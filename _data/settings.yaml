@@ -9,11 +9,11 @@ metadata:
   site_subtitle_2: Austin, Texas
   # Home page description, accepts markdown
   site_description: >
-    Halide is a customizable Jamstack portfolio website theme designed for photographers and still image creators. Read the docs at [github.com/danurbanowicz/halide](https://github.com/danurbanowicz/halide)
+    Low Design Office is an architecture and design studio that focuses on something simple: **realizing more with less.**
   # footer contact email
   site_email: lowdo@lowdo.net
   # footer social link (the social title is defined in the i18n section)
-  site_social_url: 'https://github.com/danurbanowicz/halide'
+  site_social_url: 'http://instagram.com/lowdesignoffice'
   # SVG image used for sharing/bookmark icons
   site_icon_svg: /assets/uploads/favicon.svg
   # optional PNG image used for sharing/bookmark icons
@@ -26,7 +26,7 @@ metadata:
     site_title: LowDO - Low Design Office
     # meta description
     site_description: >-
-      A customizable, minimalist portfolio website designed for photographers and still image creators.
+      Low Design Office is an architecture and design studio that focuses on something simple: **realizing more with less.**
     # Adds a noindex <meta> tag on all site pages, be careful y'all!
     # Instead you can block indexing per-project with no_index: true
     no_index: false
@@ -40,7 +40,7 @@ theme:
     # default colors aka "light mode"
     background: '#ffffff'
     text: '#101010'
-    link: '#542BFF'
+    link: '#001489'
     # dark mode colors
     background_dark: '#101010'
     text_dark: '#E1E1E1'
