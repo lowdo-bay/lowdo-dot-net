@@ -125,7 +125,7 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
 
   // The projects collection, sorted by the numerical position value and then by date
   eleventyConfig.addCollection("projects", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("projects/*.md")
+    return collectionApi.getFilteredByGlob("projects/**/*.md")
       //.filter(project => !Boolean(project.data.draft))
       .sort((a, b) => b.data.position - a.data.position);
   });
