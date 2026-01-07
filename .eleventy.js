@@ -40,26 +40,50 @@ export default function(eleventyConfig) {
 
     });
 
-  // Shortcode to generate a responsive project image
-eleventyConfig.addShortcode("generateImage", async function(src, alt) {
-  let imgSrc = src;
-  
-  // If path doesn't start with './' or '/', it's relative to the markdown file
-  if (!imgSrc.startsWith('./') && !imgSrc.startsWith('/')) {
+// Shortcode to generate a responsive project image
+eleventyConfig.addShortcode("generateImage", async function(params) {
+
+  // Destructure the parameters object and set some defaults
+  let {
+    src, // throw an error if src is missing
+    alt = "",
+    classes = "",
+    loadingType = "lazy",
+    viewportSizes = "",
+    outputWidths = ["1080","1800","2400"],
+    outputFormats = ["jpeg"],
+    outputQualityJpeg = 75,
+    outputQualityWebp = 75,
+    outputQualityAvif = 75
+  } = params;
+
+  // Tina CMS prefixes uploaded img src with a forward slash (?)
+  // Remove it from the image path if it exists
+  src = src.startsWith("/") ? src.slice(1) : src;
+
+  // NEW: If src is just a filename (no path separators), construct path relative to markdown file
+  if (!src.includes('/') && this.page && this.page.inputPath) {
     const inputPath = this.page.inputPath;
     const pathParts = inputPath.split('/');
     pathParts.pop(); // Remove the filename
-    imgSrc = pathParts.join('/') + '/' + src;
+    src = pathParts.join('/') + '/' + src;
   }
-  
-  let metadata = await Image(imgSrc, {
-    widths: [600, 1200],
-    formats: ["avif", "webp", "jpeg"]
-  });
-  
-  return Image.generateHTML(metadata, { alt });
-});
 
+  let metadata = await Image(src, {
+    widths: outputWidths,
+    sharpJpegOptions: { quality: outputQualityJpeg },
+    sharpWebpOptions: { quality: outputQualityWebp },
+    sharpAvifOptions: { quality: outputQualityAvif },
+    formats: outputFormats,
+    urlPath: "/assets/images/",
+    outputDir: "./_site/assets/images/",
+    // cacheOptions: {
+    //   // If image is a remote URL, this is the amount of time before 11ty fetches a fresh copy
+    //   duration: "5y",
+    //   directory: ".cache",
+    //   removeUrlQueryParams: true,
+    // },
+  });
 
     let lowsrc = metadata.jpeg[0];
 
