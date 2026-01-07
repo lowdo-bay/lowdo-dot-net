@@ -222,6 +222,10 @@ export default function(eleventyConfig) {
     liveReload: false
   });
 
+  // Allows projects to be in subfolders
+  eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,png,gif,webp}");
+
+
   return {
     templateFormats: ["md", "njk", "liquid"],
     pathPrefix: "/",
