@@ -135,6 +135,16 @@ img.loaded {
   transform: initial;
 }
 
+.image-caption {
+  font-size: 14px;
+  color: #666;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  text-align: left; /* or center, right */
+  font-style: italic; /* optional */
+}
+
+
 /* Fade on hover effect (images) */
 
 .hover-fade {
