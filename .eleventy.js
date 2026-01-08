@@ -56,6 +56,12 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
     outputQualityAvif = 75
   } = params;
 
+  // Add validation
+  if (!src) {
+    console.error('generateImage shortcode called without src:', params);
+    return '';
+  }
+
   console.log('Original src:', src); // DEBUG
   console.log('this.page:', this.page); // DEBUG
 
