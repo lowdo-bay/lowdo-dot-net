@@ -240,7 +240,7 @@ export default function(eleventyConfig) {
       output: "public"
     }
   };
-
+};
 
   return {
     templateFormats: ["md", "njk", "liquid"],

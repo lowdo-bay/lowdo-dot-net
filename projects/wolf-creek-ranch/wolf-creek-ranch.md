@@ -5,9 +5,9 @@ description: >
   Sustainable retreat harmonizing nature and landscape.
 year: 2024
 images:
-  - src: photo-1695394979617-f43bbf569deb.avif
+  - src: ./photo-1695394979617-f43bbf569deb.avif
     caption: a caption
-  - src: photo-1699213880412-01eddb3023ee.avif
+  - src: ./photo-1699213880412-01eddb3023ee.avif
     caption: jkkhkjhm
 date: 2024-11-10T12:28:51.623Z
 position: 4
