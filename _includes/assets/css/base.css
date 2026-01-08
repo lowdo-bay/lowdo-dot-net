@@ -140,22 +140,8 @@ img.loaded {
   color: #666;
   margin-top: 0.5rem;
   margin-bottom: 2rem;
-  text-align: left; /* or center, right */
+  text-align: center; /* left, center, right */
   font-style: italic; /* optional */
-}
-
-.image-with-caption {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-}
-
-.image-with-caption picture {
-  flex: 1;
-}
-
-.image-caption {
-  flex: 0 0 200px; /* Fixed width for caption */
 }
 
 
