@@ -1,5 +1,30 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Get all files in this directory
+const files = fs.readdirSync(__dirname);
+
+// Filter for image files only (not the .md or .js files)
+const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.svg'];
+const imageFiles = files.filter(file => {
+  const ext = path.extname(file).toLowerCase();
+  return imageExtensions.includes(ext);
+});
+
+// Get the folder name
+const folderParts = __dirname.split(path.sep);
+const projectFolder = folderParts[folderParts.length - 1];
+
+// Build the images array
+const images = imageFiles.map(file => ({
+  src: `projects/${projectFolder}/${file}`,
+  alt: path.basename(file, path.extname(file)).replace(/[-_]/g, ' ')
+}));
+
+// Export the data
 export default {
-  images: [
-    { src: 'projects/wolf-creek-ranch/123_Wolf-Creek_DH_WEB_003.jpg', alt: 'Test image' }
-  ]
+  images: images
 };
