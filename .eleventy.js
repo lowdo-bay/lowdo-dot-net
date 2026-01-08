@@ -38,9 +38,6 @@ export default function(eleventyConfig) {
     let data = metadata.png[0];
         return `<link rel="icon" href="${data.url}" type="image/png">`;
 
-  // Use index.11tydata.js in all directories instead of matching folder name
-  eleventyConfig.setDataFileBaseName("photograb");
-
     });
 
 // Shortcode to generate a responsive project image
