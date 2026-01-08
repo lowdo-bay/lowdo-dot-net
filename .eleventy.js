@@ -45,7 +45,7 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
 
   // Destructure the parameters object and set some defaults
   let {
-    src, // throw an error if src is missing
+    src,
     alt = "",
     classes = "",
     loadingType = "lazy",
@@ -61,12 +61,16 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
   // Remove it from the image path if it exists
   src = src.startsWith("/") ? src.slice(1) : src;
 
-  // NEW: If src is just a filename (no path separators), construct path relative to markdown file
-  if (!src.includes('/') && this.page && this.page.inputPath) {
+  // NEW: Handle relative paths (./ or just filename)
+  if ((src.startsWith('./') || !src.includes('/')) && this.page && this.page.inputPath) {
+    // Remove ./ prefix if present
+    const filename = src.startsWith('./') ? src.slice(2) : src;
+    
+    // Construct full path from markdown file location
     const inputPath = this.page.inputPath;
     const pathParts = inputPath.split('/');
     pathParts.pop(); // Remove the filename
-    src = pathParts.join('/') + '/' + src;
+    src = pathParts.join('/') + '/' + filename;
   }
 
   let metadata = await Image(src, {
