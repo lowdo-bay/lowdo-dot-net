@@ -4,6 +4,12 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Optional: Define custom captions for specific images
+const captions = {
+  'photo-1.jpg': 'Interior detail',
+  'photo-2.avif': 'Exterior view'
+};
+
 // Get all files in this directory
 const files = fs.readdirSync(__dirname);
 
@@ -27,7 +33,7 @@ const galleryFiles = imageFiles.filter(file => file !== headerFile);
 // Build header image object
 const headerImage = headerFile ? {
   src: `projects/${projectFolder}/${headerFile}`,
-  alt: ''  // No caption for header
+  alt: ''
 } : null;
 
 // Build gallery images array with captions
