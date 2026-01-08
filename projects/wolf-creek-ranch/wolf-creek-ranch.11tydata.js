@@ -4,12 +4,6 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Optional: Define custom captions for specific images
-const captions = {
-  '123_Wolf-Creek_DH_PRINT_001.jpg': 'Wide view',
-  '123_Wolf-Creek_DH_WEB_011': 'Secondary bathroom on subfloor'
-};
-
 // Get all files in this directory
 const files = fs.readdirSync(__dirname);
 
@@ -24,13 +18,26 @@ const imageFiles = files.filter(file => {
 const folderParts = __dirname.split(path.sep);
 const projectFolder = folderParts[folderParts.length - 1];
 
-// Build the images array with captions
-const images = imageFiles.map(file => ({
+// Find header image (any file starting with "header")
+const headerFile = imageFiles.find(file => file.toLowerCase().startsWith('header'));
+
+// Get all other images (exclude header)
+const galleryFiles = imageFiles.filter(file => file !== headerFile);
+
+// Build header image object
+const headerImage = headerFile ? {
+  src: `projects/${projectFolder}/${headerFile}`,
+  alt: ''  // No caption for header
+} : null;
+
+// Build gallery images array with captions
+const images = galleryFiles.map(file => ({
   src: `projects/${projectFolder}/${file}`,
   caption: captions[file] || path.basename(file, path.extname(file)).replace(/[-_]/g, ' ')
 }));
 
 // Export the data
 export default {
+  headerImage: headerImage,
   images: images
 };
