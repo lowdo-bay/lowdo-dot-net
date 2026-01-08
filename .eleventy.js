@@ -8,7 +8,7 @@ import eleventyHelmetPlugin from "eleventy-plugin-helmet";
 import EleventyFetch from "@11ty/eleventy-fetch";
 import Image from "@11ty/eleventy-img";
 import MarkdownIt from "markdown-it";
-const mdRender = new MarkdownIt();
+const mdRender = new MarkdownIt(); 
 
 export default function(eleventyConfig) {
 
