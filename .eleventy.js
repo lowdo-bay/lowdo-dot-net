@@ -12,6 +12,9 @@ const mdRender = new MarkdownIt();
 
 export default function(eleventyConfig) {
 
+  // Use index.11tydata.js in all directories instead of matching folder name
+  eleventyConfig.setDataFileBaseName("photograb");
+
   eleventyConfig.addFilter("renderUsingMarkdown", function(rawString) {
     return mdRender.render(rawString);
   });
