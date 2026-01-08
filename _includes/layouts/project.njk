@@ -78,7 +78,7 @@ section: project
           {
             "src": image.src,
             "alt": image.caption or title,
-            "classes": "project-image",
+            "classes": "grid__item grid__item--breakout",
             "loadingType": "lazy",
             "viewportSizes": "(min-width: 1140px) 70vw, (min-width: 540px) 90vw, 100vw",
             "outputWidths": [ 
@@ -93,17 +93,15 @@ section: project
           }
         %}
 
-        <figure class="image-with-caption grid__item grid__item--breakout">
-          {% if image.caption %}
-            <figcaption class="image-caption-left">{{ image.caption }}</figcaption>
-          {% endif %}
-          {% generateImage params %}
-        </figure>
+        {% generateImage params %}
+
+        {% if image.caption %}
+          <figcaption class="image-caption">{{ image.caption }}</figcaption>
+        {% endif %}
 
       {% endfor %}
     {% endif %}
   </section>
-
   
 </article>
 

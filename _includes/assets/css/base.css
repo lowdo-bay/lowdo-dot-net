@@ -144,26 +144,6 @@ img.loaded {
   font-style: italic; /* optional */
 }
 
-.image-with-caption {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 2rem;
-  align-items: start;
-  margin-bottom: 3rem;
-}
-
-.image-caption-left {
-  text-align: right;
-  padding-top: 0;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.project-image {
-  grid-column: 2;
-}
-
-
 /* Fade on hover effect (images) */
 
 .hover-fade {
