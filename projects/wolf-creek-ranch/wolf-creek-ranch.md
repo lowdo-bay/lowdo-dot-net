@@ -4,14 +4,15 @@ title: Wolf Creek Ranch
 description: >
   Sustainable retreat harmonizing nature and landscape.
 year: 2024
+date: 2024-11-10T12:28:51.623Z
+position: 4
+---
+
 images:
   - src: projects/wolf-creek-ranch/123_Wolf-Creek_DH_WEB_003.jpg
     caption: a caption
   - src: projects/wolf-creek-ranch/photo-1699213880412-01eddb3023ee.avif
     caption: jkkhkjhm
-date: 2024-11-10T12:28:51.623Z
-position: 4
----
 
 The Wolf Creek Ranch weaves through rolling hills and limestone rock outcrops adjacent to Lake Buchanan, providing stunning views, ample sun, and a prevalent breeze. The owners wanted to embrace and respond to these natural characteristics while also prioritizing an economy of means. The design became another iteration of resource conscious, performance-driven strategies that pro-actively respond to the landscape and create a welcoming environment for all generations who might use the house.
 
