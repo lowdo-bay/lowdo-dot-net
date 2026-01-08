@@ -5,9 +5,9 @@ description: >
   Sustainable retreat harmonizing nature and landscape.
 year: 2024
 images:
-  - src: 123_Wolf-Creek_DH_WEB_003.jpg
+  - src: projects/wolf-creek-ranch/123_Wolf-Creek_DH_WEB_003.jpg
     caption: a caption
-  - src: photo-1699213880412-01eddb3023ee.avif
+  - src: projects/wolf-creek-ranch/photo-1699213880412-01eddb3023ee.avif
     caption: jkkhkjhm
 date: 2024-11-10T12:28:51.623Z
 position: 4
