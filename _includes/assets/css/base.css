@@ -144,6 +144,20 @@ img.loaded {
   font-style: italic; /* optional */
 }
 
+.image-with-caption {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.image-with-caption picture {
+  flex: 1;
+}
+
+.image-caption {
+  flex: 0 0 200px; /* Fixed width for caption */
+}
+
 
 /* Fade on hover effect (images) */
 

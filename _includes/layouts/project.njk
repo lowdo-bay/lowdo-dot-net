@@ -93,11 +93,13 @@ section: project
           }
         %}
 
-        {% generateImage params %}
-
-        {% if image.caption %}
-          <figcaption class="image-caption">{{ image.caption }}</figcaption>
-        {% endif %}
+        <div class="image-with-caption">
+          {% generateImage params %}
+          
+          {% if image.caption %}
+            <figcaption class="image-caption">{{ image.caption }}</figcaption>
+          {% endif %}
+        </div>
 
       {% endfor %}
     {% endif %}
