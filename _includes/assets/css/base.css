@@ -140,8 +140,27 @@ img.loaded {
   color: #666;
   margin-top: 0.5rem;
   margin-bottom: 2rem;
-  text-align: center; /* left, center, right */
+  text-align: left; /* left, center, right */
   font-style: italic; /* optional */
+}
+
+.image-with-caption {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: 3rem;
+}
+
+.image-caption-left {
+  text-align: right;
+  padding-top: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.project-image {
+  grid-column: 2;
 }
 
 
