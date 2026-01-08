@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Optional: Define custom captions for specific images
 const captions = {
-  '123_Wolf-Creek_DH_PRINT_001': 'Wide view',
+  '123_Wolf-Creek_DH_PRINT_001.jpg': 'Wide view',
   '123_Wolf-Creek_DH_WEB_011': 'Secondary bathroom on subfloor'
 };
 
@@ -27,7 +27,7 @@ const projectFolder = folderParts[folderParts.length - 1];
 // Build the images array with captions
 const images = imageFiles.map(file => ({
   src: `projects/${projectFolder}/${file}`,
-  alt: captions[file] || path.basename(file, path.extname(file)).replace(/[-_]/g, ' ')
+  caption: captions[file] || path.basename(file, path.extname(file)).replace(/[-_]/g, ' ')
 }));
 
 // Export the data

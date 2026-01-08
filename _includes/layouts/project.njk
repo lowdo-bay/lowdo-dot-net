@@ -64,6 +64,17 @@ section: project
 
       {% endfor %}
 
+{# The image shortcode #}
+{% generateImage params %}
+
+{# Display caption below the image #}
+{% if image.caption %}
+  <figcaption class="image-caption">{{ image.caption }}</figcaption>
+{% endif %}
+
+{% endfor %}
+
+
     {% endif %}
 
   </section>
