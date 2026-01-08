@@ -93,6 +93,12 @@ section: project
           }
         %}
 
+        {% generateImage params %}
+
+        {% if image.caption %}
+          <figcaption class="image-caption">{{ image.caption }}</figcaption>
+        {% endif %}
+
       {% endfor %}
     {% endif %}
   </section>
