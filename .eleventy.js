@@ -43,7 +43,6 @@ export default function(eleventyConfig) {
 // Shortcode to generate a responsive project image
 eleventyConfig.addShortcode("generateImage", async function(params) {
 
-  // Destructure the parameters object and set some defaults
   let {
     src,
     alt = "",
@@ -57,20 +56,23 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
     outputQualityAvif = 75
   } = params;
 
-  // Tina CMS prefixes uploaded img src with a forward slash (?)
-  // Remove it from the image path if it exists
+  console.log('Original src:', src); // DEBUG
+  console.log('this.page:', this.page); // DEBUG
+
+  // Tina CMS prefixes uploaded img src with a forward slash
   src = src.startsWith("/") ? src.slice(1) : src;
 
-  // NEW: Handle relative paths (./ or just filename)
+  // Handle relative paths (./ or just filename)
   if ((src.startsWith('./') || !src.includes('/')) && this.page && this.page.inputPath) {
-    // Remove ./ prefix if present
     const filename = src.startsWith('./') ? src.slice(2) : src;
-    
-    // Construct full path from markdown file location
     const inputPath = this.page.inputPath;
+    console.log('Input path:', inputPath); // DEBUG
     const pathParts = inputPath.split('/');
-    pathParts.pop(); // Remove the filename
+    pathParts.pop();
     src = pathParts.join('/') + '/' + filename;
+    console.log('Resolved src:', src); // DEBUG
+  } else {
+    console.log('Path resolution skipped'); // DEBUG
   }
 
   let metadata = await Image(src, {
