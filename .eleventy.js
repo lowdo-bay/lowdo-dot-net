@@ -230,8 +230,16 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
     liveReload: false
   });
 
-  // Allows projects to be in subfolders
-  eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,png,gif,webp}");
+export default function(eleventyConfig) {
+  // Copy all images located in project subfolders to the build output
+  eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
+
+  return {
+    dir: {
+      input: "src",
+      output: "public"
+    }
+  };
 
 
   return {
