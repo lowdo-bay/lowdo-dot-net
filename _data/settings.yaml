@@ -42,7 +42,7 @@ theme:
     text: '#101010'
     link: '#001489'
     # dark mode colors
-    background_dark: '#101010'
+    background_dark: '#001489'
     text_dark: '#E1E1E1'
     link_dark: '#FFFFFF'
   theme_typography:
