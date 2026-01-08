@@ -224,23 +224,12 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
 
   // Copy folders or static assets e.g. images to site output
   eleventyConfig.addPassthroughCopy({"assets/icons/favicon.svg" : "/favicon.svg"});
+  eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
 
   // Disable 11ty dev server live reload when using CMS locally
   eleventyConfig.setServerOptions({
     liveReload: false
   });
-
-export default function(eleventyConfig) {
-  // Copy all images located in project subfolders to the build output
-  eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
-
-  return {
-    dir: {
-      input: "src",
-      output: "public"
-    }
-  };
-};
 
   return {
     templateFormats: ["md", "njk", "liquid"],
