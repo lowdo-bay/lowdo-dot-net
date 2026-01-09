@@ -11,13 +11,11 @@
       {% endif %}
 		</a>
 
-		{% if settings.metadata.site_subtitle_1 %}
-			<span class="grid__item">{{ settings.metadata.site_subtitle_1 }}</span>
-		{% endif %}
+		{# Replace the subtitle sections with navigation links #}
+		<a href="{{ '/projects/' | url }}" class="grid__item">Projects</a>
 
-		{% if settings.metadata.site_subtitle_2 %}
-			<span class="grid__item">{{ settings.metadata.site_subtitle_2 }}</span>
-		{% endif %}
+		<a href="{{ '/about/' | url }}" class="grid__item">About</a>
+
 
 		{% if settings.theme.theme_features.enable_dark_mode %}
 
