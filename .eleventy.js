@@ -239,7 +239,7 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
   eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
 
   // Copy assets folder to output
-  eleventyConfig.addPassthroughCopy("_includes/assets");
+  eleventyConfig.addPassthroughCopy("assets");
 
   // Disable 11ty dev server live reload when using CMS locally
   eleventyConfig.setServerOptions({
