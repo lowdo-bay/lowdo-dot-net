@@ -15,40 +15,21 @@ permalink: "/index.html"
 
   </header>
 
-  {# Main content section with body text #}
-  <section class="grid">
+  {# Add your Markdown content here #}
+  {% set content %}
+## Our Approach
 
+We focus on **sustainable design** that serves communities. Our work includes:
+
+- Residential projects
+- Community buildings
+- Urban planning
+  {% endset %}
+
+  <section class="grid">
     <div class="grid__item--span-4 markdown">
-      <h2>**We are Architects, Builders, and Systems Thinkers**</h2>
+      {{ content | renderUsingMarkdown | safe }}
     </div>
-
-    <div class="grid__item--span-4 markdown">
-      <h2>Our Mission</h2>
-      <p>Low Design Office creates buildings that respond to their context and serve their communities. We believe in thoughtful, sustainable design that stands the test of time.</p>
-    </div>
-
-  </section>
-
-  {# Image section #}
-  <section class="grid">
-    
-    <div class="grid__item--span-4">
-      <img src="/_includes/assets/images/dakota-mountain.jpg" alt="Dakota Mountain residence">
-    </div>
-
-  </section>
-
-  {# Multiple images in grid #}
-  <section class="grid">
-    
-    <div class="grid__item--span-2">
-      <img src="/assets/images/building-1.jpg" alt="Building exterior">
-    </div>
-
-    <div class="grid__item--span-2">
-      <img src="/assets/images/building-2.jpg" alt="Building interior">
-    </div>
-
   </section>
 
 </article>
