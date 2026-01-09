@@ -16,19 +16,13 @@ permalink: "/index.html"
   </header>
 
   {# Add your Markdown content here #}
-  {% set content %}
-## Our Approach
-
-We focus on **sustainable design** that serves communities. Our work includes:
-
-- Residential projects
-- Community buildings
-- Urban planning
+  {% set statement %}
+## We are **Architects, Builders, and Systems-Thinkers**
   {% endset %}
 
-  <section class="grid">
+  <section class="grid--body">
     <div class="grid__item--span-4 markdown">
-      {{ content | renderUsingMarkdown | safe }}
+      {{ statement | renderUsingMarkdown | safe }}
     </div>
   </section>
 
