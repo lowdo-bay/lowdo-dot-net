@@ -14,10 +14,21 @@
 	--line-height-scale: {{ settings.theme.theme_typography.line_height_scale or "100" }};
 	--link-underline: {{ "underline" if settings.theme.theme_typography.link_underline else "none" }};
   --transition-time: {{ settings.theme.theme_features.transition_duration or "300" }}ms;
+	/* Grid lines - spreadsheet style */
+	--grid-line-color: {{ settings.theme.theme_grid_lines.color or "#001489" }};
+	--grid-line-thickness: {{ settings.theme.theme_grid_lines.thickness or 1 }}px;
+	--grid-line-vertical-style: {{ settings.theme.theme_grid_lines.vertical_style or "dashed" }};
+	--grid-line-horizontal-major: {{ settings.theme.theme_grid_lines.horizontal_major_style or "solid" }};
+	--grid-line-horizontal-minor: {{ settings.theme.theme_grid_lines.horizontal_minor_style or "dashed" }};
+	/* Content margin and grid calculations */
+	--content-margin: calc(var(--space) * 2);
+	--grid-gap: calc(var(--space) * 1.25);
+	--grid-col: calc((100% - 3 * var(--grid-gap)) / 4);
 }
 
 :root[dark] {
 	--color-text: {{ settings.theme.theme_colors.text_dark or "#ffffff" }};
   --color-link: {{ settings.theme.theme_colors.link_dark or "#ffffff" }};
 	--color-background: {{ settings.theme.theme_colors.background_dark or "#001489" }};
+	--grid-line-color: {{ settings.theme.theme_grid_lines.color_dark or "#4a5568" }};
 }

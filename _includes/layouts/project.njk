@@ -5,51 +5,51 @@ section: project
 ---
 <article>
 
-  {# Header Image Banner (no caption) #}
-  {% if headerImage %}
-    <section class="pb--3">
-      {% set outputFormats = [] %}
-      {% for format, i in settings.images %}
-        {% if i.enabled === true %}
-          {{ '' if outputFormats.push(format) }}
-        {% endif %}
-      {% endfor %}
-
-      {% set params = 
-        { 
-          "src": headerImage.src,
-          "alt": title,
-          "classes": "banner-image",
-          "loadingType": "eager",
-          "viewportSizes": "100vw",
-          "outputWidths": [ 
-            settings.config.image_width_sm,
-            settings.config.image_width_md,
-            settings.config.image_width_lg
-          ],
-          "outputFormats": outputFormats,
-          "outputQualityJpeg": settings.images.jpeg.quality,
-          "outputQualityWebp": settings.images.webp.quality,
-          "outputQualityAvif": settings.images.avif.quality
-        }
-      %}
-
-      {% generateImage params %}
-    </section>
-  {% endif %}
-
-
-  {# Project Metadata#}
-  <header class="pb--4">
+  {# Project Header Section - Image left, metadata right #}
+  <header class="project-header">
     <div class="grid grid--intro">
-      <h1 class="grid__item--span-4 mw--readable">{{ title }}</h1>
-      <div class="grid__item--span-4 mw--readable markdown">{{ description | renderUsingMarkdown | safe }}</div>
-        
-      {% if year and settings.theme.theme_features.show_project_year %}
-        <p class="grid__item--span-4 mw--readable mb--0">
-          {{ year }}
-        </p>
+      {# Left: Header Image #}
+      {% if headerImage %}
+        <div class="grid__item--span-2-left">
+          {% set outputFormats = [] %}
+          {% for format, i in settings.images %}
+            {% if i.enabled === true %}
+              {{ '' if outputFormats.push(format) }}
+            {% endif %}
+          {% endfor %}
+
+          {% set params =
+            {
+              "src": headerImage.src,
+              "alt": title,
+              "classes": "header-image",
+              "loadingType": "eager",
+              "viewportSizes": "50vw",
+              "outputWidths": [
+                settings.config.image_width_sm,
+                settings.config.image_width_md,
+                settings.config.image_width_lg
+              ],
+              "outputFormats": outputFormats,
+              "outputQualityJpeg": settings.images.jpeg.quality,
+              "outputQualityWebp": settings.images.webp.quality,
+              "outputQualityAvif": settings.images.avif.quality
+            }
+          %}
+
+          {% generateImage params %}
+        </div>
       {% endif %}
+
+      {# Right: Project Metadata #}
+      <div class="grid__item--span-2-right project-metadata">
+        <h1>{{ title }}</h1>
+        <div class="markdown">{{ description | renderUsingMarkdown | safe }}</div>
+
+        {% if year and settings.theme.theme_features.show_project_year %}
+          <p class="mb--0">{{ year }}</p>
+        {% endif %}
+      </div>
     </div>
   </header>
 

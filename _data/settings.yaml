@@ -64,6 +64,21 @@ theme:
     transition_duration: 300
     show_project_year: true
     show_project_grid_titles: true
+  # Spreadsheet-style grid lines - "making what is usually invisible visible"
+  theme_grid_lines:
+    # enable/disable grid lines
+    enabled: true
+    # grid line color (hex) - light mode
+    color: '#001489'
+    # grid line color (hex) - dark mode
+    color_dark: '#4a5568'
+    # line thickness in pixels
+    thickness: 1
+    # vertical line style (dashed for column dividers)
+    vertical_style: dashed
+    # horizontal line styles - solid for main sections, dashed for minor items
+    horizontal_major_style: solid
+    horizontal_minor_style: dashed
 # Image settings (lovell/sharp). JPEG format can't be disabled via the CMS.
 images:
   avif:

@@ -42,6 +42,7 @@ An architecture and design studio portfolio website based in Austin, Texas.
 - [x] CSS custom properties for easy theming
 - [x] Google Fonts integration with caching
 - [x] Configurable colors via `settings.yaml`
+- [x] Spreadsheet-style grid lines (configurable via `settings.yaml`)
 
 ### Performance
 - [x] HTML/CSS/JS minification in production
