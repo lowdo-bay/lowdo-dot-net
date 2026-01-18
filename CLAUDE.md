@@ -56,6 +56,9 @@ An architecture and design studio portfolio website based in Austin, Texas.
 - [x] Tina CMS integration (optional)
 - [x] Custom 404 page
 
+### SEO
+- [x] JSON-LD structured data (Organization, WebSite, CreativeWork, CollectionPage, AboutPage schemas)
+
 ---
 
 ## Wishlist / Future Features
@@ -78,7 +81,7 @@ An architecture and design studio portfolio website based in Austin, Texas.
 
 ### Technical Improvements
 - [ ] Implement service worker for offline support
-- [ ] Add structured data (JSON-LD) for SEO
+- [x] Add structured data (JSON-LD) for SEO
 - [ ] Improve Lighthouse scores to 100 across all metrics
 - [ ] Add visual regression testing
 - [ ] Implement critical CSS extraction per-page

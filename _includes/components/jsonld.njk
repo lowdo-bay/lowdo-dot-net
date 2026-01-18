@@ -1,0 +1,91 @@
+{# JSON-LD Structured Data for SEO #}
+{# Appended to <head> during build via Helmet plugin #}
+
+{% set siteUrl = settings.metadata.site_url %}
+{% set siteName = settings.metadata.site_title %}
+{% set siteDescription = settings.metadata.seo.site_description or settings.metadata.site_description %}
+
+{# Home page: Organization + WebSite schema #}
+{% if page.url == "/" %}
+  {% set organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": siteName,
+    "description": siteDescription | striptags,
+    "url": siteUrl,
+    "email": settings.metadata.site_email,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Austin",
+      "addressRegion": "Texas",
+      "addressCountry": "USA"
+    },
+    "sameAs": [settings.metadata.site_social_url]
+  } %}
+  <script type="application/ld+json" data-helmet>{{ organizationSchema | dump | safe }}</script>
+
+  {% set webSiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": siteName,
+    "url": siteUrl
+  } %}
+  <script type="application/ld+json" data-helmet>{{ webSiteSchema | dump | safe }}</script>
+
+{# Project detail pages: CreativeWork schema #}
+{% elif section == "project" %}
+  {% set creativeWorkSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": title,
+    "description": (description | striptags) if description else null,
+    "datePublished": year | string if year else null,
+    "image": (siteUrl + "/" + headerImage.src) if headerImage and headerImage.src else null,
+    "creator": {
+      "@type": "Organization",
+      "name": siteName
+    },
+    "url": siteUrl + page.url
+  } %}
+  <script type="application/ld+json" data-helmet>{{ creativeWorkSchema | dump | safe }}</script>
+
+{# Projects listing page: CollectionPage schema #}
+{% elif page.url == "/projects/" %}
+  {% set collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Projects",
+    "description": "Architecture and design projects by " + siteName,
+    "url": siteUrl + page.url,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": siteName,
+      "url": siteUrl
+    }
+  } %}
+  <script type="application/ld+json" data-helmet>{{ collectionSchema | dump | safe }}</script>
+
+{# About page: AboutPage schema #}
+{% elif page.url == "/about/" %}
+  {% set aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About " + siteName,
+    "description": siteDescription | striptags,
+    "url": siteUrl + page.url,
+    "mainEntity": {
+      "@type": "Organization",
+      "name": siteName,
+      "description": siteDescription | striptags,
+      "email": settings.metadata.site_email,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Austin",
+        "addressRegion": "Texas",
+        "addressCountry": "USA"
+      }
+    }
+  } %}
+  <script type="application/ld+json" data-helmet>{{ aboutSchema | dump | safe }}</script>
+
+{% endif %}
