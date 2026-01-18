@@ -4,8 +4,8 @@ metadata:
   site_url: 'https://lowdo.netlify.app'
   site_title: LowDO
   # site subtitles are optional
-  site_subtitle_1: Design build
-  site_subtitle_2: Austin, Texas
+  site_subtitle_1: Architects who Build
+  site_subtitle_2: Austin, Texas and Tema, Ghana
   # Home page description, accepts markdown
   site_description: >
     Low Design Office is an architecture and design studio that focuses on something simple: **realizing more with less.**
