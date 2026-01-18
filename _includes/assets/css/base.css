@@ -123,6 +123,107 @@ body {
 	display: none;
 }
 
+/* Header Layout */
+
+.header-title {
+	display: flex;
+	flex-direction: column;
+	padding-left: calc(var(--space) * 0.5);
+	padding-right: calc(var(--space) * 0.5);
+}
+
+.header-subtitle {
+	font-size: var(--font-size-small);
+	color: var(--color-text);
+	opacity: 0.8;
+}
+
+/* Mobile: show mobile subtitles, hide desktop subtitles */
+.header-subtitle--mobile {
+	display: block;
+}
+
+.header-subtitle--desktop {
+	display: none;
+	white-space: nowrap;
+}
+
+/* Header Menu Dropdown */
+
+.header-menu {
+	position: relative;
+	padding-left: calc(var(--space) * 0.5);
+	padding-right: calc(var(--space) * 0.5);
+}
+
+.header-menu__button {
+	background: none;
+	border: none;
+	font-family: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+	color: var(--color-text);
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+}
+
+.header-menu__button:hover {
+	opacity: 0.7;
+}
+
+.header-menu__dropdown {
+	display: none;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	margin-top: calc(var(--space) * 0.5);
+	background-color: var(--color-background);
+	/* Mobile: full screen width */
+	width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	border: 1px solid var(--color-text);
+	z-index: 10000;
+}
+
+.header-menu.is-open .header-menu__dropdown {
+	display: flex;
+	flex-direction: column;
+}
+
+.header-menu__item {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: calc(var(--space) * 0.5) 0;
+	text-decoration: none;
+	color: var(--color-text);
+	border-bottom: 1px solid var(--color-text);
+}
+
+.header-menu__item:last-child {
+	border-bottom: none;
+}
+
+/* Dark mode toggle within menu */
+.header-menu__item.dark-toggle {
+	cursor: pointer;
+}
+
+.header-menu__item.dark-toggle .toggle__label {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: calc(var(--space) * 0.5);
+	width: 100%;
+	padding: 0;
+}
+
+.header-menu__item.dark-toggle .toggle__text {
+	display: inline;
+}
+
 /* Images */
 
 img {
@@ -312,6 +413,23 @@ img {
 
 	[data-orientation=portrait] {
 		grid-column: 2 / span 3;
+	}
+
+	/* Desktop: hide mobile subtitles, show desktop subtitles */
+	.header-subtitle--mobile {
+		display: none;
+	}
+
+	.header-subtitle--desktop {
+		display: block;
+		padding-left: calc(var(--space) * 0.5);
+		padding-right: calc(var(--space) * 0.5);
+	}
+
+	/* Desktop: menu dropdown width changes to one column */
+	.header-menu__dropdown {
+		width: calc((100vw - 2 * var(--content-margin) - 3 * var(--grid-gap)) / 4);
+		margin-left: 0;
 	}
 
 }
