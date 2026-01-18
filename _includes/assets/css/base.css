@@ -469,10 +469,12 @@ main.p--content article > * {
   object-fit: cover;
 }
 
-/* Remove top padding from header image container */
+/* Remove top and bottom padding from header image container */
 .project-header .grid__item--span-2-left {
   padding-top: 0;
+  padding-bottom: 0;
   margin-top: calc(-1 * var(--content-margin));
+  margin-bottom: calc(-1 * var(--content-margin));
 }
 
 /* Project page header section */
@@ -506,6 +508,7 @@ main.p--content article > * {
   bottom: 0;
   /* Bottom border line (major/solid) */
   border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major) var(--grid-line-color);
+  z-index: 9999;
 }
 
 :root[dark] .project-header::before {
@@ -548,6 +551,7 @@ header.p--content::after {
 	width: 100vw;
 	bottom: 0;
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major) var(--grid-line-color);
+	z-index: 9999;
 }
 
 footer.p--content {
@@ -562,6 +566,7 @@ footer.p--content::before {
 	width: 100vw;
 	top: 0;
 	border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major) var(--grid-line-color);
+	z-index: 9999;
 }
 
 /* Minor horizontal lines (dashed) - for section dividers within content */
@@ -579,6 +584,7 @@ article > section:not(:last-child)::after {
 	width: 100vw;
 	bottom: 0;
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor) var(--grid-line-color);
+	z-index: 9999;
 }
 
 /* Full-height vertical grid lines overlay (dashed)
