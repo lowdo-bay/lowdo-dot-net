@@ -33,8 +33,6 @@ An architecture and design studio portfolio website based in Austin, Texas.
 - [x] Static site generation with Eleventy
 - [x] Responsive image processing (JPEG, WebP, AVIF)
 - [x] Project pages generated from Markdown
-- [x] Homepage with featured image gallery
-- [x] About page
 - [x] Projects listing page
 
 ### Theming
@@ -42,7 +40,6 @@ An architecture and design studio portfolio website based in Austin, Texas.
 - [x] CSS custom properties for easy theming
 - [x] Google Fonts integration with caching
 - [x] Configurable colors via `settings.yaml`
-- [x] Spreadsheet-style grid lines (configurable via `settings.yaml`)
 
 ### Performance
 - [x] HTML/CSS/JS minification in production
@@ -56,9 +53,6 @@ An architecture and design studio portfolio website based in Austin, Texas.
 - [x] Automatic CSP headers
 - [x] Tina CMS integration (optional)
 - [x] Custom 404 page
-
-### SEO
-- [x] JSON-LD structured data (Organization, WebSite, CreativeWork, CollectionPage, AboutPage schemas)
 
 ---
 
@@ -82,7 +76,7 @@ An architecture and design studio portfolio website based in Austin, Texas.
 
 ### Technical Improvements
 - [ ] Implement service worker for offline support
-- [x] Add structured data (JSON-LD) for SEO
+- [ ] Add structured data (JSON-LD) for SEO
 - [ ] Improve Lighthouse scores to 100 across all metrics
 - [ ] Add visual regression testing
 - [ ] Implement critical CSS extraction per-page
