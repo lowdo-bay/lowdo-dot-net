@@ -23,7 +23,20 @@
 	/* Content margin and grid calculations */
 	--content-margin: calc(var(--space) * 2);
 	--grid-gap: calc(var(--space) * 1.25);
-	--grid-col: calc((100% - 3 * var(--grid-gap)) / 4);
+
+	/* Viewport-based calculations for precise grid */
+	--content-width: calc(100vw - 2 * var(--content-margin));
+	--col-width: calc((var(--content-width) - 3 * var(--grid-gap)) / 4);
+
+	/* Legacy variable for backwards compatibility */
+	--grid-col: var(--col-width);
+
+	/* Line positions within content area (for body::after pseudo-element) */
+	--line-pos-1: 0;
+	--line-pos-2: calc(var(--col-width) + var(--grid-gap) / 2);
+	--line-pos-3: calc(2 * var(--col-width) + 1.5 * var(--grid-gap));
+	--line-pos-4: calc(3 * var(--col-width) + 2.5 * var(--grid-gap));
+	--line-pos-5: var(--content-width);
 }
 
 :root[dark] {
