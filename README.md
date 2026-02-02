@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Netlify Status](https://api.netlify.com/api/v1/badges/110e596b-182b-4702-8039-c5bd58f59b20/deploy-status)](https://app.netlify.com/sites/halide/deploys)
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/danurbanowicz/halide#TINA_CMS_CLIENT_ID=replace-with-your-tina-cms-client-id&TINA_CMS_TOKEN=replace-with-your-tina-cms-token&TINA_CMS_SEARCH_TOKEN=replace-with-your-tina-cms-search-token)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/danurbanowicz/halide)
 
 # Halide
 
@@ -12,8 +12,6 @@ It uses [Eleventy](https://www.11ty.dev/) under the hood to generate static HTML
 
 It doesn't use a front-end framework, and only contains a few lines of vanilla JavaScript to provide some progressive enhancement. Halide leverages native browser features as much as possible.
 
-Halide also comes with [Tina CMS](https://tina.io/) pre-configured. Tina CMS is an open source, headless content management system that uses GitHub as a robust and convenient content store.
-
 ## [Demo Site](https://halide.netlify.app)
 
 ## Features
@@ -22,7 +20,6 @@ Halide also comes with [Tina CMS](https://tina.io/) pre-configured. Tina CMS is 
 - Exceptional front end performance (Lighthouse results coming soon)
 - [Eleventy Image](https://www.11ty.dev/docs/plugins/image/) for optimized images in next-gen formats
 - Automated `<picture>` syntax markup with srcset and sizes
-- Tina CMS for content management (optional, can edit .md files manually)
 - Dark mode support
 - Customizable theme settings, colors, and typography
 - Simple HTML/CSS/JS minification pipeline
@@ -49,11 +46,10 @@ By design, there are no additional pages for a bio, contact etc. You could easil
 
 ## Getting started
 
-Halide requires a number of services to be configured before it can be deployed. If you don't already have accounts with the following providers, you'll need to set these up first. Each provider’s free plan is sufficient for most use-cases.
+Halide requires a number of services to be configured before it can be deployed. If you don't already have accounts with the following providers, you'll need to set these up first. Each provider's free plan is sufficient for most use-cases.
 
 1. GitHub
 2. Netlify
-3. Tina Cloud (if you want to use Tina CMS)
 
 When you've created accounts with the providers listed above, you can proceed with the steps below to set up Halide.
 
@@ -63,40 +59,21 @@ When you've created accounts with the providers listed above, you can proceed wi
 
 Pressing the Deploy to Netlify button below will clone this repo and configure a Netlify site for it.
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/danurbanowicz/halide#TINA_CMS_CLIENT_ID=replace-with-your-tina-cms-client-id&TINA_CMS_TOKEN=replace-with-your-tina-cms-token&TINA_CMS_SEARCH_TOKEN=replace-with-your-tina-cms-search-token)
-
-:bulb: _The first Netlify deploy will fail but don't worry, continue the steps below to add your Tina CMS project and tokens._
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/danurbanowicz/halide)
 
 Make a note of the site URL Netlify has created for you e.g. https://fantastic-llama.netlify.app
 
-### Step 2: Create a Tina CMS project
+### Step 2: Configure site settings
 
-1. Navigate to your Tina Cloud [projects dashboard](https://app.tina.io/projects)
-2. Create a new custom project, and follow the steps to connect it to your GitHub repo with the required permissions
-3. Enter a project name and the live site URL you will use for your your Halide site and press Create Project
-4. Navigate to your Tina Cloud project settings and make a note of the client ID, and the Content and Search tokens listed in the Tokens section
+Edit the site settings in `_data/settings.yaml` to customize your site name, metadata, and theme.
 
-### Step 3: Add Tina CMS environmant variables to Netlify
+### Step 3: Add a new project
 
-1. In your Netlify account, navigate to Site configuration > Environment variables and replace the dummy values for `TINA_CMS_CLIENT_ID`, `TINA_CMS_TOKEN`, and `TINA_CMS_SEARCH_TOKEN` with the actual values as noted in the previous section
-2. Trigger a new deploy in the Netlify UI > Deploys > Trigger deploy > Deploy site
-
-### Step 4: Log in to Tina CMS and configure site settings
-
-1. Navigate to your Tina CMS login URL located at `/admin/` e.g. https://fantastic-llama.netlify.app/admin/ and log in if prompted. (Tina CMS will attempt to log you in with your Tina CLoud credentials)
-2. In the Tina CMS dashboard, navigate to Settings > Metadata and enter your Netlify site URL and your site name etc
-3. Once you have saved your changes, Netlify will re-build your site
-
-### Step 5. Add a new project
-
-1. Navigate to Tina CMS > Projects and create a new project, making sure to enter a meaningful title and to upload a high-quality image(s).
-2. Once you have saved your changes, Netlify will re-build your site and the new project will be visible on your live site
+Create a new Markdown file in the `projects/` directory with frontmatter for your project metadata. Upload high-quality images to `assets/uploads/` and reference them in your project file.
 
 ## Local development
 
-You can run Halide and Tina CMS locally for development.
-
-If you want to use Tina CMS, you will need to follow the Tina Cloud account setup steps discussed above.
+You can run Halide locally for development.
 
 1. Make a new directory and navigate to it
 
@@ -117,62 +94,27 @@ git clone https://github.com/danurbanowicz/halide.git
 npm install
 ```
 
-4. Create an `.env` file to store your Tina CMS access tokens and make sure it is added to your site's `.gitignore` to prevent the tokens being committed to your repo.
-
-```
-touch .env
-echo ".env" >> .gitignore
-```
-
-Add your tokens to the `.env` file, one per line.
-
-```
-TINA_CMS_CLIENT_ID=my-tina-cms-client-id
-TINA_CMS_TOKEN=my-tina-cms-token
-TINA_CMS_SEARCH_TOKEN=my-tina-cms-search-token
-```
-
-5. Build and serve Halide
+4. Build and serve Halide
 
 Generate a production-ready build to the _site folder:
 
 ```
-npx tinacms build -c "npx eleventy --serve"
+npm run build
 ```
 
 Or build and host on a local development server:
 
 ```
-npx tinacms dev -c "npx eleventy --serve"
+npm run serve
 ```
 
-If you choose to run `dev` your site should now be running on http://localhost:8080 and a local instance of Tina CMS will be available at http://localhost:8080/admin/
-
-### Using Halide without Tina CMS
-
-You can use Halide without Tina CMS by manually editing your `_/data/settings.yaml` and creating repo `.md` files for your projects.
-
-You'll need to remove the Tina CMS build command prefix from your `netlify.toml` file and replace it with the standard Eleventy build command:
-
-```
-[build]
-  publish = "_site"
-  command = "eleventy"
-```
-
-And for local development you can run:
-
-```
-npx eleventy --serve
-```
+Your site should now be running on http://localhost:8080
 
 ## Settings
 
 You'll find your site's main settings in [`_/data/settings.yaml`](https://github.com/danurbanowicz/halide/blob/main/_data/settings.yaml). The file is commented and most settings are self-explanatory.
 
-You can edit the Tina CMS settings and content schema at `/tina/config.js`.
-
-And your Eleventy build configuration and filters can be found inside `eleventy.js`.
+Your Eleventy build configuration and filters can be found inside `eleventy.js`.
 
 ## Projects
 
@@ -225,8 +167,6 @@ _Note: I might add Cloudinary as an image storage option if enough users feel th
 ## Bugs and questions
 
 If you believe you've found a bug or a serious problem, please open an issue. For everything else, including suggestions and getting help, please [open a discussion](https://github.com/danurbanowicz/halide/discussions).
-
-For solutions to some common Tina CMS problems, [take a look at their FAQ](https://tina.io/docs/tina-cloud/faq/).
 
 ## Contributing
 

@@ -4,6 +4,23 @@
 
 An architecture and design studio portfolio website based in Austin, Texas.
 
+## Workflow
+
+- Always push, commit, create a PR, and update a local dev server after making any edits.
+
+1. **Create a feature branch** — Never commit directly to main. Use `feature/description` or `fix/description` naming.
+
+2. **Start the dev server** — After switching to your branch, run `npm start` and keep it running while you work.
+
+3. **Make changes** — Edit files as needed. The dev server auto-reloads.
+
+4. **Commit and push** — Stage changes with `git add`, commit with a clear message, and push to GitHub.
+
+5. **Open a pull request** — Create a PR targeting main with a descriptive title and description of changes.
+
+6. **Merge and clean up** — After approval/review, merge to main (which auto-deploys) and delete the branch.
+
+
 ## Design Goals
 
 ### Philosophy
@@ -13,11 +30,11 @@ An architecture and design studio portfolio website based in Austin, Texas.
 -**Usability**: The site must be easily edited. The workflow to update the website should involve the user dropping in text and images into a folder and letting the code automatically generate a page.
 
 ### Visual Principles
-- Techincal but accessible visual language that recalls a spreadsheet. Lines are used to separate sections and objects. Think of a visible layout grid; making what is usually invisible visible.
+- Technical but accessible visual language that recalls a spreadsheet. Lines are used to separate sections and objects. Think of a visible layout grid; making what is usually invisible visible.
 - Generous whitespace to let projects breathe
 - Typography that is readable and elegant
-- Subtle transitions and interactions (no flashy animations)
-- Consistent visual rhythm across all pages
+- Subtle transitions and interactions
+- Consistent visual rhythm across pages
 
 ### Technical Principles
 - Static-first architecture (no unnecessary JavaScript)
@@ -53,7 +70,6 @@ An architecture and design studio portfolio website based in Austin, Texas.
 ### Infrastructure
 - [x] Netlify hosting and deployment
 - [x] Automatic CSP headers
-- [x] Tina CMS integration (optional)
 - [x] Custom 404 page
 
 ---

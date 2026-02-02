@@ -65,7 +65,7 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
   console.log('Original src:', src); // DEBUG
   console.log('this.page:', this.page); // DEBUG
 
-  // Tina CMS prefixes uploaded img src with a forward slash
+  // Remove leading slash from image paths if present
   src = src.startsWith("/") ? src.slice(1) : src;
 
   // Handle relative paths (./ or just filename)

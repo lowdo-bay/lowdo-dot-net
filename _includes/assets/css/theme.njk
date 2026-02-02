@@ -22,7 +22,7 @@
 	--grid-line-horizontal-minor: {{ settings.theme.theme_grid_lines.horizontal_minor_style or "dashed" }};
 	/* Content margin and grid calculations */
 	--content-margin: calc(var(--space) * 2);
-	--grid-gap: calc(var(--space) * 1.25);
+	--grid-gap: 0;
 
 	/* Viewport-based calculations for precise grid */
 	--content-width: calc(100vw - 2 * var(--content-margin));
@@ -32,11 +32,13 @@
 	--grid-col: var(--col-width);
 
 	/* Line positions within content area (for body::after pseudo-element) */
-	--line-pos-1: 0;
-	--line-pos-2: calc(var(--col-width) + var(--grid-gap) / 2);
-	--line-pos-3: calc(2 * var(--col-width) + 1.5 * var(--grid-gap));
-	--line-pos-4: calc(3 * var(--col-width) + 2.5 * var(--grid-gap));
-	--line-pos-5: var(--content-width);
+	/* Lines positioned at column boundaries (right edge of each column) */
+	/* With grid-gap: 0, columns are exactly 25% each */
+	--line-pos-1: 0%;
+	--line-pos-2: 25%;
+	--line-pos-3: 50%;
+	--line-pos-4: 75%;
+	--line-pos-5: 100%;
 }
 
 :root[dark] {
