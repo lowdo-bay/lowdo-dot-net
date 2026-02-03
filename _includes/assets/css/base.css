@@ -922,7 +922,10 @@ body::after {
 }
 
 .index-columns-header .index-col {
-	padding: calc(var(--space) * 0.125);
+	padding-top: calc(var(--space) * 0.5);
+	padding-bottom: calc(var(--space) * 0.125);
+	padding-left: calc(var(--space) * 0.125);
+	padding-right: calc(var(--space) * 0.125);
 	font-size: var(--font-size-small);
 	font-weight: bold;
 	text-transform: uppercase;
