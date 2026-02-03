@@ -844,6 +844,18 @@ body::after {
    Spreadsheet-style layout for all entry types
    ========================================================================== */
 
+/* Index-specific grid line positions for 4fr 4fr 7fr 1fr layout */
+@media (min-width: 840px) {
+	body[data-current="all"]::after {
+		background-position:
+			0% 0,
+			25% 0,
+			50% 0,
+			93.75% 0,
+			100% 0;
+	}
+}
+
 /* Index Header Section */
 .index-header-section {
 	position: relative;
