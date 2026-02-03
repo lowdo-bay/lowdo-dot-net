@@ -77,7 +77,7 @@ An architecture and design studio portfolio website based in Austin, Texas.
 ## Wishlist / Future Features
 
 ### High Priority
-- [ ] Data filtering/categories
+- [x] Data filtering/categories (Comprehensive Index with checkbox filters)
 - [ ] Image lightbox/gallery viewer
 
 ### Medium Priority
@@ -86,7 +86,7 @@ An architecture and design studio portfolio website based in Austin, Texas.
 - [ ] Print stylesheet for project pages
 
 ### Low Priority / Nice to Have
-- [ ] Blog/news section
+- [x] Blog/news section (via Comprehensive Index entry types)
 - [ ] Project timeline/archive view
 - [ ] Multi-language support (i18n)
 - [ ] Client testimonials section
@@ -105,9 +105,97 @@ An architecture and design studio portfolio website based in Austin, Texas.
 
 ```
 _data/settings.yaml    # Site-wide configuration (edit this for theme changes)
-projects/              # Add new projects here as markdown files
+entries/               # All content entries (projects, news, awards, etc.)
+  projects/            # Project entries with individual pages
+  news/                # News entries
+  awards/              # Award entries
+  features/            # Feature/publication entries
+  lectures/            # Lecture entries
+  exhibitions/         # Exhibition entries
+  staff/               # Staff update entries
 _includes/components/  # Reusable template components
 assets/uploads/        # Images uploaded via CMS
+```
+
+---
+
+## Adding Content to the Comprehensive Index
+
+The Comprehensive Index at `/index/` displays all entry types in a filterable spreadsheet-style layout.
+
+### Supported Entry Types
+- **projects** - Design and build projects (get individual detail pages)
+- **news** - Announcements and news items
+- **awards** - Awards and recognitions
+- **features** - Publications and media features
+- **lectures** - Talks and presentations
+- **exhibitions** - Gallery shows and exhibitions
+- **staff** - Team updates (new hires, departures, etc.)
+
+### Adding a New Entry
+
+1. Navigate to `entries/{type}/` (e.g., `entries/news/`)
+2. Create a folder with the entry name (use kebab-case): `my-entry-name/`
+3. Create a markdown file with the same name: `my-entry-name.md`
+4. Add frontmatter and content
+
+### Frontmatter Reference
+
+**Required fields:**
+```yaml
+---
+draft: false
+title: "Entry Title"
+date: 2024-01-15
+---
+```
+
+**Optional fields:**
+```yaml
+subtitle: "Brief tagline shown below title"
+description: "Longer description (used if no subtitle)"
+categories:
+  - HOUSING
+  - DESIGN
+collaborators:
+  - name: "Partner Name"
+    role: "Structural Engineer"
+link: "https://external-url.com"  # For non-project entries
+position: 1  # Sort order (lower = first)
+year: 2024   # For projects
+```
+
+### Adding Images
+
+Drop an image file in the entry folder for automatic thumbnail:
+- `header.jpg` or `header.png` - Preferred naming
+- `thumb.jpg` or `thumb.png` - Alternative naming
+- Any image file will work as fallback
+
+For **projects only**, additional images are auto-discovered for the gallery on the detail page.
+
+### Example: Adding a News Entry
+
+```
+entries/news/emerging-voices-award/
+├── emerging-voices-award.md
+└── thumb.jpg
+```
+
+```yaml
+# emerging-voices-award.md
+---
+draft: false
+title: "Emerging Voices Award"
+subtitle: "Architectural League of New York"
+date: 2021-12-31
+categories:
+  - AWARD
+  - NEWS
+link: "https://archleague.org/..."
+---
+
+LowDO has been selected for the Architectural League's Emerging Voices program...
 ```
 
 ## Development Commands

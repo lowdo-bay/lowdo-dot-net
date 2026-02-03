@@ -142,6 +142,20 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
       .sort((a, b) => b.data.position - a.data.position);
   });
 
+  // Unified entries collection (all types, sorted by position then date)
+  eleventyConfig.addCollection("entries", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("entries/**/*.md")
+      .filter(entry => entry.data.draft !== true)
+      .sort((a, b) => {
+        // Primary sort: position (lower first)
+        if (a.data.position !== b.data.position) {
+          return a.data.position - b.data.position;
+        }
+        // Secondary sort: date (newer first)
+        return new Date(b.data.date) - new Date(a.data.date);
+      });
+  });
+
   // A filter to limit output of collection items
   eleventyConfig.addFilter("limit", function (arr, limit) {
     return arr.slice(0, limit);
@@ -164,6 +178,20 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
   // Date formatting (human readable)
   eleventyConfig.addFilter("dateFullYear", dateObj => {
     return DateTime.fromJSDate(dateObj).toFormat("yyyy");
+  });
+
+  // Date formatting for index (MMDD YYYY format)
+  eleventyConfig.addFilter("formatDate", (dateObj, format) => {
+    const date = new Date(dateObj);
+    if (format === "MMDD") {
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${month}${day}`;
+    }
+    if (format === "YYYY") {
+      return date.getFullYear().toString();
+    }
+    return DateTime.fromJSDate(date).toFormat(format || "yyyy");
   });
 
   // base64 encode a string
@@ -237,6 +265,7 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
   // Copy folders or static assets e.g. images to site output
   eleventyConfig.addPassthroughCopy({"assets/icons/favicon.svg" : "/favicon.svg"});
   eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
+  eleventyConfig.addPassthroughCopy("entries/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
 
   // Copy assets folder to output
   eleventyConfig.addPassthroughCopy("assets");

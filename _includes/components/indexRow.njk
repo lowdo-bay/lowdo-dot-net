@@ -1,0 +1,71 @@
+<div class="index-row grid grid--index" data-entry-type="{{ entry.data.entryType }}">
+
+  {# Column 1: Thumbnail Image #}
+  <div class="index-col index-col--image">
+    {% if entry.data.thumbnail and entry.data.thumbnail.src %}
+      {% set outputFormats = [] %}
+      {% for format, i in settings.images %}
+        {% if i.enabled === true %}
+          {{ '' if outputFormats.push(format) }}
+        {% endif %}
+      {% endfor %}
+
+      {% set params = {
+        "src": entry.data.thumbnail.src,
+        "alt": entry.data.thumbnail.alt or entry.data.title,
+        "loadingType": "lazy",
+        "viewportSizes": "(min-width: 840px) 20vw, 40vw",
+        "outputWidths": [200, 400, 600],
+        "outputFormats": outputFormats,
+        "outputQualityJpeg": settings.images.jpeg.quality,
+        "outputQualityWebp": settings.images.webp.quality,
+        "outputQualityAvif": settings.images.avif.quality
+      } %}
+      {% generateImage params %}
+    {% else %}
+      <div class="index-row__placeholder"></div>
+    {% endif %}
+  </div>
+
+  {# Column 2: Item (Title + Subtitle) #}
+  <div class="index-col index-col--item">
+    {% if entry.data.entryType == 'project' %}
+      <a href="{{ entry.url | url }}" class="index-row__title">{{ entry.data.title }}</a>
+    {% elif entry.data.link %}
+      <a href="{{ entry.data.link }}" class="index-row__title" target="_blank" rel="noopener">{{ entry.data.title }}</a>
+    {% else %}
+      <span class="index-row__title">{{ entry.data.title }}</span>
+    {% endif %}
+    {% if entry.data.subtitle %}
+      <span class="index-row__subtitle">{{ entry.data.subtitle }}</span>
+    {% elif entry.data.description %}
+      <span class="index-row__subtitle">{{ entry.data.description }}</span>
+    {% endif %}
+  </div>
+
+  {# Column 3: Details/Description #}
+  <div class="index-col index-col--details">
+    {% if entry.data.categories %}
+      <span class="index-row__categories">{{ entry.data.categories | join(', ') | upper }}</span>
+    {% endif %}
+    {% if entry.data.collaborators and entry.data.collaborators.length %}
+      <span class="index-row__collaborators">
+        <em>IN COLLABORATION WITH:</em><br>
+        {% for collab in entry.data.collaborators %}
+          {{ collab.name | upper }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </span>
+    {% endif %}
+  </div>
+
+  {# Column 4: Date #}
+  <div class="index-col index-col--date">
+    {% if entry.data.date %}
+      <span class="index-row__date-mmdd">{{ entry.data.date | formatDate("MMDD") }}</span>
+      <span class="index-row__date-year">{{ entry.data.date | formatDate("YYYY") }}</span>
+    {% elif entry.data.year %}
+      <span class="index-row__date-year">{{ entry.data.year }}</span>
+    {% endif %}
+  </div>
+
+</div>

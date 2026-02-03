@@ -1,0 +1,77 @@
+---
+layout: layouts/base.njk
+title: Comprehensive Index
+permalink: /index/index.html
+section: index
+---
+<article>
+
+  {# Page Title and Filter Controls #}
+  <section class="index-header-section pb--2">
+    <div class="grid grid--4">
+      <div class="col-1-2">
+        <h1 class="index-title">COMPREHENSIVE INDEX</h1>
+        <p class="index-description text--small">Compendium of all LowDO happenings.</p>
+      </div>
+      <div class="col-3-4">
+        {% include "components/indexFilters.njk" %}
+      </div>
+    </div>
+  </section>
+
+  {# Column Headers Row #}
+  <section class="index-columns-header">
+    <div class="grid grid--index">
+      <div class="index-col index-col--image"></div>
+      <div class="index-col index-col--item">ITEM</div>
+      <div class="index-col index-col--details">DETAILS / DESCRIPTION</div>
+      <div class="index-col index-col--date">DATE</div>
+    </div>
+  </section>
+
+  {# Entry Rows #}
+  <section class="index-entries">
+    {% set entryList = collections.entries %}
+    {% if entryList and entryList.length > 0 %}
+      {% for entry in entryList %}
+        <div class="index-row grid grid--index" data-entry-type="{{ entry.data.entryType }}">
+          <div class="index-col index-col--image">
+            <div class="index-row__placeholder"></div>
+          </div>
+          <div class="index-col index-col--item">
+            {% if entry.data.entryType == 'project' %}
+              <a href="{{ entry.url | url }}" class="index-row__title">{{ entry.data.title }}</a>
+            {% else %}
+              <span class="index-row__title">{{ entry.data.title }}</span>
+            {% endif %}
+            {% if entry.data.description %}
+              <span class="index-row__subtitle">{{ entry.data.description }}</span>
+            {% endif %}
+          </div>
+          <div class="index-col index-col--details">
+            {% if entry.data.categories %}
+              <span class="index-row__categories">{{ entry.data.categories | join(', ') | upper }}</span>
+            {% endif %}
+          </div>
+          <div class="index-col index-col--date">
+            {% if entry.data.date %}
+              <span class="index-row__date-mmdd">{{ entry.data.date | formatDate("MMDD") }}</span>
+              <span class="index-row__date-year">{{ entry.data.date | formatDate("YYYY") }}</span>
+            {% elif entry.data.year %}
+              <span class="index-row__date-year">{{ entry.data.year }}</span>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="index-empty p--2">
+        <p>No entries yet. Add markdown files to the <code>entries/</code> folder.</p>
+      </div>
+    {% endif %}
+  </section>
+
+</article>
+
+{# Appended to <head> during build #}
+{% include "components/opengraph.njk" %}
+{% include "components/jsonld.njk" %}
