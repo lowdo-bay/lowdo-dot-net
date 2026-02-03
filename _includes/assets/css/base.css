@@ -846,7 +846,7 @@ body::after {
 
 /* Index-specific grid line positions for 4fr 4fr 7fr 1fr layout */
 @media (min-width: 840px) {
-	body[data-current="all"] {
+	:root[data-current="all"] {
 		--line-pos-4: 93.75%;
 	}
 }
