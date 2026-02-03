@@ -849,6 +849,11 @@ body::after {
 	:root[data-current="all"] {
 		--line-pos-4: 93.75%;
 	}
+
+	/* Center hamburger menu in 4th column on index page */
+	:root[data-current="all"] .grid--header .grid__item--end {
+		justify-content: center;
+	}
 }
 
 /* Index Header Section */
