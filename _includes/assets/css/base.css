@@ -689,7 +689,7 @@ main.p--content article {
   background-color: var(--project-header-bg, #E0E2F1);
   z-index: -1;
   /* Top border line (major/solid) */
-  border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major) var(--grid-line-color);
+  border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
 }
 
 .project-header::after {
@@ -700,7 +700,7 @@ main.p--content article {
   width: 100vw;
   bottom: 0;
   /* Bottom border line (major/solid) */
-  border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major) var(--grid-line-color);
+  border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
   z-index: 9999;
 }
 
@@ -743,7 +743,7 @@ header.p--content::after {
 	transform: translateX(-50%);
 	width: 100vw;
 	bottom: 0;
-	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major) var(--grid-line-color);
+	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
 	z-index: 9999;
 }
 
@@ -758,7 +758,7 @@ footer.p--content::before {
 	transform: translateX(-50%);
 	width: 100vw;
 	top: 0;
-	border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major) var(--grid-line-color);
+	border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
 	z-index: 9999;
 }
 
