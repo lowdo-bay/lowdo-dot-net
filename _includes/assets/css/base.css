@@ -912,7 +912,19 @@ body::after {
 /* Index Column Headers */
 .index-columns-header {
 	position: relative;
+}
+
+/* Extend column header line edge-to-edge across full viewport */
+.index-columns-header::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100vw;
+	height: var(--grid-line-thickness);
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+	pointer-events: none;
 }
 
 .index-columns-header .grid--index {
@@ -965,9 +977,21 @@ body::after {
 /* Index Entry Rows */
 .index-row {
 	position: relative;
-	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
 	min-height: 6rem;
 	padding: 0;
+}
+
+/* Extend horizontal line edge-to-edge across full viewport */
+.index-row::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100vw;
+	height: var(--grid-line-thickness);
+	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+	pointer-events: none;
 }
 
 /* Image column */
