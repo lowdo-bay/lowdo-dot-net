@@ -869,11 +869,13 @@ body::after {
 /* Index Header Section */
 .index-header-section {
 	position: relative;
+	padding-left: var(--content-margin);
+	padding-right: var(--content-margin);
 }
 
 .index-title {
-	text-decoration: underline;
-	text-underline-offset: 0.2em;
+	color: var(--grid-line-color);
+	font-weight: bold;
 	margin-bottom: calc(var(--space) * 0.5);
 }
 
