@@ -967,7 +967,7 @@ body::after {
 	position: relative;
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
 	min-height: 6rem;
-	padding: calc(var(--space) * 0.25) 0;
+	padding: 0;
 }
 
 /* Image column */
@@ -1133,7 +1133,7 @@ a.index-row__title:hover {
 	.index-row {
 		display: flex;
 		flex-direction: column;
-		padding: calc(var(--space) * 1) 0;
+		padding: 0;
 	}
 
 	.index-col--image {
