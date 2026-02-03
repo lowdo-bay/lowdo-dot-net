@@ -5,6 +5,10 @@ description: >
   Sustainable retreat harmonizing nature and landscape.
 year: 2024
 date: 2024-11-10T12:28:51.623Z
+categories:
+  - HOUSING
+  - RESIDENTIAL
+  - SUSTAINABLE
 position: 0
 ---
 
