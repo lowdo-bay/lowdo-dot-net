@@ -889,6 +889,7 @@ body::after {
 .grid--4 {
 	display: grid;
 	grid-template-columns: 1fr;
+	align-items: start;
 }
 
 @media (min-width: 840px) {
@@ -914,6 +915,10 @@ body::after {
 .index-columns-header {
 	position: relative;
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+}
+
+.index-columns-header .grid--index {
+	align-items: end;
 }
 
 .index-columns-header .index-col {
