@@ -29,6 +29,27 @@ export default function() {
         return 'other';
       },
 
+      // Set layout based on entry type
+      layout(data) {
+        // Determine entry type from folder path
+        const inputPath = data.page.inputPath;
+        const pathParts = inputPath.split('/');
+        const entriesIndex = pathParts.indexOf('entries');
+        let entryType = 'other';
+        if (entriesIndex >= 0 && pathParts[entriesIndex + 1]) {
+          const folder = pathParts[entriesIndex + 1];
+          entryType = folderToType[folder] || 'other';
+        }
+
+        // Only projects get a layout (and thus a page)
+        if (entryType === 'project') {
+          return 'layouts/project.njk';
+        }
+
+        // Other entry types don't need a layout
+        return false;
+      },
+
       permalink(data) {
         // If the page is in `draft:true` mode, don't write it to disk
         if (data.draft) {
@@ -168,9 +189,6 @@ export default function() {
         return [];
       }
     },
-
-    // Default layout for projects (other types don't get pages)
-    layout: "layouts/project.njk",
 
     // Tag all entries for unified collection
     tags: ["entry"],

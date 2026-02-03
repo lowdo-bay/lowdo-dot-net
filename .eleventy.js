@@ -216,7 +216,7 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
 
   // Minify HTML output
   eleventyConfig.addTransform("htmlmin", function(content, outputPath) {
-    if (outputPath.indexOf(".html") > -1) {
+    if (outputPath && typeof outputPath === 'string' && outputPath.indexOf(".html") > -1) {
       let minified = htmlmin.minify(content, {
         useShortDoctype: true,
         removeComments: true,
