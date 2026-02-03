@@ -920,7 +920,7 @@ body::after {
 }
 
 .index-columns-header .index-col {
-	padding: calc(var(--space) * 0.25);
+	padding: calc(var(--space) * 0.5);
 	font-size: var(--font-size-small);
 	font-weight: bold;
 	text-transform: uppercase;
