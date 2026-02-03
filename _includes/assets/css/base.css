@@ -869,14 +869,16 @@ body::after {
 /* Index Header Section */
 .index-header-section {
 	position: relative;
-	padding-left: var(--content-margin);
-	padding-right: var(--content-margin);
+	padding-left: calc(var(--space) * 0.5);
+	padding-right: calc(var(--space) * 0.5);
+	padding-bottom: calc(var(--space) * 0.5) !important;
+	margin-bottom: calc(var(--space) * 0.5) !important;
 }
 
 .index-title {
 	color: var(--grid-line-color);
 	font-weight: bold;
-	margin-bottom: calc(var(--space) * 0.5);
+	margin-bottom: calc(var(--space) * 0.25);
 }
 
 .index-description {
@@ -915,7 +917,7 @@ body::after {
 }
 
 .index-columns-header .index-col {
-	padding: calc(var(--space) * 0.25);
+	padding: calc(var(--space) * 0.125);
 	font-size: var(--font-size-small);
 	font-weight: bold;
 	text-transform: uppercase;
