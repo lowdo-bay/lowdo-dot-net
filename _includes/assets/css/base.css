@@ -776,7 +776,7 @@ article > section:not(:last-child)::after {
 	transform: translateX(-50%);
 	width: 100vw;
 	bottom: 0;
-	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor) var(--grid-line-color);
+	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
 	z-index: 9999;
 }
 
