@@ -418,6 +418,21 @@ img {
 		padding-right: calc(var(--space) * 0.5);
 	}
 
+	/* Fix hamburger menu at exact pixel position on all pages */
+	.grid--header .grid__item--end {
+		position: absolute;
+		top: var(--content-margin);
+		left: var(--hamburger-left);
+		transform: translateX(-50%); /* Center the element at this position */
+		grid-column: unset; /* Break out of grid */
+		padding: 0;
+	}
+
+	/* Ensure header has positioning context */
+	header.p--content {
+		position: relative;
+	}
+
 	[data-orientation] {
 		grid-column: 2 / span 3;
 	}
@@ -848,11 +863,6 @@ body::after {
 @media (min-width: 840px) {
 	:root[data-current="all"] {
 		--line-pos-4: 93.75%;
-	}
-
-	/* Center hamburger menu in 4th column on index page */
-	:root[data-current="all"] .grid--header .grid__item--end {
-		justify-content: center;
 	}
 }
 
