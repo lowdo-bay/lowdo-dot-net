@@ -21,7 +21,19 @@
 	--grid-line-horizontal-major-style: {{ settings.theme.theme_grid_lines.horizontal_major_style or "solid" }};
 	--grid-line-horizontal-minor-style: {{ settings.theme.theme_grid_lines.horizontal_minor_style or "dashed" }};
 	/* Content margin and grid calculations */
-	--content-margin: calc(var(--space) * 2);
+	/* Semantic spacing scale - automatically scales with --space at breakpoints */
+	--space-0: 0;
+	--space-1: calc(var(--space) * 0.25);   /* 0.25rem mobile, 0.375rem desktop */
+	--space-2: calc(var(--space) * 0.5);    /* 0.5rem mobile, 0.75rem desktop */
+	--space-3: var(--space);                /* 1rem mobile, 1.5rem desktop */
+	--space-4: calc(var(--space) * 1.5);    /* 1.5rem mobile, 2.25rem desktop */
+	--space-5: calc(var(--space) * 2);      /* 2rem mobile, 3rem desktop */
+	--space-6: calc(var(--space) * 3);      /* 3rem mobile, 4.5rem desktop */
+	--space-7: calc(var(--space) * 4);      /* 4rem mobile, 6rem desktop */
+	--space-8: calc(var(--space) * 6);      /* 6rem mobile, 9rem desktop */
+	--space-9: calc(var(--space) * 8);      /* 8rem mobile, 12rem desktop */
+
+	--content-margin: var(--space-5);
 	--grid-gap: 0;
 
 	/* Viewport-based calculations for precise grid */

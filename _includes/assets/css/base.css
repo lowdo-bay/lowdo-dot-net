@@ -65,8 +65,8 @@ body {
 
 .grid__item {
 	grid-column: 1;
-	padding-left: calc(var(--space) * 0.5);
-	padding-right: calc(var(--space) * 0.5);
+	padding-left: var(--space-2);
+	padding-right: var(--space-2);
 }
 
 .grid__item--end {
@@ -93,8 +93,8 @@ body {
        column-count: 1;
 	-moz-column-width: auto;
 	     column-width: auto;
-	padding-left: calc(var(--space) * 0.5);
-	padding-right: calc(var(--space) * 0.5);
+	padding-left: var(--space-2);
+	padding-right: var(--space-2);
 }
 
 .columns__item {
@@ -113,9 +113,9 @@ body {
 /* Color scheme toggle */
 
 .toggle__label {
-	width: 1rem;
-  height: 1rem;
-	padding-left: .5rem;
+	width: var(--space-3);
+  height: var(--space-3);
+	padding-left: var(--space-2);
 	cursor: pointer;
 	-webkit-user-select: none;
 	   -moz-user-select: none;
@@ -179,7 +179,7 @@ body {
 	position: absolute;
 	top: 100%;
 	right: 0;
-	margin-top: calc(var(--space) * 0.5);
+	margin-top: var(--space-2);
 	background-color: var(--color-background);
 	/* Mobile: full screen width */
 	width: 100vw;
@@ -197,7 +197,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	padding: calc(var(--space) * 0.5) 0;
+	padding: var(--space-2) 0;
 	text-decoration: none;
 	color: var(--color-text);
 	border-bottom: 1px solid var(--color-text);
@@ -216,7 +216,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	gap: calc(var(--space) * 0.5);
+	gap: var(--space-2);
 	width: 100%;
 	padding: 0;
 }
@@ -240,8 +240,8 @@ img.loaded {
 .image-caption {
   font-size: 14px;
   color: #666;
-  margin-top: 0.5rem;
-  margin-bottom: 2rem;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-5);
   text-align: left; /* left, center, right */
   font-style: italic; /* optional */
 }
@@ -329,7 +329,7 @@ img {
 
 .btn {
 	display: flex;
-	padding: 0.5rem 1rem;
+	padding: var(--space-2) var(--space-3);
 	justify-content: center;
 	align-content: center;
 }
@@ -356,7 +356,7 @@ img {
 	}
 
 	.grid--project {
-		row-gap: calc(var(--space) * 1.5);
+		row-gap: var(--space-4);
 	}
 
 	.grid__item--breakout {
@@ -376,8 +376,8 @@ img {
 
 	.grid__item--span-4 {
 		grid-column: span 2/5;
-		padding-left: calc(var(--space) * 0.5);
-		padding-right: calc(var(--space) * 0.5);
+		padding-left: var(--space-2);
+		padding-right: var(--space-2);
 	}
 
 	.grid--header,
@@ -390,14 +390,14 @@ img {
 
 	.grid__item--span-2-left {
 		grid-column: 1 / span 2;
-		padding-left: calc(var(--space) * 0.5);
-		padding-right: calc(var(--space) * 0.5);
+		padding-left: var(--space-2);
+		padding-right: var(--space-2);
 	}
 
 	.grid__item--span-2-right {
 		grid-column: 3 / span 2;
-		padding-left: calc(var(--space) * 0.5);
-		padding-right: calc(var(--space) * 0.5);
+		padding-left: var(--space-2);
+		padding-right: var(--space-2);
 	}
 
 	.grid--footer {
@@ -406,16 +406,16 @@ img {
 
 	.grid__item {
 		grid-column: initial;
-		padding-left: calc(var(--space) * 0.5);
-		padding-right: calc(var(--space) * 0.5);
+		padding-left: var(--space-2);
+		padding-right: var(--space-2);
 	}
 
 	.grid__item--end {
 		display: flex;
 		justify-content: flex-end;
 		grid-column: 4;
-		padding-left: calc(var(--space) * 0.5);
-		padding-right: calc(var(--space) * 0.5);
+		padding-left: var(--space-2);
+		padding-right: var(--space-2);
 	}
 
 	/* Fix hamburger menu at exact pixel position on all pages */
@@ -464,8 +464,8 @@ img {
 
 	.grid__item--span-4 {
 		grid-column: span 2/5;
-		padding-left: calc(var(--space) * 0.5);
-		padding-right: calc(var(--space) * 0.5);
+		padding-left: var(--space-2);
+		padding-right: var(--space-2);
 	}
 
 	.columns {
@@ -517,8 +517,8 @@ img {
 .col-1-2-3--padded,
 .col-2-3-4--padded,
 .col-1-2-3-4--padded {
-	padding-left: calc(var(--space) * 0.5);
-	padding-right: calc(var(--space) * 0.5);
+	padding-left: var(--space-2);
+	padding-right: var(--space-2);
 }
 
 /* Mobile fallback: all columns span full width */
@@ -538,7 +538,7 @@ img {
 }
 
 .p--2 {
-	padding: calc(var(--space) * 2 );
+	padding: var(--space-5);
 }
 
 /* Content margin - outer margin that aligns with grid */
@@ -585,23 +585,23 @@ main.p--content article {
 }
 
 .pb--2 {
-	padding-bottom: calc(var(--space) * 2 );
+	padding-bottom: var(--space-5);
 }
 
 .pb--3 {
-	padding-bottom: calc(var(--space) * 3 );
+	padding-bottom: var(--space-6);
 }
 
 .pb--4 {
-	padding-bottom: calc(var(--space) * 4 );
+	padding-bottom: var(--space-7);
 }
 
 .pb--6 {
-	padding-bottom: calc(var(--space) * 6 );
+	padding-bottom: var(--space-8);
 }
 
 .pb--8 {
-	padding-bottom: calc(var(--space) * 8 );
+	padding-bottom: var(--space-9);
 }
 
 /* Margins */
@@ -615,23 +615,23 @@ main.p--content article {
 }
 
 .mb--2 {
-	margin-bottom: calc(var(--space) * 2 );
+	margin-bottom: var(--space-5);
 }
 
 .mb--3 {
-	margin-bottom: calc(var(--space) * 3 );
+	margin-bottom: var(--space-6);
 }
 
 .mb--4 {
-	margin-bottom: calc(var(--space) * 4 );
+	margin-bottom: var(--space-7);
 }
 
 .mb--6 {
-	margin-bottom: calc(var(--space) * 6 );
+	margin-bottom: var(--space-8);
 }
 
 .mb--8 {
-	margin-bottom: calc(var(--space) * 8 );
+	margin-bottom: var(--space-9);
 }
 
 .banner-image {
@@ -666,15 +666,15 @@ main.p--content article {
 .project-header .grid__item--span-2-left {
   padding-top: 0;
   padding-bottom: 0;
-  margin-top: calc(-1 * var(--content-margin));
-  margin-bottom: calc(-1 * var(--content-margin));
+  margin-top: calc(-1 * var(--space-5));
+  margin-bottom: calc(-1 * var(--space-5));
 }
 
 /* Project page header section */
 .project-header {
   position: relative;
   padding: var(--content-margin);
-  margin-bottom: calc(var(--space) * 2);
+  margin-bottom: var(--space-5);
 }
 
 /* Full-width background using box-shadow, content stays within margins */
@@ -765,8 +765,8 @@ footer.p--content::before {
 /* Minor horizontal lines (dashed) - for section dividers within content */
 article > section:not(:last-child) {
 	position: relative;
-	padding-bottom: calc(var(--space) * 1);
-	margin-bottom: calc(var(--space) * 1);
+	padding-bottom: var(--space);
+	margin-bottom: var(--space);
 }
 
 article > section:not(:last-child)::after {
@@ -869,14 +869,14 @@ body::after {
 /* Index Header Section */
 .index-header-section {
 	position: relative;
-	padding-left: calc(var(--space) * 0.5);
-	padding-right: calc(var(--space) * 0.5);
+	padding-left: var(--space-2);
+	padding-right: var(--space-2);
 }
 
 .index-title {
 	color: var(--grid-line-color);
 	font-weight: bold;
-	margin-bottom: calc(var(--space) * 0.25);
+	margin-bottom: var(--space-1);
 }
 
 .index-description {
@@ -932,7 +932,7 @@ body::after {
 }
 
 .index-columns-header .index-col {
-	padding: calc(var(--space) * 0.5);
+	padding: var(--space-2);
 	font-size: var(--font-size-small);
 	font-weight: bold;
 	text-transform: uppercase;
@@ -948,7 +948,7 @@ body::after {
 
 /* Index Column Styles */
 .index-col {
-	padding: calc(var(--space) * 0.5);
+	padding: var(--space-2);
 }
 
 .index-col--image {
@@ -1036,7 +1036,7 @@ a.index-row__title:hover {
 
 .index-row__subtitle {
 	display: block;
-	margin-top: calc(var(--space) * 0.25);
+	margin-top: var(--space-1);
 	text-transform: uppercase;
 	font-size: var(--font-size-small);
 }
@@ -1051,7 +1051,7 @@ a.index-row__title:hover {
 
 .index-row__categories {
 	display: block;
-	margin-bottom: calc(var(--space) * 0.5);
+	margin-bottom: var(--space-2);
 }
 
 .index-row__collaborators {
@@ -1124,7 +1124,7 @@ a.index-row__title:hover {
 	width: 1em;
 	height: 1em;
 	border: var(--grid-line-thickness) solid var(--color-link);
-	margin-right: calc(var(--space) * 0.25);
+	margin-right: var(--space-1);
 	position: relative;
 }
 
@@ -1146,7 +1146,7 @@ a.index-row__title:hover {
 
 /* Empty state */
 .index-empty {
-	padding: calc(var(--space) * 2);
+	padding: var(--space-5);
 	text-align: center;
 	color: var(--color-text);
 	opacity: 0.6;
@@ -1162,23 +1162,23 @@ a.index-row__title:hover {
 
 	.index-col--image {
 		order: 1;
-		margin-bottom: calc(var(--space) * 0.5);
+		margin-bottom: var(--space-2);
 		max-width: 50%;
 	}
 
 	.index-col--item {
 		order: 2;
-		margin-bottom: calc(var(--space) * 0.5);
+		margin-bottom: var(--space-2);
 	}
 
 	.index-col--details {
 		order: 3;
-		margin-bottom: calc(var(--space) * 0.5);
+		margin-bottom: var(--space-2);
 	}
 
 	.index-col--date {
 		order: 4;
 		flex-direction: row;
-		gap: calc(var(--space) * 0.5);
+		gap: var(--space-2);
 	}
 }
