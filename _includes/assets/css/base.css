@@ -1071,6 +1071,13 @@ a.index-row__title:hover {
 	font-style: italic;
 }
 
+.index-row__description {
+	display: block;
+	font-size: var(--font-size-small);
+	margin-top: var(--space-1);
+	line-height: 1.4;
+}
+
 /* Date column */
 .index-col--date {
 	display: flex;

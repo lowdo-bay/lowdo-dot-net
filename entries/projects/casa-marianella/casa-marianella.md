@@ -1,6 +1,7 @@
 ---
 draft: false
 title: Casa Marianella
+subtitle: Sustainable retreat harmonizing nature and landscape
 description: >
   Sustainable retreat harmonizing nature and landscape.
 year: 2026
@@ -9,6 +10,11 @@ categories:
   - HOUSING
   - RESIDENTIAL
   - SUSTAINABLE
+collaborators:
+  - name: "Persyn Engineering"
+    role: "Structural"
+  - name: "Local Contractors Inc"
+    role: "General Contractor"
 position: 1
 ---
 

@@ -3,27 +3,7 @@
   {# Column 1: Thumbnail Image #}
   <div class="index-col index-col--image">
     {% if entry.data.thumbnail and entry.data.thumbnail.src %}
-      {% set outputFormats = [] %}
-      {% for format, i in settings.images %}
-        {% if i.enabled === true %}
-          {{ '' if outputFormats.push(format) }}
-        {% endif %}
-      {% endfor %}
-
-      {% set params = {
-        "src": entry.data.thumbnail.src,
-        "alt": entry.data.thumbnail.alt or entry.data.title,
-        "loadingType": "lazy",
-        "viewportSizes": "(min-width: 840px) 20vw, 40vw",
-        "outputWidths": [200, 400, 600],
-        "outputFormats": outputFormats,
-        "outputQualityJpeg": settings.images.jpeg.quality,
-        "outputQualityWebp": settings.images.webp.quality,
-        "outputQualityAvif": settings.images.avif.quality
-      } %}
-      {% generateImage params %}
-    {% else %}
-      <div class="index-row__placeholder"></div>
+      <img src="/{{ entry.data.thumbnail.src }}" alt="{{ entry.data.thumbnail.alt or entry.data.title }}" loading="lazy" class="index-row__thumbnail">
     {% endif %}
   </div>
 
@@ -38,8 +18,6 @@
     {% endif %}
     {% if entry.data.subtitle %}
       <span class="index-row__subtitle">{{ entry.data.subtitle }}</span>
-    {% elif entry.data.description %}
-      <span class="index-row__subtitle">{{ entry.data.description }}</span>
     {% endif %}
   </div>
 
@@ -55,6 +33,9 @@
           {{ collab.name | upper }}{% if not loop.last %}, {% endif %}
         {% endfor %}
       </span>
+    {% endif %}
+    {% if entry.data.entryType != 'project' and entry.data.description %}
+      <span class="index-row__description">{{ entry.data.description }}</span>
     {% endif %}
   </div>
 

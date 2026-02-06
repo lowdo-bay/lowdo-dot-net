@@ -41,7 +41,7 @@ export default function(eleventyConfig) {
     });
 
 // Shortcode to generate a responsive project image
-eleventyConfig.addShortcode("generateImage", async function(params) {
+eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
 
   let {
     src,
@@ -62,9 +62,6 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
     return '';
   }
 
-  console.log('Original src:', src); // DEBUG
-  console.log('this.page:', this.page); // DEBUG
-
   // Remove leading slash from image paths if present
   src = src.startsWith("/") ? src.slice(1) : src;
 
@@ -72,32 +69,35 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
   if ((src.startsWith('./') || !src.includes('/')) && this.page && this.page.inputPath) {
     const filename = src.startsWith('./') ? src.slice(2) : src;
     const inputPath = this.page.inputPath;
-    console.log('Input path:', inputPath); // DEBUG
     const pathParts = inputPath.split('/');
     pathParts.pop();
     src = pathParts.join('/') + '/' + filename;
-    console.log('Resolved src:', src); // DEBUG
-  } else {
-    console.log('Path resolution skipped'); // DEBUG
   }
 
-  let metadata = await Image(src, {
-    widths: outputWidths,
-    sharpJpegOptions: { quality: outputQualityJpeg },
-    sharpWebpOptions: { quality: outputQualityWebp },
-    sharpAvifOptions: { quality: outputQualityAvif },
-    formats: outputFormats,
-    urlPath: "/assets/images/",
-    outputDir: "./_site/assets/images/",
-    // cacheOptions: {
-    //   // If image is a remote URL, this is the amount of time before 11ty fetches a fresh copy
-    //   duration: "5y",
-    //   directory: ".cache",
-    //   removeUrlQueryParams: true,
-    // },
-  });
+  let metadata;
+  try {
+    metadata = await Image(src, {
+      widths: outputWidths,
+      sharpJpegOptions: { quality: outputQualityJpeg },
+      sharpWebpOptions: { quality: outputQualityWebp },
+      sharpAvifOptions: { quality: outputQualityAvif },
+      formats: outputFormats,
+      urlPath: "/assets/images/",
+      outputDir: "./_site/assets/images/",
+      // cacheOptions: {
+      //   // If image is a remote URL, this is the amount of time before 11ty fetches a fresh copy
+      //   duration: "5y",
+      //   directory: ".cache",
+      //   removeUrlQueryParams: true,
+      // },
+    });
+  } catch (error) {
+    console.error('Image processing error for:', src);
+    console.error('Error:', error.message);
+    return ''; // Return empty string on error
+  }
 
-    let lowsrc = metadata.jpeg[0];
+    let lowsrc = metadata.jpeg ? metadata.jpeg[0] : Object.values(metadata)[0][0];
 
     let orientation;
 
@@ -144,16 +144,17 @@ eleventyConfig.addShortcode("generateImage", async function(params) {
 
   // Unified entries collection (all types, sorted by position then date)
   eleventyConfig.addCollection("entries", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("entries/**/*.md")
-      .filter(entry => entry.data.draft !== true)
-      .sort((a, b) => {
-        // Primary sort: position (lower first)
-        if (a.data.position !== b.data.position) {
-          return a.data.position - b.data.position;
-        }
-        // Secondary sort: date (newer first)
-        return new Date(b.data.date) - new Date(a.data.date);
-      });
+    const allEntries = collectionApi.getFilteredByGlob("entries/**/*.md")
+      .filter(entry => entry.data.draft !== true);
+
+    return allEntries.sort((a, b) => {
+      // Primary sort: position (lower first)
+      if (a.data.position !== b.data.position) {
+        return a.data.position - b.data.position;
+      }
+      // Secondary sort: date (newer first)
+      return new Date(b.data.date) - new Date(a.data.date);
+    });
   });
 
   // A filter to limit output of collection items

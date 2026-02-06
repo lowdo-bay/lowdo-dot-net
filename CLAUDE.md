@@ -141,7 +141,7 @@ The Comprehensive Index at `/index/` displays all entry types in a filterable sp
 
 ### Frontmatter Reference
 
-**Required fields:**
+**Required fields (all entries):**
 ```yaml
 ---
 draft: false
@@ -150,20 +150,68 @@ date: 2024-01-15
 ---
 ```
 
-**Optional fields:**
+**Common optional fields:**
 ```yaml
-subtitle: "Brief tagline shown below title"
-description: "Longer description (used if no subtitle)"
-categories:
+subtitle: "Brief tagline shown below title"  # Displayed in Column 2
+categories:                                   # Displayed in Column 3
   - HOUSING
   - DESIGN
-collaborators:
+position: 1  # Sort order (lower = first)
+```
+
+### Metadata by Entry Type
+
+The comprehensive index displays entries in two main categories:
+
+**Projects** (`entries/projects/`)
+- Get individual detail pages at `/project/{slug}/`
+- Display collaborators in Column 3 (below categories)
+
+```yaml
+---
+draft: false
+title: "Project Name"
+subtitle: "Brief tagline"        # Shown in Column 2
+date: 2024-01-15
+year: 2024                        # Optional: display year instead of full date
+categories:
+  - HOUSING
+  - SUSTAINABLE
+collaborators:                    # Shown in Column 3
   - name: "Partner Name"
     role: "Structural Engineer"
-link: "https://external-url.com"  # For non-project entries
-position: 1  # Sort order (lower = first)
-year: 2024   # For projects
+  - name: "Another Partner"
+    role: "General Contractor"
+position: 1
+---
 ```
+
+**Updates** (`entries/news/`, `awards/`, `features/`, `lectures/`, `exhibitions/`, `staff/`)
+- Index-only display (no individual pages)
+- Display description in Column 3 (below categories)
+- Can link to external URLs
+
+```yaml
+---
+draft: false
+title: "Update Title"
+subtitle: "Brief tagline"         # Shown in Column 2
+description: "Short description"  # Shown in Column 3
+date: 2024-01-15
+categories:
+  - AWARD
+  - NEWS
+link: "https://external-url.com"  # Makes title clickable (opens in new tab)
+position: 2
+---
+```
+
+**Field Usage Summary:**
+- `subtitle` - Brief tagline shown in Column 2 below title (all entries)
+- `collaborators` - Array of partners shown in Column 3 for **Projects only**
+- `description` - Short text shown in Column 3 for **Updates only**
+- `link` - External URL for Updates (makes title clickable)
+- `year` - For projects, can be used instead of full date
 
 ### Adding Images
 
