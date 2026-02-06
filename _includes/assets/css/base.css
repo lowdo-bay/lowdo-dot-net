@@ -870,9 +870,9 @@ body::after {
 /* Index Header Section */
 .index-header-section {
 	position: relative;
-	padding-left: var(--space-2);
-	padding-right: var(--space-2);
-	margin-top: calc(-1 * var(--space-5)); /*Negative content margin*/
+	padding-left: var(--space-0);
+	padding-right: var(--space-0);
+	margin-top: calc(-1 * var(--space-6)); /*Negative content margin*/
 }
 
 /*Remove horizontal line for .index-header-section*/
