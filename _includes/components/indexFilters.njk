@@ -1,42 +1,16 @@
-<div class="index-filters" role="group" aria-label="Filter entries by type">
+<div class="index-filters" role="group" aria-label="Filter entries by category">
+  {# ALL toggle #}
   <label class="index-filter">
-    <input type="checkbox" name="filter" value="all" checked>
+    <input type="checkbox" name="filter" value="all" data-filter-type="all" checked>
     <span class="index-filter__box"></span>
     <span class="index-filter__label">ALL</span>
   </label>
+  {# Dynamic category filters #}
+  {% for category in collections.allCategories %}
   <label class="index-filter">
-    <input type="checkbox" name="filter" value="project">
+    <input type="checkbox" name="filter" value="{{ category | lower }}" data-filter-type="{{ category | lower }}">
     <span class="index-filter__box"></span>
-    <span class="index-filter__label">PROJECTS</span>
+    <span class="index-filter__label">{{ category }}</span>
   </label>
-  <label class="index-filter">
-    <input type="checkbox" name="filter" value="news">
-    <span class="index-filter__box"></span>
-    <span class="index-filter__label">NEWS</span>
-  </label>
-  <label class="index-filter">
-    <input type="checkbox" name="filter" value="award">
-    <span class="index-filter__box"></span>
-    <span class="index-filter__label">AWARD</span>
-  </label>
-  <label class="index-filter">
-    <input type="checkbox" name="filter" value="feature">
-    <span class="index-filter__box"></span>
-    <span class="index-filter__label">FEATURE</span>
-  </label>
-  <label class="index-filter">
-    <input type="checkbox" name="filter" value="lecture">
-    <span class="index-filter__box"></span>
-    <span class="index-filter__label">LECTURE</span>
-  </label>
-  <label class="index-filter">
-    <input type="checkbox" name="filter" value="exhibition">
-    <span class="index-filter__box"></span>
-    <span class="index-filter__label">EXHIBITION</span>
-  </label>
-  <label class="index-filter">
-    <input type="checkbox" name="filter" value="staff">
-    <span class="index-filter__box"></span>
-    <span class="index-filter__label">STAFF</span>
-  </label>
+  {% endfor %}
 </div>

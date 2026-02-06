@@ -157,6 +157,25 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
     });
   });
 
+  // Collection of all unique categories from entries
+  eleventyConfig.addCollection("allCategories", function(collectionApi) {
+    const entries = collectionApi.getAll()
+      .filter(item => item.data.tags && item.data.tags.includes("entry"))
+      .filter(item => !item.data.draft);
+
+    const categorySet = new Set();
+
+    entries.forEach(entry => {
+      if (entry.data.categories && Array.isArray(entry.data.categories)) {
+        entry.data.categories.forEach(cat => {
+          categorySet.add(cat.toUpperCase());
+        });
+      }
+    });
+
+    return Array.from(categorySet).sort();
+  });
+
   // A filter to limit output of collection items
   eleventyConfig.addFilter("limit", function (arr, limit) {
     return arr.slice(0, limit);
