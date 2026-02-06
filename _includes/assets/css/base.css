@@ -1160,6 +1160,10 @@ a.index-row__title:hover {
 	letter-spacing: 0.05em;
 }
 
+.index-filter__label--bold {
+	font-weight: 700;
+}
+
 /* Empty state */
 .index-empty {
 	padding: var(--space-5);

@@ -1,4 +1,4 @@
-// Index filtering - category-based checkbox filtering with "ALL" toggle
+// Index filtering - entry-type + category-based filtering with "ALL" toggle
 (function() {
   var filterControls = document.querySelector('.index-filters');
   var entryRows = document.querySelectorAll('.index-row');
@@ -6,24 +6,37 @@
   if (!filterControls || !entryRows.length) return;
 
   var allCheckbox = filterControls.querySelector('[data-filter-type="all"]');
-  var categoryCheckboxes = filterControls.querySelectorAll('[data-filter-type]:not([data-filter-type="all"])');
+  var filterCheckboxes = filterControls.querySelectorAll('[data-filter-type]:not([data-filter-type="all"])');
 
   function updateVisibility() {
-    var selectedCategories = [];
-    categoryCheckboxes.forEach(function(cb) {
-      if (cb.checked) selectedCategories.push(cb.dataset.filterType);
+    var selectedFilters = [];
+    filterCheckboxes.forEach(function(cb) {
+      if (cb.checked) {
+        selectedFilters.push({
+          value: cb.dataset.filterType,
+          category: cb.dataset.filterCategory // 'type' or 'category'
+        });
+      }
     });
 
-    var showAll = allCheckbox.checked || selectedCategories.length === 0;
+    var showAll = allCheckbox.checked || selectedFilters.length === 0;
 
     entryRows.forEach(function(row) {
+      var rowType = row.dataset.entryType || '';
       var rowCategories = (row.dataset.categories || '').split(',').filter(function(c) { return c; });
 
       if (showAll) {
         row.style.display = '';
       } else {
-        var hasMatch = rowCategories.some(function(cat) {
-          return selectedCategories.indexOf(cat) !== -1;
+        // Check if any selected filter matches
+        var hasMatch = selectedFilters.some(function(filter) {
+          if (filter.category === 'type') {
+            // Match by entry type
+            return rowType === filter.value;
+          } else {
+            // Match by category
+            return rowCategories.indexOf(filter.value) !== -1;
+          }
         });
         row.style.display = hasMatch ? '' : 'none';
       }
@@ -33,22 +46,20 @@
   // "ALL" checkbox behavior
   allCheckbox.addEventListener('change', function() {
     if (this.checked) {
-      // Uncheck all category filters when ALL is checked
-      categoryCheckboxes.forEach(function(cb) { cb.checked = false; });
+      filterCheckboxes.forEach(function(cb) { cb.checked = false; });
     }
     updateVisibility();
   });
 
-  // Individual category checkbox behavior
-  categoryCheckboxes.forEach(function(cb) {
+  // Individual filter checkbox behavior
+  filterCheckboxes.forEach(function(cb) {
     cb.addEventListener('change', function() {
-      // Uncheck "ALL" when any category is selected
       if (this.checked) {
         allCheckbox.checked = false;
       }
-      // If no categories selected, re-check "ALL"
+      // If no filters selected, re-check "ALL"
       var anyChecked = false;
-      categoryCheckboxes.forEach(function(checkbox) {
+      filterCheckboxes.forEach(function(checkbox) {
         if (checkbox.checked) anyChecked = true;
       });
       if (!anyChecked) {
@@ -58,11 +69,20 @@
     });
   });
 
-  // URL parameter support for direct linking: ?category=housing
+  // URL parameter support: ?type=project or ?category=housing
   var params = new URLSearchParams(window.location.search);
+  var typeParam = params.get('type');
   var categoryParam = params.get('category');
-  if (categoryParam) {
-    var targetCheckbox = filterControls.querySelector('[data-filter-type="' + categoryParam.toLowerCase() + '"]');
+
+  if (typeParam) {
+    var targetCheckbox = filterControls.querySelector('[data-filter-type="' + typeParam.toLowerCase() + '"][data-filter-category="type"]');
+    if (targetCheckbox) {
+      allCheckbox.checked = false;
+      targetCheckbox.checked = true;
+      updateVisibility();
+    }
+  } else if (categoryParam) {
+    var targetCheckbox = filterControls.querySelector('[data-filter-type="' + categoryParam.toLowerCase() + '"][data-filter-category="category"]');
     if (targetCheckbox) {
       allCheckbox.checked = false;
       targetCheckbox.checked = true;

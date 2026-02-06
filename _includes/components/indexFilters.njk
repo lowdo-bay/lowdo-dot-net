@@ -1,14 +1,22 @@
-<div class="index-filters" role="group" aria-label="Filter entries by category">
+<div class="index-filters" role="group" aria-label="Filter entries by type and category">
   {# ALL toggle #}
   <label class="index-filter">
     <input type="checkbox" name="filter" value="all" data-filter-type="all" checked>
     <span class="index-filter__box"></span>
     <span class="index-filter__label">ALL</span>
   </label>
-  {# Dynamic category filters #}
+  {# Entry type filters (from subfolders) - BOLD #}
+  {% for entryType in collections.allEntryTypes %}
+  <label class="index-filter index-filter--entry-type">
+    <input type="checkbox" name="filter" value="{{ entryType | lower }}" data-filter-type="{{ entryType | lower }}" data-filter-category="type">
+    <span class="index-filter__box"></span>
+    <span class="index-filter__label index-filter__label--bold">{{ entryType }}</span>
+  </label>
+  {% endfor %}
+  {# Category filters (from frontmatter) #}
   {% for category in collections.allCategories %}
   <label class="index-filter">
-    <input type="checkbox" name="filter" value="{{ category | lower }}" data-filter-type="{{ category | lower }}">
+    <input type="checkbox" name="filter" value="{{ category | lower }}" data-filter-type="{{ category | lower }}" data-filter-category="category">
     <span class="index-filter__box"></span>
     <span class="index-filter__label">{{ category }}</span>
   </label>
