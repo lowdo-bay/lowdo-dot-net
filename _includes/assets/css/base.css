@@ -765,8 +765,9 @@ footer.p--content::before {
 /* Minor horizontal lines (dashed) - for section dividers within content */
 article > section:not(:last-child) {
 	position: relative;
-	padding-bottom: var(--space);
-	margin-bottom: var(--space);
+	padding-top: var(--space);
+	padding-bottom: var(--space-0);
+	margin-bottom: var(--space-0);
 }
 
 article > section:not(:last-child)::after {
@@ -871,6 +872,12 @@ body::after {
 	position: relative;
 	padding-left: var(--space-2);
 	padding-right: var(--space-2);
+	margin-top: calc(-1 * var(--space-5)); /*Negative content margin*/
+}
+
+/*Remove horizontal line for .index-header-section*/
+.index-header-section::after {
+  display: none;
 }
 
 .index-title {
