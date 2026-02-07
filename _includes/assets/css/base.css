@@ -880,7 +880,7 @@ body::after {
 }
 
 .index-title {
-	color: var(--grid-line-color);
+	color: var(--color-accent-1);
 	font-weight: bold;
 	margin-bottom: var(--space-1);
 }
@@ -986,10 +986,24 @@ body::after {
 	position: relative;
 	min-height: 6rem;
 	padding: 0;
-	transition: background-color var(--transition-time) ease;
 }
 
-.index-row:hover {
+/* Full-width background tint on hover (like grid lines) */
+.index-row::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100vw;
+	background-color: transparent;
+	transition: background-color var(--transition-time) ease;
+	z-index: -1;
+	pointer-events: none;
+}
+
+.index-row:hover::before {
 	background-color: var(--color-accent-5);
 }
 
@@ -1036,6 +1050,37 @@ body::after {
 	display: block;
 	text-transform: uppercase;
 	letter-spacing: 0.02em;
+	position: relative;
+	z-index: 1;
+	/* Add padding for highlight background breathing room */
+	padding: var(--space-1) var(--space-2);
+	margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2));
+	transition: color var(--transition-time) ease;
+}
+
+/* Animated highlight background */
+.index-row__title::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--color-accent-1);
+	transform: scaleX(0);
+	transform-origin: left center;
+	transition: transform var(--transition-time) ease;
+	z-index: -1;
+}
+
+/* Trigger animation on row hover */
+.index-row:hover .index-row__title::before {
+	transform: scaleX(1);
+}
+
+/* Change text color to white when animated */
+.index-row:hover .index-row__title {
+	color: #ffffff;
 }
 
 a.index-row__title {
@@ -1043,8 +1088,24 @@ a.index-row__title {
 	text-decoration: none;
 }
 
-a.index-row__title:hover {
-	text-decoration: underline;
+/* Projects use accent color for titles (default state) */
+[data-entry-type="project"] a.index-row__title {
+	color: var(--color-accent-1);
+}
+
+/* On hover, all titles become white */
+.index-row:hover a.index-row__title {
+	color: #ffffff;
+}
+
+/* Override general link hover for index titles */
+.index-row a.index-row__title:hover {
+	color: inherit;
+}
+
+/* When row is hovered, title stays white regardless of link hover */
+.index-row:hover a.index-row__title:hover {
+	color: #ffffff;
 }
 
 .index-row__subtitle {
@@ -1228,5 +1289,23 @@ a.index-row__title:hover {
 		order: 4;
 		flex-direction: row;
 		gap: var(--space-2);
+	}
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+/* Respect reduced motion preference for index animations */
+@media (prefers-reduced-motion: reduce) {
+	.index-row::before,
+	.index-row__title,
+	.index-row__title::before {
+		transition: none;
+	}
+
+	/* Instant color changes instead of animations */
+	.index-row:hover .index-row__title::before {
+		transform: scaleX(1);
 	}
 }
