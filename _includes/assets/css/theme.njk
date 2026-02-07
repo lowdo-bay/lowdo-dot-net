@@ -1,8 +1,18 @@
 :root {
 	--space-scale: {{ settings.theme.theme_layout.space_scale or "100" }};
-	--color-text: {{ settings.theme.theme_colors.text or "#000000" }};
-  --color-link: {{ settings.theme.theme_colors.link or "#000000" }};
 	--color-background: {{ settings.theme.theme_colors.background or "#ffffff" }};
+	--color-text: {{ settings.theme.theme_colors.text or "#101010" }};
+
+	/* Progressive accent colors - Light mode */
+	--color-accent-1: {{ settings.theme.theme_colors.accent_primary or "#001489" }};
+	--color-accent-2: {{ settings.theme.theme_colors.accent_2 or "#2D4BA8" }};
+	--color-accent-3: {{ settings.theme.theme_colors.accent_3 or "#5A73C7" }};
+	--color-accent-4: {{ settings.theme.theme_colors.accent_4 or "#A8B9E6" }};
+	--color-accent-5: {{ settings.theme.theme_colors.accent_5 or "#D4DCFA" }};
+
+	/* Semantic aliases */
+	--color-link: var(--color-accent-1);
+	--project-header-bg: var(--color-accent-5);
 	--font:
 	{% if (settings.theme.theme_typography.font == "system" or settings.theme.theme_typography.font == "") %}
 		{{ settings.config.font_stack_system | safe }}
@@ -57,8 +67,18 @@
 }
 
 :root[dark] {
-	--color-text: {{ settings.theme.theme_colors.text_dark or "#ffffff" }};
-  --color-link: {{ settings.theme.theme_colors.link_dark or "#ffffff" }};
-	--color-background: {{ settings.theme.theme_colors.background_dark or "#001489" }};
+	--color-background: {{ settings.theme.theme_colors.background_dark or "#101010" }};
+	--color-text: {{ settings.theme.theme_colors.text_dark or "#E1E1E1" }};
+
+	/* Progressive accent colors - Dark mode */
+	--color-accent-1: {{ settings.theme.theme_colors.accent_primary_dark or "#4D6FFF" }};
+	--color-accent-2: {{ settings.theme.theme_colors.accent_2_dark or "#3D5ACC" }};
+	--color-accent-3: {{ settings.theme.theme_colors.accent_3_dark or "#2D4499" }};
+	--color-accent-4: {{ settings.theme.theme_colors.accent_4_dark or "#1D2E66" }};
+	--color-accent-5: {{ settings.theme.theme_colors.accent_5_dark or "#171F3D" }};
+
+	/* Semantic aliases */
+	--color-link: var(--color-accent-1);
+	--project-header-bg: var(--color-accent-5);
 	--grid-line-color: {{ settings.theme.theme_grid_lines.color_dark or "#4a5568" }};
 }

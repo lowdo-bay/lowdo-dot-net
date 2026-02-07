@@ -36,14 +36,22 @@ theme:
     space_scale: 100
   # theme colors can be hex, rgb, rgba or any valid CSS color value
   theme_colors:
-    # default colors aka "light mode"
+    # Light mode
     background: '#ffffff'
     text: '#101010'
-    link: '#001489'
-    # dark mode colors
+    accent_primary: '#001489'      # lowdo-blue
+    accent_2: '#2D4BA8'
+    accent_3: '#5A73C7'
+    accent_4: '#A8B9E6'
+    accent_5: '#D4DCFA'
+    # Dark mode
     background_dark: '#101010'
     text_dark: '#E1E1E1'
-    link_dark: '#FFFFFF'
+    accent_primary_dark: '#4D6FFF'  # Bright saturated blue
+    accent_2_dark: '#3D5ACC'
+    accent_3_dark: '#2D4499'
+    accent_4_dark: '#1D2E66'
+    accent_5_dark: '#171F3D'
   theme_typography:
     # font can be any variable Google Font name. Enter 'system' to use a system font stack
     font: Overpass Mono
