@@ -69,6 +69,24 @@
     });
   });
 
+  // Show more/less toggle for category filters
+  var toggleButton = filterControls.querySelector('[data-toggle-filters]');
+  var categoryContainer = filterControls.querySelector('[data-category-filters]');
+  var categoriesVisible = false;
+
+  if (toggleButton && categoryContainer) {
+    toggleButton.addEventListener('click', function() {
+      categoriesVisible = !categoriesVisible;
+      if (categoriesVisible) {
+        categoryContainer.style.display = 'flex';
+        toggleButton.textContent = 'show less...';
+      } else {
+        categoryContainer.style.display = 'none';
+        toggleButton.textContent = 'show more...';
+      }
+    });
+  }
+
   // URL parameter support: ?type=project or ?category=housing
   var params = new URLSearchParams(window.location.search);
   var typeParam = params.get('type');
@@ -86,6 +104,12 @@
     if (targetCheckbox) {
       allCheckbox.checked = false;
       targetCheckbox.checked = true;
+      // Auto-expand category filters if a category is pre-selected
+      if (toggleButton && categoryContainer) {
+        categoryContainer.style.display = 'flex';
+        toggleButton.textContent = 'show less...';
+        categoriesVisible = true;
+      }
       updateVisibility();
     }
   }

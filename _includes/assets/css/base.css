@@ -1164,6 +1164,29 @@ a.index-row__title:hover {
 	font-weight: 700;
 }
 
+.index-filters__toggle {
+	font-size: var(--font-size-small);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	text-decoration: underline;
+	cursor: pointer;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+}
+
+.index-filters__toggle:hover {
+	opacity: 0.7;
+}
+
+.index-filters__categories {
+	display: flex;
+	flex-wrap: wrap;
+	gap: calc(var(--space) * 0.75);
+	width: 100%;
+}
+
 /* Empty state */
 .index-empty {
 	padding: var(--space-5);

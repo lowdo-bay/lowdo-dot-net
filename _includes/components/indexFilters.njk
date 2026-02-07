@@ -5,20 +5,24 @@
     <span class="index-filter__box"></span>
     <span class="index-filter__label">ALL</span>
   </label>
-  {# Entry type filters (from subfolders) - BOLD #}
+  {# Entry type filters (from subfolders) #}
   {% for entryType in collections.allEntryTypes %}
   <label class="index-filter index-filter--entry-type">
     <input type="checkbox" name="filter" value="{{ entryType | lower }}" data-filter-type="{{ entryType | lower }}" data-filter-category="type">
     <span class="index-filter__box"></span>
-    <span class="index-filter__label index-filter__label--bold">{{ entryType }}</span>
+    <span class="index-filter__label">{{ entryType }}</span>
   </label>
   {% endfor %}
-  {# Category filters (from frontmatter) #}
-  {% for category in collections.allCategories %}
-  <label class="index-filter">
-    <input type="checkbox" name="filter" value="{{ category | lower }}" data-filter-type="{{ category | lower }}" data-filter-category="category">
-    <span class="index-filter__box"></span>
-    <span class="index-filter__label">{{ category }}</span>
-  </label>
-  {% endfor %}
+  {# Show more toggle #}
+  <span class="index-filters__toggle" data-toggle-filters>show more...</span>
+  {# Category filters (from frontmatter) - hidden by default #}
+  <div class="index-filters__categories" data-category-filters style="display: none;">
+    {% for category in collections.allCategories %}
+    <label class="index-filter">
+      <input type="checkbox" name="filter" value="{{ category | lower }}" data-filter-type="{{ category | lower }}" data-filter-category="category">
+      <span class="index-filter__box"></span>
+      <span class="index-filter__label">{{ category }}</span>
+    </label>
+    {% endfor %}
+  </div>
 </div>
