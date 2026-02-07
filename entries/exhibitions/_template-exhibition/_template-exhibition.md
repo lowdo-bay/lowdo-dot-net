@@ -5,7 +5,6 @@ subtitle: "Gallery or Venue Name"
 description: "Brief description of the exhibition"
 date: 2024-01-15
 categories:
-  - EXHIBITION
   - ART
 link: "https://example.com/exhibition-page"
 position: 1

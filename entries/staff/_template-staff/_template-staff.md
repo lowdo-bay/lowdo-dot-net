@@ -5,7 +5,6 @@ subtitle: "New Role or Update Type"
 description: "Brief description of the update"
 date: 2024-01-15
 categories:
-  - STAFF
   - TEAM
 link: ""
 position: 1

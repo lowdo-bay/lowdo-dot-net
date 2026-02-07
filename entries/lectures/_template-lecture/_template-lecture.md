@@ -5,7 +5,6 @@ subtitle: "Venue or Organization"
 description: "Brief description of the lecture topic"
 date: 2024-01-15
 categories:
-  - LECTURE
   - EDUCATION
 link: "https://example.com/event-page"
 position: 1

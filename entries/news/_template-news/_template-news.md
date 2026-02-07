@@ -5,7 +5,6 @@ subtitle: "Brief context or tagline"
 description: "Short summary that appears in the index"
 date: 2024-01-15
 categories:
-  - NEWS
   - STUDIO
 link: "https://example.com/optional-external-link"
 position: 1

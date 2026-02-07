@@ -5,7 +5,6 @@ subtitle: "Awarding Organization"
 description: "Brief description of the award or recognition"
 date: 2024-01-15
 categories:
-  - AWARD
   - PRESS
 link: "https://example.com/award-announcement"
 position: 1
