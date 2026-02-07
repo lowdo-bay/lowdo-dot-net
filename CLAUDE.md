@@ -4,6 +4,17 @@
 
 An architecture and design studio portfolio website based in Austin, Texas.
 
+## Documentation
+
+- **[User Documentation](docs/README.md)** — For content editors and non-technical users
+  - How to add/edit projects, news, awards, and other content
+  - How to customize site colors and settings
+  - How to use VS Code, git, and publish changes
+  - Troubleshooting guides and FAQs
+- **Technical Documentation** (below) — For developers and advanced users
+
+---
+
 ## Workflow
 
 - Always push, commit, create a PR, and update a local dev server after making any edits.
