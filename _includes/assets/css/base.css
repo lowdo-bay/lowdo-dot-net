@@ -1252,7 +1252,7 @@ body::after {
 }
 
 .index-filters__categories {
-	display: flex;
+	display: none;
 	flex-wrap: wrap;
 	justify-content: flex-end;
 	gap: calc(var(--space) * 0.75);
