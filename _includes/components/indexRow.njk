@@ -1,3 +1,9 @@
+{% if entry.data.entryType == 'project' %}
+  <a href="{{ entry.url | url }}" class="index-row-link">
+{% elif entry.data.link %}
+  <a href="{{ entry.data.link }}" class="index-row-link" target="_blank" rel="noopener">
+{% endif %}
+
 <div class="index-row grid grid--index" data-entry-type="{{ entry.data.entryType }}" data-categories="{% if entry.data.categories %}{{ entry.data.categories | join(',') | lower }}{% endif %}">
 
   {# Column 1: Thumbnail Image #}
@@ -9,13 +15,7 @@
 
   {# Column 2: Item (Title + Subtitle) #}
   <div class="index-col index-col--item">
-    {% if entry.data.entryType == 'project' %}
-      <a href="{{ entry.url | url }}" class="index-row__title">{{ entry.data.title }}</a>
-    {% elif entry.data.link %}
-      <a href="{{ entry.data.link }}" class="index-row__title" target="_blank" rel="noopener">{{ entry.data.title }}</a>
-    {% else %}
-      <span class="index-row__title">{{ entry.data.title }}</span>
-    {% endif %}
+    <span class="index-row__title">{{ entry.data.title }}</span>
     {% if entry.data.subtitle %}
       <span class="index-row__subtitle">{{ entry.data.subtitle }}</span>
     {% endif %}
@@ -50,3 +50,7 @@
   </div>
 
 </div>
+
+{% if entry.data.entryType == 'project' or entry.data.link %}
+  </a>
+{% endif %}

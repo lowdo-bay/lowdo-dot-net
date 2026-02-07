@@ -1047,15 +1047,15 @@ body::after {
 
 .index-row__title {
 	font-weight: bold;
-	display: block;
+	display: inline-block;
 	text-transform: uppercase;
 	letter-spacing: 0.02em;
 	position: relative;
 	z-index: 1;
-	/* Add padding for highlight background breathing room */
-	padding: var(--space-1) var(--space-2);
-	margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2));
 	transition: color var(--transition-time) ease;
+	width: fit-content;
+	width: -moz-fit-content;
+	max-width: 100%;
 }
 
 /* Animated highlight background */
@@ -1083,28 +1083,28 @@ body::after {
 	color: #ffffff;
 }
 
-a.index-row__title {
-	color: var(--color-text);
+/* Clickable row link wrapper */
+.index-row-link {
+	display: block;
 	text-decoration: none;
-}
-
-/* Projects use accent color for titles (default state) */
-[data-entry-type="project"] a.index-row__title {
-	color: var(--color-accent-1);
-}
-
-/* On hover, all titles become white */
-.index-row:hover a.index-row__title {
-	color: #ffffff;
-}
-
-/* Override general link hover for index titles */
-.index-row a.index-row__title:hover {
 	color: inherit;
 }
 
-/* When row is hovered, title stays white regardless of link hover */
-.index-row:hover a.index-row__title:hover {
+/* Projects use accent color for titles (default state) */
+[data-entry-type="project"] .index-row__title {
+	color: var(--color-accent-1);
+}
+
+/* Hover effects trigger on link wrapper */
+.index-row-link:hover .index-row::before {
+	background-color: var(--color-accent-5);
+}
+
+.index-row-link:hover .index-row__title::before {
+	transform: scaleX(1);
+}
+
+.index-row-link:hover .index-row__title {
 	color: #ffffff;
 }
 
