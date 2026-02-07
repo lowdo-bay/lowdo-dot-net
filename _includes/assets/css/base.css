@@ -1088,11 +1088,12 @@ body::after {
 .index-row-link {
 	display: block;
 	text-decoration: none !important;
-	color: inherit;
+	color: var(--color-text);
 }
 
 .index-row-link:hover {
 	text-decoration: none !important;
+	color: var(--color-text);
 }
 
 /* Projects use accent color for titles (default state) */
