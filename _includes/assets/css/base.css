@@ -1086,12 +1086,12 @@ body::after {
 /* Clickable row link wrapper */
 .index-row-link {
 	display: block;
-	text-decoration: none;
+	text-decoration: none !important;
 	color: inherit;
 }
 
 .index-row-link:hover {
-	text-decoration: none;
+	text-decoration: none !important;
 }
 
 /* Projects use accent color for titles (default state) */
