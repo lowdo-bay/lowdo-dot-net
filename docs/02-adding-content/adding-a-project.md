@@ -4,6 +4,30 @@ Step-by-step guide for adding a design project to the site.
 
 ---
 
+## Editing Options
+
+You can add a project in two ways:
+
+### Option 1: GitHub Web Editor (No Installation)
+
+Use GitHub.com to create files directly in your browser:
+- ✅ No software to install
+- ✅ Works on any device
+- ✅ Can use AI assistants for help
+- ✅ See [GitHub Web Editor Guide](../05-tools-and-workflow/github-web-editor.md)
+
+**This guide shows the web editor workflow first, then local editing.**
+
+### Option 2: Local Development (Advanced)
+
+Install VS Code and edit files on your computer:
+- ⚡ Faster feedback
+- ⚡ Local preview
+- ⚡ Better for complex changes
+- ⚡ See [Code Editor Setup](../05-tools-and-workflow/code-editor-setup.md)
+
+---
+
 ## What You'll Create
 
 When you add a project, you'll create:
@@ -13,7 +37,124 @@ When you add a project, you'll create:
 
 ---
 
-## Step-by-Step Instructions
+## Web Editor Workflow
+
+### Step 1: Go to GitHub.com
+
+1. Navigate to https://github.com/lowdo-bay/lowdo-dot-net
+2. Navigate to `entries/projects/` folder
+3. You should see other project folders listed
+
+### Step 2: Create the Project File
+
+1. Click **"Add file"** → **"Create new file"**
+2. In the name field, type the full path:
+   ```
+   your-project-name/your-project-name.md
+   ```
+3. GitHub automatically creates the folder structure
+
+**Naming Rules:**
+- Use lowercase letters only
+- Use hyphens (`-`) instead of spaces
+- Be descriptive but concise
+- This name will appear in the URL
+
+✅ **Good names:**
+- `casa-marianella/casa-marianella.md`
+- `wolf-creek-ranch/wolf-creek-ranch.md`
+- `community-housing-center/community-housing-center.md`
+
+❌ **Bad names:**
+- `Casa Marianella/Casa Marianella.md` (has capitals and spaces)
+- `project1/project1.md` (not descriptive)
+- `new_project/new_project.md` (uses underscores)
+
+### Step 3: Add Project Information
+
+Copy this template and fill in your details:
+
+```yaml
+---
+draft: false
+title: "Casa Marianella"
+subtitle: "Community Housing and Resource Center"
+date: 2023-06-15
+year: 2023
+categories:
+  - HOUSING
+  - COMMUNITY
+  - SUSTAINABLE
+collaborators:
+  - name: "Structural Innovations"
+    role: "Structural Engineer"
+  - name: "GreenBuild Contractors"
+    role: "General Contractor"
+description: "A community resource center providing housing and support services"
+---
+
+Write your project description here. This text appears on the project detail page.
+
+You can write multiple paragraphs. Use simple formatting like **bold** and *italic*.
+
+## Project Details
+
+You can add sections with headings using ##. Describe the project goals, process, and outcomes in a way that's accessible to visitors.
+
+## Design Approach
+
+Add as many sections as you need to tell the project story.
+```
+
+**The section between `---` lines is called "frontmatter"** - it contains metadata about your project.
+
+See [Frontmatter Reference](frontmatter-reference.md) for details on all available fields.
+
+### Step 4: Commit the File
+
+1. Scroll down to "Commit changes"
+2. Write a commit message: `Add [Project Name] project`
+3. Select **"Create a new branch for this commit and start a pull request"**
+4. Click "Propose changes"
+5. Click "Create pull request"
+
+### Step 5: Upload Images
+
+1. In your pull request, click on "Files changed" tab, then "Review changes" → "View"
+2. Navigate to your project folder: `entries/projects/your-project-name/`
+3. Click **"Add file"** → **"Upload files"**
+4. Drag and drop your images (or click "choose your files")
+
+**Before uploading, rename your images:**
+- Main thumbnail: `header.jpg` or `thumb.jpg`
+- Gallery images: `01-exterior-view.jpg`, `02-interior-space.jpg`, etc.
+
+5. Make sure to **commit to the same branch** you created earlier
+6. Write commit message: `Add images for [Project Name]`
+7. Click "Commit changes"
+
+### Step 6: Wait for Preview
+
+1. Go back to your pull request
+2. Wait 3-5 minutes for Netlify to build a preview
+3. Look for "netlify/deploy-preview" check
+4. Click "Details" to see your preview site
+
+### Step 7: Test and Merge
+
+1. Navigate to your project on the preview site:
+   - Go to `/all/` to see it in the index
+   - Click it to see the detail page
+2. Check that everything looks correct
+3. If you need to fix something, make more commits to the same branch
+4. When ready, click **"Merge pull request"**
+5. Click **"Confirm merge"**
+
+**Your project goes live in 3-5 minutes!**
+
+---
+
+## Local Development Workflow
 
 ### Step 1: Navigate to the Projects Folder
 
@@ -22,6 +163,8 @@ Open the `entries/projects/` folder in your text editor or file browser.
 This is where **ALL** projects live.
 
 ---
+
+## Local Development Workflow (Continued)
 
 ### Step 2: Create a New Folder for Your Project
 
@@ -151,11 +294,11 @@ See [Image Guide](image-guide.md) for best practices.
 
 ---
 
-### Step 7: Commit and Publish
+### Step 7: Commit and Publish (Local)
 
 Save your changes and publish them to the live site using git.
 
-See [Making Commits](../05-tools-and-workflow/making-commits.md) for step-by-step instructions.
+See [Making Commits](../05-tools-and-workflow/making-commits.md) for detailed instructions.
 
 **Quick version:**
 ```bash
@@ -163,6 +306,8 @@ git add .
 git commit -m "Add Casa Marianella project"
 git push
 ```
+
+Then create a pull request on GitHub.com, wait for preview, test, and merge.
 
 ---
 

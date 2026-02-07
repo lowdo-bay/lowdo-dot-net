@@ -4,6 +4,30 @@ Step-by-step guide for adding non-project entries (news, awards, features, lectu
 
 ---
 
+## Editing Options
+
+You can add entries in two ways:
+
+### Option 1: GitHub Web Editor (No Installation)
+
+Use GitHub.com to create files directly in your browser:
+- ✅ No software to install
+- ✅ Works on any device
+- ✅ Can use AI assistants for help
+- ✅ See [GitHub Web Editor Guide](../05-tools-and-workflow/github-web-editor.md)
+
+**This guide shows the web editor workflow first, then local editing.**
+
+### Option 2: Local Development (Advanced)
+
+Install VS Code and edit files on your computer:
+- ⚡ Faster feedback
+- ⚡ Local preview
+- ⚡ Better for complex changes
+- ⚡ See [Code Editor Setup](../05-tools-and-workflow/code-editor-setup.md)
+
+---
+
 ## Entry Types
 
 These entry types appear ONLY in the comprehensive index (they don't get their own pages):
@@ -29,11 +53,12 @@ These entry types appear ONLY in the comprehensive index (they don't get their o
 
 ---
 
-## Step-by-Step Instructions
+## Web Editor Workflow
 
-### Step 1: Choose the Right Folder
+### Step 1: Go to GitHub.com
 
-Navigate to the appropriate folder for your entry type:
+1. Navigate to https://github.com/lowdo-bay/lowdo-dot-net
+2. Choose the appropriate folder for your entry type:
 
 | Type | Folder |
 |------|--------|
@@ -43,6 +68,80 @@ Navigate to the appropriate folder for your entry type:
 | Lecture | `entries/lectures/` |
 | Exhibition | `entries/exhibitions/` |
 | Staff | `entries/staff/` |
+
+### Step 2: Create the Entry File
+
+1. Click **"Add file"** → **"Create new file"**
+2. In the name field, type the full path:
+   ```
+   your-entry-name/your-entry-name.md
+   ```
+
+**Naming Rules:**
+- Lowercase letters only
+- Hyphens instead of spaces
+- Be descriptive
+
+✅ Good: `emerging-voices-award/emerging-voices-award.md`
+❌ Bad: `Award 1/Award 1.md`, `new_award/new_award.md`
+
+### Step 3: Add Entry Information
+
+Copy this template and fill in your details:
+
+```yaml
+---
+draft: false
+title: "Emerging Voices Award"
+subtitle: "Architectural League of New York"
+date: 2021-12-31
+categories:
+  - AWARD
+  - PRESS
+link: "https://archleague.org/article/emerging-voices-2022/"
+description: "LowDO selected for the prestigious Emerging Voices program"
+---
+
+Optional: Write a longer description here. This appears below the entry in the comprehensive index when expanded.
+
+You can add details about the award, news, or event.
+```
+
+### Step 4: Commit the File
+
+1. Scroll down to "Commit changes"
+2. Write a commit message: `Add [Entry Title]`
+3. Select **"Create a new branch for this commit and start a pull request"**
+4. Click "Propose changes"
+5. Click "Create pull request"
+
+### Step 5: Upload Thumbnail Image (Optional)
+
+1. Navigate to your entry folder: `entries/{type}/your-entry-name/`
+2. Click **"Add file"** → **"Upload files"**
+3. Upload an image named `thumb.jpg` or `header.jpg`
+4. Make sure to **commit to the same branch** you created earlier
+5. Write commit message: `Add thumbnail for [Entry Title]`
+6. Click "Commit changes"
+
+### Step 6: Wait for Preview, Test, and Merge
+
+1. Go back to your pull request
+2. Wait 3-5 minutes for Netlify preview
+3. Click "Details" on the "netlify/deploy-preview" check
+4. Navigate to `/all/` to see your entry in the index
+5. If everything looks good, click **"Merge pull request"**
+6. Click **"Confirm merge"**
+
+**Your entry goes live in 3-5 minutes!**
+
+---
+
+## Local Development Workflow
+
+### Step 1: Choose the Right Folder
+
+Navigate to the appropriate folder for your entry type (see table above).
 
 ---
 

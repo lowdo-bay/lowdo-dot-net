@@ -4,6 +4,40 @@ Best practices for naming, uploading, and optimizing images.
 
 ---
 
+## Uploading Images
+
+You can upload images in two ways:
+
+### Option 1: GitHub Web Upload (Recommended)
+
+**No software needed!** Upload directly on GitHub.com:
+
+1. Navigate to your entry folder: `entries/projects/your-project/` or `entries/news/your-news/`
+2. Click **"Add file"** → **"Upload files"**
+3. Drag and drop your images (or click "choose your files")
+4. **IMPORTANT:** Before uploading, rename files on your computer using the naming rules below
+5. Write commit message: `Add images for [Entry Name]`
+6. Choose "Create a new branch" if you want to preview first
+7. Click "Commit changes"
+
+**Tips:**
+- You can upload multiple images at once
+- All images must go in the same folder as the `.md` file
+- Rename images BEFORE uploading (GitHub web doesn't let you rename)
+- If you need to rename, delete and re-upload with correct name
+
+### Option 2: Local Upload (Advanced)
+
+If editing locally with VS Code:
+
+1. Drag image files into your project folder in VS Code
+2. Place them in the same folder as the `.md` file
+3. Commit and push using git
+
+See [Code Editor Setup](../05-tools-and-workflow/code-editor-setup.md) for local editing.
+
+---
+
 ## Image File Naming
 
 Use descriptive, lowercase names with hyphens:

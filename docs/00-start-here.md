@@ -33,7 +33,7 @@ You can do a lot! This site is designed to be content-first:
 - Save your work and push it to the live website
 - Preview changes before they go live
 
-❌ **What you CAN'T do easily** (ask for help with these):
+❌ **What you CAN'T do easily** (ask an AI assistant for help with these):
 - Change the site's layout or structure
 - Add new page types or features
 - Modify complex functionality
@@ -42,18 +42,20 @@ You can do a lot! This site is designed to be content-first:
 
 ## What You'll Need
 
-To work with the site, you'll need:
+### Required (Web Browser Only)
+- ✅ A web browser (Chrome, Firefox, Safari, etc.)
+- ✅ GitHub account with access to the lowdo-dot-net repository
+- ✅ This documentation
 
-1. **A text editor**
-   - We recommend [VS Code](https://code.visualstudio.com/) (free, beginner-friendly)
-   - See [Code Editor Setup](05-tools-and-workflow/code-editor-setup.md) for installation help
+### Optional (For Advanced Users)
+- VS Code text editor (for local editing)
+- Git command-line tools
 
-2. **Access to the GitHub repository**
-   - This is where all the site files live
-   - You'll need GitHub account access (ask your team lead)
+### Recommended (For Help)
+- AI assistant (Claude, ChatGPT, etc.) for answering questions
+- See [Using AI Assistants](05-tools-and-workflow/using-ai-assistants.md)
 
-3. **This documentation**
-   - Bookmark this folder—it's your reference guide
+**Most people can edit the entire site using just their web browser!**
 
 ---
 
@@ -61,8 +63,8 @@ To work with the site, you'll need:
 
 Here's the simple version of what happens:
 
-### Step 1: You Create Content
-You create a folder and a text file (`.md` file) with your content and images.
+### Step 1: You Create Content (On GitHub.com)
+You create or edit files directly in your web browser using GitHub.
 
 ```
 entries/projects/my-project/
@@ -95,6 +97,10 @@ Ready to start? Here are the most common things you'll do:
 - **[How to Add a Project →](02-adding-content/adding-a-project.md)**
 - **[How to Add News/Awards →](02-adding-content/adding-news-awards.md)**
 
+### Editing Online
+- **[GitHub Web Editor Guide →](05-tools-and-workflow/github-web-editor.md)**
+- **[Using AI Assistants →](05-tools-and-workflow/using-ai-assistants.md)**
+
 ### Customizing the Site
 - **[How to Change Colors →](04-customizing-the-site/changing-colors.md)**
 - **[How to Update Site Info →](04-customizing-the-site/updating-site-info.md)**
@@ -111,13 +117,14 @@ Ready to start? Here are the most common things you'll do:
 
 ## Understanding the Workflow
 
-Here's the typical workflow for adding content:
+Here's the typical workflow for adding content (all done in your web browser):
 
-1. **Make your changes** (add/edit files on your computer)
-2. **Save your work** (using git to create a "commit")
-3. **Push to GitHub** (upload your changes)
-4. **Wait for deployment** (Netlify rebuilds the site, 3-5 minutes)
-5. **Check the live site** (see your changes at https://lowdo.netlify.app)
+1. **Go to GitHub.com** and navigate to the repository
+2. **Make your changes** (add/edit files using the web editor)
+3. **Create a pull request** (safe workspace to test changes)
+4. **Wait for preview** (Netlify builds a preview, 3-5 minutes)
+5. **Test on preview URL** (check that everything looks good)
+6. **Merge to publish** (changes go live, 3-5 minutes)
 
 Don't worry if this sounds complicated—the guides will walk you through each step!
 
@@ -126,7 +133,7 @@ Don't worry if this sounds complicated—the guides will walk you through each s
 ## Next Steps
 
 1. **Read [How the Site Works](01-understanding-the-site/how-the-site-works.md)** to understand the big picture
-2. **Read [Folder Structure](01-understanding-the-site/folder-structure.md)** to know where files go
+2. **Read [GitHub Web Editor Guide](05-tools-and-workflow/github-web-editor.md)** to learn the web interface
 3. **Try adding your first project** with the [Adding a Project](02-adding-content/adding-a-project.md) guide
 
 ---
@@ -135,4 +142,5 @@ Don't worry if this sounds complicated—the guides will walk you through each s
 
 - Check the **[FAQ](06-troubleshooting/faq.md)**
 - Review **[Common Issues](06-troubleshooting/common-issues.md)**
-- Ask a team member or email lowdo@lowdo.net
+- Ask an AI assistant (Claude, ChatGPT) for help
+- Remember: **No one at LowDO may be able to help with technical issues**, so rely on this documentation and AI assistants!

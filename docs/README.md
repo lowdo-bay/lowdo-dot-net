@@ -1,10 +1,27 @@
 # LowDO Website Documentation
 
-Welcome to the LowDO website documentation! This guide will help you add content, customize the site, and understand how everything works—no coding experience required.
+Welcome to the LowDO website documentation! This guide will help you add content, customize the site, and understand how everything works.
 
-## New to the Project? Start Here
+## New to Editing This Site?
 
-👉 **[Start Here Guide](00-start-here.md)** - Quick orientation for first-time users
+✨ **Good news:** You can edit this entire website using just your web browser—no software to install!
+
+👉 **[Start Here Guide](00-start-here.md)** - Quick orientation
+
+### Two Ways to Edit
+
+1. **GitHub Web Editor** (Recommended for beginners)
+   - Edit files directly on GitHub.com
+   - No installation required
+   - Works on any device with a browser
+   - Use AI assistants (Claude, ChatGPT) for help
+
+2. **Local Development** (Optional, for advanced users)
+   - Install VS Code on your computer
+   - Faster feedback and testing
+   - Better for complex changes
+
+Most content editors can do everything they need with just the web editor!
 
 ---
 
