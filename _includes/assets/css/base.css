@@ -1090,6 +1090,10 @@ body::after {
 	color: inherit;
 }
 
+.index-row-link:hover {
+	text-decoration: none;
+}
+
 /* Projects use accent color for titles (default state) */
 [data-entry-type="project"] .index-row__title {
 	color: var(--color-accent-1);
