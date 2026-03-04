@@ -195,7 +195,12 @@ section: project
     padding-top: var(--space-3);
   }
 
-  /* Image: flush left edge, natural height */
+  /* Header grid: align both columns to same height */
+  .project-header .grid {
+    align-items: stretch;
+  }
+
+  /* Image: flush left edge, matches metadata height */
   .project-header .grid__item--span-2-left {
     padding-left: 0;
     padding-right: 0;
