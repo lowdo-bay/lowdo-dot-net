@@ -20,6 +20,10 @@ section: project
     margin-bottom: 0;
     /* Stretch to full row height */
     align-self: stretch;
+    /* Remove right padding to let metadata reach right edge */
+    padding-right: 0;
+    /* Escape to right screen edge */
+    margin-right: calc(-1 * var(--content-margin));
   }
 
   /* Metadata grid inside right column: use full height */
