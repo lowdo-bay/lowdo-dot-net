@@ -16,11 +16,11 @@ section: project
     margin-right: calc(1 * var(--space-2));
   }
 
-  /* Right grid item: stretches full row height, sets the row height */
+  /* Right grid item: size to content (metadata), sets the row height */
   .project-header .grid__item--span-2-right {
     margin-bottom: 0;
-    /* Stretch to full row height */
-    align-self: stretch;
+    /* Size to content, don't stretch */
+    align-self: auto;
     /* Escape to right screen edge */
     margin-right: calc(-1 * var(--content-margin));
   }
