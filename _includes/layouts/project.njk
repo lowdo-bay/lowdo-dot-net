@@ -34,6 +34,11 @@ section: project
     align-content: start;
   }
 
+  /* Metadata row wrapper: use display: contents to not affect grid */
+  .project-meta-row {
+    display: contents;
+  }
+
   /* Spacer before last metadata row to push it to bottom */
   .project-meta-label:nth-last-of-type(1) {
     margin-top: auto;
@@ -298,16 +303,22 @@ section: project
 
         {# Rows 3+: Label (col 3) + Value (col 4) #}
         {% if location %}
-          <div class="project-meta-label">Location</div>
-          <div class="project-meta-value">{{ location }}</div>
+          <div class="project-meta-row">
+            <div class="project-meta-label">Location</div>
+            <div class="project-meta-value">{{ location }}</div>
+          </div>
         {% endif %}
         {% if year and settings.theme.theme_features.show_project_year %}
-          <div class="project-meta-label">Year</div>
-          <div class="project-meta-value">{{ year }}</div>
+          <div class="project-meta-row">
+            <div class="project-meta-label">Year</div>
+            <div class="project-meta-value">{{ year }}</div>
+          </div>
         {% endif %}
         {% if status %}
-          <div class="project-meta-label">Status</div>
-          <div class="project-meta-value">{{ status }}</div>
+          <div class="project-meta-row">
+            <div class="project-meta-label">Status</div>
+            <div class="project-meta-value">{{ status }}</div>
+          </div>
         {% endif %}
 
       </div>
