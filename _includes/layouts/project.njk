@@ -3,11 +3,154 @@ layout: layouts/base.njk
 permalink: "project/{{ title | slug }}/index.html"
 section: project
 ---
+
+{# Template-scoped styles — no changes to base.css #}
+<style>
+  .project-meta-table {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin-top: var(--space-3);
+  }
+  .project-meta-table dt,
+  .project-meta-table dd {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .project-meta-table dt {
+    font-weight: bold;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+  .project-meta-table dd {
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  .project-collab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .project-collab-cell {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+  .project-collab-cell--head {
+    font-weight: bold;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .project-section-header {
+    position: relative;
+    padding-bottom: 0;
+  }
+  .project-section-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+  .project-section-header-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 840px) {
+    .project-section-header-inner {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .project-section-header-cell {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .project-download-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    position: relative;
+  }
+  .project-download-cell--title {
+    flex: 1;
+  }
+  .project-download-row::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+  .project-download-cell {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .project-download-cell--format {
+    opacity: 0.6;
+  }
+  .project-download-cell--action {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .project-drawings-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+  @media (min-width: 540px) {
+    .project-drawings-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .project-desc-header {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    position: relative;
+  }
+  .project-desc-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .project-desc-body {
+    padding: var(--space-2);
+  }
+  .project-desc-body p {
+    margin-bottom: var(--space-3);
+  }
+</style>
+
 <article>
 
-  {# Project Header Section - Image left, metadata right #}
+  {# =========================================================
+     SECTION 1: Project Header — Image left, metadata right
+     ========================================================= #}
   <header class="project-header">
     <div class="grid grid--intro">
+
       {# Left: Header Image #}
       {% if headerImage %}
         <div class="grid__item--span-2-left">
@@ -17,71 +160,13 @@ section: project
               {{ '' if outputFormats.push(format) }}
             {% endif %}
           {% endfor %}
-
-          {% set params =
-            {
-              "src": headerImage.src,
-              "alt": title,
-              "classes": "header-image",
-              "loadingType": "eager",
-              "viewportSizes": "50vw",
-              "outputWidths": [
-                settings.config.image_width_sm,
-                settings.config.image_width_md,
-                settings.config.image_width_lg
-              ],
-              "outputFormats": outputFormats,
-              "outputQualityJpeg": settings.images.jpeg.quality,
-              "outputQualityWebp": settings.images.webp.quality,
-              "outputQualityAvif": settings.images.avif.quality
-            }
-          %}
-
-          {% generateImage params %}
-        </div>
-      {% endif %}
-
-      {# Right: Project Metadata #}
-      <div class="grid__item--span-2-right project-metadata">
-        <h1>{{ title }}</h1>
-        <div class="markdown">{{ description | renderUsingMarkdown | safe }}</div>
-
-        {% if year and settings.theme.theme_features.show_project_year %}
-          <p class="mb--0">{{ year }}</p>
-        {% endif %}
-      </div>
-    </div>
-  </header>
-
-  {# Project Description from Markdown Content #}
-  <section>
-    <div class="grid grid--description pb--6">
-      <div class="grid__item--span-4 mw--readable">
-        {{ content | safe }}
-      </div>
-    </div>
-  </section>
-
-  {# Gallery Images with Captions #}
-  <section class="grid grid--project pb--3">
-    {% if images %}
-      {% for image in images %}
-
-        {% set outputFormats = [] %}
-        {% for format, i in settings.images %}
-          {% if i.enabled === true %}
-            {{ '' if outputFormats.push(format) }}
-          {% endif %}
-        {% endfor %}
-
-        {% set params = 
-          {
-            "src": image.src,
-            "alt": image.caption or title,
-            "classes": "grid__item grid__item--breakout",
-            "loadingType": "lazy",
-            "viewportSizes": "(min-width: 1140px) 70vw, (min-width: 540px) 90vw, 100vw",
-            "outputWidths": [ 
+          {% set params = {
+            "src": headerImage.src,
+            "alt": title,
+            "classes": "header-image",
+            "loadingType": "eager",
+            "viewportSizes": "50vw",
+            "outputWidths": [
               settings.config.image_width_sm,
               settings.config.image_width_md,
               settings.config.image_width_lg
@@ -90,24 +175,244 @@ section: project
             "outputQualityJpeg": settings.images.jpeg.quality,
             "outputQualityWebp": settings.images.webp.quality,
             "outputQualityAvif": settings.images.avif.quality
-          }
-        %}
+          } %}
+          {% generateImage params %}
+        </div>
+      {% endif %}
 
-        {% generateImage params %}
-
-        {% if image.caption %}
-          <figcaption class="image-caption">{{ image.caption }}</figcaption>
+      {# Right: Title, description, categories, metadata #}
+      <div class="grid__item--span-2-right project-metadata">
+        <h1>{{ title }}</h1>
+        {% if description %}
+          <div class="markdown">{{ description | renderUsingMarkdown | safe }}</div>
         {% endif %}
+        {% if categories %}
+          <span class="index-row__categories">{{ categories | join(', ') | upper }}</span>
+        {% endif %}
+        <dl class="project-meta-table">
+          {% if location %}
+            <dt>Location</dt>
+            <dd>{{ location }}</dd>
+          {% endif %}
+          {% if year and settings.theme.theme_features.show_project_year %}
+            <dt>Year</dt>
+            <dd>{{ year }}</dd>
+          {% endif %}
+          {% if status %}
+            <dt>Status</dt>
+            <dd>{{ status }}</dd>
+          {% endif %}
+        </dl>
+      </div>
+
+    </div>
+  </header>
+
+  {# =========================================================
+     SECTION 2: Collaborators (left) + Description (right)
+     ========================================================= #}
+  <section>
+    <div class="grid grid--intro">
+
+      {# Left: Trade / Collaborator table #}
+      <div class="grid__item--span-2-left">
+        {% if collaborators and collaborators.length %}
+          <div class="project-collab-grid">
+            <div class="project-collab-cell project-collab-cell--head">Trade</div>
+            <div class="project-collab-cell project-collab-cell--head">Collaborator</div>
+            {% for collab in collaborators %}
+              <div class="project-collab-cell">{{ collab.role | upper }}</div>
+              <div class="project-collab-cell">{{ collab.name | upper }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      {# Right: Description body text #}
+      <div class="grid__item--span-2-right">
+        <div class="project-desc-header">Description</div>
+        <div class="project-desc-body">
+          {{ content | safe }}
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  {# =========================================================
+     SECTION 3: Awards & Recognition
+     ========================================================= #}
+  {% if awards and awards.length %}
+  <section>
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell" style="grid-column: 1 / span 3;">Awards &amp; Recognition</div>
+        <div class="project-section-header-cell" style="text-align: right;">Year</div>
+      </div>
+    </div>
+
+    {% for award in awards %}
+      <div class="index-row grid grid--index">
+        <div class="index-col index-col--item-wide">
+          <span class="index-row__title">{{ award.organization }}</span>
+        </div>
+        <div class="index-col index-col--details">
+          <span class="index-row__subtitle">{{ award.type | upper }}</span>
+        </div>
+        <div class="index-col index-col--date">
+          <span class="index-row__date-year">{{ award.year }}</span>
+        </div>
+      </div>
+    {% endfor %}
+
+  </section>
+  {% endif %}
+
+  {# =========================================================
+     SECTION 4: Photos
+     ========================================================= #}
+  {% if images and images.length %}
+  <section>
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell">Photos</div>
+      </div>
+    </div>
+
+    <div class="columns columns--projects pb--3">
+      {% for image in images %}
+        <div class="columns__item mb--1">
+
+          {% set outputFormats = [] %}
+          {% for format, i in settings.images %}
+            {% if i.enabled === true %}
+              {{ '' if outputFormats.push(format) }}
+            {% endif %}
+          {% endfor %}
+
+          {% set params = {
+            "src": image.src,
+            "alt": image.caption or title,
+            "loadingType": "lazy",
+            "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 540px) 45vw, 85vw",
+            "outputWidths": [
+              settings.config.image_grid_width_sm,
+              settings.config.image_grid_width_md,
+              settings.config.image_grid_width_lg
+            ],
+            "outputFormats": outputFormats,
+            "outputQualityJpeg": settings.images.jpeg.quality,
+            "outputQualityWebp": settings.images.webp.quality,
+            "outputQualityAvif": settings.images.avif.quality
+          } %}
+
+          {% generateImage params %}
+
+          {% if image.caption %}
+            <p class="image-caption">{{ image.caption }}</p>
+          {% endif %}
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </section>
+  {% endif %}
+
+  {# =========================================================
+     SECTION 5: Drawings
+     ========================================================= #}
+  {% if drawings and drawings.length %}
+  <section>
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell">Drawings</div>
+      </div>
+    </div>
+
+    <div class="project-drawings-grid">
+      {% for drawing in drawings %}
+
+        {% set outputFormats = [] %}
+        {% for format, i in settings.images %}
+          {% if i.enabled === true %}
+            {{ '' if outputFormats.push(format) }}
+          {% endif %}
+        {% endfor %}
+
+        {% set params = {
+          "src": drawing.src,
+          "alt": drawing.caption or (title + " drawing"),
+          "loadingType": "lazy",
+          "viewportSizes": "(min-width: 540px) 30vw, 85vw",
+          "outputWidths": [
+            settings.config.image_grid_width_sm,
+            settings.config.image_grid_width_md
+          ],
+          "outputFormats": outputFormats,
+          "outputQualityJpeg": settings.images.jpeg.quality,
+          "outputQualityWebp": settings.images.webp.quality,
+          "outputQualityAvif": settings.images.avif.quality
+        } %}
+
+        <div>
+          {% generateImage params %}
+          {% if drawing.caption %}
+            <p class="image-caption">{{ drawing.caption }}</p>
+          {% endif %}
+        </div>
 
       {% endfor %}
-    {% endif %}
-  </section>
-  
-</article>
+    </div>
 
-{# Output a list of random projects, excluding the current project, default limit of 48 #}
-{% set projectList = collections.projects | randomLimit((settings.theme.theme_features.item_output_limit or 48), page.url) %}
-{% include "components/projectList.njk" %}
+  </section>
+  {% endif %}
+
+  {# =========================================================
+     SECTION 6: Design Toolkit (Downloads)
+     ========================================================= #}
+  {% if downloads and downloads.length %}
+  <section>
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell">Design Toolkit</div>
+      </div>
+    </div>
+
+    {% for item in downloads %}
+      <div class="project-download-row">
+        <div class="project-download-cell project-download-cell--title">{{ item.title }}</div>
+        <div class="project-download-cell project-download-cell--format">{{ item.format }}</div>
+        <div class="project-download-cell project-download-cell--action">
+          <a href="{{ item.url }}" class="arrow arrow--right link-nostyle text--small">Download</a>
+        </div>
+      </div>
+    {% endfor %}
+
+  </section>
+  {% endif %}
+
+  {# =========================================================
+     SECTION 7: Related Projects
+     ========================================================= #}
+  <section class="pb--6">
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell">Related Projects</div>
+      </div>
+    </div>
+
+    {% set projectList = collections.projects | randomLimit((settings.theme.theme_features.item_output_limit or 48), page.url) %}
+    {% include "components/projectList.njk" %}
+
+  </section>
+
+</article>
 
 {# Appended to <head> during build #}
 {% include "components/opengraph.njk" %}
