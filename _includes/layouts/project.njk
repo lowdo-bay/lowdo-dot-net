@@ -215,9 +215,10 @@ section: project
   .project-header .header-image {
     flex: 1;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     overflow: hidden;
+    min-height: 0;
   }
 
   .project-header .header-image img {
@@ -226,6 +227,7 @@ section: project
     display: block;
     object-fit: cover;
     object-position: center;
+    flex-shrink: 0;
   }
 </style>
 
