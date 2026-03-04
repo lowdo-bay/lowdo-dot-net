@@ -6,8 +6,9 @@ section: project
 
 {# Template-scoped styles — no changes to base.css #}
 <style>
-  /* Right column: 2-col sub-grid (maps to page cols 3 & 4) */
-  .project-metadata {
+  /* Right column: 2-col sub-grid (maps to page cols 3 & 4).
+     Scoped to article to override base.css display:flex on .project-metadata */
+  article .project-metadata {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-content: start;
@@ -47,12 +48,13 @@ section: project
     position: relative;
   }
 
-  /* Dashed line starts at center of page (left edge of this cell) and extends right */
+  /* Dashed line starts at center column line and extends to right screen edge.
+     left: calc(-1 * var(--space-2)) backs up to the grid item's padding edge (= center column line) */
   .project-meta-label::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: calc(-1 * var(--space-2));
     width: 200vw;
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
@@ -186,11 +188,15 @@ section: project
     padding-left: 0;
     padding-right: 0;
     align-self: stretch;
+    /* Escape header's top/bottom content-margin padding so image fills full row */
+    margin-top: calc(-1 * var(--content-margin));
+    margin-bottom: calc(-1 * var(--content-margin));
   }
   .project-header .header-image,
   .project-header .header-image img {
     height: 100%;
-    min-height: 30vh;
+    min-height: 40vh;
+    display: block;
   }
 </style>
 
