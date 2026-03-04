@@ -12,12 +12,13 @@ section: project
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-content: start;
+    margin-bottom: 0;
   }
 
   /* Title: spans both sub-columns, all caps, bold */
   .project-meta-title {
     grid-column: 1 / span 2;
-    padding: var(--space-2);
+    padding: 0 var(--space-2) var(--space-2) var(--space-2);
     font-size: var(--font-size-base);
     font-weight: bold;
     text-transform: uppercase;
