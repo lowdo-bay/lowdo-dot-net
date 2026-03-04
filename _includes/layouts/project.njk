@@ -195,39 +195,33 @@ section: project
     padding-top: var(--space-3);
   }
 
-  /* Header grid: ensure both columns stretch to same height */
-  .project-header .grid {
-    align-items: stretch;
-  }
-
-  /* Image: flush left edge, matches right column height */
+  /* Image: flush left edge, natural height */
   .project-header .grid__item--span-2-left {
     padding-left: 0;
     padding-right: 0;
     display: flex;
     /* Escape header's left padding to reach the left screen edge */
     margin-left: calc(-1 * var(--content-margin));
-    /* Escape header's top/bottom padding so image fills full row height */
+    /* Escape header's top padding */
     margin-top: calc(-1 * var(--space-3));
-    margin-bottom: 0;
+    /* Escape header's bottom padding */
+    margin-bottom: calc(-1 * var(--space-5));
   }
 
   .project-header .header-image {
     flex: 1;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
     overflow: hidden;
-    min-height: 0;
   }
 
   .project-header .header-image img {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: block;
     object-fit: cover;
     object-position: center;
-    flex-shrink: 0;
   }
 </style>
 
