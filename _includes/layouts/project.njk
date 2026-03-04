@@ -195,12 +195,12 @@ section: project
     padding-top: var(--space-3);
   }
 
-  /* Header grid: align both columns to same height */
+  /* Header grid: let content determine height, then align image to stretch */
   .project-header .grid {
-    align-items: stretch;
+    align-items: center;
   }
 
-  /* Image: flush left edge, matches metadata height */
+  /* Image: flush left edge, matches metadata height via self-alignment */
   .project-header .grid__item--span-2-left {
     padding-left: 0;
     padding-right: 0;
@@ -210,6 +210,8 @@ section: project
     margin-top: calc(-1 * var(--space-3));
     /* No bottom margin since header has no bottom padding */
     margin-bottom: 0;
+    /* Override grid's center alignment to stretch this item */
+    align-self: stretch;
   }
 
   .project-header .header-image {
