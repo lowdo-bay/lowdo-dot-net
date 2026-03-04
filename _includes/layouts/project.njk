@@ -18,6 +18,13 @@ section: project
   /* Right grid item: fill full header height */
   .project-header .grid__item--span-2-right {
     margin-bottom: 0;
+    /* Stretch to full row height */
+    align-self: stretch;
+  }
+
+  /* Metadata grid inside right column: use full height */
+  .project-header .project-metadata {
+    height: 100%;
   }
 
   /* Title: spans both sub-columns, all caps, bold */
@@ -200,7 +207,7 @@ section: project
     align-items: start;
   }
 
-  /* Image: flush left edge, matches metadata height via self-alignment */
+  /* Image: flush left edge, matches metadata height */
   .project-header .grid__item--span-2-left {
     padding-left: 0;
     padding-right: 0;
@@ -210,8 +217,6 @@ section: project
     margin-top: calc(-1 * var(--space-3));
     /* No bottom margin since header has no bottom padding */
     margin-bottom: 0;
-    /* Override grid's start alignment to stretch this item to row height */
-    align-self: stretch;
   }
 
   .project-header .header-image {
