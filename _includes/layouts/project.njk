@@ -195,9 +195,9 @@ section: project
     padding-top: var(--space-3);
   }
 
-  /* Header grid: let content determine height, then align image to stretch */
+  /* Header grid: align items to top, metadata height sets row height */
   .project-header .grid {
-    align-items: center;
+    align-items: start;
   }
 
   /* Image: flush left edge, matches metadata height via self-alignment */
@@ -210,7 +210,7 @@ section: project
     margin-top: calc(-1 * var(--space-3));
     /* No bottom margin since header has no bottom padding */
     margin-bottom: 0;
-    /* Override grid's center alignment to stretch this item */
+    /* Override grid's start alignment to stretch this item to row height */
     align-self: stretch;
   }
 
