@@ -16,11 +16,9 @@ section: project
     margin-right: calc(1 * var(--space-2));
   }
 
-  /* Right grid item: fill full header height */
+  /* Right grid item: participates in stretch, sets the row height */
   .project-header .grid__item--span-2-right {
     margin-bottom: 0;
-    /* Stretch to full row height */
-    align-self: stretch;
     /* Escape to right screen edge */
     margin-right: calc(-1 * var(--content-margin));
   }
@@ -229,15 +227,17 @@ section: project
     padding-top: var(--space-3);
   }
 
-  /* Header grid: align items to top, metadata height sets row height */
+  /* Header grid: stretch items, metadata height sets row height */
   .project-header .grid {
-    align-items: start;
+    align-items: stretch;
   }
 
-  /* Image: flush left edge, matches metadata height */
+  /* Image: flush left edge, stretches to metadata height */
   .project-header .grid__item--span-2-left {
     padding-left: 0;
     padding-right: 0;
+    /* Stretch to match metadata height */
+    align-self: stretch;
     /* Escape header's left padding to reach the left screen edge */
     margin-left: calc(-1 * var(--content-margin));
     /* Escape header's top padding */
@@ -249,6 +249,7 @@ section: project
   .project-header .header-image {
     display: block;
     height: 100%;
+    overflow: hidden;
   }
 
   .project-header .header-image img {
