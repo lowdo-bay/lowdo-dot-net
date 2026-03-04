@@ -6,24 +6,63 @@ section: project
 
 {# Template-scoped styles — no changes to base.css #}
 <style>
-  .project-meta-table {
+  /* Right column: 2-col sub-grid (maps to page cols 3 & 4) */
+  .project-metadata {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    margin-top: var(--space-3);
+    grid-template-columns: 1fr 1fr;
+    align-content: start;
   }
-  .project-meta-table dt,
-  .project-meta-table dd {
+
+  /* Title: spans both sub-columns, all caps, bold */
+  .project-meta-title {
+    grid-column: 1 / span 2;
+    padding: var(--space-2);
+    font-size: var(--font-size-base);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Tagline: sub-col 1 (page col 3) */
+  .project-meta-tagline {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+  }
+
+  /* Tags: sub-col 2 (page col 4) */
+  .project-meta-tags {
     padding: var(--space-2);
     font-size: var(--font-size-small);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
-  .project-meta-table dt {
-    font-weight: bold;
+
+  /* Metadata label: sub-col 1, not bold */
+  .project-meta-label {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: normal;
+    position: relative;
+  }
+
+  /* Dashed line starts at center of page (left edge of this cell) and extends right */
+  .project-meta-label::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200vw;
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
-  .project-meta-table dd {
-    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+
+  /* Metadata value: sub-col 2 */
+  .project-meta-value {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .project-collab-grid {
@@ -141,6 +180,18 @@ section: project
   .project-desc-body p {
     margin-bottom: var(--space-3);
   }
+
+  /* Image: flush left edge, full height */
+  .project-header .grid__item--span-2-left {
+    padding-left: 0;
+    padding-right: 0;
+    align-self: stretch;
+  }
+  .project-header .header-image,
+  .project-header .header-image img {
+    height: 100%;
+    min-height: 30vh;
+  }
 </style>
 
 <article>
@@ -180,29 +231,34 @@ section: project
         </div>
       {% endif %}
 
-      {# Right: Title, description, categories, metadata #}
+      {# Right: Title, tagline, categories, metadata — 2-col sub-grid #}
       <div class="grid__item--span-2-right project-metadata">
-        <h1>{{ title }}</h1>
-        {% if description %}
-          <div class="markdown">{{ description | renderUsingMarkdown | safe }}</div>
+
+        {# Row 1: Title spanning both sub-columns #}
+        <div class="project-meta-title">{{ title }}</div>
+
+        {# Row 2: Tagline (col 3) + Categories (col 4) #}
+        <div class="project-meta-tagline">
+          {% if description %}{{ description | renderUsingMarkdown | safe }}{% endif %}
+        </div>
+        <div class="project-meta-tags">
+          {% if categories %}{{ categories | join(', ') | upper }}{% endif %}
+        </div>
+
+        {# Rows 3+: Label (col 3) + Value (col 4) #}
+        {% if location %}
+          <div class="project-meta-label">Location</div>
+          <div class="project-meta-value">{{ location }}</div>
         {% endif %}
-        {% if categories %}
-          <span class="index-row__categories">{{ categories | join(', ') | upper }}</span>
+        {% if year and settings.theme.theme_features.show_project_year %}
+          <div class="project-meta-label">Year</div>
+          <div class="project-meta-value">{{ year }}</div>
         {% endif %}
-        <dl class="project-meta-table">
-          {% if location %}
-            <dt>Location</dt>
-            <dd>{{ location }}</dd>
-          {% endif %}
-          {% if year and settings.theme.theme_features.show_project_year %}
-            <dt>Year</dt>
-            <dd>{{ year }}</dd>
-          {% endif %}
-          {% if status %}
-            <dt>Status</dt>
-            <dd>{{ status }}</dd>
-          {% endif %}
-        </dl>
+        {% if status %}
+          <div class="project-meta-label">Status</div>
+          <div class="project-meta-value">{{ status }}</div>
+        {% endif %}
+
       </div>
 
     </div>
