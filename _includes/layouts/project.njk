@@ -25,7 +25,7 @@ section: project
     margin-right: calc(-1 * var(--content-margin));
   }
 
-  /* Metadata grid inside right column: use full height with auto rows */
+  /* Metadata grid inside right column: stretch to full height, rows auto-size */
   .project-header .project-metadata {
     height: 100%;
     display: grid;
@@ -34,14 +34,15 @@ section: project
     align-content: start;
   }
 
+  /* Spacer: grows to push metadata rows to bottom */
+  .project-meta-spacer {
+    grid-column: 1 / span 2;
+    flex-grow: 1;
+  }
+
   /* Metadata row wrapper: use display: contents to not affect grid */
   .project-meta-row {
     display: contents;
-  }
-
-  /* Push all metadata rows to bottom by adding auto margin to first label */
-  .project-meta-row:first-of-type .project-meta-label {
-    margin-top: auto;
   }
 
   /* Title: spans both sub-columns, all caps, bold */
@@ -300,6 +301,9 @@ section: project
         <div class="project-meta-tags">
           {% if categories %}{{ categories | join(', ') | upper }}{% endif %}
         </div>
+
+        {# Spacer: grows to push metadata rows to bottom #}
+        <div class="project-meta-spacer"></div>
 
         {# Rows 3+: Label (col 3) + Value (col 4) #}
         {% if location %}
