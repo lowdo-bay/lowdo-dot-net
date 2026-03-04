@@ -27,7 +27,6 @@ section: project
 
   /* Metadata grid inside right column: stack top and bottom sections vertically */
   .project-header .project-metadata {
-    height: 100%;
     display: flex;
     flex-direction: column;
   }
@@ -40,13 +39,12 @@ section: project
     align-content: start;
   }
 
-  /* Bottom section: metadata rows — aligned to bottom */
+  /* Bottom section: metadata rows — aligned to top */
   .project-meta-bottom {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: max-content;
-    align-content: end;
-    margin-top: auto;
+    align-content: start;
   }
 
   /* Metadata row wrapper: use display: contents to not affect grid */
@@ -229,9 +227,9 @@ section: project
     padding-top: var(--space-3);
   }
 
-  /* Header grid: stretch items, metadata height sets row height */
+  /* Header grid: metadata height sets row height, image crops to match */
   .project-header .grid {
-    align-items: stretch;
+    align-items: start;
   }
 
   /* Image: flush left edge, stretches to metadata height */
@@ -246,16 +244,14 @@ section: project
     margin-top: calc(-1 * var(--space-3));
     /* No bottom margin since header has no bottom padding */
     margin-bottom: 0;
-    /* Flex container so picture element fills height */
-    display: flex;
-    flex-direction: column;
+    /* Make grid item stretch fill its height */
+    display: grid;
+    grid-template-rows: 1fr;
   }
 
   .project-header .header-image {
-    flex: 1;
-    display: block;
+    display: flex;
     overflow: hidden;
-    min-height: 0;
   }
 
   .project-header .header-image img {
