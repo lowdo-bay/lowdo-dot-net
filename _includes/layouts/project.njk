@@ -183,22 +183,36 @@ section: project
     margin-bottom: var(--space-3);
   }
 
-  /* Image: flush left edge, full height */
+  /* Header grid: 2 equal columns, both stretch to match heights */
+  .project-header .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  /* Image: flush left edge, matches right column height */
   .project-header .grid__item--span-2-left {
     padding-left: 0;
     padding-right: 0;
-    align-self: stretch;
     /* Escape header's left padding to reach the left screen edge */
     margin-left: calc(-1 * var(--content-margin));
     /* Escape header's top/bottom padding so image fills full row height */
     margin-top: calc(-1 * var(--content-margin));
     margin-bottom: calc(-1 * var(--content-margin));
   }
+
+  /* Right metadata column */
+  .project-header .grid__item--span-2-right {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+
   .project-header .header-image,
   .project-header .header-image img {
     height: 100%;
-    min-height: 40vh;
+    width: 100%;
     display: block;
+    object-fit: cover;
   }
 </style>
 
