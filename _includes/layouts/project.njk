@@ -31,7 +31,12 @@ section: project
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: max-content;
-    align-content: space-between;
+    align-content: start;
+  }
+
+  /* Spacer before last metadata row to push it to bottom */
+  .project-meta-label:nth-last-of-type(1) {
+    margin-top: auto;
   }
 
   /* Title: spans both sub-columns, all caps, bold */
