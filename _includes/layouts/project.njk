@@ -244,12 +244,16 @@ section: project
     margin-top: calc(-1 * var(--space-3));
     /* No bottom margin since header has no bottom padding */
     margin-bottom: 0;
+    /* Flex container so picture element fills height */
+    display: flex;
+    flex-direction: column;
   }
 
   .project-header .header-image {
+    flex: 1;
     display: block;
-    height: 100%;
     overflow: hidden;
+    min-height: 0;
   }
 
   .project-header .header-image img {
