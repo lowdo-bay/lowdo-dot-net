@@ -188,7 +188,9 @@ section: project
     padding-left: 0;
     padding-right: 0;
     align-self: stretch;
-    /* Escape header's top/bottom content-margin padding so image fills full row */
+    /* Escape header's left padding to reach the left screen edge */
+    margin-left: calc(-1 * var(--content-margin));
+    /* Escape header's top/bottom padding so image fills full row height */
     margin-top: calc(-1 * var(--content-margin));
     margin-bottom: calc(-1 * var(--content-margin));
   }
