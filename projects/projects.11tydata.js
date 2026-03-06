@@ -66,13 +66,44 @@ export default function() {
           const imageFiles = files
             .filter(file => {
               const ext = path.extname(file).toLowerCase();
-              return imageExtensions.includes(ext) && !file.toLowerCase().startsWith('header');
+              return imageExtensions.includes(ext)
+                && !file.toLowerCase().startsWith('header')
+                && !file.toLowerCase().startsWith('drawing-');
             })
             .sort();
 
           return imageFiles.map(file => {
             const relativePath = path.relative('.', path.join(projectDir, file));
             // Generate caption from filename: "photo-1.jpg" → "photo 1"
+            const caption = path.basename(file, path.extname(file)).replace(/[-_]/g, ' ');
+            return { src: relativePath, caption };
+          });
+        } catch (e) {
+          // Folder doesn't exist yet or can't be read
+        }
+
+        return [];
+      },
+
+      // Auto-discover drawing images (files starting with "drawing-") from project folder
+      drawings(data) {
+        if (data.drawings && data.drawings.length > 0) {
+          return data.drawings;
+        }
+
+        const projectDir = path.dirname(data.page.inputPath);
+
+        try {
+          const files = fs.readdirSync(projectDir);
+          const drawingFiles = files
+            .filter(file => {
+              const ext = path.extname(file).toLowerCase();
+              return imageExtensions.includes(ext) && file.toLowerCase().startsWith('drawing-');
+            })
+            .sort();
+
+          return drawingFiles.map(file => {
+            const relativePath = path.relative('.', path.join(projectDir, file));
             const caption = path.basename(file, path.extname(file)).replace(/[-_]/g, ' ');
             return { src: relativePath, caption };
           });

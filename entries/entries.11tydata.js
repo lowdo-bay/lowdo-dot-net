@@ -172,13 +172,61 @@ export default function() {
           const imageFiles = files
             .filter(file => {
               const ext = path.extname(file).toLowerCase();
-              return imageExtensions.includes(ext) && !file.toLowerCase().startsWith('header');
+              return imageExtensions.includes(ext)
+                && !file.toLowerCase().startsWith('header')
+                && !file.toLowerCase().startsWith('drawing-');
             })
             .sort();
 
           return imageFiles.map(file => {
             const relativePath = path.relative('.', path.join(entryDir, file));
             // Generate caption from filename: "photo-1.jpg" → "photo 1"
+            const caption = path.basename(file, path.extname(file)).replace(/[-_]/g, ' ');
+            return { src: relativePath, caption };
+          });
+        } catch (e) {
+          // Folder doesn't exist yet or can't be read
+        }
+
+        return [];
+      },
+
+      // Auto-discover drawing images (for project detail pages)
+      drawings(data) {
+        // Determine entry type from folder path
+        const inputPath = data.page.inputPath;
+        const pathParts = inputPath.split('/');
+        const entriesIndex = pathParts.indexOf('entries');
+        let entryType = 'other';
+        if (entriesIndex >= 0 && pathParts[entriesIndex + 1]) {
+          const folder = pathParts[entriesIndex + 1];
+          entryType = folderToType[folder] || 'other';
+        }
+
+        // Only projects have drawings
+        if (entryType !== 'project') {
+          return [];
+        }
+
+        // Skip if already defined in frontmatter
+        if (data.drawings && data.drawings.length > 0) {
+          return data.drawings;
+        }
+
+        const entryDir = path.dirname(inputPath);
+
+        try {
+          const files = fs.readdirSync(entryDir);
+          const drawingFiles = files
+            .filter(file => {
+              const ext = path.extname(file).toLowerCase();
+              return imageExtensions.includes(ext) && file.toLowerCase().startsWith('drawing-');
+            })
+            .sort();
+
+          return drawingFiles.map(file => {
+            const relativePath = path.relative('.', path.join(entryDir, file));
+            // Generate caption from filename: "drawing-plan_1.jpg" → "drawing plan 1"
             const caption = path.basename(file, path.extname(file)).replace(/[-_]/g, ' ');
             return { src: relativePath, caption };
           });
