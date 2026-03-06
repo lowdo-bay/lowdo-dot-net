@@ -423,6 +423,37 @@ section: project
     font-weight: normal;
   }
 
+  /* Drawing thumb and tooltip */
+  .project-drawing-cell .drawing-thumb {
+    position: relative;
+    display: block;
+    cursor: pointer;
+  }
+
+  /* Tooltip: follows mouse, hidden by default */
+  .drawing-tooltip {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    background: white;
+    color: var(--color-accent);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+    display: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  }
+
+  .drawing-tooltip__caption {
+    display: block;
+    font-weight: bold;
+  }
+
+  .drawing-tooltip__hint {
+    display: block;
+    font-weight: normal;
+  }
+
   /* Add vertical spacing above design toolkit and related projects sections */
   .project-toolkit-section,
   .project-related-section {
@@ -653,9 +684,16 @@ section: project
           "outputQualityAvif": settings.images.avif.quality
         } %}
         <div class="project-drawing-cell">
-          {% generateImage params %}
+          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}">
+            {% generateImage params %}
+          </div>
         </div>
       {% endfor %}
+    </div>
+
+    <div class="drawing-tooltip" id="drawing-tooltip">
+      <span class="drawing-tooltip__caption"></span>
+      <span class="drawing-tooltip__hint">click to expand...</span>
     </div>
 
   </section>
@@ -706,24 +744,47 @@ section: project
 
 <script>
 (function() {
-  var tooltip = document.getElementById('photo-tooltip');
-  if (!tooltip) return;
-  var captionEl = tooltip.querySelector('.photo-tooltip__caption');
-  var thumbs = document.querySelectorAll('.project-photos-grid .photo-thumb');
-  thumbs.forEach(function(thumb) {
-    thumb.addEventListener('mouseenter', function(e) {
-      var caption = (thumb.dataset.caption || '').replace(/^\d+\s*/, '');
-      captionEl.textContent = caption;
-      tooltip.style.display = 'block';
+  // Photo tooltip
+  var photoTooltip = document.getElementById('photo-tooltip');
+  if (photoTooltip) {
+    var photoCaptionEl = photoTooltip.querySelector('.photo-tooltip__caption');
+    var photoThumbs = document.querySelectorAll('.project-photos-grid .photo-thumb');
+    photoThumbs.forEach(function(thumb) {
+      thumb.addEventListener('mouseenter', function(e) {
+        var caption = (thumb.dataset.caption || '').replace(/^\d+\s*/, '');
+        photoCaptionEl.textContent = caption;
+        photoTooltip.style.display = 'block';
+      });
+      thumb.addEventListener('mousemove', function(e) {
+        photoTooltip.style.left = (e.clientX + 14) + 'px';
+        photoTooltip.style.top = (e.clientY + 14) + 'px';
+      });
+      thumb.addEventListener('mouseleave', function() {
+        photoTooltip.style.display = 'none';
+      });
     });
-    thumb.addEventListener('mousemove', function(e) {
-      tooltip.style.left = (e.clientX + 14) + 'px';
-      tooltip.style.top = (e.clientY + 14) + 'px';
+  }
+
+  // Drawing tooltip
+  var drawingTooltip = document.getElementById('drawing-tooltip');
+  if (drawingTooltip) {
+    var drawingCaptionEl = drawingTooltip.querySelector('.drawing-tooltip__caption');
+    var drawingThumbs = document.querySelectorAll('.project-drawings-grid .drawing-thumb');
+    drawingThumbs.forEach(function(thumb) {
+      thumb.addEventListener('mouseenter', function(e) {
+        var caption = (thumb.dataset.caption || '').replace(/^drawing-?\s*/, '');
+        drawingCaptionEl.textContent = caption;
+        drawingTooltip.style.display = 'block';
+      });
+      thumb.addEventListener('mousemove', function(e) {
+        drawingTooltip.style.left = (e.clientX + 14) + 'px';
+        drawingTooltip.style.top = (e.clientY + 14) + 'px';
+      });
+      thumb.addEventListener('mouseleave', function() {
+        drawingTooltip.style.display = 'none';
+      });
     });
-    thumb.addEventListener('mouseleave', function() {
-      tooltip.style.display = 'none';
-    });
-  });
+  }
 })();
 </script>
 
