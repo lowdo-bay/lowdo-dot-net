@@ -258,14 +258,31 @@ section: project
     font-family: inherit;
     text-transform: uppercase;
     color: inherit;
-    transition: color 200ms ease, font-weight 200ms ease;
+    transition: color var(--transition-time) ease;
+    position: relative;
+    z-index: 1;
+  }
+  .project-download-cell--action button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-accent-1);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--transition-time) ease;
+    z-index: -1;
   }
   .project-download-row.gate-open .project-download-cell--action button {
     color: var(--color-accent-4);
   }
+  .project-download-row.gate-ready .project-download-cell--action button::before {
+    transform: scaleX(1);
+  }
   .project-download-row.gate-ready .project-download-cell--action button {
-    color: var(--color-accent-1);
-    font-weight: bold;
+    color: #ffffff;
   }
 
   /* Download gate drawer */
