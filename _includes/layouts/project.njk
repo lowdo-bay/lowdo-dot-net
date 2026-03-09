@@ -474,6 +474,11 @@ section: project
   .project-related-section {
     margin-top: var(--space-6);
   }
+
+  /* Toolkit section should not have its own ::after line (uses child header line) */
+  .project-toolkit-section::after {
+    display: none !important;
+  }
 </style>
 
 <article>
