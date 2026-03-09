@@ -329,6 +329,11 @@ img {
 	margin-left: calc(var(--space) / 3);
 }
 
+.arrow--down::after {
+	content: "\2193";
+	margin-left: calc(var(--space) / 3);
+}
+
 /* Buttons */
 
 .btn {
