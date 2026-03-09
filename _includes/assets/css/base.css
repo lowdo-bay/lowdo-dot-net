@@ -334,9 +334,9 @@ img {
 	margin-left: calc(var(--space) / 3);
 }
 
-.file-icon::before {
-	content: "◪";
+.file-icon {
 	margin-right: calc(var(--space) / 3);
+	vertical-align: middle;
 }
 
 /* Buttons */
