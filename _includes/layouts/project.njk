@@ -3,11 +3,479 @@ layout: layouts/base.njk
 permalink: "project/{{ title | slug }}/index.html"
 section: project
 ---
+
+{# Template-scoped styles — no changes to base.css #}
+<style>
+  /* Right column: 2-col sub-grid (maps to page cols 3 & 4).
+     Scoped to article to override base.css display:flex on .project-metadata */
+  article .project-metadata {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: start;
+    margin-bottom: 0;
+    margin-right: calc(1 * var(--space-2));
+  }
+
+  /* Right grid item: size to content (metadata), sets the row height */
+  .project-header .grid__item--span-2-right {
+    margin-bottom: 0;
+    /* Size to content, don't stretch */
+    align-self: auto;
+    /* Escape to right screen edge */
+    margin-right: calc(-1 * var(--content-margin));
+  }
+
+  /* Metadata grid inside right column: stack top and bottom sections vertically */
+  .project-header .project-metadata {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top section: title, tagline, tags — aligned to top */
+  .project-meta-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: max-content;
+    align-content: start;
+  }
+
+  /* Bottom section: metadata rows — aligned to top */
+  .project-meta-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: max-content;
+    align-content: start;
+  }
+
+  /* Metadata row wrapper: use display: contents to not affect grid */
+  .project-meta-row {
+    display: contents;
+  }
+
+  /* Title: spans both sub-columns, all caps, bold */
+  .project-meta-title {
+    grid-column: 1 / span 2;
+    padding: 0 var(--space-2) var(--space-2) var(--space-2);
+    font-size: var(--font-size-base);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Tagline: sub-col 1 (page col 3) */
+  .project-meta-tagline {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+  }
+
+  /* Tags: sub-col 2 (page col 4) */
+  .project-meta-tags {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Metadata label: sub-col 1, not bold */
+  .project-meta-label {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: normal;
+    position: relative;
+  }
+
+  /* Dashed line starts at center column line and extends to right screen edge.
+     left: calc(-1 * var(--space-2)) backs up to the grid item's padding edge (= center column line) */
+  .project-meta-label::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: calc(-1 * var(--space-2));
+    width: 200vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  /* Metadata value: sub-col 2 */
+  .project-meta-value {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .project-collab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+  }
+  .project-collab-cell {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: none;
+    position: relative;
+  }
+  .project-collab-cell:not(.project-collab-cell--head)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: calc(-1 * var(--space-2));
+    right: calc(-1 * var(--space-2));
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+  .project-collab-cell--head {
+    font-weight: bold;
+    border-bottom: none !important;
+    position: relative;
+  }
+  .project-collab-cell--head:first-child::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .project-collab-cell--head:first-child::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: calc(-1 * var(--space-2));
+    right: calc(-100% - var(--space-2));
+    width: auto;
+    transform: none;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    border-bottom-width: calc(2 * var(--grid-line-thickness));
+  }
+
+  .project-collab-grid:nth-of-type(2) .project-collab-cell--head:first-child::after {
+    left: calc(-1 * var(--space-2));
+    right: calc(-100% - var(--space-2));
+    width: auto;
+    transform: none;
+    border-bottom-width: calc(2 * var(--grid-line-thickness));
+  }
+
+  .project-section-header {
+    position: relative;
+    padding-bottom: 0;
+  }
+  .project-section-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+  .project-section-header-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 840px) {
+    .project-section-header-inner {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .project-section-header-cell {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .project-download-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    position: relative;
+  }
+  .project-download-cell--title {
+    flex: 1;
+  }
+  .project-download-row::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+  .project-download-cell {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .project-download-cell--format {
+    opacity: 0.6;
+  }
+  .project-download-cell--action {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .project-drawings-section {
+    margin-top: var(--space-6);
+  }
+
+  /* Light blue background: only on the grid area (from solid line to bottom dashed line) */
+  /* Drawings grid: 2 columns on mobile, 4 on desktop */
+  .project-drawings-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    padding-left: calc(50vw - 50%);
+    padding-right: calc(50vw - 50%);
+    background-color: var(--project-header-bg);
+  }
+
+  @media (min-width: 840px) {
+    .project-drawings-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Each drawing cell: padding inside the grid column */
+  .project-drawing-cell {
+    padding: var(--space-2);
+    position: relative;
+  }
+
+  /* Dashed line under each row: every 2nd cell on mobile */
+  .project-drawing-cell:nth-child(2n)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  /* Dashed line under each row: every 4th cell on desktop */
+  @media (min-width: 840px) {
+    .project-drawing-cell:nth-child(2n)::after {
+      display: none;
+    }
+    .project-drawing-cell:nth-child(4n)::after {
+      display: block;
+    }
+  }
+
+  /* Full width, native aspect ratio, aligned top */
+  .project-drawing-cell img {
+    width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: top;
+  }
+
+  .project-desc-header {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: none;
+    position: relative;
+  }
+
+  .project-desc-body {
+    padding: var(--space-2);
+  }
+  .project-desc-body p {
+    margin-bottom: var(--space-3);
+  }
+
+  /* Header: remove bottom padding, create stacking context to isolate grid lines above image */
+  .project-header {
+    padding-bottom: 0;
+    padding-top: var(--space-3);
+    z-index: 1;
+  }
+
+  /* Header grid: metadata height sets row height, image crops to match */
+  .project-header .grid {
+    align-items: start;
+  }
+
+  /* Image: flush to grid lines, stretches to metadata height */
+  .project-header .grid__item--span-2-left {
+    padding: 0;
+    /* Stretch to match metadata height — does not contribute to row height */
+    align-self: stretch;
+    /* Escape project-header left padding to reach 1st column line (padding: 0 already zeroes grid item padding) */
+    margin-left: calc(-1 * var(--content-margin));
+    /* Escape actual top padding (--space-3) to reach blue background top border */
+    margin-top: calc(-1 * var(--space-3));
+    /* No escape needed — project-header has padding-bottom: 0 */
+    margin-bottom: 0;
+    /* Positioning context for absolutely placed image */
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-header .header-image {
+    /* Absolutely fill the container — zero layout contribution to row height */
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    /* Override base.css height: 30vh — height must be driven by containing block, not viewport */
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .project-header .header-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Add vertical spacing above photos section */
+  .project-photos-section {
+    margin-top: var(--space-6);
+  }
+
+  /* Photos grid: 2 columns on mobile, 4 on desktop */
+  .project-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 840px) {
+    .project-photos-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Each photo cell: padding inside the grid column */
+  .project-photo-cell {
+    padding: var(--space-2);
+    position: relative;
+  }
+
+  /* Dashed line under each row: every 2nd cell on mobile */
+  .project-photo-cell:nth-child(2n)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  /* Dashed line under each row: every 4th cell on desktop */
+  @media (min-width: 840px) {
+    .project-photo-cell:nth-child(2n)::after {
+      display: none;
+    }
+    .project-photo-cell:nth-child(4n)::after {
+      display: block;
+    }
+  }
+
+  /* Square crop */
+  .project-photo-cell .photo-thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .project-photo-cell .photo-thumb picture,
+  .project-photo-cell .photo-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Tooltip: follows mouse, hidden by default */
+  .photo-tooltip {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    background: white;
+    color: var(--color-accent);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+    display: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  }
+
+  .photo-tooltip__caption {
+    display: block;
+    font-weight: bold;
+  }
+
+  .photo-tooltip__hint {
+    display: block;
+    font-weight: normal;
+  }
+
+  /* Drawing thumb and tooltip */
+  .project-drawing-cell .drawing-thumb {
+    position: relative;
+    display: block;
+    cursor: pointer;
+  }
+
+  /* Tooltip: follows mouse, hidden by default */
+  .drawing-tooltip {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    background: white;
+    color: var(--color-accent);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+    display: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  }
+
+  .drawing-tooltip__caption {
+    display: block;
+    font-weight: bold;
+  }
+
+  .drawing-tooltip__hint {
+    display: block;
+    font-weight: normal;
+  }
+
+  /* Add vertical spacing above design toolkit and related projects sections */
+  .project-toolkit-section,
+  .project-related-section {
+    margin-top: var(--space-6);
+  }
+</style>
+
 <article>
 
-  {# Project Header Section - Image left, metadata right #}
+  {# =========================================================
+     SECTION 1: Project Header — Image left, metadata right
+     ========================================================= #}
   <header class="project-header">
     <div class="grid grid--intro">
+
       {# Left: Header Image #}
       {% if headerImage %}
         <div class="grid__item--span-2-left">
@@ -17,54 +485,134 @@ section: project
               {{ '' if outputFormats.push(format) }}
             {% endif %}
           {% endfor %}
-
-          {% set params =
-            {
-              "src": headerImage.src,
-              "alt": title,
-              "classes": "header-image",
-              "loadingType": "eager",
-              "viewportSizes": "50vw",
-              "outputWidths": [
-                settings.config.image_width_sm,
-                settings.config.image_width_md,
-                settings.config.image_width_lg
-              ],
-              "outputFormats": outputFormats,
-              "outputQualityJpeg": settings.images.jpeg.quality,
-              "outputQualityWebp": settings.images.webp.quality,
-              "outputQualityAvif": settings.images.avif.quality
-            }
-          %}
-
+          {% set params = {
+            "src": headerImage.src,
+            "alt": title,
+            "classes": "header-image",
+            "loadingType": "eager",
+            "viewportSizes": "50vw",
+            "outputWidths": [
+              settings.config.image_width_sm,
+              settings.config.image_width_md,
+              settings.config.image_width_lg
+            ],
+            "outputFormats": outputFormats,
+            "outputQualityJpeg": settings.images.jpeg.quality,
+            "outputQualityWebp": settings.images.webp.quality,
+            "outputQualityAvif": settings.images.avif.quality
+          } %}
           {% generateImage params %}
         </div>
       {% endif %}
 
-      {# Right: Project Metadata #}
+      {# Right: Title, tagline, categories, metadata — 2-col sub-grid #}
       <div class="grid__item--span-2-right project-metadata">
-        <h1>{{ title }}</h1>
-        <div class="markdown">{{ description | renderUsingMarkdown | safe }}</div>
 
-        {% if year and settings.theme.theme_features.show_project_year %}
-          <p class="mb--0">{{ year }}</p>
-        {% endif %}
+        {# Top section: Title, tagline, tags #}
+        <div class="project-meta-top">
+          {# Row 1: Title spanning both sub-columns #}
+          <div class="project-meta-title">{{ title }}</div>
+
+          {# Row 2: Tagline (col 3) + Categories (col 4) #}
+          <div class="project-meta-tagline">
+            {% if description %}{{ description | renderUsingMarkdown | safe }}{% endif %}
+          </div>
+          <div class="project-meta-tags">
+            {% if categories %}{{ categories | join(', ') | upper }}{% endif %}
+          </div>
+        </div>
+
+        {# Bottom section: Location, year, status #}
+        <div class="project-meta-bottom">
+          {# Rows: Label (col 3) + Value (col 4) #}
+          {% if location %}
+            <div class="project-meta-row">
+              <div class="project-meta-label">Location</div>
+              <div class="project-meta-value">{{ location }}</div>
+            </div>
+          {% endif %}
+          {% if year and settings.theme.theme_features.show_project_year %}
+            <div class="project-meta-row">
+              <div class="project-meta-label">Year</div>
+              <div class="project-meta-value">{{ year }}</div>
+            </div>
+          {% endif %}
+          {% if status %}
+            <div class="project-meta-row">
+              <div class="project-meta-label">Status</div>
+              <div class="project-meta-value">{{ status }}</div>
+            </div>
+          {% endif %}
+        </div>
+
       </div>
+
     </div>
   </header>
 
-  {# Project Description from Markdown Content #}
+  {# =========================================================
+     SECTION 2: Collaborators (left) + Description (right)
+     ========================================================= #}
   <section>
-    <div class="grid grid--description pb--6">
-      <div class="grid__item--span-4 mw--readable">
-        {{ content | safe }}
+    <div class="grid grid--intro">
+
+      {# Left: Trade / Collaborator table + Awards & Recognition #}
+      <div class="grid__item--span-2-left">
+        {% if collaborators and collaborators.length %}
+          <div class="project-collab-grid">
+            <div class="project-collab-cell project-collab-cell--head">Trade</div>
+            <div class="project-collab-cell project-collab-cell--head">Collaborator</div>
+            {% for collab in collaborators %}
+              <div class="project-collab-cell">{{ collab.role | upper }}</div>
+              <div class="project-collab-cell">{{ collab.name | upper }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {# Awards & Recognition section (using collaborators styling) #}
+        {% set projectRecognition = collections.entriesByProject[page.fileSlug] %}
+        {% if projectRecognition and projectRecognition.length %}
+          <div class="project-collab-grid" style="margin-top: var(--space-6)">
+            <div class="project-collab-cell project-collab-cell--head">Awards & Recognition</div>
+            <div class="project-collab-cell project-collab-cell--head"> </div>
+            {% for item in projectRecognition %}
+              <div class="project-collab-cell">
+                {% if item.data.link %}
+                  <a href="{{ item.data.link }}" target="_blank" rel="noopener">{{ item.data.title }}</a>
+                {% else %}
+                  {{ item.data.title }}
+                {% endif %}
+              </div>
+              <div class="project-collab-cell">{{ item.data.categories | join(', ') | upper }} ({{ item.data.date | formatDate("YYYY") }})</div>
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
+
+      {# Right: Description body text #}
+      <div class="grid__item--span-2-right">
+        <div class="project-desc-header">Description</div>
+        <div class="project-desc-body">
+          {{ content | safe }}
+        </div>
+      </div>
+
     </div>
   </section>
 
-  {# Gallery Images with Captions #}
-  <section class="grid grid--project pb--3">
-    {% if images %}
+  {# =========================================================
+     SECTION 4: Photos
+     ========================================================= #}
+  {% if images and images.length %}
+  <section class="project-photos-section">
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell">Photos</div>
+      </div>
+    </div>
+
+    <div class="project-photos-grid">
       {% for image in images %}
 
         {% set outputFormats = [] %}
@@ -74,40 +622,192 @@ section: project
           {% endif %}
         {% endfor %}
 
-        {% set params = 
-          {
-            "src": image.src,
-            "alt": image.caption or title,
-            "classes": "grid__item grid__item--breakout",
-            "loadingType": "lazy",
-            "viewportSizes": "(min-width: 1140px) 70vw, (min-width: 540px) 90vw, 100vw",
-            "outputWidths": [ 
-              settings.config.image_width_sm,
-              settings.config.image_width_md,
-              settings.config.image_width_lg
-            ],
-            "outputFormats": outputFormats,
-            "outputQualityJpeg": settings.images.jpeg.quality,
-            "outputQualityWebp": settings.images.webp.quality,
-            "outputQualityAvif": settings.images.avif.quality
-          }
-        %}
+        {% set params = {
+          "src": image.src,
+          "alt": image.caption or title,
+          "loadingType": "lazy",
+          "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 540px) 45vw, 85vw",
+          "outputWidths": [
+            settings.config.image_grid_width_sm,
+            settings.config.image_grid_width_md,
+            settings.config.image_grid_width_lg
+          ],
+          "outputFormats": outputFormats,
+          "outputQualityJpeg": settings.images.jpeg.quality,
+          "outputQualityWebp": settings.images.webp.quality,
+          "outputQualityAvif": settings.images.avif.quality
+        } %}
 
-        {% generateImage params %}
-
-        {% if image.caption %}
-          <figcaption class="image-caption">{{ image.caption }}</figcaption>
-        {% endif %}
+        <div class="project-photo-cell">
+          <div class="photo-thumb" data-caption="{{ image.caption or '' }}">
+            {% generateImage params %}
+          </div>
+        </div>
 
       {% endfor %}
-    {% endif %}
+    </div>
+
+    <div class="photo-tooltip" id="photo-tooltip">
+      <span class="photo-tooltip__caption"></span>
+      <span class="photo-tooltip__hint">click to expand...</span>
+    </div>
+
   </section>
-  
+  {% endif %}
+
+  {# =========================================================
+     SECTION 5: Drawings
+     ========================================================= #}
+  {% if drawings and drawings.length %}
+  <section class="project-drawings-section">
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell">Drawings</div>
+      </div>
+    </div>
+
+    <div class="project-drawings-grid">
+      {% for drawing in drawings %}
+        {% set outputFormats = [] %}
+        {% for format, i in settings.images %}
+          {% if i.enabled === true %}
+            {{ '' if outputFormats.push(format) }}
+          {% endif %}
+        {% endfor %}
+        {% set params = {
+          "src": drawing.src,
+          "alt": drawing.caption or (title + " drawing"),
+          "loadingType": "lazy",
+          "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 540px) 45vw, 85vw",
+          "outputWidths": [
+            settings.config.image_grid_width_sm,
+            settings.config.image_grid_width_md,
+            settings.config.image_grid_width_lg
+          ],
+          "outputFormats": outputFormats,
+          "outputQualityJpeg": settings.images.jpeg.quality,
+          "outputQualityWebp": settings.images.webp.quality,
+          "outputQualityAvif": settings.images.avif.quality
+        } %}
+        <div class="project-drawing-cell">
+          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}">
+            {% generateImage params %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="drawing-tooltip" id="drawing-tooltip">
+      <span class="drawing-tooltip__caption"></span>
+      <span class="drawing-tooltip__hint">click to expand...</span>
+    </div>
+
+  </section>
+  {% endif %}
+
+  {# =========================================================
+     SECTION 6: Design Toolkit (Downloads)
+     ========================================================= #}
+  {% set toolkitItems = toolkitFiles if toolkitFiles and toolkitFiles.length else downloads %}
+  {% if toolkitItems and toolkitItems.length %}
+  <section>
+    <div class="grid grid--intro">
+
+      {# Empty left column (spans 1-2) #}
+      <div class="grid__item--span-2-left">
+      </div>
+
+      {# Design Toolkit in right column (spans 3-4) #}
+      <div class="grid__item--span-2-right">
+        <div class="project-toolkit-section">
+
+          <div class="project-section-header">
+            <div class="project-section-header-inner">
+              <div class="project-section-header-cell">Design Toolkit</div>
+            </div>
+          </div>
+
+          {% for item in toolkitItems %}
+            <div class="project-download-row">
+              <div class="project-download-cell project-download-cell--title"><span class="file-icon"></span>{{ item.title }}</div>
+              <div class="project-download-cell project-download-cell--format">{{ item.format }}</div>
+              <div class="project-download-cell project-download-cell--action">
+                <a href="{{ item.url }}" class="arrow arrow--down link-nostyle text--small" download>Download</a>
+              </div>
+            </div>
+          {% endfor %}
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+  {% endif %}
+
+  {# =========================================================
+     SECTION 7: Related Projects
+     ========================================================= #}
+  <section class="project-related-section pb--6">
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell">Related Projects</div>
+      </div>
+    </div>
+
+    {% set projectList = collections.projects | randomLimit((settings.theme.theme_features.item_output_limit or 48), page.url) %}
+    {% include "components/projectList.njk" %}
+
+  </section>
+
 </article>
 
-{# Output a list of random projects, excluding the current project, default limit of 48 #}
-{% set projectList = collections.projects | randomLimit((settings.theme.theme_features.item_output_limit or 48), page.url) %}
-{% include "components/projectList.njk" %}
+<script>
+(function() {
+  // Photo tooltip
+  var photoTooltip = document.getElementById('photo-tooltip');
+  if (photoTooltip) {
+    var photoCaptionEl = photoTooltip.querySelector('.photo-tooltip__caption');
+    var photoThumbs = document.querySelectorAll('.project-photos-grid .photo-thumb');
+    photoThumbs.forEach(function(thumb) {
+      thumb.addEventListener('mouseenter', function(e) {
+        var caption = (thumb.dataset.caption || '').replace(/^\d+\s*/, '');
+        photoCaptionEl.textContent = caption;
+        photoTooltip.style.display = 'block';
+      });
+      thumb.addEventListener('mousemove', function(e) {
+        photoTooltip.style.left = (e.clientX + 14) + 'px';
+        photoTooltip.style.top = (e.clientY + 14) + 'px';
+      });
+      thumb.addEventListener('mouseleave', function() {
+        photoTooltip.style.display = 'none';
+      });
+    });
+  }
+
+  // Drawing tooltip
+  var drawingTooltip = document.getElementById('drawing-tooltip');
+  if (drawingTooltip) {
+    var drawingCaptionEl = drawingTooltip.querySelector('.drawing-tooltip__caption');
+    var drawingThumbs = document.querySelectorAll('.project-drawings-grid .drawing-thumb');
+    drawingThumbs.forEach(function(thumb) {
+      thumb.addEventListener('mouseenter', function(e) {
+        var caption = (thumb.dataset.caption || '').replace(/^drawing-?\s*/, '');
+        drawingCaptionEl.textContent = caption;
+        drawingTooltip.style.display = 'block';
+      });
+      thumb.addEventListener('mousemove', function(e) {
+        drawingTooltip.style.left = (e.clientX + 14) + 'px';
+        drawingTooltip.style.top = (e.clientY + 14) + 'px';
+      });
+      thumb.addEventListener('mouseleave', function() {
+        drawingTooltip.style.display = 'none';
+      });
+    });
+  }
+})();
+</script>
 
 {# Appended to <head> during build #}
 {% include "components/opengraph.njk" %}

@@ -206,6 +206,25 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
     return Array.from(categorySet).sort();
   });
 
+  // Group entries by project for Awards & Recognition display
+  eleventyConfig.addCollection("entriesByProject", function(collectionApi) {
+    const entries = collectionApi.getFilteredByGlob("entries/**/*.md")
+      .filter(entry => entry.data.draft !== true)
+      .filter(entry => entry.data.relatedProject); // Only entries with relatedProject field
+
+    const entriesByProject = {};
+
+    entries.forEach(entry => {
+      const projectSlug = entry.data.relatedProject;
+      if (!entriesByProject[projectSlug]) {
+        entriesByProject[projectSlug] = [];
+      }
+      entriesByProject[projectSlug].push(entry);
+    });
+
+    return entriesByProject;
+  });
+
   // A filter to limit output of collection items
   eleventyConfig.addFilter("limit", function (arr, limit) {
     return arr.slice(0, limit);
@@ -316,6 +335,8 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   eleventyConfig.addPassthroughCopy({"assets/icons/favicon.svg" : "/favicon.svg"});
   eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
   eleventyConfig.addPassthroughCopy("entries/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
+  // Copy toolkit files (all types) from entries
+  eleventyConfig.addPassthroughCopy("entries/**/toolkit-*");
 
   // Copy assets folder to output
   eleventyConfig.addPassthroughCopy("assets");
