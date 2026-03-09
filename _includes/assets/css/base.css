@@ -685,7 +685,7 @@ main.p--content article {
 .project-header::before {
   content: '';
   position: absolute;
-  top: 0;
+  top: calc(-1 * var(--grid-line-thickness));
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
