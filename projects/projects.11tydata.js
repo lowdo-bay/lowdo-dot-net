@@ -68,7 +68,8 @@ export default function() {
               const ext = path.extname(file).toLowerCase();
               return imageExtensions.includes(ext)
                 && !file.toLowerCase().startsWith('header')
-                && !file.toLowerCase().startsWith('drawing-');
+                && !file.toLowerCase().startsWith('drawing-')
+                && !file.toLowerCase().startsWith('toolkit-');
             })
             .sort();
 
@@ -106,6 +107,42 @@ export default function() {
             const relativePath = path.relative('.', path.join(projectDir, file));
             const caption = path.basename(file, path.extname(file)).replace(/[-_]/g, ' ');
             return { src: relativePath, caption };
+          });
+        } catch (e) {
+          // Folder doesn't exist yet or can't be read
+        }
+
+        return [];
+      },
+
+      // Auto-discover toolkit files (files starting with "toolkit-") from project folder
+      toolkitFiles(data) {
+        if (data.toolkitFiles && data.toolkitFiles.length > 0) {
+          return data.toolkitFiles;
+        }
+
+        const projectDir = path.dirname(data.page.inputPath);
+
+        try {
+          const files = fs.readdirSync(projectDir);
+          const toolkitFiles = files
+            .filter(file => file.toLowerCase().startsWith('toolkit-'))
+            .sort();
+
+          return toolkitFiles.map(file => {
+            const ext = path.extname(file).slice(1).toUpperCase();
+            // Strip "toolkit-" prefix, replace hyphens/underscores with spaces
+            // e.g. "toolkit-LOWDO-wolf-creek-ranch-drawings.pdf" → "LOWDO wolf creek ranch drawings"
+            const title = path.basename(file, path.extname(file))
+              .replace(/^toolkit-/i, '')
+              .replace(/[-_]/g, ' ');
+            const relativePath = path.relative('.', path.join(projectDir, file));
+            return {
+              filename: file,
+              title,
+              format: ext,
+              url: `/${relativePath}`
+            };
           });
         } catch (e) {
           // Folder doesn't exist yet or can't be read

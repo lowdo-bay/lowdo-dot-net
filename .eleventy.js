@@ -335,6 +335,8 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   eleventyConfig.addPassthroughCopy({"assets/icons/favicon.svg" : "/favicon.svg"});
   eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
   eleventyConfig.addPassthroughCopy("entries/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
+  // Copy toolkit files (all types) from entries
+  eleventyConfig.addPassthroughCopy("entries/**/toolkit-*");
 
   // Copy assets folder to output
   eleventyConfig.addPassthroughCopy("assets");

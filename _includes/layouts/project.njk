@@ -709,7 +709,8 @@ section: project
   {# =========================================================
      SECTION 6: Design Toolkit (Downloads)
      ========================================================= #}
-  {% if downloads and downloads.length %}
+  {% set toolkitItems = toolkitFiles if toolkitFiles and toolkitFiles.length else downloads %}
+  {% if toolkitItems and toolkitItems.length %}
   <section class="project-toolkit-section">
 
     <div class="project-section-header">
@@ -718,12 +719,12 @@ section: project
       </div>
     </div>
 
-    {% for item in downloads %}
+    {% for item in toolkitItems %}
       <div class="project-download-row">
         <div class="project-download-cell project-download-cell--title">&#9633; {{ item.title }}</div>
         <div class="project-download-cell project-download-cell--format">{{ item.format }}</div>
         <div class="project-download-cell project-download-cell--action">
-          <a href="{{ item.url }}" class="arrow arrow--right link-nostyle text--small">Download</a>
+          <a href="{{ item.url }}" class="arrow arrow--right link-nostyle text--small" download>Download</a>
         </div>
       </div>
     {% endfor %}

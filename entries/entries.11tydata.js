@@ -174,7 +174,8 @@ export default function() {
               const ext = path.extname(file).toLowerCase();
               return imageExtensions.includes(ext)
                 && !file.toLowerCase().startsWith('header')
-                && !file.toLowerCase().startsWith('drawing-');
+                && !file.toLowerCase().startsWith('drawing-')
+                && !file.toLowerCase().startsWith('toolkit-');
             })
             .sort();
 
@@ -229,6 +230,58 @@ export default function() {
             // Generate caption from filename: "drawing-plan_1.jpg" → "drawing plan 1"
             const caption = path.basename(file, path.extname(file)).replace(/[-_]/g, ' ');
             return { src: relativePath, caption };
+          });
+        } catch (e) {
+          // Folder doesn't exist yet or can't be read
+        }
+
+        return [];
+      },
+
+      // Auto-discover toolkit files (for project detail pages)
+      toolkitFiles(data) {
+        // Determine entry type from folder path
+        const inputPath = data.page.inputPath;
+        const pathParts = inputPath.split('/');
+        const entriesIndex = pathParts.indexOf('entries');
+        let entryType = 'other';
+        if (entriesIndex >= 0 && pathParts[entriesIndex + 1]) {
+          const folder = pathParts[entriesIndex + 1];
+          entryType = folderToType[folder] || 'other';
+        }
+
+        // Only projects have toolkit files
+        if (entryType !== 'project') {
+          return [];
+        }
+
+        // Skip if already defined in frontmatter
+        if (data.toolkitFiles && data.toolkitFiles.length > 0) {
+          return data.toolkitFiles;
+        }
+
+        const entryDir = path.dirname(inputPath);
+
+        try {
+          const files = fs.readdirSync(entryDir);
+          const toolkitFiles = files
+            .filter(file => file.toLowerCase().startsWith('toolkit-'))
+            .sort();
+
+          return toolkitFiles.map(file => {
+            const ext = path.extname(file).slice(1).toUpperCase();
+            // Strip "toolkit-" prefix, replace hyphens/underscores with spaces
+            // e.g. "toolkit-LOWDO-wolf-creek-ranch-drawings.pdf" → "LOWDO wolf creek ranch drawings"
+            const title = path.basename(file, path.extname(file))
+              .replace(/^toolkit-/i, '')
+              .replace(/[-_]/g, ' ');
+            const relativePath = path.relative('.', path.join(entryDir, file));
+            return {
+              filename: file,
+              title,
+              format: ext,
+              url: `/${relativePath}`
+            };
           });
         } catch (e) {
           // Folder doesn't exist yet or can't be read
