@@ -309,17 +309,16 @@ section: project
     align-items: start;
   }
 
-  /* Image: flush left edge, stretches to metadata height */
+  /* Image: flush to grid lines, stretches to metadata height */
   .project-header .grid__item--span-2-left {
     padding: 0;
     /* Stretch to match metadata height */
     align-self: stretch;
-    /* Escape both main and header left padding to reach the left screen edge */
-    margin-left: calc(-2 * var(--content-margin));
-    /* Escape header's top padding */
-    margin-top: calc(-1 * var(--space-3));
-    /* No bottom margin since header has no bottom padding */
-    margin-bottom: 0;
+    /* Stay within grid — left edge aligns with 1st column line */
+    margin-left: 0;
+    /* Escape full header padding to reach top/bottom of blue background */
+    margin-top: calc(-1 * var(--content-margin));
+    margin-bottom: calc(-1 * var(--content-margin));
     /* Make grid item stretch fill its height */
     display: grid;
     grid-template-rows: 1fr;
