@@ -312,23 +312,25 @@ section: project
   /* Image: flush to grid lines, stretches to metadata height */
   .project-header .grid__item--span-2-left {
     padding: 0;
-    /* Stretch to match metadata height */
+    /* Stretch to match metadata height — does not contribute to row height */
     align-self: stretch;
-    /* Cancel grid item's padding-left to reach 1st column line */
-    margin-left: calc(-1 * var(--space-2));
-    /* Escape only the actual top padding (--space-3) to reach blue background top border */
+    /* Escape project-header left padding + grid item padding to reach 1st column line */
+    margin-left: calc(-1 * var(--content-margin) - var(--space-2));
+    /* Escape actual top padding (--space-3) to reach blue background top border */
     margin-top: calc(-1 * var(--space-3));
     /* No escape needed — project-header has padding-bottom: 0 */
     margin-bottom: 0;
-    /* Make grid item stretch fill its height */
-    display: grid;
-    grid-template-rows: 1fr;
+    /* Positioning context for absolutely placed image */
+    position: relative;
+    overflow: hidden;
   }
 
   .project-header .header-image {
+    /* Absolutely fill the container — zero layout contribution to row height */
+    position: absolute;
+    inset: 0;
     display: flex;
     overflow: hidden;
-    height: 100%;
   }
 
   .project-header .header-image img {
