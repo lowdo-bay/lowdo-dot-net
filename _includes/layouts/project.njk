@@ -719,7 +719,7 @@ section: project
      ========================================================= #}
   {% set toolkitItems = toolkitFiles if toolkitFiles and toolkitFiles.length else downloads %}
   {% if toolkitItems and toolkitItems.length %}
-  <section>
+  <section class="project-toolkit-section">
     <div class="grid grid--intro">
 
       {# Empty left column (spans 1-2) #}
@@ -728,7 +728,6 @@ section: project
 
       {# Design Toolkit in right column (spans 3-4) #}
       <div class="grid__item--span-2-right">
-        <div class="project-toolkit-section">
 
           <div class="project-section-header">
             <div class="project-section-header-inner">
@@ -746,7 +745,6 @@ section: project
             </div>
           {% endfor %}
 
-        </div>
       </div>
 
     </div>
