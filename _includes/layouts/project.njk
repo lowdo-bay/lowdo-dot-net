@@ -314,11 +314,12 @@ section: project
     padding: 0;
     /* Stretch to match metadata height */
     align-self: stretch;
-    /* Stay within grid — left edge aligns with 1st column line */
-    margin-left: 0;
-    /* Escape full header padding to reach top/bottom of blue background */
-    margin-top: calc(-1 * var(--content-margin));
-    margin-bottom: calc(-1 * var(--content-margin));
+    /* Cancel grid item's padding-left to reach 1st column line */
+    margin-left: calc(-1 * var(--space-2));
+    /* Escape only the actual top padding (--space-3) to reach blue background top border */
+    margin-top: calc(-1 * var(--space-3));
+    /* No escape needed — project-header has padding-bottom: 0 */
+    margin-bottom: 0;
     /* Make grid item stretch fill its height */
     display: grid;
     grid-template-rows: 1fr;
