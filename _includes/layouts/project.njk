@@ -298,10 +298,11 @@ section: project
     margin-bottom: var(--space-3);
   }
 
-  /* Header: remove bottom padding */
+  /* Header: remove bottom padding, create stacking context to isolate grid lines above image */
   .project-header {
     padding-bottom: 0;
     padding-top: var(--space-3);
+    z-index: 1;
   }
 
   /* Header grid: metadata height sets row height, image crops to match */
