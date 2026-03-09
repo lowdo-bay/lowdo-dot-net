@@ -43,7 +43,7 @@ theme:
     accent_2: '#2D4BA8'
     accent_3: '#5A73C7'
     accent_4: '#A8B9E6'
-    accent_5: '#D4DCFA'
+    accent_5: '#EAEEFD'
     # Dark mode
     background_dark: '#101010'
     text_dark: '#E1E1E1'

@@ -215,7 +215,7 @@ section: project
   .project-download-cell--title {
     flex: 1;
   }
-  /* Separator line: extends from column 3 to column 4 right edge */
+  /* Separator line under each download row */
   .project-download-row::after {
     content: '';
     position: absolute;
@@ -224,13 +224,17 @@ section: project
     right: calc(-1 * var(--space-2));
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
-  /* Remove line from first item (header line above it) */
+  /* Remove line from first item */
   .project-download-row:first-child::after {
     display: none;
   }
-  /* Last row: restore separator line (re-enable the line hidden on first child) */
-  .project-download-row:last-child::after {
+  /* Gate drawer separator below it */
+  .download-gate::after {
+    content: '';
     display: block;
+    margin-left: calc(-1 * var(--space-2));
+    margin-right: calc(-1 * var(--space-2));
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
   .project-download-cell {
     padding: var(--space-2);
@@ -244,6 +248,108 @@ section: project
   .project-download-cell--action {
     text-align: right;
     white-space: nowrap;
+  }
+  .project-download-cell--action button {
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    text-transform: uppercase;
+  }
+
+  /* Download gate drawer */
+  .download-gate {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 300ms ease;
+    background-color: var(--color-accent-5);
+    margin-left: calc(-1 * var(--space-2));
+    margin-right: calc(-1 * var(--space-2));
+  }
+  .download-gate.is-open {
+    max-height: 200px;
+  }
+  .download-gate-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4) var(--space-4) calc(var(--space-2) + 1em + var(--space-2));
+  }
+  /* Hide the row-level download button when gate is open */
+  .project-download-row.gate-open .project-download-cell--action {
+    visibility: hidden;
+  }
+  .download-gate__email {
+    background: transparent;
+    border: none;
+    border-bottom: var(--grid-line-thickness) solid var(--grid-line-color);
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: 100%;
+    padding: var(--space-1) 0;
+    outline: none;
+  }
+  .download-gate__email::placeholder {
+    opacity: 0.4;
+  }
+  .download-gate__checkbox-row {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--font-size-small);
+    opacity: 0.8;
+  }
+  .download-gate__checkbox-row input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    margin-top: 2px;
+    flex-shrink: 0;
+    width: 0.85em;
+    height: 0.85em;
+    border: var(--grid-line-thickness) solid var(--grid-line-color);
+    border-radius: 0;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+  }
+  .download-gate__checkbox-row input[type="checkbox"]:checked {
+    background-color: var(--color-accent-1);
+  }
+  .download-gate__checkbox-row input[type="checkbox"]:checked::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 15%;
+    top: 5%;
+    width: 40%;
+    height: 65%;
+    border-right: 2px solid var(--color-background);
+    border-bottom: 2px solid var(--color-background);
+    transform: rotate(40deg);
+  }
+  .download-gate__submit {
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-1) 0 var(--space-1) var(--space-2);
+    white-space: nowrap;
+  }
+  .download-gate__submit:disabled {
+    opacity: 0.3;
+    cursor: default;
   }
 
   .project-drawings-section {
@@ -737,6 +843,14 @@ section: project
   {# =========================================================
      SECTION 6: Design Toolkit (Downloads)
      ========================================================= #}
+  {# Hidden Netlify form for download gate analytics — detected at build time #}
+  <form name="toolkit-download" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="toolkit-download" />
+    <input type="hidden" name="bot-field" />
+    <input type="hidden" name="project" />
+    <input type="hidden" name="file" />
+    <input type="email" name="email" />
+  </form>
   {% set toolkitItems = toolkitFiles if toolkitFiles and toolkitFiles.length else downloads %}
   {% if toolkitItems and toolkitItems.length %}
   <section class="project-toolkit-section">
@@ -756,11 +870,21 @@ section: project
           </div>
 
           {% for item in toolkitItems %}
-            <div class="project-download-row">
+            <div class="project-download-row" data-download-url="{{ item.url }}" data-download-title="{{ item.title }}">
               <div class="project-download-cell project-download-cell--title"><svg class="file-icon" width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true"><path d="M3 23h18V6.709L15.29 1H3zM15 2h.2L20 6.8V7h-5zM4 2h10v6h6v14H4z"/></svg>{{ item.title }}</div>
               <div class="project-download-cell project-download-cell--format">{{ item.format }}</div>
               <div class="project-download-cell project-download-cell--action">
-                <a href="{{ item.url }}" class="arrow arrow--down link-nostyle text--small" download>Download</a>
+                <button class="arrow arrow--down link-nostyle text--small js-download-trigger" type="button">Download</button>
+              </div>
+            </div>
+            <div class="download-gate" aria-hidden="true">
+              <div class="download-gate-inner">
+                <input class="download-gate__email" type="email" placeholder="Email address" autocomplete="email" />
+                <button class="download-gate__submit arrow arrow--down link-nostyle text--small" type="button" disabled>Download</button>
+                <label class="download-gate__checkbox-row">
+                  <input type="checkbox" />
+                  <span>I understand that this material is for personal reference only and may not be reproduced or distributed without permission.</span>
+                </label>
               </div>
             </div>
           {% endfor %}
@@ -829,6 +953,122 @@ section: project
       });
       thumb.addEventListener('mouseleave', function() {
         drawingTooltip.style.display = 'none';
+      });
+    });
+  }
+
+
+  // Download gate
+  var SESSION_KEY = 'toolkit-gate-passed';
+  var triggers = document.querySelectorAll('.js-download-trigger');
+  if (triggers.length) {
+    function openGate(gate) {
+      gate.classList.add('is-open');
+      gate.setAttribute('aria-hidden', 'false');
+      var row = gate.previousElementSibling;
+      if (row) row.classList.add('gate-open');
+      var emailEl = gate.querySelector('.download-gate__email');
+      if (emailEl) emailEl.focus();
+    }
+    function closeGate(gate) {
+      gate.classList.remove('is-open');
+      gate.setAttribute('aria-hidden', 'true');
+      var row = gate.previousElementSibling;
+      if (row) row.classList.remove('gate-open');
+    }
+    function startDownload(url) {
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    function markPassed() {
+      try { sessionStorage.setItem(SESSION_KEY, '1'); } catch(e) {}
+    }
+    function hasPassed() {
+      try { return sessionStorage.getItem(SESSION_KEY) === '1'; } catch(e) { return false; }
+    }
+    function unlockAllTriggers() {
+      // Replace all remaining trigger buttons with direct download links behavior
+      document.querySelectorAll('.js-download-trigger').forEach(function(btn) {
+        btn.dataset.gatePassed = '1';
+      });
+      // Close any open gates
+      document.querySelectorAll('.download-gate.is-open').forEach(closeGate);
+    }
+
+    triggers.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var row = btn.closest('.project-download-row');
+        var url = row.dataset.downloadUrl;
+        // If already passed gate this session, download directly
+        if (hasPassed() || btn.dataset.gatePassed) {
+          startDownload(url);
+          return;
+        }
+        var gate = row.nextElementSibling;
+        if (!gate || !gate.classList.contains('download-gate')) return;
+        // Toggle: clicking open gate closes it
+        if (gate.classList.contains('is-open')) {
+          closeGate(gate);
+          return;
+        }
+        // Close any other open gates first
+        document.querySelectorAll('.download-gate.is-open').forEach(closeGate);
+        openGate(gate);
+      });
+    });
+
+    // Close gates when clicking outside
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.download-gate.is-open').forEach(closeGate);
+    });
+
+    // Wire up each gate's form fields
+    document.querySelectorAll('.download-gate').forEach(function(gate) {
+      var emailEl = gate.querySelector('.download-gate__email');
+      var checkEl = gate.querySelector('input[type="checkbox"]');
+      var submitEl = gate.querySelector('.download-gate__submit');
+
+      // Prevent closing when clicking inside the gate
+      gate.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+
+      function validate() {
+        var valid = emailEl.value.trim().length > 0 &&
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim()) &&
+          checkEl.checked;
+        submitEl.disabled = !valid;
+      }
+
+      emailEl.addEventListener('input', validate);
+      checkEl.addEventListener('change', validate);
+
+      submitEl.addEventListener('click', function() {
+        if (submitEl.disabled) return;
+        var row = gate.previousElementSibling;
+        var fileTitle = row ? (row.dataset.downloadTitle || '') : '';
+        var url = row ? (row.dataset.downloadUrl || '') : '';
+        var projectTitle = document.title || '';
+
+        // Submit to Netlify Forms
+        var formData = new FormData();
+        formData.append('form-name', 'toolkit-download');
+        formData.append('bot-field', '');
+        formData.append('project', projectTitle);
+        formData.append('file', fileTitle);
+        formData.append('email', emailEl.value.trim());
+
+        fetch('/', { method: 'POST', body: formData })
+          .catch(function() {}); // Fire and forget — don't block download on network error
+
+        markPassed();
+        unlockAllTriggers();
+        startDownload(url);
       });
     });
   }
