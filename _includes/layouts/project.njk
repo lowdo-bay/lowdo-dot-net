@@ -169,10 +169,8 @@ section: project
     content: '';
     position: absolute;
     bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    left: calc(-50vw - var(--content-margin));
+    width: calc(100vw + var(--content-margin));
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
   }
   .project-section-header-inner {
