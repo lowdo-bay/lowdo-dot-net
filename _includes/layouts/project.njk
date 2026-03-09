@@ -215,13 +215,13 @@ section: project
   .project-download-cell--title {
     flex: 1;
   }
-  /* Separator line: extends from column 3 to right screen edge */
+  /* Separator line: extends from column 3 to column 4 right edge */
   .project-download-row::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: calc(-1 * var(--space-2));
-    width: 200vw;
+    right: calc(-1 * var(--space-2));
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
   /* Remove line from first item (header line above it) */
