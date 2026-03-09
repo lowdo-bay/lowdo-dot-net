@@ -314,8 +314,8 @@ section: project
     padding: 0;
     /* Stretch to match metadata height — does not contribute to row height */
     align-self: stretch;
-    /* Escape project-header left padding + grid item padding to reach 1st column line */
-    margin-left: calc(-1 * var(--content-margin) - var(--space-2));
+    /* Escape project-header left padding to reach 1st column line (padding: 0 already zeroes grid item padding) */
+    margin-left: calc(-1 * var(--content-margin));
     /* Escape actual top padding (--space-3) to reach blue background top border */
     margin-top: calc(-1 * var(--space-3));
     /* No escape needed — project-header has padding-bottom: 0 */
@@ -329,6 +329,8 @@ section: project
     /* Absolutely fill the container — zero layout contribution to row height */
     position: absolute;
     inset: 0;
+    /* Override base.css height: 30vh — height must be driven by containing block, not viewport */
+    height: 100%;
     display: flex;
     overflow: hidden;
   }
