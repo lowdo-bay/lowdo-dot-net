@@ -335,16 +335,8 @@ img {
 }
 
 .file-icon::before {
-	content: "";
+	content: "◪";
 	margin-right: calc(var(--space) / 3);
-	display: inline-block;
-	width: 0.75em;
-	height: 0.9em;
-	border: 0.1em solid currentColor;
-	border-radius: 0.05em;
-	position: relative;
-	top: 0.05em;
-	box-sizing: border-box;
 }
 
 /* Buttons */
