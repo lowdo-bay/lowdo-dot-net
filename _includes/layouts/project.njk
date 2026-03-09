@@ -537,6 +537,69 @@ section: project
     object-position: center;
   }
 
+  /* Related projects grid: 2 columns on mobile, 4 on desktop */
+  .project-related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 840px) {
+    .project-related-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .project-related-cell {
+    padding: var(--space-2);
+    position: relative;
+  }
+
+  /* Dashed row separator — mirrors photo grid pattern */
+  .project-related-cell:nth-child(2n)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  @media (min-width: 840px) {
+    .project-related-cell:nth-child(2n)::after { display: none; }
+    .project-related-cell:nth-child(4n)::after { display: block; }
+  }
+
+  /* Header image: 3:2 landscape crop */
+  .project-related-cell .related-thumb {
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+  }
+
+  .project-related-cell .related-thumb picture,
+  .project-related-cell .related-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .project-related-title {
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-1);
+  }
+
+  .project-related-desc {
+    font-size: var(--font-size-small);
+    opacity: 0.7;
+  }
+
   /* Tooltip: follows mouse, hidden by default */
   .photo-tooltip {
     position: fixed;
@@ -907,8 +970,51 @@ section: project
       </div>
     </div>
 
-    {% set projectList = collections.projects | randomLimit((settings.theme.theme_features.item_output_limit or 48), page.url) %}
-    {% include "components/projectList.njk" %}
+    {% set relatedList = collections.projects | relatedProjects(categories, 4, page.url) %}
+
+    {% if relatedList | length %}
+
+      {% set outputFormats = [] %}
+      {% for format, i in settings.images %}
+        {% if i.enabled === true %}
+          {{ '' if outputFormats.push(format) }}
+        {% endif %}
+      {% endfor %}
+
+      <div class="project-related-grid">
+        {% for project in relatedList %}
+          <div class="project-related-cell">
+            <a href="{{ project.url | url }}" class="link-nostyle">
+              <div class="related-thumb">
+                {% if project.data.headerImage %}
+                  {% set params = {
+                    "src": project.data.headerImage.src,
+                    "alt": project.data.headerImage.alt or project.data.title,
+                    "loadingType": "lazy",
+                    "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 840px) 25vw, 45vw",
+                    "outputWidths": [
+                      settings.config.image_grid_width_sm,
+                      settings.config.image_grid_width_md,
+                      settings.config.image_grid_width_lg
+                    ],
+                    "outputFormats": outputFormats,
+                    "outputQualityJpeg": settings.images.jpeg.quality,
+                    "outputQualityWebp": settings.images.webp.quality,
+                    "outputQualityAvif": settings.images.avif.quality
+                  } %}
+                  {% generateImage params %}
+                {% endif %}
+              </div>
+              <div class="project-related-title">{{ project.data.title }}</div>
+              {% if project.data.description %}
+                <div class="project-related-desc">{{ project.data.description }}</div>
+              {% endif %}
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+
+    {% endif %}
 
   </section>
 
