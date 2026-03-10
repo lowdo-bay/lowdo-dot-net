@@ -665,6 +665,126 @@ section: project
   .project-toolkit-section::after {
     display: none !important;
   }
+
+  /* ---- Modal image viewer ---- */
+  .photo-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  .photo-modal.is-open {
+    display: flex;
+  }
+  .photo-modal__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    cursor: pointer;
+    animation: modal-scrim-in var(--transition-time) ease forwards;
+  }
+  @keyframes modal-scrim-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .photo-modal.is-closing .photo-modal__scrim {
+    animation: modal-scrim-in var(--transition-time) ease reverse forwards;
+  }
+  .photo-modal__card {
+    position: relative;
+    z-index: 1;
+    background: var(--color-background);
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    outline: var(--grid-line-thickness) solid var(--grid-line-color);
+    animation: modal-card-in var(--transition-time) ease forwards;
+  }
+  @keyframes modal-card-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .photo-modal.is-closing .photo-modal__card {
+    animation: modal-card-in var(--transition-time) ease reverse forwards;
+  }
+  .photo-modal__close,
+  .photo-modal__prev,
+  .photo-modal__next {
+    position: absolute;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--color-background);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.2rem;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background var(--transition-time) ease;
+  }
+  .photo-modal__close:hover,
+  .photo-modal__prev:hover,
+  .photo-modal__next:hover {
+    background: var(--color-accent-5);
+  }
+  .photo-modal__close {
+    top: 0;
+    right: 0;
+    border-left: var(--grid-line-thickness) solid var(--grid-line-color);
+    border-bottom: var(--grid-line-thickness) solid var(--grid-line-color);
+  }
+  .photo-modal__prev {
+    top: 50%;
+    left: var(--space-2);
+    transform: translateY(-50%);
+  }
+  .photo-modal__next {
+    top: 50%;
+    right: var(--space-2);
+    transform: translateY(-50%);
+  }
+  .photo-modal__image-wrap {
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+  .photo-modal__img {
+    display: block;
+    max-width: 90vw;
+    max-height: calc(90vh - 3rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    opacity: 1;
+  }
+  .photo-modal__caption {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    min-height: 2rem;
+  }
+  /* Mobile: tighter sizing */
+  @media (max-width: 839px) {
+    .photo-modal__card {
+      max-width: 96vw;
+      max-height: 92vh;
+    }
+    .photo-modal__img {
+      max-width: 96vw;
+      max-height: calc(92vh - 3rem);
+    }
+  }
 </style>
 
 <article>
@@ -1018,6 +1138,22 @@ section: project
 
   </section>
 
+  {# =========================================================
+     IMAGE EXPAND MODAL (shared by Photos and Drawings)
+     ========================================================= #}
+  <div class="photo-modal" id="photo-modal" role="dialog" aria-modal="true" hidden>
+    <div class="photo-modal__scrim" id="photo-modal-scrim"></div>
+    <div class="photo-modal__card">
+      <button class="photo-modal__prev" id="photo-modal-prev" aria-label="Previous image">←</button>
+      <button class="photo-modal__close" id="photo-modal-close" aria-label="Close">×</button>
+      <button class="photo-modal__next" id="photo-modal-next" aria-label="Next image">→</button>
+      <div class="photo-modal__image-wrap">
+        <img class="photo-modal__img" id="photo-modal-img" src="" alt="" />
+      </div>
+      <div class="photo-modal__caption" id="photo-modal-caption"></div>
+    </div>
+  </div>
+
 </article>
 
 <script>
@@ -1177,6 +1313,86 @@ section: project
     // Close gates when clicking outside
     document.addEventListener('click', function() {
       document.querySelectorAll('.download-gate.is-open').forEach(closeGate);
+    });
+  }
+
+  // ---- Image expand: Modal ----
+  var modal = document.getElementById('photo-modal');
+  if (modal) {
+    var allThumbs = [];
+    var activeThumbIndex = -1;
+    var modalImg = document.getElementById('photo-modal-img');
+    var modalCaption = document.getElementById('photo-modal-caption');
+    var modalClose = document.getElementById('photo-modal-close');
+    var modalPrev = document.getElementById('photo-modal-prev');
+    var modalNext = document.getElementById('photo-modal-next');
+    var modalScrim = document.getElementById('photo-modal-scrim');
+
+    function openModal(imgEl, caption, thumbIndex) {
+      modalImg.src = imgEl.currentSrc || imgEl.src;
+      modalCaption.textContent = caption || '';
+      activeThumbIndex = thumbIndex;
+      modal.removeAttribute('hidden');
+      modal.classList.add('is-open');
+      modal.classList.remove('is-closing');
+      document.body.style.overflow = 'hidden';
+      // Update button visibility
+      modalPrev.style.display = activeThumbIndex > 0 ? 'flex' : 'none';
+      modalNext.style.display = activeThumbIndex < allThumbs.length - 1 ? 'flex' : 'none';
+      modalClose.focus();
+    }
+
+    function navigateModal(direction) {
+      var next = activeThumbIndex + direction;
+      if (next < 0 || next >= allThumbs.length) return;
+      var thumb = allThumbs[next];
+      var img = thumb.querySelector('img');
+      var caption = (thumb.dataset.caption || '').replace(/^\d+\s*|^drawing-?\s*/i, '');
+      openModal(img, caption, next);
+    }
+
+    function closeModal() {
+      modal.classList.add('is-closing');
+      setTimeout(function() {
+        modal.classList.remove('is-open', 'is-closing');
+        modal.setAttribute('hidden', '');
+        document.body.style.overflow = '';
+      }, 300);
+    }
+
+    // Build allThumbs list in DOM order (photos first, then drawings)
+    document.querySelectorAll('.photo-thumb, .drawing-thumb').forEach(function(t) {
+      allThumbs.push(t);
+    });
+
+    // Wire clicks on all thumbs
+    allThumbs.forEach(function(thumb, i) {
+      thumb.addEventListener('click', function() {
+        var img = thumb.querySelector('img');
+        var caption = (thumb.dataset.caption || '').replace(/^\d+\s*|^drawing-?\s*/i, '');
+        if (img) openModal(img, caption, i);
+      });
+    });
+
+    // Close button
+    modalClose.addEventListener('click', closeModal);
+    // Scrim click
+    modalScrim.addEventListener('click', closeModal);
+    // Prev/Next buttons
+    modalPrev.addEventListener('click', function(e) {
+      e.stopPropagation();
+      navigateModal(-1);
+    });
+    modalNext.addEventListener('click', function(e) {
+      e.stopPropagation();
+      navigateModal(+1);
+    });
+    // Escape key
+    document.addEventListener('keydown', function(e) {
+      if (!modal.classList.contains('is-open')) return;
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft') navigateModal(-1);
+      if (e.key === 'ArrowRight') navigateModal(+1);
     });
   }
 })();
