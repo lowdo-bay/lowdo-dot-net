@@ -671,7 +671,7 @@ section: project
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 2000;
+    z-index: 10000;
     align-items: center;
     justify-content: center;
   }
@@ -694,7 +694,6 @@ section: project
   }
   .photo-modal__card {
     position: relative;
-    z-index: 1;
     background: var(--color-background);
     max-width: 90vw;
     max-height: 90vh;
@@ -710,10 +709,24 @@ section: project
   .photo-modal.is-closing .photo-modal__card {
     animation: modal-card-in var(--transition-time) ease reverse forwards;
   }
-  .photo-modal__close,
   .photo-modal__prev,
   .photo-modal__next {
     position: absolute;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--color-background);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.2rem;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background var(--transition-time) ease;
+  }
+  .photo-modal__close {
     width: 2.5rem;
     height: 2.5rem;
     background: var(--color-background);
@@ -733,21 +746,30 @@ section: project
   .photo-modal__next:hover {
     background: var(--color-accent-5);
   }
-  .photo-modal__close {
-    top: 0;
-    right: 0;
-    border-left: var(--grid-line-thickness) solid var(--grid-line-color);
-    border-bottom: var(--grid-line-thickness) solid var(--grid-line-color);
-  }
   .photo-modal__prev {
+    position: fixed;
     top: 50%;
-    left: var(--space-2);
+    left: var(--space-4);
     transform: translateY(-50%);
   }
   .photo-modal__next {
+    position: fixed;
     top: 50%;
-    right: var(--space-2);
+    right: var(--space-4);
     transform: translateY(-50%);
+  }
+  .photo-modal__caption-row {
+    display: flex;
+    align-items: stretch;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+  .photo-modal__close {
+    position: static;
+    flex-shrink: 0;
+    border-left: var(--grid-line-thickness) solid var(--grid-line-color);
+  }
+  .photo-modal__close:hover {
+    background: var(--color-accent-5);
   }
   .photo-modal__image-wrap {
     overflow: hidden;
@@ -767,11 +789,11 @@ section: project
     opacity: 1;
   }
   .photo-modal__caption {
+    flex: 1;
     padding: var(--space-2) var(--space-3);
     font-size: var(--font-size-small);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
     min-height: 2rem;
   }
   /* Mobile: tighter sizing */
@@ -1143,15 +1165,17 @@ section: project
      ========================================================= #}
   <div class="photo-modal" id="photo-modal" role="dialog" aria-modal="true" hidden>
     <div class="photo-modal__scrim" id="photo-modal-scrim"></div>
+    <button class="photo-modal__prev" id="photo-modal-prev" aria-label="Previous image">←</button>
     <div class="photo-modal__card">
-      <button class="photo-modal__prev" id="photo-modal-prev" aria-label="Previous image">←</button>
-      <button class="photo-modal__close" id="photo-modal-close" aria-label="Close">×</button>
-      <button class="photo-modal__next" id="photo-modal-next" aria-label="Next image">→</button>
       <div class="photo-modal__image-wrap">
         <img class="photo-modal__img" id="photo-modal-img" src="" alt="" />
       </div>
-      <div class="photo-modal__caption" id="photo-modal-caption"></div>
+      <div class="photo-modal__caption-row">
+        <div class="photo-modal__caption" id="photo-modal-caption"></div>
+        <button class="photo-modal__close" id="photo-modal-close" aria-label="Close">×</button>
+      </div>
     </div>
+    <button class="photo-modal__next" id="photo-modal-next" aria-label="Next image">→</button>
   </div>
 
 </article>
