@@ -21,26 +21,6 @@ collaborators:
     name: "Daisuke Hirabayashi"
   - role: "Trade"
     name: "Collaborator"
-awards:
-  - organization: "Texas Architect Magazine"
-    type: "Feature"
-    year: 2026
-  - organization: "Publication"
-    type: "Feature"
-    year: 2024
-  - organization: "Awards"
-    type: "Nomination"
-    year: 2023
-downloads:
-  - title: "Media Kit"
-    format: "PDF"
-    url: "#"
-  - title: "Drawings"
-    format: "DWG"
-    url: "#"
-  - title: "3D Model"
-    format: "BIM"
-    url: "#"
 ---
 
 The Wolf Creek Ranch weaves through rolling hills and limestone rock outcrops adjacent to Lake Buchanan, providing stunning views, ample sun, and a prevalent breeze. The owners wanted to embrace and respond to these natural characteristics while also prioritizing an economy of means. The design became another iteration of resource conscious, performance-driven strategies that pro-actively respond to the landscape and create a welcoming environment for all generations who might use the house.

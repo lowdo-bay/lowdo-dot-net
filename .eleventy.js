@@ -137,8 +137,8 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
 
   // The projects collection, sorted by the numerical position value and then by date
   eleventyConfig.addCollection("projects", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("projects/**/*.md")
-      //.filter(project => !Boolean(project.data.draft))
+    return collectionApi.getFilteredByGlob("entries/projects/**/*.md")
+      .filter(project => project.data.draft !== true)
       .sort((a, b) => b.data.position - a.data.position);
   });
 
@@ -237,6 +237,23 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
       return 0.5 - Math.random();
     });
     return pageArr.slice(0, limit);
+  });
+
+  // Filter to return related projects scored by category overlap
+  eleventyConfig.addFilter("relatedProjects", (arr, categories, limit, currPage) => {
+    const otherProjects = arr.filter((project) => project.url !== currPage);
+    const currentCats = Array.isArray(categories)
+      ? categories.map(c => String(c).toUpperCase())
+      : [];
+    const scored = otherProjects.map((project) => {
+      const projectCats = Array.isArray(project.data.categories)
+        ? project.data.categories.map(c => String(c).toUpperCase())
+        : [];
+      const overlap = projectCats.filter(c => currentCats.includes(c)).length;
+      return { project, overlap };
+    });
+    scored.sort((a, b) => b.overlap - a.overlap);
+    return scored.slice(0, limit).map(item => item.project);
   });
 
   // Filter to format Google Fonts font name for use in link URLs

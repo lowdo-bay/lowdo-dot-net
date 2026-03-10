@@ -174,6 +174,21 @@ section: project
     width: 100vw;
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
   }
+
+  /* Full-width sections: Photos, Drawings, Related Projects */
+  .project-photos-section .project-section-header::after,
+  .project-drawings-section .project-section-header::after,
+  .project-related-section .project-section-header::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Toolkit section in right column: extend to left screen edge */
+  .project-toolkit-section .project-section-header::after {
+    left: calc(-50vw - var(--content-margin));
+    width: calc(100vw + var(--content-margin));
+    transform: none;
+  }
   .project-section-header-inner {
     display: grid;
     grid-template-columns: 1fr;
@@ -200,13 +215,25 @@ section: project
   .project-download-cell--title {
     flex: 1;
   }
+  /* Separator line under each download row */
   .project-download-row::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
+    left: calc(-1 * var(--space-2));
+    right: calc(-1 * var(--space-2));
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+  /* Remove line from first item */
+  .project-download-row:first-child::after {
+    display: none;
+  }
+  /* Gate drawer separator below it */
+  .download-gate::after {
+    content: '';
+    display: block;
+    margin-left: calc(-1 * var(--space-2));
+    margin-right: calc(-1 * var(--space-2));
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
   .project-download-cell {
@@ -222,7 +249,111 @@ section: project
     text-align: right;
     white-space: nowrap;
   }
+  .project-download-cell--action button {
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    text-transform: uppercase;
+    color: inherit;
+    transition: color var(--transition-time) ease;
+    position: relative;
+    z-index: 1;
+  }
+  .project-download-cell--action button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-accent-1);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--transition-time) ease;
+    z-index: -1;
+  }
+  .project-download-row.gate-open .project-download-cell--action button {
+    color: #999999;
+  }
+  .project-download-row.gate-ready .project-download-cell--action button::before {
+    transform: scaleX(1);
+  }
+  .project-download-row.gate-ready .project-download-cell--action button {
+    color: #ffffff;
+  }
 
+  /* Download gate drawer */
+  .download-gate {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 300ms ease;
+    background-color: var(--color-accent-5);
+    margin-left: calc(-1 * var(--space-2));
+    margin-right: calc(-1 * var(--space-2));
+  }
+  .download-gate.is-open {
+    max-height: 200px;
+  }
+  .download-gate-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4) var(--space-4) calc(var(--space-2) + 1em + var(--space-2));
+  }
+  .download-gate__email {
+    background: transparent;
+    border: none;
+    border-bottom: var(--grid-line-thickness) solid var(--grid-line-color);
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: 100%;
+    padding: var(--space-1) 0;
+    outline: none;
+  }
+  .download-gate__email::placeholder {
+    opacity: 0.4;
+  }
+  .download-gate__checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--font-size-small);
+    opacity: 0.8;
+  }
+  .download-gate__checkbox-row input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    margin-top: 2px;
+    flex-shrink: 0;
+    width: 0.85em;
+    height: 0.85em;
+    border: var(--grid-line-thickness) solid var(--grid-line-color);
+    border-radius: 0;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+  }
+  .download-gate__checkbox-row input[type="checkbox"]:checked {
+    background-color: var(--color-accent-1);
+  }
+  .download-gate__checkbox-row input[type="checkbox"]:checked::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 15%;
+    top: 5%;
+    width: 40%;
+    height: 65%;
+    border-right: 2px solid var(--color-background);
+    border-bottom: 2px solid var(--color-background);
+    transform: rotate(40deg);
+  }
   .project-drawings-section {
     margin-top: var(--space-6);
   }
@@ -406,6 +537,69 @@ section: project
     object-position: center;
   }
 
+  /* Related projects grid: 2 columns on mobile, 4 on desktop */
+  .project-related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 840px) {
+    .project-related-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .project-related-cell {
+    padding: var(--space-2);
+    position: relative;
+  }
+
+  /* Dashed row separator — mirrors photo grid pattern */
+  .project-related-cell:nth-child(2n)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  @media (min-width: 840px) {
+    .project-related-cell:nth-child(2n)::after { display: none; }
+    .project-related-cell:nth-child(4n)::after { display: block; }
+  }
+
+  /* Header image: 3:2 landscape crop */
+  .project-related-cell .related-thumb {
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+  }
+
+  .project-related-cell .related-thumb picture,
+  .project-related-cell .related-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .project-related-title {
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-1);
+  }
+
+  .project-related-desc {
+    font-size: var(--font-size-small);
+    opacity: 0.7;
+  }
+
   /* Tooltip: follows mouse, hidden by default */
   .photo-tooltip {
     position: fixed;
@@ -465,6 +659,11 @@ section: project
   .project-toolkit-section,
   .project-related-section {
     margin-top: var(--space-6);
+  }
+
+  /* Toolkit section should not have its own ::after line (uses child header line) */
+  .project-toolkit-section::after {
+    display: none !important;
   }
 </style>
 
@@ -709,9 +908,17 @@ section: project
   {# =========================================================
      SECTION 6: Design Toolkit (Downloads)
      ========================================================= #}
+  {# Hidden Netlify form for download gate analytics — detected at build time #}
+  <form name="toolkit-download" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="toolkit-download" />
+    <input type="hidden" name="bot-field" />
+    <input type="hidden" name="project" />
+    <input type="hidden" name="file" />
+    <input type="email" name="email" />
+  </form>
   {% set toolkitItems = toolkitFiles if toolkitFiles and toolkitFiles.length else downloads %}
   {% if toolkitItems and toolkitItems.length %}
-  <section>
+  <section class="project-toolkit-section">
     <div class="grid grid--intro">
 
       {# Empty left column (spans 1-2) #}
@@ -720,7 +927,6 @@ section: project
 
       {# Design Toolkit in right column (spans 3-4) #}
       <div class="grid__item--span-2-right">
-        <div class="project-toolkit-section">
 
           <div class="project-section-header">
             <div class="project-section-header-inner">
@@ -729,16 +935,24 @@ section: project
           </div>
 
           {% for item in toolkitItems %}
-            <div class="project-download-row">
-              <div class="project-download-cell project-download-cell--title"><span class="file-icon"></span>{{ item.title }}</div>
+            <div class="project-download-row" data-download-url="{{ item.url }}" data-download-title="{{ item.title }}">
+              <div class="project-download-cell project-download-cell--title"><svg class="file-icon" width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true"><path d="M3 23h18V6.709L15.29 1H3zM15 2h.2L20 6.8V7h-5zM4 2h10v6h6v14H4z"/></svg>{{ item.title }}</div>
               <div class="project-download-cell project-download-cell--format">{{ item.format }}</div>
               <div class="project-download-cell project-download-cell--action">
-                <a href="{{ item.url }}" class="arrow arrow--down link-nostyle text--small" download>Download</a>
+                <button class="arrow arrow--down link-nostyle text--small js-download-trigger" type="button">Download</button>
+              </div>
+            </div>
+            <div class="download-gate" aria-hidden="true">
+              <div class="download-gate-inner">
+                <input class="download-gate__email" type="email" placeholder="Email address" autocomplete="email" />
+                <label class="download-gate__checkbox-row">
+                  <input type="checkbox" />
+                  <span>I understand that this material is for personal reference only and may not be reproduced or distributed without permission.</span>
+                </label>
               </div>
             </div>
           {% endfor %}
 
-        </div>
       </div>
 
     </div>
@@ -756,8 +970,51 @@ section: project
       </div>
     </div>
 
-    {% set projectList = collections.projects | randomLimit((settings.theme.theme_features.item_output_limit or 48), page.url) %}
-    {% include "components/projectList.njk" %}
+    {% set relatedList = collections.projects | relatedProjects(categories, 4, page.url) %}
+
+    {% if relatedList | length %}
+
+      {% set outputFormats = [] %}
+      {% for format, i in settings.images %}
+        {% if i.enabled === true %}
+          {{ '' if outputFormats.push(format) }}
+        {% endif %}
+      {% endfor %}
+
+      <div class="project-related-grid">
+        {% for project in relatedList %}
+          <div class="project-related-cell">
+            <a href="{{ project.url | url }}" class="link-nostyle">
+              <div class="related-thumb">
+                {% if project.data.headerImage %}
+                  {% set params = {
+                    "src": project.data.headerImage.src,
+                    "alt": project.data.headerImage.alt or project.data.title,
+                    "loadingType": "lazy",
+                    "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 840px) 25vw, 45vw",
+                    "outputWidths": [
+                      settings.config.image_grid_width_sm,
+                      settings.config.image_grid_width_md,
+                      settings.config.image_grid_width_lg
+                    ],
+                    "outputFormats": outputFormats,
+                    "outputQualityJpeg": settings.images.jpeg.quality,
+                    "outputQualityWebp": settings.images.webp.quality,
+                    "outputQualityAvif": settings.images.avif.quality
+                  } %}
+                  {% generateImage params %}
+                {% endif %}
+              </div>
+              <div class="project-related-title">{{ project.data.title }}</div>
+              {% if project.data.description %}
+                <div class="project-related-desc">{{ project.data.description }}</div>
+              {% endif %}
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+
+    {% endif %}
 
   </section>
 
@@ -804,6 +1061,122 @@ section: project
       thumb.addEventListener('mouseleave', function() {
         drawingTooltip.style.display = 'none';
       });
+    });
+  }
+
+
+  // Download gate
+  var SESSION_KEY = 'toolkit-gate-passed';
+  var triggers = document.querySelectorAll('.js-download-trigger');
+  if (triggers.length) {
+    function openGate(gate) {
+      gate.classList.add('is-open');
+      gate.setAttribute('aria-hidden', 'false');
+      var row = gate.previousElementSibling;
+      if (row) { row.classList.add('gate-open'); row.classList.remove('gate-ready'); }
+      var emailEl = gate.querySelector('.download-gate__email');
+      if (emailEl) emailEl.focus();
+    }
+    function closeGate(gate) {
+      gate.classList.remove('is-open');
+      gate.setAttribute('aria-hidden', 'true');
+      var row = gate.previousElementSibling;
+      if (row) { row.classList.remove('gate-open'); row.classList.remove('gate-ready'); }
+    }
+    function startDownload(url) {
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    function markPassed() {
+      try { sessionStorage.setItem(SESSION_KEY, '1'); } catch(e) {}
+    }
+    function hasPassed() {
+      try { return sessionStorage.getItem(SESSION_KEY) === '1'; } catch(e) { return false; }
+    }
+    function unlockAllTriggers() {
+      // Replace all remaining trigger buttons with direct download links behavior
+      document.querySelectorAll('.js-download-trigger').forEach(function(btn) {
+        btn.dataset.gatePassed = '1';
+      });
+      // Close any open gates
+      document.querySelectorAll('.download-gate.is-open').forEach(closeGate);
+    }
+
+    // Wire up each gate's form fields
+    document.querySelectorAll('.download-gate').forEach(function(gate) {
+      var emailEl = gate.querySelector('.download-gate__email');
+      var checkEl = gate.querySelector('input[type="checkbox"]');
+
+      // Prevent closing when clicking inside the gate
+      gate.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+
+      function validate() {
+        var row = gate.previousElementSibling;
+        var valid = emailEl.value.trim().length > 0 &&
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim()) &&
+          checkEl.checked;
+        if (row) {
+          row.classList.toggle('gate-ready', valid);
+        }
+      }
+
+      emailEl.addEventListener('input', validate);
+      checkEl.addEventListener('change', validate);
+    });
+
+    triggers.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var row = btn.closest('.project-download-row');
+        var url = row.dataset.downloadUrl;
+        // If already passed gate this session, download directly
+        if (hasPassed() || btn.dataset.gatePassed) {
+          startDownload(url);
+          return;
+        }
+        var gate = row.nextElementSibling;
+        if (!gate || !gate.classList.contains('download-gate')) return;
+        // If gate is open and ready, submit
+        if (gate.classList.contains('is-open') && row.classList.contains('gate-ready')) {
+          var emailEl = gate.querySelector('.download-gate__email');
+          var fileTitle = row.dataset.downloadTitle || '';
+          var projectTitle = document.title || '';
+
+          var formData = new FormData();
+          formData.append('form-name', 'toolkit-download');
+          formData.append('bot-field', '');
+          formData.append('project', projectTitle);
+          formData.append('file', fileTitle);
+          formData.append('email', emailEl.value.trim());
+
+          fetch('/', { method: 'POST', body: formData })
+            .catch(function() {});
+
+          markPassed();
+          unlockAllTriggers();
+          startDownload(url);
+          return;
+        }
+        // If gate is open but not ready, close it
+        if (gate.classList.contains('is-open')) {
+          closeGate(gate);
+          return;
+        }
+        // Close any other open gates first, then open this one
+        document.querySelectorAll('.download-gate.is-open').forEach(closeGate);
+        openGate(gate);
+      });
+    });
+
+    // Close gates when clicking outside
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.download-gate.is-open').forEach(closeGate);
     });
   }
 })();
