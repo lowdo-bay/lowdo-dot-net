@@ -1477,8 +1477,8 @@ body::after {
 
 	/* 2. Content padding — extra breathing room inside the border lines */
 	.p--content {
-		padding-left: 0;
-		padding-right: 0;
+		padding-left: var(--content-margin);
+		padding-right: var(--content-margin);
 	}
 
 	/* 3. Index rows — image + title side by side, details + date below */
