@@ -871,11 +871,13 @@ header.p--content {
 	position: sticky;
 	top: 0;
 	z-index: 1000;
-	background-color: var(--color-background);
-	margin-left: calc(-1 * var(--content-margin));
-	margin-right: calc(-1 * var(--content-margin));
-	padding-left: var(--content-margin);
-	padding-right: var(--content-margin);
+	width: 100vw;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	background: linear-gradient(to right, var(--color-background), var(--color-background));
+	background-attachment: fixed;
 }
 
 header.p--content::after {
