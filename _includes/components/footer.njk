@@ -7,8 +7,35 @@
 		<div class="col-4 footer__section-label">Socials</div>
 	</div>
 
-	{# Row 2: Logo + nav links #}
+	{# Row 2: Nav links + Logo #}
 	<div class="grid grid--footer footer__content">
+
+		{% if settings.metadata.footer_sitemap %}
+			<nav class="col-2 footer__nav" aria-label="Sitemap">
+				<span class="footer__nav-label">Sitemap</span>
+				{% for item in settings.metadata.footer_sitemap %}
+					<a href="{{ item.url | url }}" class="footer__nav-link">{{ item.label }}</a>
+				{% endfor %}
+			</nav>
+		{% endif %}
+
+		{% if settings.metadata.footer_legal %}
+			<nav class="col-3 footer__nav" aria-label="Legal">
+				<span class="footer__nav-label">Legal</span>
+				{% for item in settings.metadata.footer_legal %}
+					<a href="{{ item.url | url }}" class="footer__nav-link">{{ item.label }}</a>
+				{% endfor %}
+			</nav>
+		{% endif %}
+
+		{% if settings.metadata.footer_socials %}
+			<nav class="col-4 footer__nav" aria-label="Socials">
+				<span class="footer__nav-label">Socials</span>
+				{% for item in settings.metadata.footer_socials %}
+					<a href="{{ item.url }}" class="footer__nav-link" target="_blank" rel="noopener">{{ item.label }}</a>
+				{% endfor %}
+			</nav>
+		{% endif %}
 
 		<div class="col-1">
 			<a href="{{ '/' | url }}" class="footer__logo link-nostyle" aria-label="{{ settings.metadata.site_title }}">
@@ -20,30 +47,6 @@
 				{% endif %}
 			</a>
 		</div>
-
-		{% if settings.metadata.footer_sitemap %}
-			<nav class="col-2 footer__nav" aria-label="Sitemap">
-				{% for item in settings.metadata.footer_sitemap %}
-					<a href="{{ item.url | url }}" class="footer__nav-link">{{ item.label }}</a>
-				{% endfor %}
-			</nav>
-		{% endif %}
-
-		{% if settings.metadata.footer_legal %}
-			<nav class="col-3 footer__nav" aria-label="Legal">
-				{% for item in settings.metadata.footer_legal %}
-					<a href="{{ item.url | url }}" class="footer__nav-link">{{ item.label }}</a>
-				{% endfor %}
-			</nav>
-		{% endif %}
-
-		{% if settings.metadata.footer_socials %}
-			<nav class="col-4 footer__nav" aria-label="Socials">
-				{% for item in settings.metadata.footer_socials %}
-					<a href="{{ item.url }}" class="footer__nav-link" target="_blank" rel="noopener">{{ item.label }}</a>
-				{% endfor %}
-			</nav>
-		{% endif %}
 
 	</div>
 
