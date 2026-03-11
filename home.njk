@@ -218,8 +218,12 @@ permalink: "/index.html"
     display: block;
   }
 
+  .expertise-expand .expertise-body-content {
+    transition: max-height 0.3s ease-out;
+  }
+
   .expertise-expand summary {
-    color: var(--color-accent-1);
+    color: var(--color-accent-3);
     font-weight: 500;
     cursor: pointer;
     font-size: var(--font-size-base);
@@ -268,7 +272,7 @@ permalink: "/index.html"
     .expertise-item {
       display: block;
       padding-bottom: var(--space-4);
-      margin-bottom: var(--space-4);
+      margin-bottom: 0;
       position: relative;
     }
 
@@ -363,7 +367,7 @@ permalink: "/index.html"
 
     /* Summary styling on mobile */
     .expertise-expand summary {
-      padding: var(--space-2) var(--space-2) 0;
+      padding: var(--space-2) var(--space-2) 0 0;
       margin-top: 0;
       margin-bottom: 0;
     }
@@ -423,6 +427,16 @@ permalink: "/index.html"
     border: 1px dashed rgba(0, 20, 137, 0.2);
     color: var(--color-accent-1);
     font-size: var(--font-size-base);
+  }
+
+  @media (max-width: 839px) {
+    .tech-portfolio-description {
+      order: 2;
+    }
+
+    .tech-portfolio-diagram {
+      order: 1;
+    }
   }
 
   /* Awards & Recognition section */
@@ -695,6 +709,37 @@ permalink: "/index.html"
   .contact-row a {
     color: inherit;
   }
+
+  /* Mobile: Contact Section */
+  @media (max-width: 839px) {
+    .contact-image-col {
+      display: none;
+    }
+
+    .contact-heading {
+      font-size: 1.5rem;
+      padding-bottom: var(--space-4);
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+      grid-row: auto; /* reset the multi-row span */
+    }
+
+    .contact-section .grid--description {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .contact-section .contact-heading {
+      grid-column: 1 / -1; /* full width */
+    }
+
+    .contact-section .col-3.contact-row {
+      grid-column: 1 / 2;
+    }
+
+    .contact-section .col-4.contact-row {
+      grid-column: 2 / 3;
+    }
+  }
 </style>
 
 <article>
@@ -908,7 +953,7 @@ permalink: "/index.html"
       </div>
 
       {# Cols 2–4: Diagram placeholder #}
-      <div class="tech-portfolio-diagram col-2" style="grid-column: 2 / -1;">
+      <div class="tech-portfolio-diagram col-2-3-4">
         [ Diagram — drop PNG or SVG here ]
       </div>
 
