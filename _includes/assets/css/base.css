@@ -184,7 +184,9 @@ body {
 	flex-direction: column;
 	background: var(--color-background);
 	border-bottom: none;
-	width: 100%;
+	width: calc(100% - 2 * var(--content-margin));
+	margin-left: var(--content-margin);
+	margin-right: var(--content-margin);
 }
 
 .header-menu__drawer.is-open {
