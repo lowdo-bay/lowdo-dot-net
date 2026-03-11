@@ -75,17 +75,37 @@ permalink: "/index.html"
 
   .expertise-section .grid {
     row-gap: var(--space-3);
+    grid-template-rows: auto auto auto;
   }
 
-  .expertise-section .grid > div:nth-child(n+2)::before {
+  /* Grid row placement utilities */
+  .expertise-section .row-1 { grid-row: 1; }
+  .expertise-section .row-2 { grid-row: 2; }
+  .expertise-section .row-3 { grid-row: 3; }
+
+  /* Horizontal separator lines on rows 2 and 3 */
+  .expertise-section .row-2.col-2,
+  .expertise-section .row-3.col-2 {
+    position: relative;
+    padding-top: var(--space-3);
+  }
+
+  .expertise-section .row-2.col-2::before,
+  .expertise-section .row-3.col-2::before {
     content: '';
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: calc(-1 * var(--space-3) / 2);
+    top: 0;
     width: 100vw;
     border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
-    z-index: 9998;
+  }
+
+  /* Padding for all non-image rows */
+  .expertise-section .row-2,
+  .expertise-section .row-3 {
+    position: relative;
+    padding-top: var(--space-3);
   }
 
   .expertise-heading {
@@ -98,29 +118,9 @@ permalink: "/index.html"
     align-self: start;
   }
 
-  .expertise-column {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .expertise-column > div:nth-child(n+2) {
-    position: relative;
-    padding-top: var(--space-3);
-  }
-
-  .expertise-column > div:nth-child(n+2)::before {
-    content: '';
-    position: absolute;
-    left: calc(-1 * var(--content-margin));
-    right: calc(-1 * var(--content-margin));
-    top: 0;
-    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
-  }
-
   .expertise-image {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
   }
 
@@ -159,6 +159,15 @@ permalink: "/index.html"
 
   .expertise-body p:last-child {
     margin-bottom: 0;
+  }
+
+  /* Mobile responsive: reset grid-row to auto for single-column layout */
+  @media (max-width: 839px) {
+    .expertise-section .row-1,
+    .expertise-section .row-2,
+    .expertise-section .row-3 {
+      grid-row: auto;
+    }
   }
 </style>
 
@@ -217,118 +226,118 @@ permalink: "/index.html"
     <div class="grid grid--description">
 
       {# Row 1: Heading (Col 1) + Images (Cols 2-4) #}
-      <div class="expertise-heading col-1">
+      <div class="expertise-heading col-1 row-1">
         WE ARE ARCHITECTS, BUILDERS, AND SYSTEMS-THINKERS
       </div>
 
-      {# Architects Column #}
-      <div class="expertise-column col-2">
-        <div class="expertise-image">
-          {% set outputFormats = [] %}
-          {% for format, i in settings.images %}
-            {% if i.enabled === true %}
-              {{ '' if outputFormats.push(format) }}
-            {% endif %}
-          {% endfor %}
-          {% set params = {
-            "src": "/assets/images/expertise-architects.jpg",
-            "alt": "Architects",
-            "loadingType": "lazy",
-            "viewportSizes": "25vw",
-            "outputWidths": [
-              settings.config.image_grid_width_sm,
-              settings.config.image_grid_width_md,
-              settings.config.image_grid_width_lg
-            ],
-            "outputFormats": outputFormats,
-            "outputQualityJpeg": settings.images.jpeg.quality,
-            "outputQualityWebp": settings.images.webp.quality,
-            "outputQualityAvif": settings.images.avif.quality
-          } %}
-          {% generateImage params %}
-        </div>
-
-        <div class="expertise-lead markdown">
-          As **ARCHITECTS**, we make architecture for the now, rooted in culture and context, driven by societal and planetary well-being.
-        </div>
-
-        <div class="expertise-body markdown">
-          At Low Design Office, we leverage low-cost materials, low-energy technologies, and low-carbon strategies to deliver inspiring and impactful environments.
-
-          By rethinking design and delivery methods, we lower barriers to access while raising the standard for efficiency in building construction. Our "more with less" approach transforms scarcity into innovation, making custom architecture more sustainable, equitable, and efficient than traditional approaches.
-        </div>
+      {# Architects Image (Row 1) #}
+      <div class="expertise-image col-2 row-1">
+        {% set outputFormats = [] %}
+        {% for format, i in settings.images %}
+          {% if i.enabled === true %}
+            {{ '' if outputFormats.push(format) }}
+          {% endif %}
+        {% endfor %}
+        {% set params = {
+          "src": "/assets/images/expertise-architects.jpg",
+          "alt": "Architects",
+          "loadingType": "lazy",
+          "viewportSizes": "25vw",
+          "outputWidths": [
+            settings.config.image_grid_width_sm,
+            settings.config.image_grid_width_md,
+            settings.config.image_grid_width_lg
+          ],
+          "outputFormats": outputFormats,
+          "outputQualityJpeg": settings.images.jpeg.quality,
+          "outputQualityWebp": settings.images.webp.quality,
+          "outputQualityAvif": settings.images.avif.quality
+        } %}
+        {% generateImage params %}
       </div>
 
-      {# Builders Column #}
-      <div class="expertise-column col-3">
-        <div class="expertise-image">
-          {% set outputFormats = [] %}
-          {% for format, i in settings.images %}
-            {% if i.enabled === true %}
-              {{ '' if outputFormats.push(format) }}
-            {% endif %}
-          {% endfor %}
-          {% set params = {
-            "src": "/assets/images/expertise-builders.jpg",
-            "alt": "Builders",
-            "loadingType": "lazy",
-            "viewportSizes": "25vw",
-            "outputWidths": [
-              settings.config.image_grid_width_sm,
-              settings.config.image_grid_width_md,
-              settings.config.image_grid_width_lg
-            ],
-            "outputFormats": outputFormats,
-            "outputQualityJpeg": settings.images.jpeg.quality,
-            "outputQualityWebp": settings.images.webp.quality,
-            "outputQualityAvif": settings.images.avif.quality
-          } %}
-          {% generateImage params %}
-        </div>
-
-        <div class="expertise-lead markdown">
-          As **BUILDERS**, we bridge design and construction—often fabricating and building our own projects—to ensure transparency, affordability, and healthful outcomes.
-        </div>
-
-        <div class="expertise-body markdown">
-          Whether in the studio or on the jobsite, we treat all participants as collaborators, fostering open dialogue that transforms site-specific challenges into adaptable, efficient, and sustainable solutions that minimize stress on people and ecosystems alike. This hands-on, integrated process not only deepens our knowledge but also sets a foundation for innovation and trust in every project.
-        </div>
+      {# Architects Lead Text (Row 2) #}
+      <div class="expertise-lead markdown col-2 row-2">
+        As **ARCHITECTS**, we make architecture for the now, rooted in culture and context, driven by societal and planetary well-being.
       </div>
 
-      {# Systems-Thinkers Column #}
-      <div class="expertise-column col-4">
-        <div class="expertise-image">
-          {% set outputFormats = [] %}
-          {% for format, i in settings.images %}
-            {% if i.enabled === true %}
-              {{ '' if outputFormats.push(format) }}
-            {% endif %}
-          {% endfor %}
-          {% set params = {
-            "src": "/assets/images/expertise-systems-thinkers.jpg",
-            "alt": "Systems-Thinkers",
-            "loadingType": "lazy",
-            "viewportSizes": "25vw",
-            "outputWidths": [
-              settings.config.image_grid_width_sm,
-              settings.config.image_grid_width_md,
-              settings.config.image_grid_width_lg
-            ],
-            "outputFormats": outputFormats,
-            "outputQualityJpeg": settings.images.jpeg.quality,
-            "outputQualityWebp": settings.images.webp.quality,
-            "outputQualityAvif": settings.images.avif.quality
-          } %}
-          {% generateImage params %}
-        </div>
+      {# Architects Body Text (Row 3) #}
+      <div class="expertise-body markdown col-2 row-3">
+        At Low Design Office, we leverage low-cost materials, low-energy technologies, and low-carbon strategies to deliver inspiring and impactful environments.
 
-        <div class="expertise-lead markdown">
-          As **SYSTEMS-THINKERS**, we develop systems that can evolve, be retooled, and reinvented to meet individual and collective challenges.
-        </div>
+        By rethinking design and delivery methods, we lower barriers to access while raising the standard for efficiency in building construction. Our "more with less" approach transforms scarcity into innovation, making custom architecture more sustainable, equitable, and efficient than traditional approaches.
+      </div>
 
-        <div class="expertise-body markdown">
-          We are community-focused and systems-based, leading design for planetary and social equity. By leveraging the power of thinking small, we transform resource constraints into opportunities for innovation—using low-tech, low-carbon methods, and open-source designs to realize more with less. Through participatory processes, we strive for efficiency, affordability, and equity, incrementally improving places for people and planet.
-        </div>
+      {# Builders Image (Row 1) #}
+      <div class="expertise-image col-3 row-1">
+        {% set outputFormats = [] %}
+        {% for format, i in settings.images %}
+          {% if i.enabled === true %}
+            {{ '' if outputFormats.push(format) }}
+          {% endif %}
+        {% endfor %}
+        {% set params = {
+          "src": "/assets/images/expertise-builders.jpg",
+          "alt": "Builders",
+          "loadingType": "lazy",
+          "viewportSizes": "25vw",
+          "outputWidths": [
+            settings.config.image_grid_width_sm,
+            settings.config.image_grid_width_md,
+            settings.config.image_grid_width_lg
+          ],
+          "outputFormats": outputFormats,
+          "outputQualityJpeg": settings.images.jpeg.quality,
+          "outputQualityWebp": settings.images.webp.quality,
+          "outputQualityAvif": settings.images.avif.quality
+        } %}
+        {% generateImage params %}
+      </div>
+
+      {# Builders Lead Text (Row 2) #}
+      <div class="expertise-lead markdown col-3 row-2">
+        As **BUILDERS**, we bridge design and construction—often fabricating and building our own projects—to ensure transparency, affordability, and healthful outcomes.
+      </div>
+
+      {# Builders Body Text (Row 3) #}
+      <div class="expertise-body markdown col-3 row-3">
+        Whether in the studio or on the jobsite, we treat all participants as collaborators, fostering open dialogue that transforms site-specific challenges into adaptable, efficient, and sustainable solutions that minimize stress on people and ecosystems alike. This hands-on, integrated process not only deepens our knowledge but also sets a foundation for innovation and trust in every project.
+      </div>
+
+      {# Systems-Thinkers Image (Row 1) #}
+      <div class="expertise-image col-4 row-1">
+        {% set outputFormats = [] %}
+        {% for format, i in settings.images %}
+          {% if i.enabled === true %}
+            {{ '' if outputFormats.push(format) }}
+          {% endif %}
+        {% endfor %}
+        {% set params = {
+          "src": "/assets/images/expertise-systems-thinkers.jpg",
+          "alt": "Systems-Thinkers",
+          "loadingType": "lazy",
+          "viewportSizes": "25vw",
+          "outputWidths": [
+            settings.config.image_grid_width_sm,
+            settings.config.image_grid_width_md,
+            settings.config.image_grid_width_lg
+          ],
+          "outputFormats": outputFormats,
+          "outputQualityJpeg": settings.images.jpeg.quality,
+          "outputQualityWebp": settings.images.webp.quality,
+          "outputQualityAvif": settings.images.avif.quality
+        } %}
+        {% generateImage params %}
+      </div>
+
+      {# Systems-Thinkers Lead Text (Row 2) #}
+      <div class="expertise-lead markdown col-4 row-2">
+        As **SYSTEMS-THINKERS**, we develop systems that can evolve, be retooled, and reinvented to meet individual and collective challenges.
+      </div>
+
+      {# Systems-Thinkers Body Text (Row 3) #}
+      <div class="expertise-body markdown col-4 row-3">
+        We are community-focused and systems-based, leading design for planetary and social equity. By leveraging the power of thinking small, we transform resource constraints into opportunities for innovation—using low-tech, low-carbon methods, and open-source designs to realize more with less. Through participatory processes, we strive for efficiency, affordability, and equity, incrementally improving places for people and planet.
       </div>
 
     </div>
