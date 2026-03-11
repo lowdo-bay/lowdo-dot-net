@@ -191,10 +191,17 @@ body {
 	flex-direction: column;
 	background: var(--color-background);
 	border-bottom: 1px solid transparent;
+	opacity: 0;
+	transform: translateY(-0.5rem);
+	transition: opacity 200ms ease, transform 200ms ease;
+	pointer-events: none;
 }
 
 .header-menu__drawer.is-open {
 	display: flex;
+	opacity: 1;
+	transform: translateY(0);
+	pointer-events: auto;
 	border-bottom-color: var(--color-accent-1);
 }
 
