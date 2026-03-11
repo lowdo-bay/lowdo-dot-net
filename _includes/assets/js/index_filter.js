@@ -41,6 +41,7 @@
         row.style.display = hasMatch ? '' : 'none';
       }
     });
+    window.scrollTo(0, 0);
   }
 
   // "ALL" checkbox behavior

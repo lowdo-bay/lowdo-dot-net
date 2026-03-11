@@ -1,13 +1,23 @@
 <footer class="p--content text--small">
 
-	{# Row 1: Section labels #}
+	{# Row 1: Logo + Section labels #}
 	<div class="grid grid--footer footer__labels">
+		<div class="col-1" style="padding-left: var(--space-2);">
+			<a href="{{ '/' | url }}" class="footer__logo link-nostyle" aria-label="{{ settings.metadata.site_title }}">
+				{% if settings.metadata.site_logo_light %}
+					<img src="/{{ settings.metadata.site_logo_light }}" alt="{{ settings.metadata.site_title }} logo" class="footer__logo-light">
+				{% endif %}
+				{% if settings.metadata.site_logo_dark %}
+					<img src="/{{ settings.metadata.site_logo_dark }}" alt="{{ settings.metadata.site_title }} logo" class="footer__logo-dark">
+				{% endif %}
+			</a>
+		</div>
 		<div class="col-2 footer__section-label">Sitemap</div>
 		<div class="col-3 footer__section-label">Legal</div>
 		<div class="col-4 footer__section-label">Socials</div>
 	</div>
 
-	{# Row 2: Nav links + Logo #}
+	{# Row 2: Nav links #}
 	<div class="grid grid--footer footer__content">
 
 		{% if settings.metadata.footer_sitemap %}
@@ -36,17 +46,6 @@
 				{% endfor %}
 			</nav>
 		{% endif %}
-
-		<div class="col-1">
-			<a href="{{ '/' | url }}" class="footer__logo link-nostyle" aria-label="{{ settings.metadata.site_title }}">
-				{% if settings.metadata.site_logo_light %}
-					<img src="/{{ settings.metadata.site_logo_light }}" alt="{{ settings.metadata.site_title }} logo" class="footer__logo-light">
-				{% endif %}
-				{% if settings.metadata.site_logo_dark %}
-					<img src="/{{ settings.metadata.site_logo_dark }}" alt="{{ settings.metadata.site_title }} logo" class="footer__logo-dark">
-				{% endif %}
-			</a>
-		</div>
 
 	</div>
 
