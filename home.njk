@@ -293,18 +293,38 @@ permalink: "/index.html"
     text-decoration: underline;
   }
 
+  .awards-table {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .awards-table-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  @media (min-width: 840px) {
+    .awards-table {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .awards-table-row {
+      grid-column: 2 / -1;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
   .awards-col-header {
     font-weight: bold;
     text-transform: uppercase;
     font-size: var(--font-size-base);
     padding: var(--space-2);
-    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
 
   .awards-col-cell {
     font-size: var(--font-size-base);
     padding: var(--space-2);
-    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
 
   /* Featured Projects section */
@@ -672,32 +692,39 @@ permalink: "/index.html"
 
   {# Awards & Recognition Section #}
   <section class="awards-section">
-    <div class="grid grid--description">
 
-      {# Col 1: Heading, blurb, see more #}
-      <div class="col-1" style="grid-row: 1; padding: var(--space-2);">
+    {# Row 0: Description #}
+    <div class="grid grid--description">
+      <div class="col-1" style="padding: var(--space-2);">
         <div class="awards-heading">AWARDS &amp; RECOGNITION</div>
         <div class="awards-blurb">With our commitment to building societal equity through design, LowDO has been internationally recognized as an emerging leader in our profession.</div>
         <a href="/all/?type=award" class="awards-see-more">see more...</a>
       </div>
+    </div>
 
-      {# Column headers — cols 2, 3, 4 #}
-      <div class="awards-col-header col-2" style="grid-row: 1">AWARD</div>
-      <div class="awards-col-header col-3" style="grid-row: 1">ORGANIZATION</div>
-      <div class="awards-col-header col-4" style="grid-row: 1">YEAR</div>
+    {# Table: column headers + data rows #}
+    <div class="awards-table">
 
-      {# Data rows: one set of 3 cells per featured award entry #}
-      {% set awardRowIndex = 2 %}
+      {# Column headers #}
+      <div class="awards-table-row">
+        <div class="awards-col-header">AWARD</div>
+        <div class="awards-col-header">ORGANIZATION</div>
+        <div class="awards-col-header">YEAR</div>
+      </div>
+
+      {# Data rows #}
       {% for entry in collections.entries %}
         {% if entry.data.entryType === "award" and entry.data.featured === true and entry.data.draft !== true %}
-          <div class="awards-col-cell col-2" style="grid-row: {{ awardRowIndex }}">{{ entry.data.title }}</div>
-          <div class="awards-col-cell col-3" style="grid-row: {{ awardRowIndex }}">{{ entry.data.subtitle }}</div>
-          <div class="awards-col-cell col-4" style="grid-row: {{ awardRowIndex }}">{{ entry.data.date | dateFullYear }}</div>
-          {% set awardRowIndex = awardRowIndex + 1 %}
+          <div class="awards-table-row">
+            <div class="awards-col-cell">{{ entry.data.title }}</div>
+            <div class="awards-col-cell">{{ entry.data.subtitle }}</div>
+            <div class="awards-col-cell">{{ entry.data.date | dateFullYear }}</div>
+          </div>
         {% endif %}
       {% endfor %}
 
     </div>
+
   </section>
 
   {# Featured Projects Section #}
