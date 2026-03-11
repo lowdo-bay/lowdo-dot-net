@@ -7,7 +7,6 @@ permalink: "/index.html"
   /* Reuse project-header styles for homepage header */
   .project-header {
     border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
-    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
     padding: 0 !important;
     height: 30vh;
   }
@@ -81,6 +80,7 @@ permalink: "/index.html"
     left: 50%;
     transform: translateX(-50%);
     width: 100vw;
+    height: var(--grid-line-thickness);
     border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
     top: 0;
   }
@@ -91,6 +91,7 @@ permalink: "/index.html"
     left: 50%;
     transform: translateX(-50%);
     width: 100vw;
+    height: var(--grid-line-thickness);
     border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
     bottom: 0;
     padding: 0 !important;
@@ -674,7 +675,7 @@ permalink: "/index.html"
     <div class="grid grid--description">
 
       {# Col 1: Heading, blurb, see more #}
-      <div class="col-1" style="grid-row: 1 / span 999; padding: var(--space-2);">
+      <div class="col-1" style="padding: var(--space-2);">
         <div class="awards-heading">AWARDS &amp; RECOGNITION</div>
         <div class="awards-blurb">With our commitment to building societal equity through design, LowDO has been internationally recognized as an emerging leader in our profession.</div>
         <a href="/all/?type=award" class="awards-see-more">see more...</a>
@@ -686,11 +687,13 @@ permalink: "/index.html"
       <div class="awards-col-header col-4" style="grid-row: 1">YEAR</div>
 
       {# Data rows: one set of 3 cells per featured award entry #}
+      {% set awardRowIndex = 2 %}
       {% for entry in collections.entries %}
         {% if entry.data.entryType === "award" and entry.data.featured === true and entry.data.draft !== true %}
-          <div class="awards-col-cell col-2">{{ entry.data.title }}</div>
-          <div class="awards-col-cell col-3">{{ entry.data.subtitle }}</div>
-          <div class="awards-col-cell col-4">{{ entry.data.date | dateFullYear }}</div>
+          <div class="awards-col-cell col-2" style="grid-row: {{ awardRowIndex }}">{{ entry.data.title }}</div>
+          <div class="awards-col-cell col-3" style="grid-row: {{ awardRowIndex }}">{{ entry.data.subtitle }}</div>
+          <div class="awards-col-cell col-4" style="grid-row: {{ awardRowIndex }}">{{ entry.data.date | dateFullYear }}</div>
+          {% set awardRowIndex = awardRowIndex + 1 %}
         {% endif %}
       {% endfor %}
 
@@ -776,11 +779,11 @@ permalink: "/index.html"
 
       {# Row 3: Phone #}
       <div class="col-3 contact-row">Phone</div>
-      <div class="col-4 contact-row">(512) 555-0000</div>
+      <div class="col-4 contact-row">(512) 553-5026</div>
 
       {# Row 4: Address #}
       <div class="col-3 contact-row">Address</div>
-      <div class="col-4 contact-row">Austin, Texas</div>
+      <div class="col-4 contact-row">705 W 29th St. Austin, Texas 78705</div>
 
       {# Row 5: Instagram #}
       <div class="col-3 contact-row">Instagram</div>
