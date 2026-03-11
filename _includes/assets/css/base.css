@@ -207,6 +207,10 @@ body {
 	border-bottom: none;
 }
 
+.header-menu__drawer:not(.is-open) .header-menu__item {
+	border-bottom-color: transparent;
+}
+
 /* Dark mode toggle within menu */
 .header-menu__item.dark-toggle {
 	cursor: pointer;
