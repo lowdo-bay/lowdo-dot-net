@@ -182,7 +182,6 @@ body {
 	display: flex;
 	flex-direction: column;
 	background: var(--color-background);
-	border-top: 1px solid var(--color-accent-1);
 	border-bottom: 1px solid var(--color-text);
 	width: calc(100% + 2 * var(--content-margin));
 	margin-left: calc(-1 * var(--content-margin));
@@ -233,9 +232,6 @@ body {
 		margin-left: 3 * var(--col-width);
 		padding-left: var(--space-2);
 		padding-right: var(--space-2);
-		border-top: 1px solid var(--color-accent-1);
-		border-left: none;
-		border-right: none;
 		border-bottom: 1px solid var(--color-text);
 	}
 }
