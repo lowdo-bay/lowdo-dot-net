@@ -182,7 +182,7 @@ body {
 
 /* Menu Drawer — overlays below header */
 .header-menu__drawer {
-	display: none;
+	display: flex;
 	position: absolute;
 	top: 100%;
 	left: var(--content-margin);
@@ -195,13 +195,14 @@ body {
 	transform: translateY(-0.5rem);
 	transition: opacity 200ms ease, transform 200ms ease;
 	pointer-events: none;
+	visibility: hidden;
 }
 
 .header-menu__drawer.is-open {
-	display: flex;
 	opacity: 1;
 	transform: translateY(0);
 	pointer-events: auto;
+	visibility: visible;
 	border-bottom-color: var(--color-accent-1);
 }
 
