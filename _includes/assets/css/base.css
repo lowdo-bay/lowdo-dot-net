@@ -640,6 +640,10 @@ img {
 		gap: var(--space-3);
 	}
 
+	.footer__content > * {
+		padding: var(--space-2);
+	}
+
 	.footer__nav-label {
 		display: block;
 		font-weight: 700;
