@@ -876,8 +876,17 @@ header.p--content {
 	right: 0;
 	margin-left: auto;
 	margin-right: auto;
-	background: linear-gradient(to right, var(--color-background), var(--color-background));
-	background-attachment: fixed;
+}
+
+header.p--content::before {
+	content: '';
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: inherit;
+	background-color: var(--color-background);
+	z-index: -1;
 }
 
 header.p--content::after {
