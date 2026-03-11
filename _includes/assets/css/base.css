@@ -182,7 +182,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	background: var(--color-background);
-	border-bottom: 1px solid var(--color-text);
+	border-bottom: 1px solid transparent;
 	width: calc(100% + 2 * var(--content-margin));
 	margin-left: calc(-1 * var(--content-margin));
 	padding-left: var(--content-margin);
@@ -191,6 +191,7 @@ body {
 
 .header-menu__drawer.is-open {
 	max-height: 300px;
+	border-bottom-color: var(--color-text);
 }
 
 .header-menu__item {
