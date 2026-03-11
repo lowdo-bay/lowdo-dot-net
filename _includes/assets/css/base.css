@@ -57,7 +57,13 @@ body {
 }
 
 .grid--header {
-	grid-template-columns: 3fr 1fr;
+	grid-template-columns: 1fr;
+}
+
+@media (min-width: 840px) {
+	.grid--header {
+		grid-template-columns: repeat(4, 1fr);
+	}
 }
 
 .grid--footer {

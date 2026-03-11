@@ -3,7 +3,7 @@
 	<div class="grid grid--header">
 
 		{# Column 1: Site Title + Subtitles (mobile stacked) #}
-		<div class="grid__item header-title">
+		<div class="grid__item col-1 header-title">
 			<a href="{{ '/' | url }}" class="link-nostyle">
 				{# SEO: home page header title should be inside a h1 tag #}
 				{% if page.url == "/" %}
@@ -23,16 +23,16 @@
 
 		{# Column 2: Subtitle 1 (desktop only) #}
 		{% if settings.metadata.site_subtitle_1 %}
-			<span class="grid__item header-subtitle--desktop">{{ settings.metadata.site_subtitle_1 }}</span>
+			<span class="grid__item col-2 header-subtitle--desktop">{{ settings.metadata.site_subtitle_1 }}</span>
 		{% endif %}
 
 		{# Column 3: Subtitle 2 (desktop only) #}
 		{% if settings.metadata.site_subtitle_2 %}
-			<span class="grid__item header-subtitle--desktop">{{ settings.metadata.site_subtitle_2 }}</span>
+			<span class="grid__item col-3 header-subtitle--desktop">{{ settings.metadata.site_subtitle_2 }}</span>
 		{% endif %}
 
 		{# Column 4: Menu button (right-aligned) #}
-		<div class="grid__item grid__item--end grid__item--top">
+		<div class="grid__item col-4 grid__item--end grid__item--top">
 			<div class="header-menu">
 				<button class="header-menu__button" aria-expanded="false" aria-label="Menu">
 					<svg width="20" height="14" viewBox="0 0 20 14" fill="none" aria-hidden="true">
