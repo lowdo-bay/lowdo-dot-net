@@ -9,6 +9,7 @@ categories:
 link: "https://aiaaustin.org/design-awards/"
 position: 3
 relatedProject: wolf-creek-ranch
+featured: true
 ---
 
 Wolf Creek Ranch receives AIA Austin Design Award in the Unbuilt Category, recognizing excellence in architectural design and innovation in sustainable building practices.

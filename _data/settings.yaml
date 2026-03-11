@@ -8,15 +8,15 @@ metadata:
   site_subtitle_2: Austin, Texas and Tema, Ghana
   # Home page description, accepts markdown
   site_description: >
-    Low Design Office is an architecture and design studio that focuses on something simple: **realizing more with less.**
+    **Low Design Office** is an architecture and design studio that focuses on something simple: **realizing more with less.**
   # footer contact email
   site_email: lowdo@lowdo.net
   # footer social link (the social title is defined in the i18n section)
   site_social_url: 'http://instagram.com/lowdesignoffice'
   # SVG image used for sharing/bookmark icons
-  site_icon_svg: /assets/uploads/favicon.svg
+  site_icon_svg: ''
   # optional PNG image used for sharing/bookmark icons
-  site_icon_png: ''
+  site_icon_png: assets/uploads/favicon.png
   # add a GA4 ID to enable Google Analytics e.g. G-123456789
   site_ga4_id: ''
   # home page SEO fields
