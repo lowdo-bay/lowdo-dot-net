@@ -63,6 +63,11 @@ permalink: "/index.html"
 
   /* Mobile: stack header image on top, description and logo side by side below */
   @media (max-width: 839px) {
+    .project-header {
+      margin-left: calc(-1 * var(--content-margin));
+      margin-right: calc(-1 * var(--content-margin));
+    }
+
     .project-header .grid {
       grid-template-columns: 1fr;
     }
@@ -79,6 +84,8 @@ permalink: "/index.html"
 
     .project-header .grid__item--span-2-right {
       grid-template-columns: 4fr 1fr;
+      padding-left: var(--space-2);
+      padding-right: var(--space-2);
     }
   }
 
