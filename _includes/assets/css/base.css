@@ -181,7 +181,6 @@ body {
 	transition: max-height 300ms ease;
 	display: flex;
 	flex-direction: column;
-	border-top: 1px solid var(--color-text);
 }
 
 .header-menu__drawer.is-open {
@@ -191,11 +190,11 @@ body {
 .header-menu__item {
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
-	padding: var(--space-2) 0;
+	justify-content: flex-start;
+	padding: var(--space-2);
 	text-decoration: none;
 	color: var(--color-text);
-	border-bottom: 1px solid var(--color-text);
+	border-bottom: 1px dashed var(--color-accent-1);
 }
 
 .header-menu__item:last-child {
@@ -210,7 +209,7 @@ body {
 .header-menu__item.dark-toggle .toggle__label {
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: flex-start;
 	gap: var(--space-2);
 	width: 100%;
 	padding: 0;
