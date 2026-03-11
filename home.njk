@@ -262,13 +262,25 @@ permalink: "/index.html"
     /* On mobile, expertise-item becomes a block container grouping each expertise pillar */
     .expertise-item {
       display: block;
-      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
       padding-bottom: var(--space-4);
       margin-bottom: var(--space-4);
+      position: relative;
     }
 
-    .expertise-item:last-of-type {
-      border-bottom: none;
+    .expertise-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: var(--grid-line-thickness);
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+      z-index: 1;
+    }
+
+    .expertise-item:last-of-type::after {
+      display: none;
     }
 
     /* Change image aspect ratio on mobile for better vertical economy */
@@ -278,13 +290,39 @@ permalink: "/index.html"
 
     /* Add horizontal grid lines between sections within each card */
     .expertise-lead {
+      padding: var(--space-2);
+      padding-top: 0;
+      position: relative;
+    }
+
+    .expertise-lead::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: var(--grid-line-thickness);
       border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+      z-index: 1;
     }
 
     .expertise-body {
-      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
       padding: var(--space-2);
+      padding-top: 0;
       position: relative;
+    }
+
+    .expertise-body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: var(--grid-line-thickness);
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+      z-index: 1;
     }
 
     /* On mobile, when details is closed, truncate content with fade */
