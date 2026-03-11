@@ -44,10 +44,11 @@
 	--space-9: calc(var(--space) * 8);      /* 8rem mobile, 12rem desktop */
 
 	--content-margin: var(--space-5);
+	--max-content-width: 1200px;
 	--grid-gap: 0;
 
 	/* Viewport-based calculations for precise grid */
-	--content-width: calc(100vw - 2 * var(--content-margin));
+	--content-width: calc(min(100vw, var(--max-content-width)) - 2 * var(--content-margin));
 	--col-width: calc((var(--content-width) - 3 * var(--grid-gap)) / 4);
 
 	/* Legacy variable for backwards compatibility */

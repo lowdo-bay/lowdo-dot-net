@@ -191,6 +191,10 @@ body {
 	border-bottom: 1px solid var(--color-accent-1);
 }
 
+:root[dark] .header-menu__drawer.is-open {
+	border-bottom-color: var(--grid-line-color);
+}
+
 .header-menu__item {
 	display: flex;
 	align-items: center;
@@ -209,6 +213,10 @@ body {
 	border-bottom-color: transparent;
 }
 
+:root[dark] .header-menu__item {
+	border-bottom-color: var(--grid-line-color);
+}
+
 /* Dark mode toggle within menu */
 .header-menu__item.dark-toggle {
 	cursor: pointer;
@@ -217,7 +225,7 @@ body {
 .header-menu__item.dark-toggle .toggle__label {
 	display: flex;
 	align-items: center;
-	justify-content: flex-start;
+	justify-content: space-between;
 	gap: var(--space-2);
 	width: 100%;
 	padding: 0;
@@ -225,6 +233,11 @@ body {
 
 .header-menu__item.dark-toggle .toggle__text {
 	display: inline;
+	color: var(--color-accent-1);
+}
+
+.header-menu__item.dark-toggle svg {
+	color: var(--color-accent-1);
 }
 
 /* Drawer positioning at desktop breakpoint - removed, see line 482 */
@@ -422,6 +435,18 @@ img {
 		grid-auto-rows: auto;
 	}
 
+	.footer__col-2 {
+		grid-column: 2;
+	}
+
+	.footer__col-3 {
+		grid-column: 3;
+	}
+
+	.footer__col-4 {
+		grid-column: 4;
+	}
+
 	.grid__item {
 		grid-column: initial;
 		padding-left: var(--space-2);
@@ -472,7 +497,7 @@ img {
 	/* Desktop: span from 4th grid line (75%) to right screen edge */
 	.header-menu__drawer {
 		margin-left: auto;
-		margin-right: var(--content-margin);
+		margin-right: calc((100vw - min(100vw, var(--max-content-width))) / 2 + var(--content-margin));
 		width: calc(var(--content-width) / 4);
 	}
 
@@ -569,6 +594,9 @@ img {
 /* Content margin - outer margin that aligns with grid */
 .p--content {
 	padding: var(--content-margin);
+	max-width: var(--max-content-width);
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /* Remove internal vertical padding, but keep horizontal padding for column spacing */
@@ -808,8 +836,9 @@ body::after {
 	content: '';
 	position: absolute;
 	top: 0;
-	left: var(--content-margin);
-	right: var(--content-margin);
+	left: 50%;
+	transform: translateX(-50%);
+	width: calc(min(100vw, var(--max-content-width)) - 2 * var(--content-margin));
 	bottom: 0;
 	min-height: 100vh;
 	--dash-size: 4px;
