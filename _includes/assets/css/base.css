@@ -151,7 +151,7 @@ body {
 	white-space: nowrap;
 }
 
-/* Header Menu Dropdown */
+/* Header Menu */
 
 .header-menu {
 	position: relative;
@@ -174,23 +174,18 @@ body {
 	opacity: 0.7;
 }
 
-.header-menu__dropdown {
-	display: none;
-	position: absolute;
-	top: 100%;
-	right: 0;
-	margin-top: var(--space-2);
-	background-color: var(--color-background);
-	/* Mobile: full screen width */
-	width: 100vw;
-	margin-left: calc(-50vw + 50%);
-	border: 1px solid var(--color-text);
-	z-index: 10000;
-}
-
-.header-menu.is-open .header-menu__dropdown {
+/* Menu Drawer — in-flow, pushes content down */
+.header-menu__drawer {
+	overflow: hidden;
+	max-height: 0;
+	transition: max-height 300ms ease;
 	display: flex;
 	flex-direction: column;
+	border-top: 1px solid var(--color-text);
+}
+
+.header-menu__drawer.is-open {
+	max-height: 300px;
 }
 
 .header-menu__item {
@@ -465,9 +460,10 @@ img {
 	}
 
 	/* Desktop: menu dropdown width changes to one column */
-	.header-menu__dropdown {
-		width: calc((100vw - 2 * var(--content-margin) - 3 * var(--grid-gap)) / 4);
-		margin-left: 0;
+	/* Desktop: constrain drawer to column 4 width, right-aligned */
+	.header-menu__drawer {
+		width: var(--col-width);
+		margin-left: auto;
 	}
 
 }

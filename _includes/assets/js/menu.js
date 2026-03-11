@@ -1,31 +1,31 @@
-// Header menu dropdown toggle
+// Header menu drawer toggle
 (function() {
-  const menu = document.querySelector('.header-menu');
+  const header = document.querySelector('header');
   const button = document.querySelector('.header-menu__button');
-  const dropdown = document.querySelector('.header-menu__dropdown');
+  const drawer = document.querySelector('.header-menu__drawer');
 
-  if (!menu || !button || !dropdown) return;
+  if (!button || !drawer) return;
 
-  // Toggle menu on button click
   button.addEventListener('click', function(e) {
     e.stopPropagation();
-    const isOpen = menu.classList.toggle('is-open');
+    const isOpen = drawer.classList.toggle('is-open');
     button.setAttribute('aria-expanded', isOpen);
+    drawer.setAttribute('aria-hidden', !isOpen);
   });
 
-  // Close menu when clicking outside
   document.addEventListener('click', function(e) {
-    if (!menu.contains(e.target)) {
-      menu.classList.remove('is-open');
+    if (!header.contains(e.target)) {
+      drawer.classList.remove('is-open');
       button.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
     }
   });
 
-  // Close menu on Escape key
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && menu.classList.contains('is-open')) {
-      menu.classList.remove('is-open');
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) {
+      drawer.classList.remove('is-open');
       button.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
       button.focus();
     }
   });
