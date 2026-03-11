@@ -73,6 +73,21 @@ permalink: "/index.html"
     position: relative;
   }
 
+  .expertise-section .grid {
+    row-gap: var(--space-3);
+  }
+
+  .expertise-section .grid > div:nth-child(n+2)::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(-1 * var(--space-3) / 2);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    z-index: 9998;
+  }
+
   .expertise-heading {
     font-weight: bold;
     text-transform: uppercase;
