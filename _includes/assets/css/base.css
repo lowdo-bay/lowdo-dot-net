@@ -872,9 +872,7 @@ header.p--content {
 	top: 0;
 	z-index: 1000;
 	background-color: var(--color-background);
-	width: 100vw;
-	left: 50%;
-	transform: translateX(-50%);
+	box-shadow: -100vw 0 0 100vw var(--color-background), 100vw 0 0 100vw var(--color-background);
 }
 
 header.p--content::after {
