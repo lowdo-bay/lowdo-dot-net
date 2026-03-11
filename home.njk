@@ -104,6 +104,20 @@ permalink: "/index.html"
     gap: var(--space-3);
   }
 
+  .expertise-column > div:nth-child(n+2) {
+    position: relative;
+    padding-top: var(--space-3);
+  }
+
+  .expertise-column > div:nth-child(n+2)::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--content-margin));
+    right: calc(-1 * var(--content-margin));
+    top: 0;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
   .expertise-image {
     width: 100%;
     aspect-ratio: 1;
