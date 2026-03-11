@@ -49,6 +49,15 @@
     {% endif %}
   </div>
 
+  {# Mobile meta row: subtitle (projects) or description (non-projects) #}
+  <div class="index-row__meta">
+    {% if entry.data.entryType == 'project' and entry.data.subtitle %}
+      <span class="index-row__meta-text">{{ entry.data.subtitle }}</span>
+    {% elif entry.data.entryType != 'project' and entry.data.description %}
+      <span class="index-row__meta-text">{{ entry.data.description }}</span>
+    {% endif %}
+  </div>
+
 </div>
 
 {% if entry.data.entryType == 'project' or entry.data.link %}
