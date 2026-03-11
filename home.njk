@@ -64,8 +64,8 @@ permalink: "/index.html"
   /* Mobile: stack header image on top, description and logo side by side below */
   @media (max-width: 839px) {
     .project-header {
-      margin-left: calc(-1 * var(--content-margin));
-      margin-right: calc(-1 * var(--content-margin));
+      margin-left: 0;
+      margin-right: 0;
     }
 
     .project-header .grid {
@@ -81,12 +81,6 @@ permalink: "/index.html"
     .project-header .grid__item--span-2-left,
     .project-header .grid__item--span-2-right {
       grid-column: 1;
-    }
-
-    .project-header picture.header-image {
-      margin-left: calc(-1 * var(--content-margin));
-      margin-right: calc(-1 * var(--content-margin));
-      width: calc(100% + 2 * var(--content-margin));
     }
 
     .project-header .grid__item--span-2-right {
