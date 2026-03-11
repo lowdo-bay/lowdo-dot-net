@@ -1581,7 +1581,7 @@ body::after {
 		grid-area: title;
 		flex-direction: column;
 		margin-bottom: 0;
-		padding-top: 0;
+		padding-top: var(--space-1);
 		padding-bottom: 0;
 		align-self: baseline;
 	}
