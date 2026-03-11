@@ -71,11 +71,38 @@ permalink: "/index.html"
   /* Expertise section styles */
   .expertise-section {
     position: relative;
+    padding-top: 0 !important;
+    margin-top: calc(var(--space-8) - var(--space)) !important;
+  }
+
+  .expertise-section::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    top: 0;
+  }
+
+  .expertise-section::after {
+    content: '' !important;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    bottom: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-bottom: none !important;
   }
 
   .expertise-section .grid {
-    row-gap: var(--space-3);
+    row-gap: 0;
+    column-gap: 0;
     grid-template-rows: auto auto auto;
+    padding-top: 0;
   }
 
   /* Grid row placement utilities */
@@ -83,29 +110,11 @@ permalink: "/index.html"
   .expertise-section .row-2 { grid-row: 2; }
   .expertise-section .row-3 { grid-row: 3; }
 
-  /* Horizontal separator lines on rows 2 and 3 */
-  .expertise-section .row-2.col-2,
-  .expertise-section .row-3.col-2 {
-    position: relative;
-    padding-top: var(--space-3);
-  }
-
-  .expertise-section .row-2.col-2::before,
-  .expertise-section .row-3.col-2::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 0;
-    width: 100vw;
-    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
-  }
 
   /* Padding for all non-image rows */
   .expertise-section .row-2,
   .expertise-section .row-3 {
     position: relative;
-    padding-top: var(--space-3);
   }
 
   .expertise-heading {
@@ -114,14 +123,15 @@ permalink: "/index.html"
     letter-spacing: 0.05em;
     color: var(--color-accent-1);
     font-size: var(--font-size-base);
-    padding: var(--space-2);
     align-self: start;
+    padding: var(--space-2);
   }
 
   .expertise-image {
     width: 100%;
     aspect-ratio: 3 / 4;
     overflow: hidden;
+    padding: var(--space-2);
   }
 
   .expertise-image picture {
@@ -140,25 +150,19 @@ permalink: "/index.html"
 
   .expertise-lead {
     color: var(--color-accent-1);
-    padding: var(--space-2);
-    padding-top: 0;
     font-weight: 500;
     line-height: calc(1.6 * var(--line-height-scale) / 100);
+    padding: var(--space-2);
   }
 
   .expertise-body {
-    padding: var(--space-2);
-    padding-top: 0;
     font-size: var(--font-size-base);
     line-height: calc(1.6 * var(--line-height-scale) / 100);
+    padding: var(--space-2);
   }
 
   .expertise-body p {
-    margin-bottom: var(--space-3);
-  }
-
-  .expertise-body p:last-child {
-    margin-bottom: 0;
+    margin: 0;
   }
 
   /* Mobile responsive: reset grid-row to auto for single-column layout */
@@ -168,6 +172,136 @@ permalink: "/index.html"
     .expertise-section .row-3 {
       grid-row: auto;
     }
+  }
+
+  /* Tech Portfolio section styles */
+  .tech-portfolio-section {
+    position: relative;
+    margin-top: var(--space-8);
+    padding-top: 0;
+  }
+
+  .tech-portfolio-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    background-color: var(--color-accent-5);
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    z-index: -1;
+  }
+
+  .tech-portfolio-section::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    bottom: 0;
+    z-index: 9999;
+  }
+
+  .tech-portfolio-section .grid {
+    row-gap: 0;
+    column-gap: 0;
+    align-items: center;
+  }
+
+  .tech-portfolio-description {
+    color: var(--color-accent-1);
+    padding: var(--space-2);
+    font-size: var(--font-size-base);
+    align-self: start;
+  }
+
+  .tech-portfolio-diagram {
+    grid-column: span 3;
+    padding: var(--space-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    border: 1px dashed rgba(0, 20, 137, 0.2);
+    color: var(--color-accent-1);
+    font-size: var(--font-size-base);
+  }
+
+  /* Awards & Recognition section */
+  .awards-section {
+    position: relative;
+    margin-top: var(--space-8);
+    padding-top: 0;
+  }
+
+  .awards-section::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    top: 0;
+  }
+
+  .awards-section::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    bottom: 0;
+  }
+
+  .awards-section .grid {
+    row-gap: 0;
+    column-gap: 0;
+  }
+
+  .awards-heading {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-1);
+    font-size: var(--font-size-base);
+    padding: var(--space-2);
+  }
+
+  .awards-blurb {
+    font-size: var(--font-size-base);
+    padding: var(--space-2);
+    padding-top: 0;
+  }
+
+  .awards-see-more {
+    display: block;
+    padding: var(--space-2);
+    padding-top: 0;
+    font-size: var(--font-size-base);
+    color: var(--color-accent-1);
+    text-decoration: none;
+  }
+
+  .awards-see-more:hover {
+    text-decoration: underline;
+  }
+
+  .awards-col-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: var(--font-size-base);
+    padding: var(--space-2);
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  .awards-col-cell {
+    font-size: var(--font-size-base);
+    padding: var(--space-2);
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
 </style>
 
@@ -256,10 +390,16 @@ permalink: "/index.html"
         {% generateImage params %}
       </div>
 
+      {# Row 2 Divider #}
+      <div style="grid-column: 1 / -1; grid-row: 2; position: relative; height: 0; border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);"></div>
+
       {# Architects Lead Text (Row 2) #}
       <div class="expertise-lead markdown col-2 row-2">
         As **ARCHITECTS**, we make architecture for the now, rooted in culture and context, driven by societal and planetary well-being.
       </div>
+
+      {# Row 3 Divider #}
+      <div style="grid-column: 1 / -1; grid-row: 3; position: relative; height: 0; border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);"></div>
 
       {# Architects Body Text (Row 3) #}
       <div class="expertise-body markdown col-2 row-3">
@@ -339,6 +479,51 @@ permalink: "/index.html"
       <div class="expertise-body markdown col-4 row-3">
         We are community-focused and systems-based, leading design for planetary and social equity. By leveraging the power of thinking small, we transform resource constraints into opportunities for innovation—using low-tech, low-carbon methods, and open-source designs to realize more with less. Through participatory processes, we strive for efficiency, affordability, and equity, incrementally improving places for people and planet.
       </div>
+
+    </div>
+  </section>
+
+  {# Tech Portfolio Section #}
+  <section class="tech-portfolio-section">
+    <div class="grid grid--description">
+
+      {# Col 1: Description text #}
+      <div class="tech-portfolio-description markdown col-1">
+        LowDO's work spans a diverse network of projects, collaborators, and systems—from housing and civic infrastructure to fabrication and open-source tools. Our portfolio reflects deep connections across disciplines: architecture, construction, community organizing, and environmental stewardship. Each project is a node in an evolving network of ideas, partners, and places.
+      </div>
+
+      {# Cols 2–4: Diagram placeholder #}
+      <div class="tech-portfolio-diagram col-2" style="grid-column: 2 / -1;">
+        [ Diagram — drop PNG or SVG here ]
+      </div>
+
+    </div>
+  </section>
+
+  {# Awards & Recognition Section #}
+  <section class="awards-section">
+    <div class="grid grid--description">
+
+      {# Col 1: Heading, blurb, see more #}
+      <div class="col-1" style="grid-row: 1 / span 999; padding: var(--space-2);">
+        <div class="awards-heading">AWARDS &amp; RECOGNITION</div>
+        <div class="awards-blurb">Recognition of our work by peers and the broader architectural community.</div>
+        <a href="/all/?type=award" class="awards-see-more">see more...</a>
+      </div>
+
+      {# Column headers — cols 2, 3, 4 #}
+      <div class="awards-col-header col-2">AWARD</div>
+      <div class="awards-col-header col-3">ORGANIZATION</div>
+      <div class="awards-col-header col-4">YEAR</div>
+
+      {# Data rows: one set of 3 cells per featured award entry #}
+      {% for entry in collections.entries %}
+        {% if entry.data.entryType === "award" and entry.data.featured === true and entry.data.draft !== true %}
+          <div class="awards-col-cell col-2">{{ entry.data.title }}</div>
+          <div class="awards-col-cell col-3">{{ entry.data.subtitle }}</div>
+          <div class="awards-col-cell col-4">{{ entry.data.date | dateFullYear }}</div>
+        {% endif %}
+      {% endfor %}
 
     </div>
   </section>
