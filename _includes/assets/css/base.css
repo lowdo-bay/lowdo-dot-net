@@ -180,23 +180,22 @@ body {
 	opacity: 0.7;
 }
 
-/* Menu Drawer — appears below header */
+/* Menu Drawer — overlays below header */
 .header-menu__drawer {
-	overflow: hidden;
-	max-height: 0;
-	transition: max-height 300ms ease;
-	display: flex;
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: var(--content-margin);
+	right: var(--content-margin);
+	z-index: 998;
 	flex-direction: column;
 	background: var(--color-background);
-	border-bottom: none;
-	width: calc(100% - 2 * var(--content-margin));
-	margin-left: var(--content-margin);
-	margin-right: var(--content-margin);
+	border-bottom: 1px solid transparent;
 }
 
 .header-menu__drawer.is-open {
-	max-height: 300px;
-	border-bottom: 1px solid var(--color-accent-1);
+	display: flex;
+	border-bottom-color: var(--color-accent-1);
 }
 
 :root[dark] .header-menu__drawer.is-open {
@@ -547,11 +546,10 @@ img {
 		display: block;
 	}
 
-	/* Desktop: menu dropdown width changes to one column */
-	/* Desktop: span from 4th grid line (75%) to right screen edge */
+	/* Desktop: menu dropdown width aligns to column 4 */
 	.header-menu__drawer {
-		margin-left: auto;
-		margin-right: calc((100vw - min(100vw, var(--max-content-width))) / 2 + var(--content-margin));
+		left: auto;
+		right: calc((100vw - min(100vw, var(--max-content-width))) / 2 + var(--content-margin));
 		width: calc(var(--content-width) / 4);
 	}
 
