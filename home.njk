@@ -75,11 +75,18 @@ permalink: "/index.html"
     .project-header .grid__item--span-2-left {
       padding: 0;
       margin: 0;
+      overflow: hidden;
     }
 
     .project-header .grid__item--span-2-left,
     .project-header .grid__item--span-2-right {
       grid-column: 1;
+    }
+
+    .project-header picture.header-image {
+      margin-left: calc(-1 * var(--content-margin));
+      margin-right: calc(-1 * var(--content-margin));
+      width: calc(100% + 2 * var(--content-margin));
     }
 
     .project-header .grid__item--span-2-right {
