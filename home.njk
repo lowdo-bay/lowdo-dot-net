@@ -293,9 +293,17 @@ permalink: "/index.html"
     text-decoration: underline;
   }
 
+  .awards-layout {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .awards-layout > :first-child {
+    flex: 0 0 25%;
+  }
+
   .awards-table {
-    display: grid;
-    grid-template-columns: 1fr;
+    flex: 1;
   }
 
   .awards-table-row {
@@ -304,14 +312,14 @@ permalink: "/index.html"
     border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
 
-  @media (min-width: 840px) {
-    .awards-table {
-      grid-template-columns: repeat(4, 1fr);
+  @media (max-width: 839px) {
+    .awards-layout {
+      flex-direction: column;
     }
 
-    .awards-table-row {
-      grid-column: 2 / -1;
-      grid-template-columns: repeat(3, 1fr);
+    .awards-layout > :first-child {
+      flex: none;
+      width: 100%;
     }
   }
 
@@ -693,13 +701,13 @@ permalink: "/index.html"
   {# Awards & Recognition Section #}
   <section class="awards-section">
 
-    {# Row 0: Description #}
-    <div class="grid grid--description">
-      <div class="col-1" style="padding: var(--space-2);">
-        <div class="awards-heading">AWARDS &amp; RECOGNITION</div>
-        <div class="awards-blurb">With our commitment to building societal equity through design, LowDO has been internationally recognized as an emerging leader in our profession.</div>
-        <a href="/all/?type=award" class="awards-see-more">see more...</a>
-      </div>
+    <div class="awards-layout">
+
+    {# Col 1: Description #}
+    <div style="padding: var(--space-2);">
+      <div class="awards-heading">AWARDS &amp; RECOGNITION</div>
+      <div class="awards-blurb">With our commitment to building societal equity through design, LowDO has been internationally recognized as an emerging leader in our profession.</div>
+      <a href="/all/?type=award" class="awards-see-more">see more...</a>
     </div>
 
     {# Table: column headers + data rows #}
@@ -724,6 +732,8 @@ permalink: "/index.html"
       {% endfor %}
 
     </div>
+
+    </div>{# end awards-layout #}
 
   </section>
 
