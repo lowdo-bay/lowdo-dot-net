@@ -1,5 +1,6 @@
 ---
 draft: false
+featured: true
 title: Wolf Creek Ranch
 description: >
   Sustainable retreat harmonizing nature and landscape.
