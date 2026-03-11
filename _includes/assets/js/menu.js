@@ -14,7 +14,7 @@
   });
 
   document.addEventListener('click', function(e) {
-    if (!header.contains(e.target)) {
+    if (!header.contains(e.target) && !drawer.contains(e.target)) {
       drawer.classList.remove('is-open');
       button.setAttribute('aria-expanded', 'false');
       drawer.setAttribute('aria-hidden', 'true');

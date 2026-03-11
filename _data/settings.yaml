@@ -90,7 +90,7 @@ theme:
 # Image settings (lovell/sharp). JPEG format can't be disabled via the CMS.
 images:
   avif:
-    enabled: false
+    enabled: true
   webp:
     enabled: true
     quality: 75
