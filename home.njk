@@ -61,6 +61,22 @@ permalink: "/index.html"
     align-items: flex-start;
   }
 
+  /* Mobile: stack header image on top, description and logo side by side below */
+  @media (max-width: 839px) {
+    .project-header .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .project-header .grid__item--span-2-left,
+    .project-header .grid__item--span-2-right {
+      grid-column: 1;
+    }
+
+    .project-header .grid__item--span-2-right {
+      grid-template-columns: 4fr 1fr;
+    }
+  }
+
   .header-logo img {
     width: 30%;
     height: auto;
