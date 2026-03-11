@@ -3,35 +3,304 @@ layout: layouts/base.njk
 section: home
 permalink: "/index.html"
 ---
+<style>
+  /* Reuse project-header styles for homepage header */
+  .project-header {
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    padding: 0 !important;
+    height: 30vh;
+  }
+
+  .project-header .grid {
+    align-items: start;
+    height: 100%;
+  }
+
+  .project-header .grid__item--span-2-left {
+    align-self: stretch;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .project-header picture.header-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .project-header picture.header-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .project-header .grid__item--span-2-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-self: start;
+  }
+
+  .header-description {
+    grid-column: 1;
+    padding: var(--space-2);
+    font-size: var(--font-size-base);
+  }
+
+  .header-logo {
+    grid-column: 2;
+    padding: var(--space-2);
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .header-logo img {
+    width: 30%;
+    height: auto;
+    max-width: 100%;
+  }
+
+  /* Expertise section styles */
+  .expertise-section {
+    position: relative;
+  }
+
+  .expertise-heading {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-1);
+    font-size: var(--font-size-base);
+    padding: var(--space-2);
+    align-self: center;
+  }
+
+  .expertise-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .expertise-image {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .expertise-image picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .expertise-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .expertise-lead {
+    color: var(--color-accent-1);
+    padding: var(--space-2);
+    padding-top: 0;
+    font-weight: 500;
+  }
+
+  .expertise-body {
+    padding: var(--space-2);
+    padding-top: 0;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-scale);
+  }
+
+  .expertise-body p {
+    margin-bottom: var(--space-3);
+  }
+
+  .expertise-body p:last-child {
+    margin-bottom: 0;
+  }
+</style>
+
 <article>
 
-  <header class="pb--4">
-
+  <header class="project-header">
     <div class="grid grid--intro">
 
-      <div class="grid__item--span-4 mw--readable markdown">{{ settings.metadata.site_description | renderUsingMarkdown | safe }}</div>
+      {# Left: Header Image #}
+      <div class="grid__item--span-2-left">
+        {% set outputFormats = [] %}
+        {% for format, i in settings.images %}
+          {% if i.enabled === true %}
+            {{ '' if outputFormats.push(format) }}
+          {% endif %}
+        {% endfor %}
+        {% set params = {
+          "src": "/assets/images/homepage-header.jpg",
+          "alt": "Low Design Office",
+          "classes": "header-image",
+          "loadingType": "eager",
+          "viewportSizes": "50vw",
+          "outputWidths": [
+            settings.config.image_width_sm,
+            settings.config.image_width_md,
+            settings.config.image_width_lg
+          ],
+          "outputFormats": outputFormats,
+          "outputQualityJpeg": settings.images.jpeg.quality,
+          "outputQualityWebp": settings.images.webp.quality,
+          "outputQualityAvif": settings.images.avif.quality
+        } %}
+        {% generateImage params %}
+      </div>
+
+      {# Right: Description and Logo — 2-col sub-grid #}
+      <div class="grid__item--span-2-right">
+
+        {# Description #}
+        <div class="header-description markdown">
+          {{ settings.metadata.site_description | renderUsingMarkdown | safe }}
+        </div>
+
+        {# Logo #}
+        <div class="header-logo">
+          <img src="/assets/uploads/favicon.png" alt="LowDO logo">
+        </div>
+
+      </div>
 
     </div>
-
   </header>
 
-  {# Image section #}
-  <section class="grid">
-    
-    <div class="grid--body">
-      <img src="/assets/images/dakota-mountain.jpg" alt="Dakota Mountain residence">
-    </div>
+  {# Expertise Section #}
+  <section class="expertise-section">
+    <div class="grid grid--description">
 
-  </section>
+      {# Row 1: Heading (Col 1) + Images (Cols 2-4) #}
+      <div class="expertise-heading col-1">
+        WE ARE ARCHITECTS, BUILDERS, AND SYSTEMS-THINKERS
+      </div>
 
-  {# Add your Markdown content here #}
-  {% set statement %}
-## We are **Architects, Builders, and Systems-Thinkers**
-  {% endset %}
+      {# Architects Column #}
+      <div class="expertise-column col-2">
+        <div class="expertise-image">
+          {% set outputFormats = [] %}
+          {% for format, i in settings.images %}
+            {% if i.enabled === true %}
+              {{ '' if outputFormats.push(format) }}
+            {% endif %}
+          {% endfor %}
+          {% set params = {
+            "src": "/assets/images/expertise-architects.jpg",
+            "alt": "Architects",
+            "loadingType": "lazy",
+            "viewportSizes": "25vw",
+            "outputWidths": [
+              settings.config.image_grid_width_sm,
+              settings.config.image_grid_width_md,
+              settings.config.image_grid_width_lg
+            ],
+            "outputFormats": outputFormats,
+            "outputQualityJpeg": settings.images.jpeg.quality,
+            "outputQualityWebp": settings.images.webp.quality,
+            "outputQualityAvif": settings.images.avif.quality
+          } %}
+          {% generateImage params %}
+        </div>
 
-  <section class="grid--body">
-    <div class="grid__item--span-4 markdown">
-      {{ statement | renderUsingMarkdown | safe }}
+        <div class="expertise-lead markdown">
+          As **ARCHITECTS**, we make architecture for the now, rooted in culture and context, driven by societal and planetary well-being.
+        </div>
+
+        <div class="expertise-body markdown">
+          At Low Design Office, we leverage low-cost materials, low-energy technologies, and low-carbon strategies to deliver inspiring and impactful environments.
+
+          By rethinking design and delivery methods, we lower barriers to access while raising the standard for efficiency in building construction. Our "more with less" approach transforms scarcity into innovation, making custom architecture more sustainable, equitable, and efficient than traditional approaches.
+        </div>
+      </div>
+
+      {# Builders Column #}
+      <div class="expertise-column col-3">
+        <div class="expertise-image">
+          {% set outputFormats = [] %}
+          {% for format, i in settings.images %}
+            {% if i.enabled === true %}
+              {{ '' if outputFormats.push(format) }}
+            {% endif %}
+          {% endfor %}
+          {% set params = {
+            "src": "/assets/images/expertise-builders.jpg",
+            "alt": "Builders",
+            "loadingType": "lazy",
+            "viewportSizes": "25vw",
+            "outputWidths": [
+              settings.config.image_grid_width_sm,
+              settings.config.image_grid_width_md,
+              settings.config.image_grid_width_lg
+            ],
+            "outputFormats": outputFormats,
+            "outputQualityJpeg": settings.images.jpeg.quality,
+            "outputQualityWebp": settings.images.webp.quality,
+            "outputQualityAvif": settings.images.avif.quality
+          } %}
+          {% generateImage params %}
+        </div>
+
+        <div class="expertise-lead markdown">
+          As **BUILDERS**, we bridge design and construction—often fabricating and building our own projects—to ensure transparency, affordability, and healthful outcomes.
+        </div>
+
+        <div class="expertise-body markdown">
+          Whether in the studio or on the jobsite, we treat all participants as collaborators, fostering open dialogue that transforms site-specific challenges into adaptable, efficient, and sustainable solutions that minimize stress on people and ecosystems alike. This hands-on, integrated process not only deepens our knowledge but also sets a foundation for innovation and trust in every project.
+        </div>
+      </div>
+
+      {# Systems-Thinkers Column #}
+      <div class="expertise-column col-4">
+        <div class="expertise-image">
+          {% set outputFormats = [] %}
+          {% for format, i in settings.images %}
+            {% if i.enabled === true %}
+              {{ '' if outputFormats.push(format) }}
+            {% endif %}
+          {% endfor %}
+          {% set params = {
+            "src": "/assets/images/expertise-systems-thinkers.jpg",
+            "alt": "Systems-Thinkers",
+            "loadingType": "lazy",
+            "viewportSizes": "25vw",
+            "outputWidths": [
+              settings.config.image_grid_width_sm,
+              settings.config.image_grid_width_md,
+              settings.config.image_grid_width_lg
+            ],
+            "outputFormats": outputFormats,
+            "outputQualityJpeg": settings.images.jpeg.quality,
+            "outputQualityWebp": settings.images.webp.quality,
+            "outputQualityAvif": settings.images.avif.quality
+          } %}
+          {% generateImage params %}
+        </div>
+
+        <div class="expertise-lead markdown">
+          As **SYSTEMS-THINKERS**, we develop systems that can evolve, be retooled, and reinvented to meet individual and collective challenges.
+        </div>
+
+        <div class="expertise-body markdown">
+          We are community-focused and systems-based, leading design for planetary and social equity. By leveraging the power of thinking small, we transform resource constraints into opportunities for innovation—using low-tech, low-carbon methods, and open-source designs to realize more with less. Through participatory processes, we strive for efficiency, affordability, and equity, incrementally improving places for people and planet.
+        </div>
+      </div>
+
     </div>
   </section>
 
