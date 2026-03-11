@@ -1567,7 +1567,7 @@ body::after {
 			"title  date"
 			"meta   meta";
 		gap: 0;
-		padding: var(--space-2) 0;
+		padding: 0;
 		align-items: baseline;
 	}
 
