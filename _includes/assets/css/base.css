@@ -841,7 +841,7 @@ main.p--content article {
   bottom: 0;
   /* Bottom border line (major/solid) */
   border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
-  z-index: 9999;
+  z-index: 998;
 }
 
 :root[dark] .project-header::before {
@@ -870,7 +870,7 @@ main.p--content article {
 header.p--content {
 	position: sticky;
 	top: 0;
-	z-index: 1000;
+	z-index: 999;
 	width: 100vw;
 	left: 0;
 	right: 0;
@@ -898,7 +898,7 @@ header.p--content::after {
 	width: 100vw;
 	bottom: 0;
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
-	z-index: 9999;
+	z-index: 998;
 }
 
 footer.p--content {
@@ -916,7 +916,7 @@ footer.p--content::before {
 	width: 100vw;
 	top: var(--content-margin);
 	border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
-	z-index: 9999;
+	z-index: 998;
 }
 
 /* Minor horizontal lines (dashed) - for section dividers within content */
@@ -935,7 +935,7 @@ article > section:not(:last-child)::after {
 	width: 100vw;
 	bottom: 0;
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
-	z-index: 9999;
+	z-index: 998;
 }
 
 /* Full-height vertical grid lines overlay (dashed)
