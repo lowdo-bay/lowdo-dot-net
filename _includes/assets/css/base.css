@@ -911,6 +911,13 @@ header.p--content::after {
 	z-index: 998;
 }
 
+@media (min-width: 600px) {
+	header.p--content::after {
+		bottom: auto;
+		top: 120px;
+	}
+}
+
 footer.p--content {
 	position: relative;
 	width: 100%;
