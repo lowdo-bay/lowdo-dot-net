@@ -1590,7 +1590,7 @@ body::after {
 		display: none;
 	}
 
-	.index-col--details {
+	.index-row .index-col--details {
 		display: none;
 	}
 
