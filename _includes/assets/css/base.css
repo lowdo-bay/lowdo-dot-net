@@ -884,7 +884,8 @@ header.p--content::before {
 	top: 0;
 	left: 0;
 	right: 0;
-	height: inherit;
+	bottom: auto;
+	height: 120px;
 	background-color: var(--color-background);
 	z-index: -1;
 }
