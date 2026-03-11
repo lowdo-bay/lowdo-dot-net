@@ -13,10 +13,29 @@ metadata:
   site_email: lowdo@lowdo.net
   # footer social link (the social title is defined in the i18n section)
   site_social_url: 'http://instagram.com/lowdesignoffice'
+  # footer navigation columns
+  footer_sitemap:
+    - label: Home
+      url: /
+    - label: Project Index
+      url: /all/
+    - label: About
+      url: /about/
+  footer_legal:
+    - label: Terms & Conditions
+      url: /terms/
+    - label: Privacy Policy
+      url: /privacy/
+  footer_socials:
+    - label: Instagram
+      url: 'http://instagram.com/lowdesignoffice'
   # SVG image used for sharing/bookmark icons
   site_icon_svg: ''
   # optional PNG image used for sharing/bookmark icons
   site_icon_png: assets/uploads/favicon.png
+  # footer logo images (light and dark mode)
+  site_logo_light: assets/uploads/favicon.png
+  site_logo_dark: assets/uploads/innovation star white.png
   # add a GA4 ID to enable Google Analytics e.g. G-123456789
   site_ga4_id: ''
   # home page SEO fields
