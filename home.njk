@@ -178,7 +178,7 @@ permalink: "/index.html"
   .tech-portfolio-section {
     position: relative;
     margin-top: var(--space-8);
-    padding-top: 0;
+    padding-top: 0 !important;
   }
 
   .tech-portfolio-section::before {
@@ -200,7 +200,7 @@ permalink: "/index.html"
     left: 50%;
     transform: translateX(-50%);
     width: 100vw;
-    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    border-bottom: var(--grid-line-thickness) solid var(--grid-line-color) !important;
     bottom: 0;
     z-index: 9999;
   }
@@ -234,7 +234,7 @@ permalink: "/index.html"
   .awards-section {
     position: relative;
     margin-top: var(--space-8);
-    padding-top: 0;
+    padding-top: 0 !important;
   }
 
   .awards-section::before {
@@ -253,9 +253,10 @@ permalink: "/index.html"
     left: 50%;
     transform: translateX(-50%);
     width: 100vw;
-    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    border-bottom: var(--grid-line-thickness) solid var(--grid-line-color) !important;
     bottom: 0;
   }
+
 
   .awards-section .grid {
     row-gap: 0;
@@ -302,6 +303,173 @@ permalink: "/index.html"
     font-size: var(--font-size-base);
     padding: var(--space-2);
     border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  /* Featured Projects section */
+  .featured-projects-section {
+    margin-top: var(--space-6);
+  }
+
+  .featured-projects-section .project-section-header {
+    position: relative;
+    padding-bottom: 0;
+  }
+
+  .featured-projects-section .project-section-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .featured-projects-section .project-section-header-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 840px) {
+    .featured-projects-section .project-section-header-inner {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .featured-projects-section .project-section-header-cell {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .featured-projects-section .project-related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 840px) {
+    .featured-projects-section .project-related-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .featured-projects-section .project-related-cell {
+    padding: var(--space-2);
+    position: relative;
+  }
+
+  .featured-projects-section .project-related-cell:nth-child(2n)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  @media (min-width: 840px) {
+    .featured-projects-section .project-related-cell:nth-child(2n)::after { display: none; }
+    .featured-projects-section .project-related-cell:nth-child(4n)::after { display: block; }
+  }
+
+  .featured-projects-section .related-thumb {
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+  }
+
+  .featured-projects-section .related-thumb picture,
+  .featured-projects-section .related-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .featured-projects-section .project-related-title {
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-1);
+  }
+
+  .featured-projects-section .project-related-desc {
+    font-size: var(--font-size-small);
+    opacity: 0.7;
+  }
+
+  /* Contact Section */
+  .contact-section {
+    position: relative;
+    margin-top: calc(var(--space-8) - var(--space)) !important;
+  }
+
+  .contact-section::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    top: 0;
+  }
+
+  .contact-section::after {
+    content: '' !important;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    bottom: 0;
+  }
+
+  .contact-image-col {
+    grid-row: 1 / span 999;
+  }
+
+  .contact-image-col img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .contact-heading {
+    grid-row: 1 / span 999;
+    padding: var(--space-2);
+    font-weight: bold;
+    color: var(--color-accent-1);
+    text-transform: uppercase;
+    align-self: start;
+  }
+
+  .contact-row {
+    padding: var(--space-2);
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    text-transform: uppercase;
+  }
+
+  .contact-row:first-of-type {
+    border-top: none;
+  }
+
+  .contact-row.col-3 {
+    color: var(--color-accent-3);
+  }
+
+  .contact-row.col-4 {
+    color: var(--color-accent-1);
+  }
+
+  .contact-row a {
+    color: inherit;
   }
 </style>
 
@@ -507,7 +675,7 @@ permalink: "/index.html"
       {# Col 1: Heading, blurb, see more #}
       <div class="col-1" style="grid-row: 1 / span 999; padding: var(--space-2);">
         <div class="awards-heading">AWARDS &amp; RECOGNITION</div>
-        <div class="awards-blurb">Recognition of our work by peers and the broader architectural community.</div>
+        <div class="awards-blurb">With our commitment to building societal equity through design, LowDO has been internationally recognized as an emerging leader in our profession.</div>
         <a href="/all/?type=award" class="awards-see-more">see more...</a>
       </div>
 
@@ -524,6 +692,106 @@ permalink: "/index.html"
           <div class="awards-col-cell col-4">{{ entry.data.date | dateFullYear }}</div>
         {% endif %}
       {% endfor %}
+
+    </div>
+  </section>
+
+  {# Featured Projects Section #}
+  {% set featuredProjects = [] %}
+  {% for project in collections.projects %}
+    {% if project.data.featured === true %}
+      {{ '' if featuredProjects.push(project) }}
+    {% endif %}
+  {% endfor %}
+
+  {% if featuredProjects | length %}
+    <section class="featured-projects-section pb--6">
+
+      <div class="project-section-header">
+        <div class="project-section-header-inner">
+          <div class="project-section-header-cell">Featured Projects</div>
+        </div>
+      </div>
+
+      {% set outputFormats = [] %}
+      {% for format, i in settings.images %}
+        {% if i.enabled === true %}
+          {{ '' if outputFormats.push(format) }}
+        {% endif %}
+      {% endfor %}
+
+      <div class="project-related-grid">
+        {% for project in featuredProjects %}
+          <div class="project-related-cell">
+            <a href="{{ project.url | url }}" class="link-nostyle">
+              <div class="related-thumb">
+                {% if project.data.headerImage %}
+                  {% set params = {
+                    "src": project.data.headerImage.src,
+                    "alt": project.data.headerImage.alt or project.data.title,
+                    "loadingType": "lazy",
+                    "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 840px) 25vw, 45vw",
+                    "outputWidths": [
+                      settings.config.image_grid_width_sm,
+                      settings.config.image_grid_width_md,
+                      settings.config.image_grid_width_lg
+                    ],
+                    "outputFormats": outputFormats,
+                    "outputQualityJpeg": settings.images.jpeg.quality,
+                    "outputQualityWebp": settings.images.webp.quality,
+                    "outputQualityAvif": settings.images.avif.quality
+                  } %}
+                  {% generateImage params %}
+                {% endif %}
+              </div>
+              <div class="project-related-title">{{ project.data.title }}</div>
+              {% if project.data.description %}
+                <div class="project-related-desc">{{ project.data.description }}</div>
+              {% endif %}
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+
+    </section>
+  {% endif %}
+
+  {# Contact Section #}
+  <section class="contact-section">
+    <div class="grid grid--description">
+
+      {# Col 1: Image 3:4 ratio #}
+      <div class="col-1 contact-image-col">
+        <img src="/assets/images/get-in-touch.jpg" alt="Get in touch with LowDO" loading="lazy">
+      </div>
+
+      {# Col 2: Heading #}
+      <div class="col-2 contact-heading">GET IN TOUCH</div>
+
+      {# Cols 3–4: Contact rows #}
+      {# Row 1: Email #}
+      <div class="col-3 contact-row">Email</div>
+      <div class="col-4 contact-row"><a href="mailto:{{ settings.metadata.site_email }}">{{ settings.metadata.site_email }}</a></div>
+
+      {# Row 3: Phone #}
+      <div class="col-3 contact-row">Phone</div>
+      <div class="col-4 contact-row">(512) 555-0000</div>
+
+      {# Row 4: Address #}
+      <div class="col-3 contact-row">Address</div>
+      <div class="col-4 contact-row">Austin, Texas</div>
+
+      {# Row 5: Instagram #}
+      <div class="col-3 contact-row">Instagram</div>
+      <div class="col-4 contact-row"><a href="{{ settings.metadata.site_social_url }}" target="_blank" rel="noopener">@lowdesignoffice</a></div>
+
+      {# Row 6: X #}
+      <div class="col-3 contact-row">X</div>
+      <div class="col-4 contact-row"><a href="https://x.com/lowdesignoffice" target="_blank" rel="noopener">@lowdesignoffice</a></div>
+
+      {# Row 7: Facebook #}
+      <div class="col-3 contact-row">Facebook</div>
+      <div class="col-4 contact-row"><a href="https://facebook.com/lowdesignoffice" target="_blank" rel="noopener">/lowdesignoffice</a></div>
 
     </div>
   </section>
