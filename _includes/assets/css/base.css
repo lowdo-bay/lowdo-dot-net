@@ -558,6 +558,7 @@ img {
 		left: auto;
 		right: var(--content-margin);
 		width: calc(var(--content-width) / 4);
+		top: 120px;
 	}
 
 	.header-menu__drawer .header-menu__item {
