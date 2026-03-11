@@ -1,16 +1,16 @@
 <footer class="p--content text--small">
-	<div class="grid grid--footer">
 
-		{# Row 1: Section labels (above divider) #}
-		<div class="grid__item footer__col-2 footer__section-label">Sitemap</div>
-		<div class="grid__item footer__col-3 footer__section-label">Legal</div>
-		<div class="grid__item footer__col-4 footer__section-label">Socials</div>
+	{# Row 1: Section labels #}
+	<div class="grid grid--footer footer__labels">
+		<div class="col-2 footer__section-label">Sitemap</div>
+		<div class="col-3 footer__section-label">Legal</div>
+		<div class="col-4 footer__section-label">Socials</div>
+	</div>
 
-		{# Divider line spanning all 4 columns #}
-		<div class="footer__divider"></div>
+	{# Row 2: Logo + nav links #}
+	<div class="grid grid--footer footer__content">
 
-		{# Row 3: Logo + nav links #}
-		<div class="grid__item footer__col-1">
+		<div class="col-1">
 			<a href="{{ '/' | url }}" class="footer__logo link-nostyle" aria-label="{{ settings.metadata.site_title }}">
 				{% if settings.metadata.site_logo_light %}
 					<img src="/{{ settings.metadata.site_logo_light }}" alt="{{ settings.metadata.site_title }} logo" class="footer__logo-light">
@@ -22,7 +22,7 @@
 		</div>
 
 		{% if settings.metadata.footer_sitemap %}
-			<nav class="grid__item footer__col-2 footer__nav" aria-label="Sitemap">
+			<nav class="col-2 footer__nav" aria-label="Sitemap">
 				{% for item in settings.metadata.footer_sitemap %}
 					<a href="{{ item.url | url }}" class="footer__nav-link">{{ item.label }}</a>
 				{% endfor %}
@@ -30,7 +30,7 @@
 		{% endif %}
 
 		{% if settings.metadata.footer_legal %}
-			<nav class="grid__item footer__col-3 footer__nav" aria-label="Legal">
+			<nav class="col-3 footer__nav" aria-label="Legal">
 				{% for item in settings.metadata.footer_legal %}
 					<a href="{{ item.url | url }}" class="footer__nav-link">{{ item.label }}</a>
 				{% endfor %}
@@ -38,7 +38,7 @@
 		{% endif %}
 
 		{% if settings.metadata.footer_socials %}
-			<nav class="grid__item footer__col-4 footer__nav" aria-label="Socials">
+			<nav class="col-4 footer__nav" aria-label="Socials">
 				{% for item in settings.metadata.footer_socials %}
 					<a href="{{ item.url }}" class="footer__nav-link" target="_blank" rel="noopener">{{ item.label }}</a>
 				{% endfor %}
@@ -46,4 +46,5 @@
 		{% endif %}
 
 	</div>
+
 </footer>
