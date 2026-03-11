@@ -31,7 +31,7 @@
 			<span class="grid__item header-subtitle--desktop">{{ settings.metadata.site_subtitle_2 }}</span>
 		{% endif %}
 
-		{# Column 4: Menu (right-aligned) #}
+		{# Column 4: Menu button (right-aligned) #}
 		<div class="grid__item grid__item--end grid__item--top">
 			<div class="header-menu">
 				<button class="header-menu__button" aria-expanded="false" aria-label="Menu">
@@ -41,26 +41,28 @@
 						<line x1="0" y1="13" x2="20" y2="13" stroke="currentColor" stroke-width="2"/>
 					</svg>
 				</button>
-				<nav class="header-menu__dropdown" aria-label="Main navigation">
-					<a href="{{ '/all/' | url }}" class="header-menu__item">Index</a>
-					<a href="{{ '/projects/' | url }}" class="header-menu__item">Projects</a>
-					<a href="{{ '/about/' | url }}" class="header-menu__item">About</a>
-					{% if settings.theme.theme_features.enable_dark_mode %}
-						<div class="header-menu__item dark-toggle">
-							<label for="toggle" class="toggle__label">
-								<svg width="14" height="14" viewBox="0 0 16 16">
-									<circle pid="0" cx="8" cy="8" r="7.5" fill="var(--color-text)" stroke="var(--color-text)"></circle>
-									<path pid="1" d="M1 8a7 7 0 007 7V1a7 7 0 00-7 7z" fill="var(--color-background)"></path>
-								</svg>
-								<span class="toggle__text">Dark Mode</span>
-								<input type="checkbox" name="toggle" id="toggle" class="toggle__checkbox">
-							</label>
-						</div>
-					{% endif %}
-				</nav>
 			</div>
 		</div>
 
 	</div>
+
+	{# Menu Drawer: expands in-flow below header grid #}
+	<nav class="header-menu__drawer" aria-label="Main navigation" aria-hidden="true">
+		<a href="{{ '/all/' | url }}" class="header-menu__item">Index</a>
+		<a href="{{ '/projects/' | url }}" class="header-menu__item">Projects</a>
+		<a href="{{ '/about/' | url }}" class="header-menu__item">About</a>
+		{% if settings.theme.theme_features.enable_dark_mode %}
+			<div class="header-menu__item dark-toggle">
+				<label for="toggle" class="toggle__label">
+					<svg width="14" height="14" viewBox="0 0 16 16">
+						<circle pid="0" cx="8" cy="8" r="7.5" fill="var(--color-text)" stroke="var(--color-text)"></circle>
+						<path pid="1" d="M1 8a7 7 0 007 7V1a7 7 0 00-7 7z" fill="var(--color-background)"></path>
+					</svg>
+					<span class="toggle__text">Dark Mode</span>
+					<input type="checkbox" name="toggle" id="toggle" class="toggle__checkbox">
+				</label>
+			</div>
+		{% endif %}
+	</nav>
 
 </header>
