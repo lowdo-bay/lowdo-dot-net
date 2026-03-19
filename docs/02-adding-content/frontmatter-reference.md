@@ -189,6 +189,51 @@ collaborators:
 - List primary collaborators first
 - Be specific with roles
 
+### location
+
+**What it does:** Geographic location of the project.
+
+**Format:** Text in quotes
+
+**Example:**
+```yaml
+location: "Austin, TX, USA"
+```
+
+**Tips:**
+- Be specific: city, state, country
+- Optional but helpful for context
+
+### status
+
+**What it does:** Current status of the project (Built, In Progress, Proposed, etc.).
+
+**Format:** Text in quotes
+
+**Example:**
+```yaml
+status: "Built"
+```
+
+**Tips:**
+- Use consistent values: "Built", "In Progress", "Proposed", "Concept"
+- Helps visitors understand project phase
+
+### featured
+
+**What it does:** Highlight projects or awards for special display.
+
+**Format:** `true` or `false` (no quotes)
+
+**Example:**
+```yaml
+featured: true
+```
+
+**Tips:**
+- `featured: true` may be used by the site for special display areas
+- `featured: false` (default) means normal display
+
 ### description (Projects)
 
 **What it does:** Short project summary.
