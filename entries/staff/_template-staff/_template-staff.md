@@ -8,6 +8,8 @@ categories:
   - STAFF
   - NEWS
 link: ""
+relatedProjects:    # Optional: link this staff update to one or more projects
+  - ""              # Use the project folder name (slug), e.g. "wolf-creek-ranch"
 position: 1
 ---
 
@@ -21,6 +23,25 @@ You can include:
 - Projects they'll work on
 - Welcome message or announcement
 - Contact information
+
+---
+
+## Link to a Project
+
+To show this staff update on one or more project pages, list each project's folder name under `relatedProjects`:
+
+```yaml
+# One project:
+relatedProjects:
+  - wolf-creek-ranch
+
+# Multiple projects:
+relatedProjects:
+  - wolf-creek-ranch
+  - river-house
+```
+
+The staff update will appear in the "Awards & Recognition" section of each listed project page.
 
 ---
 

@@ -7,6 +7,8 @@ date: 2024-01-15
 categories:
   - EDUCATION
 link: "https://example.com/event-page"
+relatedProjects:    # Optional: link this lecture to one or more projects
+  - ""              # Use the project folder name (slug), e.g. "garden-st-residence"
 position: 1
 ---
 
@@ -20,6 +22,25 @@ You can include:
 - Audience or context
 - Related projects or research
 - Video or recording links
+
+---
+
+## Link to a Project
+
+To show this lecture on one or more project pages, list each project's folder name under `relatedProjects`:
+
+```yaml
+# One project:
+relatedProjects:
+  - garden-st-residence
+
+# Multiple projects:
+relatedProjects:
+  - garden-st-residence
+  - wolf-creek-ranch
+```
+
+The lecture will appear in the "Awards & Recognition" section of each listed project page.
 
 ---
 

@@ -279,6 +279,43 @@ Keep it concise (1-2 sentences).
 
 Updates don't have a `collaborators:` field. That's only for projects.
 
+### The `relatedProjects` Field
+
+You can link an award, feature, news, lecture, exhibition, or staff update to one or more projects. Each linked project will show the entry in its "Awards & Recognition" section.
+
+```yaml
+relatedProjects:
+  - wolf-creek-ranch
+```
+
+Use the **project folder name** (the slug) for each entry. For example:
+```yaml
+relatedProjects:
+  - casa-marianella
+  - river-house
+  - garden-st-residence
+```
+
+**Example:** An award linked to multiple projects
+
+```yaml
+---
+draft: false
+title: "Design Excellence Award"
+subtitle: "American Institute of Architects"
+date: 2024-05-15
+categories:
+  - AWARD
+relatedProjects:
+  - wolf-creek-ranch
+  - casa-marianella
+link: "https://example.com"
+description: "Recognized for exceptional design and sustainability"
+---
+```
+
+The award will appear in the "Awards & Recognition" section of both project pages.
+
 ---
 
 ## When to Use Which Type

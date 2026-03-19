@@ -207,19 +207,27 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   });
 
   // Group entries by project for Awards & Recognition display
+  // Supports both relatedProject (single string) and relatedProjects (array of strings)
   eleventyConfig.addCollection("entriesByProject", function(collectionApi) {
     const entries = collectionApi.getFilteredByGlob("entries/**/*.md")
       .filter(entry => entry.data.draft !== true)
-      .filter(entry => entry.data.relatedProject); // Only entries with relatedProject field
+      .filter(entry => entry.data.relatedProject || entry.data.relatedProjects);
 
     const entriesByProject = {};
 
     entries.forEach(entry => {
-      const projectSlug = entry.data.relatedProject;
-      if (!entriesByProject[projectSlug]) {
-        entriesByProject[projectSlug] = [];
+      const slugs = [];
+      if (entry.data.relatedProjects && Array.isArray(entry.data.relatedProjects)) {
+        slugs.push(...entry.data.relatedProjects);
+      } else if (entry.data.relatedProject) {
+        slugs.push(entry.data.relatedProject);
       }
-      entriesByProject[projectSlug].push(entry);
+      slugs.forEach(slug => {
+        if (!entriesByProject[slug]) {
+          entriesByProject[slug] = [];
+        }
+        entriesByProject[slug].push(entry);
+      });
     });
 
     return entriesByProject;
@@ -358,9 +366,9 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   // Copy assets folder to output
   eleventyConfig.addPassthroughCopy("assets");
 
-  // Disable 11ty dev server live reload when using CMS locally
+  // Enable live reload for dev server
   eleventyConfig.setServerOptions({
-    liveReload: false
+    liveReload: true
   });
 
   return {

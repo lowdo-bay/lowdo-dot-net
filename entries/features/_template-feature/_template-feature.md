@@ -8,6 +8,8 @@ categories:
   - PRESS
   - PUBLICATION
 link: "https://example.com/article-url"
+relatedProjects:    # Optional: link this feature to one or more projects
+  - ""              # Use the project folder name (slug), e.g. "casa-marianella"
 position: 1
 ---
 
@@ -20,6 +22,25 @@ You can include:
 - Key quotes or highlights
 - Projects or work that was featured
 - Impact or significance
+
+---
+
+## Link to a Project
+
+To show this feature on one or more project pages, list each project's folder name under `relatedProjects`:
+
+```yaml
+# One project:
+relatedProjects:
+  - casa-marianella
+
+# Multiple projects:
+relatedProjects:
+  - casa-marianella
+  - river-house
+```
+
+The feature will appear in the "Awards & Recognition" section of each listed project page.
 
 ---
 

@@ -7,6 +7,8 @@ date: 2024-01-15
 categories:
   - ART
 link: "https://example.com/exhibition-page"
+relatedProjects:    # Optional: link this exhibition to one or more projects
+  - ""              # Use the project folder name (slug), e.g. "mishpocha-woods"
 position: 1
 ---
 
@@ -21,6 +23,25 @@ You can include:
 - Duration and dates
 - Curator or organizer details
 - Reception or opening details
+
+---
+
+## Link to a Project
+
+To show this exhibition on one or more project pages, list each project's folder name under `relatedProjects`:
+
+```yaml
+# One project:
+relatedProjects:
+  - mishpocha-woods
+
+# Multiple projects:
+relatedProjects:
+  - mishpocha-woods
+  - casa-marianella
+```
+
+The exhibition will appear in the "Awards & Recognition" section of each listed project page.
 
 ---
 

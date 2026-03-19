@@ -294,6 +294,58 @@ description: "LowDO selected for the prestigious Emerging Voices program recogni
 - Concise and informative
 - Appears in the index, not on a detail page (updates don't have detail pages)
 
+### relatedProjects
+
+**What it does:** Links an award, feature, news, or other entry to one or more projects. The entry will appear in the "Awards & Recognition" section on each linked project page.
+
+**Format:** List of project folder slugs (no quotes needed on list items)
+
+**Example — one project:**
+```yaml
+relatedProjects:
+  - wolf-creek-ranch
+```
+
+**Example — multiple projects:**
+```yaml
+relatedProjects:
+  - wolf-creek-ranch
+  - casa-marianella
+  - river-house
+```
+
+**When to use:**
+- Linking awards to the projects they recognize
+- Connecting press features to related projects
+- Showing lectures or exhibitions related to specific projects
+- Any time you want an entry to appear in a project's "Awards & Recognition" section
+
+**Tips:**
+- Use the **folder name** of the project (the slug in the URL, e.g. `/project/wolf-creek-ranch/` → `wolf-creek-ranch`)
+- Only works for entries in `entries/awards/`, `entries/features/`, `entries/news/`, `entries/lectures/`, `entries/exhibitions/`, and `entries/staff/`
+- The entry will display on each project page with its title, categories, and date
+- If the entry has a `link` field, the title will be clickable
+
+**Example: Linking an award to multiple projects**
+
+In `entries/awards/design-excellence/design-excellence.md`:
+```yaml
+---
+draft: false
+title: "Design Excellence Award"
+subtitle: "American Institute of Architects"
+date: 2024-05-15
+categories:
+  - AWARD
+relatedProjects:
+  - wolf-creek-ranch
+  - casa-marianella
+link: "https://example.com"
+---
+```
+
+The award will appear in the "Awards & Recognition" section of both `/project/wolf-creek-ranch/` and `/project/casa-marianella/`.
+
 ---
 
 ## Field Type Guide

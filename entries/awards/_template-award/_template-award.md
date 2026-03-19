@@ -7,6 +7,8 @@ date: 2024-01-15
 categories:
   - PRESS
 link: "https://example.com/award-announcement"
+relatedProjects:    # Optional: link this award to one or more projects
+  - ""              # Use the project folder name (slug), e.g. "wolf-creek-ranch"
 position: 1
 featured: false
 ---
@@ -20,6 +22,25 @@ You can include:
 - Selection criteria
 - Context or background
 - Related projects or work
+
+---
+
+## Link to a Project
+
+To show this award on one or more project pages, list each project's folder name under `relatedProjects`:
+
+```yaml
+# One project:
+relatedProjects:
+  - wolf-creek-ranch
+
+# Multiple projects:
+relatedProjects:
+  - wolf-creek-ranch
+  - casa-marianella
+```
+
+The award will appear in the "Awards & Recognition" section of each listed project page.
 
 ---
 
