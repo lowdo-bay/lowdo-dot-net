@@ -1,37 +1,29 @@
 ---
 draft: false
 title: Casa Marianella
-subtitle: Sustainable retreat harmonizing nature and landscape
-description: >
-  Sustainable retreat harmonizing nature and landscape.
+subtitle: "New communal home and landscape for a women and childrens' campus"
 year: 2026
-date: 2026-01-08T12:28:51.623Z
+date: 2023-08-14T12:28:51.623Z
 categories:
   - HOUSING
   - RESIDENTIAL
   - SUSTAINABLE
+location: "Austin, TX"  # e.g., "Austin, TX"
+status: "Under Construction"    # e.g., "Built", "In Progress"
 collaborators:
-  - name: "Persyn Engineering"
+  - name: "Fort"
     role: "Structural"
-  - name: "Local Contractors Inc"
-    role: "General Contractor"
-position: 1
+  - name: "Forge"
+    role: "Landscape"
+  - name: "Emily Eisenhart"
+    role: "Mural"
+position: 
 ---
 
-The Wolf Creek Ranch weaves through rolling hills and limestone rock outcrops adjacent to Lake Buchanan, providing stunning views, ample sun, and a prevalent breeze. The owners wanted to embrace and respond to these natural characteristics while also prioritizing an economy of means. The design became another iteration of resource conscious, performance-driven strategies that pro-actively respond to the landscape and create a welcoming environment for all generations who might use the house.
+LowDO and FORGE Landscape Architecture have designed a new community dwelling, garden, and playscape for Casa Marianella. Casa is a non-profit that provides essential shelter and support for immigrants and refugees, and the project will create shared spaces for their Posada campus, which exclusively serves women and children who have traveled to Austin from myriad countries across the Americas and Africa. Casa promotes self-sufficiency by offering these women and their families a temporary home and supportive services to place children in school, find jobs, complete paperwork, and adjust to living in a new culture after often-traumatic journeys.
 
-The house floats on a steel pier and beam foundation in order to minimize disturbance to the landscape. Its orientation is optimized to capture the summer breeze, mitigate sun, and frame the amazing views into the hills, valleys and trees. The “entry foyer” is an exterior potting room that serves as an intermediary between outside and inside. This unexpected approach reorients and prepares everyone for an immersive interior/exterior living experience as they step up onto the platform and see the land fall away below.
+LowDO has worked inclusively with Casa staff and residents to design the new building, beginning with a series of on-site engagement workshops in which visual cards and translators helped facilitate conversations between the design team and residents about their experiences and priorities. This participatory process has informed the development of all aspects of the design.
 
-An exterior courtyard cuts through the house to bring light and airflow to its center. A rainwater collection tank serves all water needs, and the roof was designed for a solar array so that the house can operate completely off the grid if desired.
+The project has taken shape as a structure and landscape that center much-needed shared gathering space. Modest bedrooms upstairs will increase capacity at Posada, while an adaptable “great room” below will connect directly to an outdoor covered porch and landscape, maximizing opportunities for gathering and connecting while providing flexible areas for services and tutoring. FORGE has designed the landscape to include a central community agroforestry garden that includes edible and medicinal plants identified by current residents as culturally desirable. Adjacent to the garden is a nature-based playscape that encourages creativity and exploration for children.
 
-Primitive, easy-to-build forms create layered experiences of negative space, offering multiple readings of the space and landscape beyond.
-
-Through a design/build process, we maximized design innovation even as the building process unfolded, ensuring that construction stayed true to low-impact ideals, while exchanging knowledge with the various experts and tradespeople involved in the construction ecosystem. Good buildings emerge from good processes that are inclusive. A rainwater collection tanks serves all water needs.
-
-TimberTown, who supplied the decking and siding for the project, generously shared the video.
-
-2024 [design and construction by LowDO]
-
-Persyn Engineering (Structural)
-
-Photos by Daisuke Hirabayashi
+Throughout, the design weaves multi-cultural sensibilities through spaces and materials, aiming to create a cost-effective building that over time will represent “home” for diverse groups of women and children. Large shady overhangs, semi-conditioned spaces, and climate-resilient plantings all contribute to the economic, social, and environmental sustainability of the project.
