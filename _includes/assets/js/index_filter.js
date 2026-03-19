@@ -75,16 +75,20 @@
   var categoryContainer = filterControls.querySelector('[data-category-filters]');
   var categoriesVisible = false;
 
+  function toggleCategories() {
+    categoriesVisible = !categoriesVisible;
+    if (categoriesVisible) {
+      categoryContainer.classList.add('is-visible');
+      if (toggleButton) toggleButton.textContent = 'show less...';
+    } else {
+      categoryContainer.classList.remove('is-visible');
+      if (toggleButton) toggleButton.textContent = 'show more...';
+    }
+  }
+
   if (toggleButton && categoryContainer) {
     toggleButton.addEventListener('click', function() {
-      categoriesVisible = !categoriesVisible;
-      if (categoriesVisible) {
-        categoryContainer.style.display = 'flex';
-        toggleButton.textContent = 'show less...';
-      } else {
-        categoryContainer.style.display = 'none';
-        toggleButton.textContent = 'show more...';
-      }
+      toggleCategories();
     });
   }
 
@@ -106,9 +110,9 @@
       allCheckbox.checked = false;
       targetCheckbox.checked = true;
       // Auto-expand category filters if a category is pre-selected
-      if (toggleButton && categoryContainer) {
-        categoryContainer.style.display = 'flex';
-        toggleButton.textContent = 'show less...';
+      if (categoryContainer) {
+        categoryContainer.classList.add('is-visible');
+        if (toggleButton) toggleButton.textContent = 'show less...';
         categoriesVisible = true;
       }
       updateVisibility();

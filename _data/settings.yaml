@@ -19,8 +19,6 @@ metadata:
       url: /
     - label: Project Index
       url: /all/
-    - label: About
-      url: /about/
   footer_legal:
     - label: Terms & Conditions
       url: /terms/
@@ -29,6 +27,10 @@ metadata:
   footer_socials:
     - label: Instagram
       url: 'http://instagram.com/lowdesignoffice'
+    - label: Facebook
+      url: 'https://www.facebook.com/lowdesignoffice'
+    - label: X
+      url: 'https://x.com/lowdesignoffice'
   # SVG image used for sharing/bookmark icons
   site_icon_svg: ''
   # optional PNG image used for sharing/bookmark icons
