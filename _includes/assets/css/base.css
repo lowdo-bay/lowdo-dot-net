@@ -448,19 +448,35 @@ img {
 	.footer__section-label {
 		font-weight: 700;
 		text-transform: uppercase;
-		padding: var(--space-3) var(--space-2) var(--space-2);
+		padding: var(--space-2) var(--space-2) var(--space-2);
 	}
 
 	.footer__divider {
 		border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
 	}
 
-	.footer__content > * {
-		padding: var(--space-3) var(--space-2);
+	.footer__body {
+		display: flex;
+		align-items: flex-start;
 	}
 
-	.footer__content > .col-1 {
-		padding-top: var(--space-2);
+	.footer__logo-column {
+		flex: 0 0 25%;
+		padding: var(--space-2);
+	}
+
+	.footer__table {
+		flex: 1;
+	}
+
+	.footer__row {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.footer__column {
+		display: flex;
+		flex-direction: column;
 	}
 
 	/* Footer logo */
@@ -491,6 +507,7 @@ img {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2);
+		padding: 0 var(--space-2);
 	}
 
 	.footer__nav-link {
@@ -641,41 +658,32 @@ img {
 	}
 
 	/* Mobile footer layout */
-	.footer__labels {
-		display: none;
+	.footer__body {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto auto;
 	}
 
-	.footer__content {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-3);
-	}
-
-	.footer__content > * {
+	.footer__logo-column {
+		grid-row: 2;
 		padding: var(--space-2);
 	}
 
-	.footer__nav-label {
-		display: block;
-		font-weight: 700;
-		text-transform: uppercase;
-		margin-bottom: var(--space-1);
+	.footer__logo-column .footer__logo img {
+		width: 40px;
 	}
 
-	.footer__nav {
-		flex-direction: row;
-		flex-wrap: wrap;
-		gap: var(--space-1) var(--space-2);
+	.footer__table {
+		grid-row: 1;
 	}
 
-	.footer__content > .col-1 {
-		display: flex;
-		justify-content: center;
-		padding-top: var(--space-4);
+	.footer__row {
+		grid-template-columns: 1fr;
+		gap: var(--space-3);
 	}
 
-	.footer__content > .col-1 .footer__logo img {
-		width: 20px;
+	.footer__column {
+		padding: var(--space-2);
 	}
 }
 
@@ -922,7 +930,7 @@ header.p--content::after {
 footer.p--content {
 	position: relative;
 	width: 100%;
-	padding-top: calc(var(--content-margin) + var(--space-3));
+	padding-top: calc(var(--content-margin) + var(--space-1));
 	text-transform: uppercase;
 }
 
