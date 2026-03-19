@@ -110,6 +110,24 @@ Add as many sections as you need to tell the project story.
 
 See [Frontmatter Reference](frontmatter-reference.md) for details on all available fields.
 
+**Awards & Recognition:** Projects automatically display awards, features, press coverage, and other recognitions that are linked to them. To link an award or news item to this project, see [Adding News & Awards](adding-news-awards.md) and use the `relatedProject` field.
+
+### Image File Naming Conventions
+
+When you add images to your project, use these naming conventions:
+
+| Prefix | Example | Purpose |
+|--------|---------|---------|
+| `header.jpg` | `header.jpg` | Main thumbnail shown in index + top of project page |
+| `00_`, `01_`, etc. | `00_Exterior view.jpg` | Gallery photos (numbered for sort order) |
+| `drawing-` | `drawing-plan_1.jpg` | Floor plans and architectural drawings |
+| `toolkit-` | `toolkit-framing-plan.dwg` | Reference files (CAD, PDF, DWG, etc.) |
+
+**Numbering tip:** Use zero-padded numbers to control order:
+- `00_name.jpg` ← Appears first
+- `01_name.jpg` ← Appears second
+- `02_name.jpg` ← Appears third
+
 ### Step 4: Commit the File
 
 1. Scroll down to "Commit changes"
@@ -256,6 +274,8 @@ Add as many sections as you need to tell the project story.
 **The section between `---` lines is called "frontmatter"** - it contains metadata about your project.
 
 See [Frontmatter Reference](frontmatter-reference.md) for details on all available fields.
+
+**Awards & Recognition:** Projects automatically display awards, features, press coverage, and other recognitions that are linked to them. To link an award or news item to this project, see [Adding News & Awards](adding-news-awards.md) and use the `relatedProject` field.
 
 ---
 

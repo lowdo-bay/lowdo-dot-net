@@ -1,18 +1,19 @@
 # Template Project
 
-This is a template folder you can duplicate to create new projects.
+Duplicate this folder to create a new project. See the `.md` file for detailed instructions.
 
-## How to Use
+## File Naming Conventions
 
-1. **Duplicate this entire folder**
-2. **Rename the folder** to your project name (lowercase, use hyphens)
-3. **Rename the `.md` file** to match the folder name
-4. **Add your images:**
-   - `header.jpg` - Main thumbnail (required)
-   - `01-description.jpg`, `02-description.jpg`, etc. - Gallery images (optional)
-5. **Edit the frontmatter** in the `.md` file
-6. **Change `draft: true` to `draft: false`** when ready to publish
+| Prefix | Example | Purpose |
+|--------|---------|---------|
+| `header.jpg` | `header.jpg` | Main thumbnail for index |
+| `00_`, `01_`, etc. | `00_Exterior view.jpg` | Gallery photos (numbered) |
+| `drawing-` | `drawing-plan_1.jpg` | Floor plans, technical drawings |
+| `toolkit-` | `toolkit-framing-plan.dwg` | Reference files (CAD, PDF, DWG) |
 
-## Need Help?
+**Numbering:** Use underscores and zero-padded numbers to control sort order:
+- `00_name.jpg` ← First
+- `01_name.jpg` ← Second
+- `02_name.jpg` ← Third
 
-See the [Adding a Project guide](../../docs/02-adding-content/adding-a-project.md)
+See [Image Guide](../../docs/02-adding-content/images.md) for more help.

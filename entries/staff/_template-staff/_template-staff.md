@@ -5,8 +5,11 @@ subtitle: "New Role or Update Type"
 description: "Brief description of the update"
 date: 2024-01-15
 categories:
-  - TEAM
+  - STAFF
+  - NEWS
 link: ""
+relatedProjects:    # Optional: link this staff update to one or more projects
+  - ""              # Use the project folder name (slug), e.g. "wolf-creek-ranch"
 position: 1
 ---
 
@@ -23,17 +26,32 @@ You can include:
 
 ---
 
-## Instructions for Using This Template
+## Link to a Project
 
-1. **Duplicate this folder:** Copy the entire `_template-staff` folder
-2. **Rename the folder:** Use lowercase and hyphens (e.g., `jane-doe-joins`)
-3. **Rename the .md file:** Must match the folder name (e.g., `jane-doe-joins.md`)
-4. **Add thumbnail (optional):** Add `thumb.jpg` or `header.jpg` (headshot, team photo, etc.)
-5. **Edit frontmatter:** Update all fields between the `---` lines
-   - Remove the `link:` field or leave it empty if not needed
-   - Adjust categories (STAFF, TEAM, HIRE, PROMOTION, DEPARTURE, etc.)
-6. **Set draft to false:** Change `draft: true` to `draft: false` when ready to publish
-7. **Write content:** Replace this template text with staff update details
-8. **Delete this section:** Remove these instructions before publishing
+To show this staff update on one or more project pages, list each project's folder name under `relatedProjects`:
 
-Need help? See the [Adding News/Awards guide](../../docs/02-adding-content/adding-news-awards.md)
+```yaml
+# One project:
+relatedProjects:
+  - wolf-creek-ranch
+
+# Multiple projects:
+relatedProjects:
+  - wolf-creek-ranch
+  - river-house
+```
+
+The staff update will appear in the "Awards & Recognition" section of each listed project page.
+
+---
+
+## How to Use This Template
+
+1. Duplicate this entire folder
+2. Rename folder and `.md` file (e.g., `jane-doe-joins`)
+3. Edit frontmatter fields above
+4. Add optional image: `header.jpg` or `thumb.jpg`
+5. Change `draft: true` to `draft: false` to publish
+6. Delete these instructions before publishing
+
+See [Adding News/Awards](../../docs/02-adding-content/adding-updates.md) for help.

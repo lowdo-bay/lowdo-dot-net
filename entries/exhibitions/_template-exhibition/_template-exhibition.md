@@ -7,6 +7,8 @@ date: 2024-01-15
 categories:
   - ART
 link: "https://example.com/exhibition-page"
+relatedProjects:    # Optional: link this exhibition to one or more projects
+  - ""              # Use the project folder name (slug), e.g. "mishpocha-woods"
 position: 1
 ---
 
@@ -24,17 +26,32 @@ You can include:
 
 ---
 
-## Instructions for Using This Template
+## Link to a Project
 
-1. **Duplicate this folder:** Copy the entire `_template-exhibition` folder
-2. **Rename the folder:** Use lowercase and hyphens (e.g., `gallery-show-2024`)
-3. **Rename the .md file:** Must match the folder name (e.g., `gallery-show-2024.md`)
-4. **Add thumbnail (optional):** Add `thumb.jpg` or `header.jpg` (exhibition photo, poster, etc.)
-5. **Edit frontmatter:** Update all fields between the `---` lines
-   - The `link:` field can point to gallery page, event listing, or announcement
-   - Adjust categories (EXHIBITION, ART, INSTALLATION, SHOW, etc.)
-6. **Set draft to false:** Change `draft: true` to `draft: false` when ready to publish
-7. **Write content:** Replace this template text with exhibition details
-8. **Delete this section:** Remove these instructions before publishing
+To show this exhibition on one or more project pages, list each project's folder name under `relatedProjects`:
 
-Need help? See the [Adding News/Awards guide](../../docs/02-adding-content/adding-news-awards.md)
+```yaml
+# One project:
+relatedProjects:
+  - mishpocha-woods
+
+# Multiple projects:
+relatedProjects:
+  - mishpocha-woods
+  - casa-marianella
+```
+
+The exhibition will appear in the "Awards & Recognition" section of each listed project page.
+
+---
+
+## How to Use This Template
+
+1. Duplicate this entire folder
+2. Rename folder and `.md` file (e.g., `gallery-show-2024`)
+3. Edit frontmatter fields above
+4. Add optional image: `header.jpg` or `thumb.jpg`
+5. Change `draft: true` to `draft: false` to publish
+6. Delete these instructions before publishing
+
+See [Adding News/Awards](../../docs/02-adding-content/adding-updates.md) for help.

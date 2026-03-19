@@ -70,16 +70,23 @@ If neither exists, the system will use the first image it finds alphabetically.
 
 ### For Projects (Gallery Images)
 
-Name gallery images in order with descriptive names:
+Use these file naming prefixes:
 
+| Prefix | Purpose | Example |
+|--------|---------|---------|
+| `00_`, `01_`, etc. | Gallery photos (numbered for sort order) | `00_Exterior view.jpg` |
+| `drawing-` | Floor plans and architectural drawings | `drawing-plan_1.jpg` |
+| `toolkit-` | Reference files (CAD, PDF, DWG) | `toolkit-framing-plan.dwg` |
+
+**Gallery images in alphabetical order:**
 ```
-01-exterior-view.jpg
-02-interior-space.jpg
-03-detail-shot.jpg
-04-community-area.jpg
+00_exterior-view.jpg
+01_interior-space.jpg
+02_detail-shot.jpg
+03_community-area.jpg
 ```
 
-The numbers keep them in order; the descriptions help you identify them.
+The numbers keep them in order; the descriptions help you identify them. Note the underscore (`_`) in numbered filenames, which ensures proper alphabetical sort order.
 
 ---
 
