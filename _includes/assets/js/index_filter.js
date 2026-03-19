@@ -71,20 +71,31 @@
   });
 
   // Show more/less toggle for category filters
-  var toggleButton = filterControls.querySelector('[data-toggle-filters]');
+  var toggleShowMore = filterControls.querySelector('[data-toggle-filters]');
+  var toggleShowLess = filterControls.querySelector('[data-toggle-filters-bottom]');
   var categoryContainer = filterControls.querySelector('[data-category-filters]');
   var categoriesVisible = false;
 
-  if (toggleButton && categoryContainer) {
-    toggleButton.addEventListener('click', function() {
-      categoriesVisible = !categoriesVisible;
-      if (categoriesVisible) {
-        categoryContainer.style.display = 'flex';
-        toggleButton.textContent = 'show less...';
-      } else {
-        categoryContainer.style.display = 'none';
-        toggleButton.textContent = 'show more...';
-      }
+  function toggleCategories() {
+    categoriesVisible = !categoriesVisible;
+    if (categoriesVisible) {
+      categoryContainer.style.display = 'flex';
+      if (toggleShowMore) toggleShowMore.style.display = 'none';
+    } else {
+      categoryContainer.style.display = 'none';
+      if (toggleShowMore) toggleShowMore.style.display = '';
+    }
+  }
+
+  if (toggleShowMore && categoryContainer) {
+    toggleShowMore.addEventListener('click', function() {
+      toggleCategories();
+    });
+  }
+
+  if (toggleShowLess && categoryContainer) {
+    toggleShowLess.addEventListener('click', function() {
+      toggleCategories();
     });
   }
 
@@ -106,9 +117,8 @@
       allCheckbox.checked = false;
       targetCheckbox.checked = true;
       // Auto-expand category filters if a category is pre-selected
-      if (toggleButton && categoryContainer) {
+      if (categoryContainer) {
         categoryContainer.style.display = 'flex';
-        toggleButton.textContent = 'show less...';
         categoriesVisible = true;
       }
       updateVisibility();

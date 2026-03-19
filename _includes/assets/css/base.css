@@ -1367,7 +1367,7 @@ body::after {
 
 @media (min-width: 840px) {
 	.index-filters {
-		justify-content: flex-end;
+		justify-content: flex-start;
 	}
 }
 
@@ -1439,6 +1439,11 @@ body::after {
 	justify-content: flex-start;
 	gap: calc(var(--space) * 0.75);
 	width: 100%;
+}
+
+.index-filters__toggle--bottom {
+	width: 100%;
+	text-align: left;
 }
 
 /* Empty state */
