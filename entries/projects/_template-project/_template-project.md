@@ -16,7 +16,6 @@ collaborators:
   - name: "Another Partner"
     role: "General Contractor"
 position:
-description: "Short summary of the project (optional, shown in index)" 
 ---
 
 Write your project description here. This text appears on the project detail page below the header image.

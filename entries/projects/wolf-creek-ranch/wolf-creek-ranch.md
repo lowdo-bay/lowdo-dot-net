@@ -2,8 +2,7 @@
 draft: false
 featured: true
 title: Wolf Creek Ranch
-description: >
-  Sustainable retreat harmonizing nature and landscape.
+subtitle: Sustainable retreat harmonizing nature and landscape.
 year: 2024
 date: 2024-11-10T12:28:51.623Z
 categories:
@@ -12,7 +11,6 @@ categories:
   - ADAPTIVE HOUSING
 location: "Burnet, TX, USA"
 status: "Built"
-position: 0
 collaborators:
   - role: "Decking & Siding"
     name: "Timbertown"
@@ -20,8 +18,7 @@ collaborators:
     name: "Persyn Engineering"
   - role: "Photography"
     name: "Daisuke Hirabayashi"
-  - role: "Trade"
-    name: "Collaborator"
+position: 1
 ---
 
 The Wolf Creek Ranch weaves through rolling hills and limestone rock outcrops adjacent to Lake Buchanan, providing stunning views, ample sun, and a prevalent breeze. The owners wanted to embrace and respond to these natural characteristics while also prioritizing an economy of means. The design became another iteration of resource conscious, performance-driven strategies that pro-actively respond to the landscape and create a welcoming environment for all generations who might use the house.
