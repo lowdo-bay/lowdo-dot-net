@@ -71,30 +71,23 @@
   });
 
   // Show more/less toggle for category filters
-  var toggleShowMore = filterControls.querySelector('[data-toggle-filters]');
-  var toggleShowLess = filterControls.querySelector('[data-toggle-filters-bottom]');
+  var toggleButton = filterControls.querySelector('[data-toggle-filters]');
   var categoryContainer = filterControls.querySelector('[data-category-filters]');
   var categoriesVisible = false;
 
   function toggleCategories() {
     categoriesVisible = !categoriesVisible;
     if (categoriesVisible) {
-      categoryContainer.style.display = 'flex';
-      if (toggleShowMore) toggleShowMore.style.display = 'none';
+      categoryContainer.classList.add('is-visible');
+      if (toggleButton) toggleButton.textContent = 'show less...';
     } else {
-      categoryContainer.style.display = 'none';
-      if (toggleShowMore) toggleShowMore.style.display = '';
+      categoryContainer.classList.remove('is-visible');
+      if (toggleButton) toggleButton.textContent = 'show more...';
     }
   }
 
-  if (toggleShowMore && categoryContainer) {
-    toggleShowMore.addEventListener('click', function() {
-      toggleCategories();
-    });
-  }
-
-  if (toggleShowLess && categoryContainer) {
-    toggleShowLess.addEventListener('click', function() {
+  if (toggleButton && categoryContainer) {
+    toggleButton.addEventListener('click', function() {
       toggleCategories();
     });
   }
@@ -118,7 +111,8 @@
       targetCheckbox.checked = true;
       // Auto-expand category filters if a category is pre-selected
       if (categoryContainer) {
-        categoryContainer.style.display = 'flex';
+        categoryContainer.classList.add('is-visible');
+        if (toggleButton) toggleButton.textContent = 'show less...';
         categoriesVisible = true;
       }
       updateVisibility();

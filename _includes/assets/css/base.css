@@ -1363,6 +1363,12 @@ body::after {
 	flex-wrap: wrap;
 	gap: calc(var(--space) * 0.75);
 	justify-content: flex-start;
+	align-content: flex-start;
+	row-gap: 2;
+}
+
+.index-filters__main {
+	display: contents;
 }
 
 @media (min-width: 840px) {
@@ -1434,16 +1440,27 @@ body::after {
 }
 
 .index-filters__categories {
-	display: none;
+	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	gap: calc(var(--space) * 0.75);
-	width: 100%;
+	flex-basis: 100%;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 400ms ease-in-out;
+	margin: 0;
+	padding: 0;
+	order: 2;
 }
 
-.index-filters__toggle--bottom {
-	width: 100%;
-	text-align: left;
+.index-filters__categories.is-visible {
+	max-height: 2000px;
+	padding: 0;
+}
+
+.index-filters__toggle {
+	flex-basis: 100%;
+	order: 3;
 }
 
 /* Empty state */
