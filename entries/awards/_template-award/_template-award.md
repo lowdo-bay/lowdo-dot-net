@@ -8,6 +8,7 @@ categories:
   - PRESS
 link: "https://example.com/award-announcement"
 position: 1
+featured: false
 ---
 
 Optional: Add more details about the award here.
