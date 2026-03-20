@@ -2,7 +2,7 @@
 draft: false
 featured: false
 title: "Garden St. Residence"
-subtitle: "Multiphase home framing everyday life."
+description: "Multiphase home framing everyday life."
 date: 2024-01-15
 year: 2024
 categories:
