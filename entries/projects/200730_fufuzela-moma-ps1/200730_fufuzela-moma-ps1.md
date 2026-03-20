@@ -9,6 +9,7 @@ categories:
   - EXHIBITION
   - BAMBOT
   - BAMBOO
+  - COMPETITION
 location: "Queens, NY"  # e.g., "Austin, TX"
 status: "Unbuilt"    # e.g., "Built", "In Progress"
 collaborators:
