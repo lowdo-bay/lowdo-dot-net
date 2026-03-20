@@ -6,8 +6,7 @@ description: "Agbogbloshie Makerspace Platform"
 date: 2014-01-22
 year: 2014 - Present
 categories:
-  - HOUSING
-  - SUSTAINABLE
+  - AMP
 location: "Various"  # e.g., "Austin, TX"
 status: "Ongoing"    # e.g., "Built", "In Progress"
 collaborators:
