@@ -8,6 +8,7 @@ year: 2024
 categories:
   - HOUSING
   - SUSTAINABLE
+  - DESIGN+BUILD
 location: "Austin, TX"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:
