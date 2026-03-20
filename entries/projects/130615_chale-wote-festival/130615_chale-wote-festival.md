@@ -1,91 +1,26 @@
 ---
-draft: true
+draft: false
 featured: false
-title: "Your Project Name"
-description: "A short summary of the project (1-2 sentences)"
-date: 2024-01-15
-year: 2024
+title: "Chale Wote Festival"
+description: "Performance arena for the annual street arts celebration"
+date: 2013-06-15
+year: 2013
 categories:
-  - HOUSING
-  - SUSTAINABLE
-location: ""  # e.g., "Austin, TX"
-status: ""    # e.g., "Built", "In Progress"
+  - INSTALLATION
+  - AFRICA
+location: "Accra, Ghana"  # e.g., "Austin, TX"
+status: "Built"    # e.g., "Built", "In Progress"
 collaborators:
-  - name: "Partner Name"
-    role: "Structural Engineer"
-  - name: "Another Partner"
-    role: "General Contractor"
 position:
 ---
 
-Write your project description here. This text appears on the project detail page below the header image.
+Installing stage-as-TV-set in the context of Otublohum Square anchors the
+reprogramming — for the duration of the Chale Wote festival — of the typically
+understated triangle into an urban instrument, or **Urban Living Room** with the following components:
 
-You can write multiple paragraphs to tell the story of your project.
-
-## Project Details
-
-Add sections with ## headings to organize your content.
-
-Describe:
-- Project goals and vision
-- Design approach and process
-- Key challenges and solutions
-- Materials and sustainability features
-
-## Design Approach
-
-Continue adding sections as needed.
-
-Use simple markdown formatting:
-- **Bold text** with double asterisks
-- *Italic text* with single asterisks
-- `code or technical terms` with backticks
-
-Keep paragraphs short for readability on the web.
-
----
-
-## How to Use This Template
-
-1. Duplicate this entire folder
-2. Rename folder and `.md` file to match your project (e.g., `my-project-name`)
-3. Edit frontmatter (metadata between `---` lines)
-4. Add images (see image naming conventions below)
-5. Change `draft: true` to `draft: false` to publish
-6. Delete these instructions before publishing
-
-**Image File Naming:**
-
-| Name | Purpose | Example |
-|------|---------|---------|
-| `header.jpg` | Main thumbnail | `header.jpg` |
-| `00_`, `01_`, etc. | Gallery photos (numbered) | `00_Exterior view.jpg` |
-| `drawing-` | Floor plans, drawings | `drawing-plan_1.jpg` |
-| `toolkit-` | Reference files (CAD, PDF) | `toolkit-framing-plan.dwg` |
-
-## Awards & Recognition
-
-Projects automatically display a section showing related awards, features, and other recognitions. To link awards or news to this project:
-
-1. Create an award, feature, news, or other entry in the appropriate `entries/` folder
-2. Add this field to its frontmatter using the folder name of this project:
-   ```yaml
-   relatedProjects:
-     - your-project-slug
-   ```
-3. Save and publish
-
-The award/news will appear in the "Awards & Recognition" section of this project page. An entry can link to multiple projects by listing more slugs.
-
-**Example:**
-```yaml
-# In entries/awards/my-award.md
----
-title: "Design Excellence Award"
-relatedProjects:
-  - wolf-creek-ranch   # Links to this project
-  - river-house        # Also links to another project
----
-```
-
-See [Adding a Project](../../docs/02-adding-content/adding-a-project.md) guide for detailed help.
+• Street Address...Brazil Lane · sign post geo-landmark
+• (Mega) Sofa · oversized furniture for sponaneous group social interactions
+• TV ... Bambu TV · stage / portal / urban cyber eye
+• Front Porch...Bambu Cat Forest · bamboo suspended “flexi” fabric shade sails over High Street wall of Otublohum Square that serves as social buffer and converts side-to catwalk
+• Front Door ... Story Gate · sync realities via oral history
+• Window Seat ... Corner Bench Goal combined wood street furniture and soccer goal post
