@@ -18,7 +18,7 @@ collaborators:
     name: "Persyn Engineering"
   - role: "Photography"
     name: "Daisuke Hirabayashi"
-position: 1
+position: 
 ---
 
 The Wolf Creek Ranch weaves through rolling hills and limestone rock outcrops adjacent to Lake Buchanan, providing stunning views, ample sun, and a prevalent breeze. The owners wanted to embrace and respond to these natural characteristics while also prioritizing an economy of means. The design became another iteration of resource conscious, performance-driven strategies that pro-actively respond to the landscape and create a welcoming environment for all generations who might use the house.
