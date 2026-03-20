@@ -8,6 +8,7 @@ categories:
   - HOUSING
   - RESIDENTIAL
   - SUSTAINABLE
+  - DESIGN+BUILD
 location: "Austin, TX"  # e.g., "Austin, TX"
 status: "Under Construction"    # e.g., "Built", "In Progress"
 collaborators:
