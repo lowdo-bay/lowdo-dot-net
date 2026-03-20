@@ -2,7 +2,7 @@
 draft: true
 featured: false
 title: "Your Project Name"
-subtitle: An affordable and ecologically sensitive model for building community.
+description: An affordable and ecologically sensitive model for building community.
 date: 2022-01-01
 year: 2022
 categories:
@@ -15,7 +15,7 @@ collaborators:
     role: "Structural Engineer"
   - name: "Another Partner"
     role: "General Contractor"
-position: 
+position:
 ---
 
 Write your project description here. This text appears on the project detail page below the header image.

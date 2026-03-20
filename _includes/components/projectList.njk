@@ -55,8 +55,8 @@
 						<figcaption class="pb--1{% if settings.theme.theme_features.show_project_grid_titles === false %} hide{% endif %}">
 
 							<span class="text--small arrow arrow--right">{{ project.data.title }}</span>
-							{% if project.data.subtitle %}
-								<span class="text--small" style="display: block; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em;">{{ project.data.subtitle }}</span>
+							{% if project.data.description %}
+								<span class="text--small" style="display: block; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em;">{{ project.data.description }}</span>
 							{% endif %}
 
 						</figcaption>

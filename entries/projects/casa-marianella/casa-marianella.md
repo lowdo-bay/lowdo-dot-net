@@ -1,7 +1,7 @@
 ---
 draft: false
 title: Casa Marianella
-subtitle: "New communal home and landscape for a women and childrens' campus"
+description: "New communal home and landscape for a women and childrens' campus"
 year: 2026
 date: 2023-08-14T12:28:51.623Z
 categories:
@@ -17,7 +17,7 @@ collaborators:
     role: "Landscape"
   - name: "Emily Eisenhart"
     role: "Mural"
-position: 
+position:
 ---
 
 LowDO and FORGE Landscape Architecture have designed a new community dwelling, garden, and playscape for Casa Marianella. Casa is a non-profit that provides essential shelter and support for immigrants and refugees, and the project will create shared spaces for their Posada campus, which exclusively serves women and children who have traveled to Austin from myriad countries across the Americas and Africa. Casa promotes self-sufficiency by offering these women and their families a temporary home and supportive services to place children in school, find jobs, complete paperwork, and adjust to living in a new culture after often-traumatic journeys.
