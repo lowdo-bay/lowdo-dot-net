@@ -1,0 +1,18 @@
+---
+draft: false
+featured: false
+title: "Fufuzela: Le Lieu Unique"
+description: "Exhibit in Nantes, France"
+date: 2021-01-01
+year: 2021
+categories:
+  - EXHIBITION
+location: "Nantes, France"  # e.g., "Austin, TX"
+status: "Built"    # e.g., "Built", "In Progress"
+collaborators:
+  - name: "David Gallard"
+    role: "Photography"
+position:
+---
+
+In the repertoire of 'Afronautics', utility corresponds to uniquity: the liberty to precipitate possibility. Born of a decade-long community-based (participatory design) research into bamboo building systems - co-creating architecture as a form of collective building technology - FUFUZELA are an open-source architecture, in the form of modular mobile #BAMBOTS (bamboo micro­infrastructures) that interoperate at the scale between furniture and architecture.
