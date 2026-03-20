@@ -16,8 +16,10 @@
   {# Column 2: Item (Title + Subtitle) #}
   <div class="index-col index-col--item">
     <span class="index-row__title">{{ entry.data.title }}</span>
-    {% if entry.data.subtitle %}
-      <span class="index-row__subtitle">{{ entry.data.subtitle }}</span>
+    {% if entry.data.entryType == 'project' %}
+      {% if entry.data.description %}<span class="index-row__subtitle">{{ entry.data.description }}</span>{% endif %}
+    {% else %}
+      {% if entry.data.subtitle %}<span class="index-row__subtitle">{{ entry.data.subtitle }}</span>{% endif %}
     {% endif %}
   </div>
 
@@ -49,10 +51,10 @@
     {% endif %}
   </div>
 
-  {# Mobile meta row: subtitle (projects) or description (non-projects) #}
+  {# Mobile meta row: description (projects) or description (non-projects) #}
   <div class="index-row__meta">
-    {% if entry.data.entryType == 'project' and entry.data.subtitle %}
-      <span class="index-row__meta-text">{{ entry.data.subtitle }}</span>
+    {% if entry.data.entryType == 'project' and entry.data.description %}
+      <span class="index-row__meta-text">{{ entry.data.description }}</span>
     {% elif entry.data.entryType != 'project' and entry.data.description %}
       <span class="index-row__meta-text">{{ entry.data.description }}</span>
     {% endif %}

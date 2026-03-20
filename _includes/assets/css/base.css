@@ -882,6 +882,10 @@ main.p--content article {
   margin-bottom: var(--space);
 }
 
+.project-meta-tagline {
+  text-transform: uppercase;
+}
+
 /* Grid Lines - Spreadsheet Style
    "Making what is usually invisible visible" */
 

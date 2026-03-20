@@ -2,7 +2,7 @@
 draft: false
 featured: true
 title: Wolf Creek Ranch
-subtitle: Sustainable retreat harmonizing nature and landscape.
+description: Sustainable retreat harmonizing nature and landscape.
 year: 2024
 date: 2024-11-10T12:28:51.623Z
 categories:

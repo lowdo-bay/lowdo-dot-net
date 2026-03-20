@@ -2,7 +2,7 @@
 draft: true
 featured: false
 title: "Your Project Name"
-subtitle: "A short summary of the project (1-2 sentences)"
+description: "A short summary of the project (1-2 sentences)"
 date: 2024-01-15
 year: 2024
 categories:
