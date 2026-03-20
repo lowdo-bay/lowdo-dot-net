@@ -7,8 +7,9 @@ date: 2016-08-18
 year: 2016
 categories:
   - COMMERCIAL
+  - REMODEL
 location: "Austin, TX"  # e.g., "Austin, TX"
-status: ""    # e.g., "Built", "In Progress"
+status: "Built"    # e.g., "Built", "In Progress"
 collaborators:
   - name: "Molly Culver"
     role: "Photography"
