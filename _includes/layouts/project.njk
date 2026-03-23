@@ -842,7 +842,13 @@ section: project
             "outputQualityWebp": settings.images.webp.quality,
             "outputQualityAvif": settings.images.avif.quality
           } %}
-          {% generateImage params %}
+          {% if headerImage.src | endsWith('.gif') %}
+            <picture>
+              <img src="/{{ headerImage.src }}" alt="{{ title }}" loading="eager" decoding="async" class="header-image">
+            </picture>
+          {% else %}
+            {% generateImage params %}
+          {% endif %}
         </div>
       {% endif %}
 
@@ -1156,7 +1162,13 @@ section: project
                     "outputQualityWebp": settings.images.webp.quality,
                     "outputQualityAvif": settings.images.avif.quality
                   } %}
-                  {% generateImage params %}
+                  {% if project.data.headerImage.src | endsWith('.gif') %}
+                    <picture>
+                      <img src="/{{ project.data.headerImage.src }}" alt="{{ project.data.headerImage.alt or project.data.title }}" loading="lazy" decoding="async" class="hover-fade">
+                    </picture>
+                  {% else %}
+                    {% generateImage params %}
+                  {% endif %}
                 {% endif %}
               </div>
               <div class="project-related-title">{{ project.data.title }}</div>
