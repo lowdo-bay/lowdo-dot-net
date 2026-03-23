@@ -270,6 +270,9 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   eleventyConfig.addFilter("formatGoogleFontName", name => {
     return name.replace(/\s/g, '+');
   });
+
+  // Filter to check if a string ends with a given suffix
+  eleventyConfig.addFilter("endsWith", (str, suffix) => String(str).endsWith(suffix));
   
   // Date formatting (human readable)
   eleventyConfig.addFilter("dateFullYear", dateObj => {
