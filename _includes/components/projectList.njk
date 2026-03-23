@@ -50,7 +50,13 @@
 						%}
 
 						{# The image shortcode #}
-						{% generateImage params %}
+						{% if image.src | endsWith('.gif') %}
+							<picture>
+								<img src="/{{ image.src }}" alt="{{ image.caption or title }}" loading="{{ 'eager' if (loop.first and section != 'project') else 'lazy' }}" decoding="async" class="hover-fade">
+							</picture>
+						{% else %}
+							{% generateImage params %}
+						{% endif %}
 						
 						<figcaption class="pb--1{% if settings.theme.theme_features.show_project_grid_titles === false %} hide{% endif %}">
 
