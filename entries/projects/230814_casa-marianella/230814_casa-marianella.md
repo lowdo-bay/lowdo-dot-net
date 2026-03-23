@@ -2,8 +2,8 @@
 draft: false
 title: Casa Marianella
 description: "New communal home and landscape for a women and childrens' campus"
-year: 2026
-date: 2023-08-14T12:28:51.623Z
+year: 2027
+date: 2027-03-01
 categories:
   - HOUSING
   - RESIDENTIAL
