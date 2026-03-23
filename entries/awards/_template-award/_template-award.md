@@ -9,7 +9,7 @@ categories:
 link: "https://example.com/award-announcement"
 relatedProjects:    # Optional: link this award to one or more projects
   - ""              # Use the project folder name (slug), e.g. "wolf-creek-ranch"
-position: 1
+position: 
 featured: false
 ---
 

@@ -7,6 +7,6 @@ date: 2021-01-15
 categories:
   - PRESS
 link: "https://archleague.org/low-design-office/"
-position: 1
+position: 
 featured: true
 ---

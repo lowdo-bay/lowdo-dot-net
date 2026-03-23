@@ -7,6 +7,6 @@ date: 2020-01-01
 categories:
   - PRESS
 link: "https://www.domusweb.it/en/speciali/best-architecture-firms-2020/gallery/2020/low-design-office.html"
-position: 1
+position: 
 featured: true
 ---

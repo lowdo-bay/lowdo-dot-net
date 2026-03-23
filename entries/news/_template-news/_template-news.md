@@ -9,7 +9,7 @@ categories:
 link: "https://example.com/optional-external-link"
 relatedProjects:    # Optional: link this news to one or more projects
   - ""              # Use the project folder name (slug), e.g. "river-house"
-position: 1
+position: 
 ---
 
 Write your news content here (optional).

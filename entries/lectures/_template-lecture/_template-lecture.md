@@ -9,7 +9,7 @@ categories:
 link: "https://example.com/event-page"
 relatedProjects:    # Optional: link this lecture to one or more projects
   - ""              # Use the project folder name (slug), e.g. "garden-st-residence"
-position: 1
+position: 
 ---
 
 Optional: Add details about the lecture here.

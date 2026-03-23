@@ -10,7 +10,7 @@ categories:
 link: ""
 relatedProjects:    # Optional: link this staff update to one or more projects
   - ""              # Use the project folder name (slug), e.g. "wolf-creek-ranch"
-position: 1
+position: 
 ---
 
 Optional: Add more details about the staff update here.
