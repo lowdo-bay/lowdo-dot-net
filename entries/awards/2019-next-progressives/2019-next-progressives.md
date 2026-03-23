@@ -7,6 +7,6 @@ date: 2019-09-18
 categories:
   - PRESS
 link: "https://www.architectmagazine.com/practice/low-design-office_o"
-position: 1
+position: 
 featured: true
 ---

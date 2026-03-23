@@ -7,6 +7,6 @@ date: 2021-01-01
 categories:
   - PRESS
 link: "https://winners.architizer.com/2021/Firms/best-of-the-year/africa/"
-position: 1
+position: 
 featured: true
 ---

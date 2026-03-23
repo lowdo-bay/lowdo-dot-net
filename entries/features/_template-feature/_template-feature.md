@@ -10,7 +10,7 @@ categories:
 link: "https://example.com/article-url"
 relatedProjects:    # Optional: link this feature to one or more projects
   - ""              # Use the project folder name (slug), e.g. "casa-marianella"
-position: 1
+position: 
 ---
 
 Optional: Add context or quotes from the feature here.

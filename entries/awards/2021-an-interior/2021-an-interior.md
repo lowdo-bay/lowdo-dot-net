@@ -7,6 +7,6 @@ date: 2021-10-01
 categories:
   - PRESS
 link: "https://aninteriormag.com/an-interior-top-50-architects-2021/"
-position: 1
+position: 
 featured: true
 ---

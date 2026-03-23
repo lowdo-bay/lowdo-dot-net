@@ -7,7 +7,7 @@ date: 2023-09-01
 categories:
   - STAFF
   - NEWS
-position: 7
+position: 
 ---
 
 We are excited to welcome Firstname Lastname as an Associate at LowDO. Firstname brings expertise in sustainable building systems and material innovation from her previous work with award-winning practice in Colorado.
