@@ -6,8 +6,8 @@ description: "Community-driven masterplan weaving housing, public space, and res
 date: 2024-01-15
 year: 2024
 categories:
-  - HOUSING
-  - SUSTAINABLE
+  - AFRICA
+  - URBAN
 location: "Koumbi City, Ghana"  # e.g., "Austin, TX"
 status: "In Progress"    # e.g., "Built", "In Progress"
 collaborators:
