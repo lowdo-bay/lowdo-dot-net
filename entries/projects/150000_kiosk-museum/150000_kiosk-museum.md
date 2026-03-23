@@ -6,6 +6,7 @@ description: "Mobile hub for cultural memory"
 date: 2015-01-01
 year: 2015 - 2016
 categories:
+  - AFRICA
   - EXHIBITION
   - INSTALLATION
 location: "Accra, Ghana"  # e.g., "Austin, TX"
