@@ -981,7 +981,13 @@ section: project
 
         <div class="project-photo-cell">
           <div class="photo-thumb" data-caption="{{ image.caption or '' }}">
-            {% generateImage params %}
+            {% if image.src | endsWith('.gif') %}
+              <picture>
+                <img src="/{{ image.src }}" alt="{{ image.caption or title }}" loading="lazy" decoding="async" class="hover-fade">
+              </picture>
+            {% else %}
+              {% generateImage params %}
+            {% endif %}
           </div>
         </div>
 
@@ -1033,7 +1039,13 @@ section: project
         } %}
         <div class="project-drawing-cell">
           <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}">
-            {% generateImage params %}
+            {% if drawing.src | endsWith('.gif') %}
+              <picture>
+                <img src="/{{ drawing.src }}" alt="{{ drawing.caption or (title + ' drawing') }}" loading="lazy" decoding="async" class="hover-fade">
+              </picture>
+            {% else %}
+              {% generateImage params %}
+            {% endif %}
           </div>
         </div>
       {% endfor %}
