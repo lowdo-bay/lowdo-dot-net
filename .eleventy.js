@@ -148,9 +148,11 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
       .filter(entry => entry.data.draft !== true);
 
     return allEntries.sort((a, b) => {
-      // Primary sort: position (lower first)
-      if (a.data.position !== b.data.position) {
-        return a.data.position - b.data.position;
+      // Primary sort: position (lower first); null/undefined treated as default 999
+      const posA = a.data.position ?? 999;
+      const posB = b.data.position ?? 999;
+      if (posA !== posB) {
+        return posA - posB;
       }
       // Secondary sort: date (newer first)
       return new Date(b.data.date) - new Date(a.data.date);
