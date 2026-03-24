@@ -3,8 +3,8 @@ draft: false
 featured: false
 title: "Koumbi City"
 description: "Community-driven masterplan weaving housing, public space, and resilient infrastructure"
-date: 2024-01-15
-year: 2024
+date: 2014-01-01
+year: 2014
 categories:
   - AFRICA
   - URBAN
