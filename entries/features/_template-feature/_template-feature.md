@@ -9,7 +9,7 @@ categories:
   - PUBLICATION
 link: "https://example.com/article-url"
 relatedProjects:    # Optional: link this feature to one or more projects
-  - ""              # Use the project folder name (slug), e.g. "casa-marianella"
+  - ""              # Use the project folder name (slug), e.g. "230814_casa-marianella"
 position: 
 ---
 
