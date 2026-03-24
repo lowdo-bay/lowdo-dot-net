@@ -8,7 +8,7 @@ categories:
   - PRESS
 link: "https://example.com/award-announcement"
 relatedProjects:    # Optional: link this award to one or more projects
-  - ""              # Use the project folder name (slug), e.g. "wolf-creek-ranch"
+  - ""              # Use the project folder name (slug), e.g. "211230_wolf-creek-ranch"
 position: 
 featured: false
 ---
