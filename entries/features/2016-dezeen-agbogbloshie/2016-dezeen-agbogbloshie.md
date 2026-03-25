@@ -10,7 +10,7 @@ categories:
   - AFRICA
 link: "https://www.dezeen.com/2016/05/16/agbogbloshie-e-waste-dump-makerspace-platform-spacecraft-mobile-architecture-workshop-ghana-julien-lanoo-photography/"
 relatedProjects:
-  - 240122_spacecraft
+  - "240122_spacecraft"
 position:
 ---
 
