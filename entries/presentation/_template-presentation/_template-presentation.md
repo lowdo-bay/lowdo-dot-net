@@ -1,18 +1,19 @@
 ---
 draft: true
-title: "Lecture or Talk Title"
+title: "Presentation or Talk Title"
 subtitle: "Venue or Organization"
-description: "Brief description of the lecture topic"
+description: "Brief description of the presentation topic"
 date: 2024-01-15
 categories:
   - EDUCATION
+  - LECTURE
 link: "https://example.com/event-page"
-relatedProjects:    # Optional: link this lecture to one or more projects
+relatedProjects:    # Optional: link this presentation to one or more projects
   - ""              # Use the project folder name (slug), e.g. "garden-st-residence"
 position: 
 ---
 
-Optional: Add details about the lecture here.
+Optional: Add details about the presentation here.
 
 This text appears when someone expands the entry in the comprehensive index.
 

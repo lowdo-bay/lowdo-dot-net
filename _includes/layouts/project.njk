@@ -919,7 +919,7 @@ section: project
         {# Awards & Recognition section (using collaborators styling) #}
         {% set projectRecognition = collections.entriesByProject[page.fileSlug] %}
         {% if projectRecognition and projectRecognition.length %}
-          <div class="project-collab-grid" style="margin-top: var(--space-6)">
+          <div class="project-collab-grid" style="margin-top: var(--space-6); padding-top: var(--space-6)">
             <div class="project-collab-cell project-collab-cell--head">Awards & Recognition</div>
             <div class="project-collab-cell project-collab-cell--head"> </div>
             {% for item in projectRecognition %}
