@@ -12,12 +12,16 @@ categories:
 location: "Austin, TX"  # e.g., "Austin, TX"
 status: "Under Construction"    # e.g., "Built", "In Progress"
 collaborators:
-  - name: "Fort"
-    role: "Structural"
   - name: "Forge"
-    role: "Landscape"
+    role: "Landscape Architect"
+  - name: "Fort"
+    role: "Structural Engineer"
+  - name: "Civilitude"
+    role: "Civil Engineer"
+  - name: "MLA Geotechnical"
+    role: "Geotechnical Engineer"
   - name: "Emily Eisenhart"
-    role: "Mural"
+    role: "Mural Design"
 position:
 ---
 

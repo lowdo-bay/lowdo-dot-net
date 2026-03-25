@@ -10,6 +10,10 @@ categories:
 location: "Billings, MT"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:
+  - name: "Collaborative Design Architects"
+    role: "Architect of Record"
+  - name: "Air Controls Billings"
+    role: "HVAC"
 position:
 ---
 
