@@ -10,7 +10,7 @@ categories:
   - AFRICA
 link: "https://pace.princeton.edu/news/2016/qa-dk-osseo-asare"
 relatedProjects:
-  - 240122_spacecraft
+  - "240122_spacecraft"
 position:
 ---
 

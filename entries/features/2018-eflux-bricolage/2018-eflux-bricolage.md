@@ -10,7 +10,7 @@ categories:
   - AFRICA
 link: "https://www.e-flux.com/architecture/structural-instability/208705/bricolage-or-the-impossibility-of-pollution"
 relatedProjects:
-  - 240122_spacecraft
+  - "240122_spacecraft"
 position:
 ---
 

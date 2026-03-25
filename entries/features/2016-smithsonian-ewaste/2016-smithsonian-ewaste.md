@@ -10,7 +10,7 @@ categories:
   - AFRICA
 link: "https://www.smithsonianmag.com/science-nature/burning-truth-behind-e-waste-dump-africa-180957597/"
 relatedProjects:
-  - 240122_spacecraft
+  - "240122_spacecraft"
 position:
 ---
 
