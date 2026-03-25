@@ -3,8 +3,8 @@ draft: false
 featured: true
 title: "Mishpocha Woods Compound"
 description: An affordable and ecologically sensitive model for building community.
-date: 2020-01-01
-year: 2020
+date: 2023-01-01
+year: 2023
 categories:
   - HOUSING
   - SUSTAINABLE

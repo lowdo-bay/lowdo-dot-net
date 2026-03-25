@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: Firstname Lastname Joins as Associate
 subtitle: "Expanding the Design Team"
 description: Bringing expertise in sustainable building systems and material innovation
