@@ -32,12 +32,12 @@ To show this award on one or more project pages, list each project's folder name
 ```yaml
 # One project:
 relatedProjects:
-  - wolf-creek-ranch
+  - 230101_wolf-creek-ranch
 
 # Multiple projects:
 relatedProjects:
-  - wolf-creek-ranch
-  - casa-marianella
+  - 230101_wolf-creek-ranch
+  - 211231_casa-marianella
 ```
 
 The award will appear in the "Awards & Recognition" section of each listed project page.

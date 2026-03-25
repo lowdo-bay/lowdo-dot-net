@@ -5,7 +5,6 @@ subtitle: Architectural League of New York
 description: LowDO has been selected for the Architectural League's Emerging Voices program
 date: 2021-12-31
 categories:
-  - AWARD
   - NEWS
 link: "https://archleague.org/article/emerging-voices-2022/"
 position: 
