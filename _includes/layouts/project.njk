@@ -553,10 +553,9 @@ section: project
      height driven by aspect-ratio so image shows in full */
   .project-header.is-portrait-header .grid__item--span-2-left {
     position: absolute;
-    left: calc(-1 * var(--content-margin));
-    top: calc(-1 * var(--space-3));
-    width: calc(var(--content-margin) + var(--content-width) / 2);
-    max-width: calc(var(--content-margin) + 600px); /* cap at half max-content-width */
+    left: 0;
+    top: 0;
+    width: calc(var(--content-width) / 2);
     aspect-ratio: 1 / var(--portrait-image-ratio);
     margin: 0;
     overflow: visible;
