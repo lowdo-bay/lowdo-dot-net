@@ -45,6 +45,19 @@ section: project
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: max-content;
     align-content: start;
+    position: relative;
+  }
+
+  /* Mobile: dashed line at the top of project-meta-bottom */
+  @media (max-width: 839px) {
+    .project-meta-bottom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: calc(-1 * var(--content-margin) - var(--space-2));
+      width: calc(100vw + var(--content-margin));
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
   }
 
   /* Metadata row wrapper: use display: contents to not affect grid */
@@ -97,6 +110,14 @@ section: project
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
 
+  /* Mobile: extend dashed line to left screen edge */
+  @media (max-width: 839px) {
+    .project-meta-label::after {
+      left: calc(-1 * var(--content-margin) - var(--space-2));
+      width: calc(100vw + var(--content-margin));
+    }
+  }
+
   /* Metadata value: sub-col 2 */
   .project-meta-value {
     padding: var(--space-2);
@@ -117,6 +138,20 @@ section: project
     letter-spacing: 0.05em;
     border-bottom: none;
     position: relative;
+  }
+  /* Vertical divider between columns: only on data cells (not header), stops at header line */
+  .project-collab-cell:not(.project-collab-cell--head):nth-child(odd)::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-right: var(--grid-line-thickness) var(--grid-line-vertical-style) var(--grid-line-color);
+  }
+  @media (min-width: 840px) {
+    .project-collab-cell:not(.project-collab-cell--head):nth-child(odd)::before {
+      display: none;
+    }
   }
   .project-collab-cell:not(.project-collab-cell--head)::after {
     content: '';
@@ -382,6 +417,14 @@ section: project
     padding: var(--space-2);
     position: relative;
   }
+  .project-drawing-cell:nth-child(odd) {
+    border-right: var(--grid-line-thickness) var(--grid-line-vertical-style) var(--grid-line-color);
+  }
+  @media (min-width: 840px) {
+    .project-drawing-cell:nth-child(odd) {
+      border-right: none;
+    }
+  }
 
   /* Dashed line under each row: every 2nd cell on mobile */
   .project-drawing-cell:nth-child(2n)::after {
@@ -498,6 +541,17 @@ section: project
     padding: var(--space-2);
     position: relative;
   }
+  .project-photo-cell:nth-child(odd) {
+    border-right: var(--grid-line-thickness) var(--grid-line-vertical-style) var(--grid-line-color);
+  }
+  @media (min-width: 840px) {
+    .project-photo-cell:nth-child(odd) {
+      border-right: none;
+    }
+    .project-photo-cell:not(:nth-child(4n)) {
+      border-right: none;
+    }
+  }
 
   /* Dashed line under each row: every 2nd cell on mobile */
   .project-photo-cell:nth-child(2n)::after {
@@ -552,6 +606,14 @@ section: project
   .project-related-cell {
     padding: var(--space-2);
     position: relative;
+  }
+  .project-related-cell:nth-child(odd) {
+    border-right: var(--grid-line-thickness) var(--grid-line-vertical-style) var(--grid-line-color);
+  }
+  @media (min-width: 840px) {
+    .project-related-cell:nth-child(odd) {
+      border-right: none;
+    }
   }
 
   /* Dashed row separator — mirrors photo grid pattern */
@@ -820,6 +882,17 @@ section: project
       height: auto;
       display: block;
       overflow: visible;
+      position: relative;
+      padding-bottom: var(--space-2);
+    }
+
+    .project-header .header-image::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: calc(-1 * var(--content-margin) - var(--space-2));
+      width: calc(100vw + var(--content-margin));
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
     }
 
     .project-header .header-image img {
