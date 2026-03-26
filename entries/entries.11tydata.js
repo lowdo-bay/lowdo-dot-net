@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import sizeOf from 'image-size';
 
 const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.svg'];
 
@@ -141,6 +142,29 @@ export default function() {
         }
 
         return null;
+      },
+
+      // Detect orientation and aspect ratio of the header image (for project detail pages)
+      headerImageOrientation(data) {
+        if (!data.headerImage) return null;
+        try {
+          const dims = sizeOf(data.headerImage.src);
+          if (dims.width > dims.height) return 'landscape';
+          if (dims.width < dims.height) return 'portrait';
+          return 'square';
+        } catch (e) {
+          return null;
+        }
+      },
+
+      headerImageRatio(data) {
+        if (!data.headerImage) return null;
+        try {
+          const dims = sizeOf(data.headerImage.src);
+          return dims.height / dims.width;
+        } catch (e) {
+          return null;
+        }
       },
 
       // Auto-discover gallery images (for project detail pages)

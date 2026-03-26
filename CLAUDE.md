@@ -252,6 +252,8 @@ categories:
   - AWARD
   - NEWS
 link: "https://archleague.org/..."
+relatedProjects:
+  - "000000_project-slug"
 ---
 
 LowDO has been selected for the Architectural League's Emerging Voices program...
@@ -268,5 +270,3 @@ netlify dev            # Full Netlify dev environment
 ## Links
 
 - **Live Site**: https://lowdo.netlify.app
-- **Contact**: lowdo@lowdo.net
-- **Instagram**: @lowdesignoffice
