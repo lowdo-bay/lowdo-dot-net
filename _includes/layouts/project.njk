@@ -45,6 +45,19 @@ section: project
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: max-content;
     align-content: start;
+    position: relative;
+  }
+
+  /* Mobile: dashed line at the top of project-meta-bottom */
+  @media (max-width: 839px) {
+    .project-meta-bottom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: calc(-1 * var(--content-margin) - var(--space-2));
+      width: calc(100vw + var(--content-margin));
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
   }
 
   /* Metadata row wrapper: use display: contents to not affect grid */
@@ -97,6 +110,14 @@ section: project
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
 
+  /* Mobile: extend dashed line to left screen edge */
+  @media (max-width: 839px) {
+    .project-meta-label::after {
+      left: calc(-1 * var(--content-margin) - var(--space-2));
+      width: calc(100vw + var(--content-margin));
+    }
+  }
+
   /* Metadata value: sub-col 2 */
   .project-meta-value {
     padding: var(--space-2);
@@ -117,6 +138,20 @@ section: project
     letter-spacing: 0.05em;
     border-bottom: none;
     position: relative;
+  }
+  /* Vertical divider between columns: only on data cells (not header), stops at header line */
+  .project-collab-cell:not(.project-collab-cell--head):nth-child(odd)::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-right: var(--grid-line-thickness) var(--grid-line-vertical-style) var(--grid-line-color);
+  }
+  @media (min-width: 840px) {
+    .project-collab-cell:not(.project-collab-cell--head):nth-child(odd)::before {
+      display: none;
+    }
   }
   .project-collab-cell:not(.project-collab-cell--head)::after {
     content: '';
@@ -382,6 +417,14 @@ section: project
     padding: var(--space-2);
     position: relative;
   }
+  .project-drawing-cell:nth-child(odd) {
+    border-right: var(--grid-line-thickness) var(--grid-line-vertical-style) var(--grid-line-color);
+  }
+  @media (min-width: 840px) {
+    .project-drawing-cell:nth-child(odd) {
+      border-right: none;
+    }
+  }
 
   /* Dashed line under each row: every 2nd cell on mobile */
   .project-drawing-cell:nth-child(2n)::after {
@@ -498,6 +541,17 @@ section: project
     padding: var(--space-2);
     position: relative;
   }
+  .project-photo-cell:nth-child(odd) {
+    border-right: var(--grid-line-thickness) var(--grid-line-vertical-style) var(--grid-line-color);
+  }
+  @media (min-width: 840px) {
+    .project-photo-cell:nth-child(odd) {
+      border-right: none;
+    }
+    .project-photo-cell:not(:nth-child(4n)) {
+      border-right: none;
+    }
+  }
 
   /* Dashed line under each row: every 2nd cell on mobile */
   .project-photo-cell:nth-child(2n)::after {
@@ -552,6 +606,14 @@ section: project
   .project-related-cell {
     padding: var(--space-2);
     position: relative;
+  }
+  .project-related-cell:nth-child(odd) {
+    border-right: var(--grid-line-thickness) var(--grid-line-vertical-style) var(--grid-line-color);
+  }
+  @media (min-width: 840px) {
+    .project-related-cell:nth-child(odd) {
+      border-right: none;
+    }
   }
 
   /* Dashed row separator — mirrors photo grid pattern */
@@ -798,6 +860,118 @@ section: project
   }
   /* Mobile: tighter sizing */
   @media (max-width: 839px) {
+    /* On mobile, reduce header padding to match content padding */
+    .project-header {
+      padding-top: var(--space-2);
+      padding-left: var(--space-2);
+      padding-right: var(--space-2);
+    }
+
+    /* On mobile, image stacks vertically. Remove absolute positioning
+       to let the image display at its natural aspect ratio */
+    .project-header .grid__item--span-2-left {
+      position: static;
+      overflow: visible;
+      margin-left: 0;
+      margin-top: 0;
+      padding: 0;
+    }
+
+    .project-header .header-image {
+      position: static;
+      height: auto;
+      display: block;
+      overflow: visible;
+      position: relative;
+      padding-bottom: var(--space-2);
+    }
+
+    .project-header .header-image::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: calc(-1 * var(--content-margin) - var(--space-2));
+      width: calc(100vw + var(--content-margin));
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
+
+    .project-header .header-image img {
+      height: auto;
+    }
+
+    /* On mobile, constrain metadata to same width as image */
+    .project-header .grid__item--span-2-right {
+      margin-top: var(--space-3);
+      margin-right: 0;
+      padding-right: var(--space-2);
+    }
+
+    /* Suppress duplicate line on the second cell of each row in collaborator/award tables */
+    .project-collab-cell:not(.project-collab-cell--head):nth-child(even)::after {
+      display: none;
+    }
+
+    /* Extend the single line edge-to-edge */
+    .project-collab-cell:not(.project-collab-cell--head):nth-child(odd)::after {
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200vw;
+    }
+
+    /* Hide thick header line on mobile */
+    .project-collab-cell--head:first-child::before {
+      display: none;
+    }
+
+    /* Hide thick header line on mobile for awards table */
+    .project-collab-grid:nth-of-type(2) .project-collab-cell--head:first-child::before {
+      display: none;
+    }
+
+    /* Convert thick line to normal dashed line on awards table */
+    .project-collab-grid:nth-of-type(2) .project-collab-cell--head:first-child::after {
+      border-bottom-width: var(--grid-line-thickness) !important;
+    }
+
+    /* Keep dashed header line full width on mobile */
+    .project-collab-cell--head:first-child::after {
+      left: 50%;
+      right: auto;
+      width: 200vw;
+      transform: translateX(-50%);
+    }
+
+    /* Keep dashed header line full width on mobile for awards table */
+    .project-collab-grid:nth-of-type(2) .project-collab-cell--head:first-child::after {
+      left: 50%;
+      right: auto;
+      width: 200vw;
+      transform: translateX(-50%);
+    }
+
+    /* Add top margin and full-width line under Description header on mobile */
+    .project-desc-header {
+      border-bottom: none;
+      position: relative;
+      margin-top: var(--space-8);
+    }
+
+    .project-desc-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    }
+
+    /* Remove top margin from awards section on mobile */
+    .project-collab-grid:nth-of-type(2) {
+      margin-top: 0 !important;
+    }
+
+
     .photo-modal__card {
       max-width: 96vw;
       max-height: 92vh;
