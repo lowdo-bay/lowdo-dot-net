@@ -44,8 +44,8 @@
   {# Column 4: Date #}
   <div class="index-col index-col--date">
     {% if entry.data.date %}
-      <span class="index-row__date-mmdd">{{ entry.data.date | formatDate("MMDD") }}</span>
       <span class="index-row__date-year">{{ entry.data.date | formatDate("YYYY") }}</span>
+      <span class="index-row__date-mmdd">{{ entry.data.date | formatDate("MMDD") }}</span>
     {% elif entry.data.year %}
       <span class="index-row__date-year">{{ entry.data.year }}</span>
     {% endif %}
