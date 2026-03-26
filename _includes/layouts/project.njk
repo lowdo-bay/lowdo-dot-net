@@ -798,6 +798,107 @@ section: project
   }
   /* Mobile: tighter sizing */
   @media (max-width: 839px) {
+    /* On mobile, reduce header padding to match content padding */
+    .project-header {
+      padding-top: var(--space-2);
+      padding-left: var(--space-2);
+      padding-right: var(--space-2);
+    }
+
+    /* On mobile, image stacks vertically. Remove absolute positioning
+       to let the image display at its natural aspect ratio */
+    .project-header .grid__item--span-2-left {
+      position: static;
+      overflow: visible;
+      margin-left: 0;
+      margin-top: 0;
+      padding: 0;
+    }
+
+    .project-header .header-image {
+      position: static;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    .project-header .header-image img {
+      height: auto;
+    }
+
+    /* On mobile, constrain metadata to same width as image */
+    .project-header .grid__item--span-2-right {
+      margin-top: var(--space-3);
+      margin-right: 0;
+      padding-right: var(--space-2);
+    }
+
+    /* Suppress duplicate line on the second cell of each row in collaborator/award tables */
+    .project-collab-cell:not(.project-collab-cell--head):nth-child(even)::after {
+      display: none;
+    }
+
+    /* Extend the single line edge-to-edge */
+    .project-collab-cell:not(.project-collab-cell--head):nth-child(odd)::after {
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200vw;
+    }
+
+    /* Hide thick header line on mobile */
+    .project-collab-cell--head:first-child::before {
+      display: none;
+    }
+
+    /* Hide thick header line on mobile for awards table */
+    .project-collab-grid:nth-of-type(2) .project-collab-cell--head:first-child::before {
+      display: none;
+    }
+
+    /* Convert thick line to normal dashed line on awards table */
+    .project-collab-grid:nth-of-type(2) .project-collab-cell--head:first-child::after {
+      border-bottom-width: var(--grid-line-thickness) !important;
+    }
+
+    /* Keep dashed header line full width on mobile */
+    .project-collab-cell--head:first-child::after {
+      left: 50%;
+      right: auto;
+      width: 200vw;
+      transform: translateX(-50%);
+    }
+
+    /* Keep dashed header line full width on mobile for awards table */
+    .project-collab-grid:nth-of-type(2) .project-collab-cell--head:first-child::after {
+      left: 50%;
+      right: auto;
+      width: 200vw;
+      transform: translateX(-50%);
+    }
+
+    /* Add top margin and full-width line under Description header on mobile */
+    .project-desc-header {
+      border-bottom: none;
+      position: relative;
+      margin-top: var(--space-8);
+    }
+
+    .project-desc-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    }
+
+    /* Remove top margin from awards section on mobile */
+    .project-collab-grid:nth-of-type(2) {
+      margin-top: 0 !important;
+    }
+
+
     .photo-modal__card {
       max-width: 96vw;
       max-height: 92vh;

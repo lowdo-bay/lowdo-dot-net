@@ -811,14 +811,13 @@ main.p--content article {
 /* Project header image - confined to grid columns */
 .header-image {
   width: 100%;
-  height: 30vh;
-  object-fit: cover;
+  height: auto;
 }
 
 .header-image img {
   width: 100%;
-  height: 30vh;
-  object-fit: cover;
+  height: auto;
+  display: block;
 }
 
 /* Remove top and bottom padding from header image container */
@@ -1363,6 +1362,7 @@ body::after {
 
 .index-row__date-mmdd {
 	display: block;
+	color: var(--color-accent-4);
 }
 
 .index-row__date-year {
