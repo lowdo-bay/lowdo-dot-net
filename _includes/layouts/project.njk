@@ -177,24 +177,26 @@ section: project
   }
 
   /* Portrait header: hide dashed line under Trade header, add line under Description */
-  section.is-portrait-header .project-collab-cell--head:first-child::after {
-    display: none;
-  }
+  @media (min-width: 840px) {
+    section.is-portrait-header .project-collab-cell--head:first-child::after {
+      display: none;
+    }
 
-  section.is-portrait-header .project-desc-header {
-    border-bottom: none;
-    padding-bottom: 0;
-    position: relative;
-  }
+    section.is-portrait-header .project-desc-header {
+      border-bottom: none;
+      padding-bottom: 0;
+      position: relative;
+    }
 
-  section.is-portrait-header .project-desc-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 100vw;
-    transform: translateX(-50%);
-    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    section.is-portrait-header .project-desc-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    }
   }
 
   .project-collab-cell--head:first-child::before {
@@ -541,49 +543,51 @@ section: project
   }
 
   /* ---- Portrait header: image is absolutely positioned (out of flow),
-     so header height = metadata column height only ---- */
+     so header height = metadata column height only (DESKTOP ONLY) ---- */
 
-  /* Header must be overflow:visible so image can bleed downward */
-  .project-header.is-portrait-header {
-    overflow: visible;
-    margin-bottom: 0;
-  }
+  @media (min-width: 840px) {
+    /* Header must be overflow:visible so image can bleed downward */
+    .project-header.is-portrait-header {
+      overflow: visible;
+      margin-bottom: 0;
+    }
 
-  /* Image container: absolutely positioned, left viewport edge to 2-col midpoint,
-     height driven by aspect-ratio so image shows in full */
-  .project-header.is-portrait-header .grid__item--span-2-left {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: calc(var(--content-width) / 2);
-    aspect-ratio: 1 / var(--portrait-image-ratio);
-    margin: 0;
-    overflow: visible;
-    z-index: 2;
-    align-self: auto;
-  }
+    /* Image container: absolutely positioned, left viewport edge to 2-col midpoint,
+       height driven by aspect-ratio so image shows in full */
+    .project-header.is-portrait-header .grid__item--span-2-left {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: calc(var(--content-width) / 2);
+      aspect-ratio: 1 / var(--portrait-image-ratio);
+      margin: 0;
+      overflow: visible;
+      z-index: 2;
+      align-self: auto;
+    }
 
-  /* Image fills the absolutely-positioned container */
-  .project-header.is-portrait-header .header-image {
-    position: absolute;
-    inset: 0;
-    height: 100%;
-  }
+    /* Image fills the absolutely-positioned container */
+    .project-header.is-portrait-header .header-image {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+    }
 
-  .project-header.is-portrait-header .header-image img {
-    object-fit: cover;
-    height: 100%;
-  }
+    .project-header.is-portrait-header .header-image img {
+      object-fit: cover;
+      height: 100%;
+    }
 
-  /* Section after portrait header: sits flush below metadata (no extra top padding).
-     Left column padded down by full image height to clear the bleed. */
-  section.is-portrait-header {
-    padding-top: 0;
-  }
+    /* Section after portrait header: sits flush below metadata (no extra top padding).
+       Left column padded down by full image height to clear the bleed. */
+    section.is-portrait-header {
+      padding-top: 0;
+    }
 
-  /* Left column: pushed down by JS-measured image height minus header height */
-  section.is-portrait-header .grid__item--span-2-left {
-    padding-top: var(--portrait-image-bleed, 0px);
+    /* Left column: pushed down by JS-measured image height minus header height */
+    section.is-portrait-header .grid__item--span-2-left {
+      padding-top: var(--portrait-image-bleed, 0px);
+    }
   }
 
   /* Add vertical spacing above photos section */
