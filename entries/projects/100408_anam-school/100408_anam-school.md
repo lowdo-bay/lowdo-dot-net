@@ -7,7 +7,7 @@ date: 2011-04-08
 year: 2011
 categories:
   - AFRICA
-  - EDUCATION
+  - COMMUNITY
 location: "Anam, Nigeria"  # e.g., "Austin, TX"
 status: "Unbuilt"    # e.g., "Built", "In Progress"
 collaborators:

@@ -7,6 +7,7 @@ date: 2021-01-01
 year: 2021
 categories:
   - EXHIBITION
+  - BAMBOT
 location: "Nantes, France"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

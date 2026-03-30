@@ -7,7 +7,7 @@ date: 2012-04-17
 year: 2012
 categories:
   - AFRICA
-  - SUSTAINABLE
+  - COMMUNITY
 location: "Anam, Nigeria"  # e.g., "Austin, TX"
 status: "Unbuilt"    # e.g., "Built", "In Progress"
 collaborators:

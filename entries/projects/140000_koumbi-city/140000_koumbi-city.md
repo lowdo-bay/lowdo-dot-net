@@ -8,6 +8,7 @@ year: 2014
 categories:
   - AFRICA
   - URBAN
+  - COMMUNITY
 location: "Koumbi City, Ghana"  # e.g., "Austin, TX"
 status: "In Progress"    # e.g., "Built", "In Progress"
 collaborators:

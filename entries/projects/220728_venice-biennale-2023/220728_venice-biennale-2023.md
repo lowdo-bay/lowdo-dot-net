@@ -8,6 +8,7 @@ year: 2023
 categories:
   - EXHIBITION
   - AMP
+  - AFRICA
 location: "Venice, Italy"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

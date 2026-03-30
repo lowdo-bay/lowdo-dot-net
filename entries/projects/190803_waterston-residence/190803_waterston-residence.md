@@ -8,6 +8,8 @@ year: 2019
 categories:
   - HOUSING
   - DESIGN+BUILD
+  - REMODEL
+  - ADDITION
 location: "Austin, TX"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

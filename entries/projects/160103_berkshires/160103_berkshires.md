@@ -7,7 +7,6 @@ date: 2018-01-03
 year: 2018
 categories:
   - HOUSING
-  - SUSTAINABLE
 location: "Austerlitz, NY"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

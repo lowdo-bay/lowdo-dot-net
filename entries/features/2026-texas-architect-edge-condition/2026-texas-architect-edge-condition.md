@@ -4,8 +4,7 @@ title: "Edge Condition"
 subtitle: "Texas Architect Magazine"
 description: "Feature article examining the Wolf Creek Ranch Residence by LowDO, highlighting sustainable design principles, passive cooling strategies, and integration with the Texas landscape."
 date: 2026-03-17
-categories:
-  - PRESS
+categories: []
 link: "https://magazine.texasarchitects.org/2026/03/17/edge-condition/"
 relatedProjects:
   - "201230_wolf-creek-ranch"

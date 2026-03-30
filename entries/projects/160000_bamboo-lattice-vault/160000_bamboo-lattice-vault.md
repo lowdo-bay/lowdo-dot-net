@@ -7,8 +7,8 @@ date: 2016-01-01
 year: 2016
 categories:
   - AFRICA
-  - BAMBOO
   - BAMBOT
+  - COMMUNITY
 location: "Accra, Ghana"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

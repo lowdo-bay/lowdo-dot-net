@@ -166,7 +166,7 @@ date: 2024-01-15
 subtitle: "Brief tagline shown below title"  # Displayed in Column 2
 categories:                                   # Displayed in Column 3
   - HOUSING
-  - DESIGN
+  - SUSTAINABLE
 position: 1  # Sort order (lower = first)
 ```
 
@@ -188,6 +188,7 @@ year: 2024                        # Optional: display year instead of full date
 categories:
   - HOUSING
   - SUSTAINABLE
+  - DESIGN+BUILD
 collaborators:                    # Shown in Column 3
   - name: "Partner Name"
     role: "Structural Engineer"
@@ -209,9 +210,7 @@ title: "Update Title"
 subtitle: "Brief tagline"         # Shown in Column 2
 description: "Short description"  # Shown in Column 3
 date: 2024-01-15
-categories:
-  - AWARD
-  - NEWS
+categories: []                    # Updates don't use topic categories
 link: "https://external-url.com"  # Makes title clickable (opens in new tab)
 position: 2
 ---
@@ -223,6 +222,10 @@ position: 2
 - `description` - Short text shown in Column 3 for **Updates only**
 - `link` - External URL for Updates (makes title clickable)
 - `year` - For projects, can be used instead of full date
+
+### Category Consolidation and Reorganization
+
+When consolidating or reorganizing categories across multiple entries, **use an AI assistant** to help review entries and suggest changes. See the [User Documentation on AI assistants](docs/05-tools-and-workflow/using-ai-assistants.md#consolidating-categories) for workflow and example prompts.
 
 ### Adding Images
 

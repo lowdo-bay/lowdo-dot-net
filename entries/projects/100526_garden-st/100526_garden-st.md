@@ -7,8 +7,9 @@ date: 2024-01-15
 year: 2024
 categories:
   - HOUSING
-  - SUSTAINABLE
   - DESIGN+BUILD
+  - REMODEL
+  - ADDITION
 location: "Austin, TX"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

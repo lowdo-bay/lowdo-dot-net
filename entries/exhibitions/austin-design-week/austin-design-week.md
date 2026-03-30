@@ -5,7 +5,6 @@ subtitle: "Material Strategies"
 date: 2022-11-05
 categories:
   - EXHIBITION
-  - DESIGN
 link: "https://austindesignweek.org/"
 position: 
 ---

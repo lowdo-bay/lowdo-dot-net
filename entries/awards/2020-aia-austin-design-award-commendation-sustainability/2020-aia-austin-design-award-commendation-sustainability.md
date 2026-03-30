@@ -4,8 +4,7 @@ title: "Design Award Commendation: Sustainability"
 subtitle: "AIA Austin"
 description: "LowDO received a Commendation in the Sustainability category at the AIA Austin Design Awards, recognizing excellence in sustainable and environmentally responsible design."
 date: 2020-05-15
-categories:
-  - PRESS
+categories: []
 link: "https://www.aiaaustin.org/component/content/article/1-latest-news/77-2020-design-awards-winners"
 relatedProjects:
   - "120710_dakota-mountain"

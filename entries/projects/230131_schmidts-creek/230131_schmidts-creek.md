@@ -6,8 +6,8 @@ description: "Community space under the trees anchored by local retail."
 date: 2023-01-31
 year: Ongoing
 categories:
-  - HOUSING
-  - SUSTAINABLE
+  - COMMERCIAL
+  - COMMUNITY
 location: "Hutto, TX"  # e.g., "Austin, TX"
 status: "In Progress"    # e.g., "Built", "In Progress"
 collaborators:

@@ -8,6 +8,7 @@ year: 2016
 categories:
   - COMMERCIAL
   - REMODEL
+  - DESIGN+BUILD
 location: "Austin, TX"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:
