@@ -10,7 +10,7 @@ categories:
   - EXHIBITION
   - INSTALLATION
 location: "Accra, Ghana"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+status: "Exhibition"    # e.g., "Built", "In Progress"
 collaborators:
   - name: "Nana Oforiatta Ayim"
     role: "Collaborator"

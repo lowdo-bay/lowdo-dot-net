@@ -3,14 +3,14 @@ draft: false
 featured: false
 title: "Bambot: Fufuzela MoMA PS1 YAP"
 description: "Finalist submission for 2019 MoMA PS1 Young Architects Program, Queens NY"
-date: 2020-07-30
+date: 2019-07-30
 year: 2019
 categories:
   - EXHIBITION
   - BAMBOT
   - COMPETITION
 location: "Queens, NY"  # e.g., "Austin, TX"
-status: "Unbuilt"    # e.g., "Built", "In Progress"
+status: "Finalist"    # e.g., "Built", "In Progress"
 collaborators:
   - name: "Panurban, Dr. Yasmine Abbas"
     role: "Atmospheres design"

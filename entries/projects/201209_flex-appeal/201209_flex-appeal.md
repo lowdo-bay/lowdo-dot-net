@@ -3,7 +3,7 @@ draft: false
 featured: false
 title: "Flex Appeal"
 description: "Adaptive housing that addresses affordability and equitable communities"
-date: 2020-12-09
+date: 2021-01-09
 year: 2021
 categories:
   - HOUSING

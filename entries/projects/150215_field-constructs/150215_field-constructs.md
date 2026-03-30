@@ -9,7 +9,7 @@ categories:
   - INSTALLATION
   - COMPETITION
 location: "Austin, TX"  # e.g., "Austin, TX"
-status: "Proposal"    # e.g., "Built", "In Progress"
+status: "Competition"    # e.g., "Built", "In Progress"
 collaborators:
   - name: "Variable Projects"
     role: "Collaborator"

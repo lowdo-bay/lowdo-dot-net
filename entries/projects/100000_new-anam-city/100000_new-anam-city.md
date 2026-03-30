@@ -9,7 +9,7 @@ categories:
   - AFRICA
   - URBAN
 location: "Anambra State, Nigeria"  # e.g., "Austin, TX"
-status: "In Development"    # e.g., "Built", "In Progress"
+status: "Ongoing"    # e.g., "Built", "In Progress"
 collaborators:
 position:
 ---

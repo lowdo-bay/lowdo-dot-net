@@ -8,7 +8,7 @@ year: 2023
 categories:
   - COMMERCIAL
 location: "Austin, TX"  # e.g., "Austin, TX"
-status: "Unbuilt"    # e.g., "Built", "In Progress"
+status: "Designed"    # e.g., "Built", "In Progress"
 collaborators:
 position:
 ---

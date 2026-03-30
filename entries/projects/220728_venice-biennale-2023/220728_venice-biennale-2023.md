@@ -10,7 +10,7 @@ categories:
   - AMP
   - AFRICA
 location: "Venice, Italy"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+status: "Exhibition"    # e.g., "Built", "In Progress"
 collaborators:
 position:
 ---

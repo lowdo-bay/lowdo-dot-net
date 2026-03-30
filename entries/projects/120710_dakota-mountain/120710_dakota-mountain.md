@@ -1,10 +1,10 @@
 ---
 draft: false
-featured: false
+featured: true
 title: "Dakota Mountain"
 description: "Climate-responsive house for co-living"
-date: 2012-07-10
-year: 2012
+date: 2019-07-10
+year: 2019
 categories:
   - HOUSING
   - DESIGN+BUILD

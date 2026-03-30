@@ -3,13 +3,13 @@ draft: false
 featured: false
 title: "Fufuzela: Le Lieu Unique"
 description: "Exhibit in Nantes, France"
-date: 2021-01-01
+date: 2021-04-21
 year: 2021
 categories:
   - EXHIBITION
   - BAMBOT
 location: "Nantes, France"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+status: "Exhibition"    # e.g., "Built", "In Progress"
 collaborators:
   - name: "David Gallard"
     role: "Photography"
