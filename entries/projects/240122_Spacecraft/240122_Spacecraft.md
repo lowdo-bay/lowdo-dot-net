@@ -7,6 +7,7 @@ date: 2014-01-22
 year: 2014 - Present
 categories:
   - AMP
+  - AFRICA
 location: "Various"  # e.g., "Austin, TX"
 status: "Ongoing"    # e.g., "Built", "In Progress"
 collaborators:

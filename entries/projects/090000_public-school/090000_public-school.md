@@ -6,7 +6,7 @@ description: "Harvard Graduate School of Design Thesis"
 date: 2009-01-01
 year: 2009
 categories:
-  - PUBLIC
+  - COMMUNITY
   - RESEARCH
 location: "Washington DC"  # e.g., "Austin, TX"
 status: "Research"    # e.g., "Built", "In Progress"

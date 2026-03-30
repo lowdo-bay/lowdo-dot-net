@@ -4,8 +4,7 @@ title: "Innovation Challenge Award"
 subtitle: "Rockefeller Foundation"
 description: "LowDO was selected for the Rockefeller Foundation Innovation Challenge Award, recognizing innovative approaches to design and community development."
 date: 2013-01-15
-categories:
-  - PRESS
+categories: []
 link: "https://www.rockefellerfoundation.org/"
 relatedProjects:
   - "240122_spacecraft"

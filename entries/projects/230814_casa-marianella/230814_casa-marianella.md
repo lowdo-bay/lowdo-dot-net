@@ -6,7 +6,6 @@ year: 2027
 date: 2027-03-01
 categories:
   - HOUSING
-  - RESIDENTIAL
   - SUSTAINABLE
   - DESIGN+BUILD
 location: "Austin, TX"  # e.g., "Austin, TX"

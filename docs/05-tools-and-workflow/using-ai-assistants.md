@@ -42,6 +42,38 @@ When asking for help, provide context:
 
 ---
 
+## Consolidating Categories
+
+This is a perfect use case for AI assistants. If you want to reorganize or consolidate categories across multiple projects:
+
+### Example Scenario
+
+> "I have several LowDO projects tagged with both RESIDENTIAL and HOUSING, which are too similar. I also have some tagged with DESIGN that should probably be combined with project types. Help me consolidate these categories and tell me which entries need to be updated."
+
+**AI can help by:**
+1. Analyzing your current category usage
+2. Suggesting a cleaner system
+3. Listing exactly which entries need updates
+4. Providing the updated frontmatter
+
+You then update each entry and commit the changes.
+
+### Example Prompts for Category Work
+
+**Reviewing category consistency:**
+> "Can you tell me which categories are used most and suggest a simplified system?"
+
+**Finding entries to update:**
+> "Which of my projects use the PRESS category? Give me their filenames so I can update them."
+
+**Consolidating similar categories:**
+> "I want to combine COMMERCIAL and BUSINESS into one category. Which entries have each one and what should the new unified category be?"
+
+**Bulk category updates:**
+> "Can you create updated versions where RESIDENTIAL becomes HOUSING and DESIGN is removed if it's the only category?"
+
+---
+
 ## Example Prompts
 
 ### Adding a Project

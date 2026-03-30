@@ -7,7 +7,6 @@ date: 2009-01-01
 year: 2009 - 2017
 categories:
   - AFRICA
-  - RURBAN
 location: "Accra + Tema, Ghana"  # e.g., "Austin, TX"
 status: "Research"    # e.g., "Built", "In Progress"
 collaborators:

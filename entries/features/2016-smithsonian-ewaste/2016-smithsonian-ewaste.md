@@ -5,7 +5,6 @@ subtitle: "Smithsonian Magazine"
 description: "Investigation into e-waste dumping in Africa and innovative approaches to recycling and reuse in Ghana"
 date: 2016-01-13
 categories:
-  - PRESS
   - AMP
   - AFRICA
 link: "https://www.smithsonianmag.com/science-nature/burning-truth-behind-e-waste-dump-africa-180957597/"

@@ -5,7 +5,6 @@ subtitle: "Dezeen"
 description: "Profile of AMP's modular, open-source workshop structures built from recycled materials at Agbogbloshie e-waste site in Ghana"
 date: 2016-05-16
 categories:
-  - PRESS
   - AMP
   - AFRICA
 link: "https://www.dezeen.com/2016/05/16/agbogbloshie-e-waste-dump-makerspace-platform-spacecraft-mobile-architecture-workshop-ghana-julien-lanoo-photography/"

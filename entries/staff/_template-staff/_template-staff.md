@@ -4,9 +4,7 @@ title: "Person's Name"
 subtitle: "New Role or Update Type"
 description: "Brief description of the update"
 date: 2024-01-15
-categories:
-  - STAFF
-  - NEWS
+categories: []
 link: ""
 relatedProjects:    # Optional: link this staff update to one or more projects
   - ""              # Use the project folder name (slug), e.g. "wolf-creek-ranch"

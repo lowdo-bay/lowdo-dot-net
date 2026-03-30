@@ -4,8 +4,7 @@ title: "Dear Prudence"
 subtitle: "Texas Architect Magazine"
 description: "Feature article on the Dakota Mountain Residence by Low Design Office, highlighting sustainable design, affordability, and innovative co-living solutions in Texas Hill Country."
 date: 2020-05-06
-categories:
-  - PRESS
+categories: []
 link: "https://magazine.texasarchitects.org/2020/05/06/dear-prudence/"
 relatedProjects:
   - "120710_dakota-mountain"

@@ -4,8 +4,7 @@ title: "This Clever, Affordable Homestead for a Retired Texas Couple Is Two Hous
 subtitle: "Dwell"
 description: "Feature on the Dakota Mountain Residence by Low Design Office, showcasing an innovative co-housing design that achieves high-end aesthetics within a modest budget through efficient design and sustainable systems."
 date: 2020-08-03
-categories:
-  - PRESS
+categories: []
 link: "https://www.dwell.com/article/dakota-mountain-residence-low-design-office-9958376a"
 relatedProjects:
   - "120710_dakota-mountain"

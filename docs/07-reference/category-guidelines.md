@@ -1,31 +1,35 @@
 # Category Guidelines
 
-When to use which categories.
+Organize entries with consistent, meaningful categories.
 
 ---
 
-## Common Categories
+## Available Categories
 
 **Project Types:**
-- HOUSING
-- COMMERCIAL
-- RESIDENTIAL
-- PUBLIC
+- HOUSING — Residential projects (single-family, multi-unit, renovations, adaptive housing)
+- COMMERCIAL — Commercial and hospitality projects
+- COMMUNITY — Civic projects (schools, hospitals, public space, urban planning)
 
-**Themes:**
-- SUSTAINABLE
-- COMMUNITY
-- EDUCATION
-- DESIGN
+**Core Themes:**
+- SUSTAINABLE — Sustainability-driven design
+- AFRICA — Work on the African continent
 
-**Recognition:**
-- AWARD
-- PRESS
-- FEATURE
+**Specialized Work:**
+- BAMBOT — Bamboo robotic construction research and fabrication
+- INSTALLATION — Temporary structures, installations, galleries, exhibitions
+- AMP — Agbogbloshie Makerspace Platform initiative
 
-**Events:**
-- LECTURE
-- EXHIBITION
+**Delivery & Scope:**
+- DESIGN+BUILD — Design-build delivery method
+- URBAN — Urban-scale planning
+- ADAPTIVE HOUSING — Modular or flexible housing systems
+- REMODEL — Renovation or renovation-focused projects
+- ADDITION — Building additions
+- COMPETITION — Competition entries
+
+**Research:**
+- RESEARCH — Research and thesis projects
 
 ---
 
@@ -35,12 +39,13 @@ When to use which categories.
 - Keep it to 2-4 categories per entry
 - Use ALL CAPS
 - Be consistent (SUSTAINABLE not Sustainable)
+- Don't add new categories lightly—use AI assistant to review before creating new ones
 
 ---
 
 ## Creating New Categories
 
-Just add to frontmatter:
+Before adding a new category, check with an AI assistant to see if existing categories could work instead. If you do create a new one:
 
 ```yaml
 categories:
@@ -48,6 +53,14 @@ categories:
 ```
 
 It will automatically appear in filters.
+
+---
+
+## Consolidating or Reorganizing Categories
+
+When you want to reorganize categories across many entries, **use an AI assistant** to help review and suggest changes. This keeps categories consistent and prevents drift.
+
+See [Using AI Assistants](../05-tools-and-workflow/using-ai-assistants.md#consolidating-categories) for full workflow.
 
 ---
 

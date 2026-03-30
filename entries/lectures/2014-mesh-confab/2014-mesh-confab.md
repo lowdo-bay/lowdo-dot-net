@@ -7,7 +7,6 @@ date: 2015-02-25
 categories:
   - AFRICA
   - AMP
-  - VIDEO
 link: "https://www.youtube.com/watch?v=kpSbWWJHUtQ"
 relatedProjects:    # Optional: link this presentation to one or more projects
   - "240122_spacecraft"              # Use the project folder name (slug), e.g. "garden-st-residence"

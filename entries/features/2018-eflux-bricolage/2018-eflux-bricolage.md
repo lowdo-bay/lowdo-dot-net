@@ -5,7 +5,6 @@ subtitle: "e-flux Architecture"
 description: "Essay exploring bricolage practices and material reuse in design, featuring AMP's work in Ghana"
 date: 2018-07-01
 categories:
-  - PRESS
   - AMP
   - AFRICA
 link: "https://www.e-flux.com/architecture/structural-instability/208705/bricolage-or-the-impossibility-of-pollution"
