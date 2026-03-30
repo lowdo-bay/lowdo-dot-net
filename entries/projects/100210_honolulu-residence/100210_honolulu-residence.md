@@ -7,6 +7,7 @@ date: 2010-02-10
 year: 2010
 categories:
   - HOUSING
+  - REMODEL
 location: "Honolulu, HI"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

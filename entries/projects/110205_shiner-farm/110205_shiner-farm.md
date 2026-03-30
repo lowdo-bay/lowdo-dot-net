@@ -7,6 +7,7 @@ date: 2011-02-05
 year: 2012
 categories:
   - HOUSING
+  - DESIGN+BUILD
 location: "Shiner, TX"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

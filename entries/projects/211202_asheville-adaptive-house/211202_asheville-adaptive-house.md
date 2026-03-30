@@ -7,7 +7,6 @@ date: 2021-12-02
 year: 2021
 categories:
   - HOUSING
-  - SUSTAINABLE
   - ADAPTIVE HOUSING
 location: "Asheville, NC"  # e.g., "Austin, TX"
 status: "Designed"    # e.g., "Built", "In Progress"

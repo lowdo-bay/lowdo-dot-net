@@ -8,6 +8,7 @@ year: 2017
 categories:
   - HOUSING
   - REMODEL
+  - DESIGN+BUILD
 location: "San Antonio, TX"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:

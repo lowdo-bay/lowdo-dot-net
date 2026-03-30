@@ -8,6 +8,8 @@ year: 2014 - Present
 categories:
   - AMP
   - AFRICA
+  - INSTALLATION
+  - EXHIBITION
 location: "Various"  # e.g., "Austin, TX"
 status: "Ongoing"    # e.g., "Built", "In Progress"
 collaborators:

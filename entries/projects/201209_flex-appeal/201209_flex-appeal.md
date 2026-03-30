@@ -19,7 +19,7 @@ collaborators:
 position:
 ---
 
-2021 Honorable Mention in LA Low-rise Competition .
+2021 Honorable Mention in LA Low-rise Competition.
 
 Adaptive/Expansive Housing is a human community-powered system that is designed to accommodate a range of cohabitation scenarios, as well as fostering genuine relationships between housed and unhoused, high- and low-income residents, owners and renters. The combinatory system operates not unlike a sequence of hybrid architectural DNA that interlaces living and dwelling functions by means of a dynamic human-powered algorithm: building clusters evolve via accretion and reconfiguration, determined by choices and decisions made by members of the community over time, while the overall composition can adjust (attune) to the scale and relative massing of a given neighborhood, in order to create contextual scenarios, situations that are situated and reference vernacular forms.
 

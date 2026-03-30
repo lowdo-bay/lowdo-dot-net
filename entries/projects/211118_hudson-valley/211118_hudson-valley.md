@@ -7,7 +7,6 @@ date: 2028-11-18
 year: 2028
 categories:
   - HOUSING
-  - SUSTAINABLE
 location: "Hudson Valley, NY"  # e.g., "Austin, TX"
 status: "In Progress"    # e.g., "Built", "In Progress"
 collaborators:

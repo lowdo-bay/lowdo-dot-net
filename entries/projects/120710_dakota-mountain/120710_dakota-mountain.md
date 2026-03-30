@@ -7,7 +7,6 @@ date: 2012-07-10
 year: 2012
 categories:
   - HOUSING
-  - SUSTAINABLE
   - DESIGN+BUILD
   - ADAPTIVE HOUSING
 location: "Dripping Springs, TX"  # e.g., "Austin, TX"

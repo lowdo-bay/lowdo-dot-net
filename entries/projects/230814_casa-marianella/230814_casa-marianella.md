@@ -6,8 +6,8 @@ year: 2027
 date: 2027-03-01
 categories:
   - HOUSING
-  - SUSTAINABLE
   - DESIGN+BUILD
+  - COMMUNITY
 location: "Austin, TX"  # e.g., "Austin, TX"
 status: "Under Construction"    # e.g., "Built", "In Progress"
 collaborators:

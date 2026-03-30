@@ -7,7 +7,7 @@ date: 2024-01-31
 year: 2024
 categories:
   - HOUSING
-  - SUSTAINABLE
+  - COMMUNITY
 location: "Baja Sur, MX"  # e.g., "Austin, TX"
 status: "In Progress"    # e.g., "Built", "In Progress"
 collaborators:
