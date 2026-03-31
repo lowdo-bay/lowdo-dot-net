@@ -28,9 +28,3 @@ Deployments:
 [Chale Wote Street Arts Festival: African Electronics, Accra, Ghana](http://anoghana.org/living-history-hub-chale-wote-festival-20-23-august/) (2015)
 [Chale Wote Street Arts Festival: Spirit Robot, Accra, Ghana](http://anoghana.org/kiosk-museum-at-the-chale-wote-street-art-festival-august-2016/) (2016)
 [Kiosk Culture Exhibition, ANO Institute, Accra, Ghana](http://anoghana.org/kiosk-culture-exhibition/) (2016)
-
-Press:
-[The New York Times](https://www.nytimes.com/2017/03/11/arts/africa-cultural-encyclopedia.html) (2017)
-[The Guardian UK](https://www.theguardian.com/world/2016/nov/08/ghanas-first-travelling-museum-ready-to-hit-the-road-kiosk) (2016)
-[Africa's a Country](https://africasacountry.com/2016/01/the-kiosks-in-accra-that-are-reshaping-space-in-the-city/) (2016)
-[Lonely Planet](https://www.lonelyplanet.com/articles/moving-museums-ghana-art) (2016)

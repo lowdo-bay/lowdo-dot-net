@@ -51,7 +51,3 @@ position:
 *-Aaron Seward, "Dear Prudence" feature in Texas Architect*
 
 Designed and built by LowDO on a three-acre property in the Texas hill country, the Dakota Mountain Residence is a homestead that pilots sustainability for contemporary lifestyles. A retired couple wanted to build a climate-responsive house tailored for their creative pursuits, and to host their children and grandchildren. The project emerged accordingly as a form of intermittent intra-family co-housing, interlocking two homes into a single block.
-
-2020 AIA Austin Design Award Commendation: Sustainability
-2020 Feature in Dwell, "This Clever, Affordable Homestead for a Retired Texas Couple Is Two Houses in One"
-2020 Feature in Texas Architect, "Dear Prudence"
