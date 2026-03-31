@@ -12,6 +12,10 @@ status: "In Progress"    # e.g., "Built", "In Progress"
 collaborators:
   - name: "Spiegel Aihara Workshop"
     role: "Landscape Designer"
+  - name: "LIA Engineering LLC"
+    role: "Structural Engineer"
+  - name: "Ecobuild NY"
+    role: "General Contractor"
 position:
 ---
 

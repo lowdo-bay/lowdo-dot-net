@@ -1,10 +1,10 @@
 ---
 draft: false
-featured: false
+featured: true
 title: "Dakota Mountain"
 description: "Climate-responsive house for co-living"
-date: 2012-07-10
-year: 2012
+date: 2019-07-10
+year: 2019
 categories:
   - HOUSING
   - DESIGN+BUILD
@@ -16,6 +16,34 @@ collaborators:
     role: "Structural Engineer"
   - name: "Chase Daniel"
     role: "Photography"
+  - name: "Mario Alcocer"
+    role: "Foundation and Site Work"
+  - name: "Chabert Plumbing"
+    role: "Plumbing"
+  - name: "S2N Electric"
+    role: "Electrical"
+  - name: "Jason Wiggins"
+    role: "Framing, Finish Work, Painting, Doors, and Site Work"
+  - name: "Low Design Labor"
+    role: "Framing"
+  - name: "Nic Perez"
+    role: "Roofing"
+  - name: "Harvested Rain Solutions"
+    role: "Rainwater Collection"
+  - name: "Jean Gonzales"
+    role: "Framing, Finish Work, and Painting"
+  - name: "Master Roofing"
+    role: "Siding"
+  - name: "RC Drywall"
+    role: "Drywall"
+  - name: "Kenneth Bollom"
+    role: "Painting and Finish Work"
+  - name: "FCS Granite"
+    role: "Countertops"
+  - name: "Larry"
+    role: "Septic"
+  - name: "American Trees"
+    role: "Site Work"
 position:
 ---
 

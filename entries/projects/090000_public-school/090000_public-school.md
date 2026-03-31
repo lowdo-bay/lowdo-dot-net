@@ -3,7 +3,7 @@ draft: false
 featured: false
 title: "Public School"
 description: "Harvard Graduate School of Design Thesis"
-date: 2009-01-01
+date: 2009-05-31
 year: 2009
 categories:
   - COMMUNITY

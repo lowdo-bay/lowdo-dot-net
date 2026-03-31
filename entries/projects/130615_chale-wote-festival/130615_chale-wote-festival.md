@@ -11,7 +11,7 @@ categories:
   - COMMUNITY
   - BAMBOT
 location: "Accra, Ghana"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+status: "Temporary Installation"    # e.g., "Built", "In Progress"
 collaborators:
 position:
 ---

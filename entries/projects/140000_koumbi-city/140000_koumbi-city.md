@@ -3,14 +3,14 @@ draft: false
 featured: false
 title: "Koumbi City"
 description: "Community-driven masterplan weaving housing, public space, and resilient infrastructure"
-date: 2014-01-01
+date: 2014-01-31
 year: 2014
 categories:
   - AFRICA
   - URBAN
   - COMMUNITY
 location: "Koumbi City, Ghana"  # e.g., "Austin, TX"
-status: "In Progress"    # e.g., "Built", "In Progress"
+status: "Designed"    # e.g., "Built", "In Progress"
 collaborators:
 position:
 ---

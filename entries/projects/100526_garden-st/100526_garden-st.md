@@ -1,10 +1,10 @@
 ---
 draft: false
-featured: false
+featured: true
 title: "Garden St. Residence"
 description: "Multiphase home framing everyday life."
 date: 2024-01-15
-year: 2024
+year: 2012 - 2024
 categories:
   - HOUSING
   - DESIGN+BUILD

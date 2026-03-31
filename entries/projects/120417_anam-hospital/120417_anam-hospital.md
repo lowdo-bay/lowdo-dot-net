@@ -1,7 +1,7 @@
 ---
 draft: false
 featured: false
-title: "Anam Hospital"
+title: "Anam City Health Center"
 description: "Experimental model for site-specific African development"
 date: 2012-04-17
 year: 2012
