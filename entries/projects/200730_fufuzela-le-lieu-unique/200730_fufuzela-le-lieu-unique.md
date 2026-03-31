@@ -1,6 +1,6 @@
 ---
 draft: false
-featured: false
+featured: true
 title: "Fufuzela: Le Lieu Unique"
 description: "Exhibit in Nantes, France"
 date: 2021-04-21

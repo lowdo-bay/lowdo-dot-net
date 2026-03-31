@@ -1,6 +1,6 @@
 ---
 draft: false
-featured: false
+featured: true
 title: "Greenhouse"
 description: "Naturhus-inspired residence and music studio"
 date: 2028-12-01
