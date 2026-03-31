@@ -1110,7 +1110,7 @@ section: project
             {% if description %}{{ description | renderUsingMarkdown | safe }}{% endif %}
           </div>
           <div class="project-meta-tags">
-            {% if categories %}{{ categories | join(', ') | upper }}{% endif %}
+            {% if categories and categories.length %}{{ categories | join(', ') | upper }}{% endif %}
           </div>
         </div>
 
@@ -1175,7 +1175,7 @@ section: project
                   {{ item.data.title }}
                 {% endif %}
               </div>
-              <div class="project-collab-cell">{{ item.data.categories | join(', ') | upper }} ({{ item.data.date | formatDate("YYYY") }})</div>
+              <div class="project-collab-cell">{% if item.data.categories and item.data.categories.length %}{{ item.data.categories | join(', ') | upper }} ({{ item.data.date | formatDate("YYYY") }}){% else %}({{ item.data.date | formatDate("YYYY") }}){% endif %}</div>
             {% endfor %}
           </div>
         {% endif %}
