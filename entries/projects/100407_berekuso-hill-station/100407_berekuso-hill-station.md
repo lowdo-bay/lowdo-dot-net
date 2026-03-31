@@ -9,7 +9,7 @@ categories:
   - AFRICA
   - COMMUNITY
 location: "Berekuso, Ghana"  # e.g., "Austin, TX"
-status: "Designed"    # e.g., "Built", "In Progress"
+status: "In Progress"    # e.g., "Built", "In Progress"
 collaborators:
 position:
 ---

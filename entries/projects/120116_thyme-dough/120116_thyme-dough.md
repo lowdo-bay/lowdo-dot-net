@@ -27,5 +27,3 @@ Rolling in Thyme and Dough began as an organic produce vendor in 2006 and has tr
 The business, however, has consequently outgrown the old house. In order to alleviate congestion and enhance the great social atmosphere it provides, the owner decided to add a new dining room, bar, kitchen, storage, and outdoor deck.
 
 The design strategy strives to pay homage to the existing house by lightly connecting to it with a series of simple buildings that open to the surrounding nursery. It also applied minimal stress to the existing structure while allowing the business to continue functioning during the majority of construction.
-
-2012 Feature in Discover Dripping Springs, "Now more room to enjoy Thyme and Dough"
