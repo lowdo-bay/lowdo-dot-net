@@ -11,6 +11,12 @@ categories:
 location: "Asheville, NC"  # e.g., "Austin, TX"
 status: "Designed"    # e.g., "Built", "In Progress"
 collaborators:
+  - name: "Steffen Engineering Consulting"
+    role: "Structural Engineer"
+  - name: "Fresh Air HVAC"
+    role: "HVAC"
+  - name: "Gentry Geotechnical Engineering"
+    role: "Geotechnical Engineer"
 position:
 ---
 

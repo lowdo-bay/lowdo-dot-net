@@ -9,9 +9,16 @@ categories:
   - COMMERCIAL
   - DESIGN+BUILD
   - ADDITION
+  - ADAPTIVE REUSE
 location: "Dripping Springs, TX"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:
+  - name: "CMA Engineering"
+    role: "Civil Engineer"
+  - name: "Hinkle"
+    role: "Drywall"
+  - name: "Chase"
+    role: "Insulation"
 position:
 ---
 

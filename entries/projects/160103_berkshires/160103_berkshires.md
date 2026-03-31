@@ -10,6 +10,8 @@ categories:
 location: "Austerlitz, NY"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:
+  - name: "Mark P. Bergeron, P.E."
+    role: "Structural Engineer"
 position:
 ---
 
