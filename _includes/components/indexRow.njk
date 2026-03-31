@@ -4,7 +4,7 @@
   <a href="{{ entry.data.link }}" class="index-row-link" target="_blank" rel="noopener">
 {% endif %}
 
-<div class="index-row grid grid--index" data-entry-type="{{ entry.data.entryType }}" data-categories="{% if entry.data.categories %}{{ entry.data.categories | join(',') | lower }}{% endif %}">
+<div class="index-row grid grid--index" data-entry-type="{{ entry.data.entryType }}" data-categories="{% if entry.data.categories and entry.data.categories.length %}{{ entry.data.categories | join(',') | lower }}{% endif %}">
 
   {# Column 1: Thumbnail Image #}
   <div class="index-col index-col--image">
@@ -26,7 +26,7 @@
   {# Column 3: Details/Description #}
   <div class="index-col index-col--details">
     {% if entry.data.entryType or entry.data.categories %}
-      <span class="index-row__categories">{% if entry.data.entryType %}{{ entry.data.entryType | upper }}{% endif %}{% if entry.data.entryType and entry.data.categories %}, {% endif %}{% if entry.data.categories %}{{ entry.data.categories | join(', ') | upper }}{% endif %}</span>
+      <span class="index-row__categories">{% if entry.data.entryType %}{{ entry.data.entryType | upper }}{% endif %}{% if entry.data.entryType and entry.data.categories and entry.data.categories.length %}, {% endif %}{% if entry.data.categories and entry.data.categories.length %}{{ entry.data.categories | join(', ') | upper }}{% endif %}</span>
     {% endif %}
     {% if entry.data.collaborators and entry.data.collaborators.length %}
       <span class="index-row__collaborators">
