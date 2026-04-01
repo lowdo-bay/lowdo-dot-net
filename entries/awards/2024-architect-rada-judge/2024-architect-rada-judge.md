@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Judge for ARCHITECT RADA Awards"
 subtitle: "Architect Magazine"
 description: "Ashley Heeren served as judge for the 2024 Residential Architect Design Awards"

@@ -30,7 +30,3 @@
 - [Glossary](07-reference/glossary.md) — Terminology
 - [Entry Types](07-reference/entry-types-comparison.md) — Projects vs. news vs. awards
 - [Categories](07-reference/category-guidelines.md) — How to use categories
-
----
-
-Email lowdo@lowdo.net with questions.
