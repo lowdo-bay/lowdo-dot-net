@@ -3,8 +3,8 @@ draft: false
 featured: false
 title: "Alamo St House"
 description: "A remodel and addition to a historic home for a young family"
-date: 2020-12-02
-year: 2020
+date: 2024-12-02
+year: 2024
 categories:
   - HOUSING
   - REMODEL

@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "AIA Next to Lead Program"
 subtitle: "AIA (national)"
 description: "Nkiru selected for the AIA leadership development program for ethnically diverse women architects"

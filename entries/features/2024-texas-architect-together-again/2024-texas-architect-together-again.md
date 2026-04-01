@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Together Again"
 subtitle: "Texas Architect"
 description: "How third places are being reconsidered for the new millennium, by Nkiru Gelles"
