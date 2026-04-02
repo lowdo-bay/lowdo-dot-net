@@ -31,8 +31,8 @@
         // Check if any selected filter matches
         var hasMatch = selectedFilters.some(function(filter) {
           if (filter.category === 'type') {
-            // Match by entry type
-            return rowType === filter.value;
+            // Match by entry type OR by category (e.g. a project tagged with "exhibitions")
+            return rowType === filter.value || rowCategories.indexOf(filter.value) !== -1;
           } else {
             // Match by category
             return rowCategories.indexOf(filter.value) !== -1;
