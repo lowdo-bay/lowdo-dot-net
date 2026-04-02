@@ -642,11 +642,27 @@ permalink: "/index.html"
   .featured-projects-section .project-related-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    position: relative;
+  }
+
+  .featured-projects-section .project-related-grid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: var(--grid-line-thickness) dashed var(--grid-line-color);
+    pointer-events: none;
   }
 
   @media (min-width: 840px) {
     .featured-projects-section .project-related-grid {
       grid-template-columns: repeat(4, 1fr);
+    }
+
+    .featured-projects-section .project-related-grid::before {
+      display: none;
     }
   }
 
@@ -1072,6 +1088,7 @@ permalink: "/index.html"
       {{ '' if featuredProjects.push(project) }}
     {% endif %}
   {% endfor %}
+  {% set featuredProjects = featuredProjects | sortFeatured %}
 
   {% if featuredProjects | length %}
     <section class="featured-projects-section pb--6">
@@ -1094,10 +1111,11 @@ permalink: "/index.html"
           <div class="project-related-cell">
             <a href="{{ project.url | url }}" class="link-nostyle">
               <div class="related-thumb">
-                {% if project.data.headerImage %}
+                {% set featuredImage = project.data.featureImage or project.data.headerImage %}
+                {% if featuredImage %}
                   {% set params = {
-                    "src": project.data.headerImage.src,
-                    "alt": project.data.headerImage.alt or project.data.title,
+                    "src": featuredImage.src,
+                    "alt": featuredImage.alt or project.data.title,
                     "loadingType": "lazy",
                     "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 840px) 25vw, 45vw",
                     "outputWidths": [

@@ -273,6 +273,15 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
 
   // Filter to check if a string ends with a given suffix
   eleventyConfig.addFilter("endsWith", (str, suffix) => String(str).endsWith(suffix));
+
+  // Sort featured projects by featuredPosition (ascending); projects without it sort last
+  eleventyConfig.addFilter("sortFeatured", function(projects) {
+    return [...projects].sort((a, b) => {
+      const posA = a.data.featuredPosition ?? Infinity;
+      const posB = b.data.featuredPosition ?? Infinity;
+      return posA - posB;
+    });
+  });
   
   // Date formatting (human readable)
   eleventyConfig.addFilter("dateFullYear", dateObj => {

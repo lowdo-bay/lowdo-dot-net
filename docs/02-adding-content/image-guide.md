@@ -63,10 +63,28 @@ Use descriptive, lowercase names with hyphens:
 
 The system looks for these special names first:
 
-1. `header.jpg` or `header.png` - Preferred main thumbnail
+1. `header.jpg` or `header.png` - Preferred main thumbnail (used on the index and project pages)
 2. `thumb.jpg` or `thumb.png` - Alternative thumbnail name
+3. `featured.jpg` or `featured.png` - Homepage-only image (see below)
 
-If neither exists, the system will use the first image it finds alphabetically.
+If neither `header` nor `thumb` exists, the system will use the first image it finds alphabetically.
+
+### For Featured Projects (Homepage)
+
+If a project has `featured: true` in its frontmatter, it appears in the Featured Projects section on the homepage. By default it uses `header.jpg`. To show a **different image on the homepage** without changing the main header, add a `featured.jpg` to the project folder:
+
+- `featured.jpg` is used **only** on the homepage Featured Projects section
+- `header.jpg` continues to be used on the project detail page and in the index
+- `featured.jpg` does **not** appear in the project's photo gallery
+- Falls back to `header.jpg` if no `featured.jpg` exists
+
+```
+entries/projects/my-project/
+├── my-project.md
+├── header.jpg        ← Used on index, project page, and as fallback on homepage
+├── featured.jpg      ← Used only in the homepage Featured Projects section
+└── 01-exterior.jpg   ← Gallery image
+```
 
 ### For Projects (Gallery Images)
 
@@ -187,7 +205,7 @@ Before uploading, you can:
 
 ## For Projects: Gallery Behavior
 
-All images in a project folder (except `header.*` and `thumb.*`) are added to the gallery.
+All images in a project folder (except `header.*`, `thumb.*`, and `featured.*`) are added to the gallery.
 
 **Example:**
 ```
@@ -300,7 +318,8 @@ Additional images in the folder won't break anything, but they won't appear anyw
 | Add gallery images | Name them `01-name.jpg`, `02-name.jpg`, etc. |
 | Add thumbnail for news | Name it `thumb.jpg`, put in news folder |
 | Change thumbnail | Rename/replace `header.jpg` or `thumb.jpg` |
-| Remove image from gallery | Delete the file or rename to start with `header` or `thumb` |
+| Use a different image on the homepage | Name it `featured.jpg`, put in project folder (requires `featured: true`) |
+| Remove image from gallery | Delete the file or rename to start with `header`, `thumb`, or `featured` |
 | Reorder gallery | Rename files to change alphabetical order |
 
 ---

@@ -1,6 +1,7 @@
 ---
 draft: false
-featured: false
+featured: true
+featuredPosition: 5
 title: "New Anam City"
 description: "Vision plan for a new town prototype balancing social, economic, and ecological imperatives"
 date: 2011-01-01

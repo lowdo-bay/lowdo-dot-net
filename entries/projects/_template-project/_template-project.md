@@ -1,6 +1,7 @@
 ---
 draft: true
 featured: false
+featuredPosition:  # Control the order of featured projects on the homepage.
 title: "Your Project Name"
 description: "A short summary of the project (1-2 sentences)"
 date: 2024-01-15

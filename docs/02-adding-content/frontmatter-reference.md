@@ -221,7 +221,7 @@ status: "Built"
 
 ### featured
 
-**What it does:** Highlight projects or awards for special display.
+**What it does:** Marks a project as featured so it appears in the Featured Projects section on the homepage.
 
 **Format:** `true` or `false` (no quotes)
 
@@ -231,8 +231,28 @@ featured: true
 ```
 
 **Tips:**
-- `featured: true` may be used by the site for special display areas
-- `featured: false` (default) means normal display
+- `featured: true` — project appears in the Featured Projects section on the homepage
+- `featured: false` (default) — normal display only
+- Add a `featured.jpg` to the project folder to use a different image on the homepage than the main `header.jpg` (see [Image Guide](image-guide.md))
+
+### featuredPosition
+
+**What it does:** Controls the display order of projects within the Featured Projects section on the homepage.
+
+**Format:** Number (no quotes)
+
+**Example:**
+```yaml
+featuredPosition: 1
+```
+
+**When to use:**
+- Control which featured project appears first, second, etc.
+- Override the default order (which follows the global `position` field)
+
+**Default:** Projects without `featuredPosition` sort after those that have it set.
+
+**Note:** Only applies to projects with `featured: true`.
 
 ### description (Projects)
 
@@ -429,6 +449,8 @@ collaborators:
     role: "Sustainability Consultant"
 description: "A sustainable residential development in the Texas Hill Country"
 position: 1
+featured: true
+featuredPosition: 1
 ---
 ```
 
