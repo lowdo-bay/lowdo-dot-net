@@ -25,8 +25,8 @@
 
   {# Column 3: Details/Description #}
   <div class="index-col index-col--details">
-    {% if entry.data.entryType or entry.data.categories %}
-      <span class="index-row__categories">{% if entry.data.entryType %}{{ entry.data.entryType | upper }}{% endif %}{% if entry.data.entryType and entry.data.categories %}, {% endif %}{% if entry.data.categories %}{{ entry.data.categories | join(', ') | upper }}{% endif %}</span>
+    {% if entry.data.entryType or (entry.data.categories and entry.data.categories.length) %}
+      <span class="index-row__categories">{% if entry.data.entryType %}{{ entry.data.entryType | upper }}{% endif %}{% if entry.data.entryType and entry.data.categories and entry.data.categories.length %}, {% endif %}{% if entry.data.categories and entry.data.categories.length %}{{ entry.data.categories | join(', ') | upper }}{% endif %}</span>
     {% endif %}
     {% if entry.data.collaborators and entry.data.collaborators.length %}
       <span class="index-row__collaborators">

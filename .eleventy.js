@@ -160,10 +160,11 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   });
 
   // Collection of all unique entry types from subfolders
+  // Includes draft entries so types are always shown in the main filter bar,
+  // even when all entries of that type are currently drafts.
   eleventyConfig.addCollection("allEntryTypes", function(collectionApi) {
     const entries = collectionApi.getAll()
-      .filter(item => item.data.tags && item.data.tags.includes("entry"))
-      .filter(item => !item.data.draft);
+      .filter(item => item.data.tags && item.data.tags.includes("entry"));
 
     const typeSet = new Set();
 
@@ -178,19 +179,22 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
 
   // Collection of all unique categories from entries (excluding entry types)
   eleventyConfig.addCollection("allCategories", function(collectionApi) {
-    const entries = collectionApi.getAll()
-      .filter(item => item.data.tags && item.data.tags.includes("entry"))
-      .filter(item => !item.data.draft);
+    const allEntries = collectionApi.getAll()
+      .filter(item => item.data.tags && item.data.tags.includes("entry"));
+    const publishedEntries = allEntries.filter(item => !item.data.draft);
 
     const categorySet = new Set();
     const entryTypeSet = new Set();
 
-    // First, collect all entry types
-    entries.forEach(entry => {
+    // Collect entry types from ALL entries (including drafts) so that type
+    // names like "EXHIBITION" are always excluded from the category list.
+    allEntries.forEach(entry => {
       if (entry.data.entryType && entry.data.entryType !== 'other') {
         entryTypeSet.add(entry.data.entryType.toUpperCase());
       }
     });
+
+    const entries = publishedEntries;
 
     // Then collect categories, excluding entry types
     entries.forEach(entry => {
