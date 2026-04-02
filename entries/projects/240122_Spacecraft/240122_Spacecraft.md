@@ -1,6 +1,7 @@
 ---
 draft: false
 featured: true
+featuredPosition: 6
 title: "AMP Spacecraft"
 description: "Agbogbloshie Makerspace Platform"
 date: 2014-01-22

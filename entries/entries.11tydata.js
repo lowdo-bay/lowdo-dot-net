@@ -144,6 +144,24 @@ export default function() {
         return null;
       },
 
+      // Auto-discover featured image (for homepage featured projects section)
+      featureImage(data) {
+        if (data.featureImage) return data.featureImage;
+        const entryDir = path.dirname(data.page.inputPath);
+        try {
+          const files = fs.readdirSync(entryDir);
+          const featureFile = files.find(file => {
+            const ext = path.extname(file).toLowerCase();
+            return imageExtensions.includes(ext) && file.toLowerCase().startsWith('featured');
+          });
+          if (featureFile) {
+            const relativePath = path.relative('.', path.join(entryDir, featureFile));
+            return { src: relativePath, alt: data.title || '' };
+          }
+        } catch (e) {}
+        return null;
+      },
+
       // Detect orientation and aspect ratio of the header image (for project detail pages)
       headerImageOrientation(data) {
         if (!data.headerImage) return null;
@@ -198,6 +216,7 @@ export default function() {
               const ext = path.extname(file).toLowerCase();
               return imageExtensions.includes(ext)
                 && !file.toLowerCase().startsWith('header')
+                && !file.toLowerCase().startsWith('featured')
                 && !file.toLowerCase().startsWith('drawing-')
                 && !file.toLowerCase().startsWith('toolkit-');
             })

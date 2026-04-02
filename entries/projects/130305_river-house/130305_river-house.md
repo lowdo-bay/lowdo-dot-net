@@ -1,6 +1,6 @@
 ---
 draft: false
-featured: true
+featured: false
 title: "Guadalupe River House"
 description: "Family haven on the Guadalupe River."
 date: 2017-01-15

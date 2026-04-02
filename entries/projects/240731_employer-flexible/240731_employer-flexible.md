@@ -1,6 +1,7 @@
 ---
 draft: false
-featured: false
+featured: true
+featuredPosition: 4
 title: "Employer Flexible"
 description: "Workplace identity rooted in familiarity and place"
 date: 2025-07-31
