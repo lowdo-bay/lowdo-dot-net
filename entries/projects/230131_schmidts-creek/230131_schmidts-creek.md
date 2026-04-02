@@ -4,7 +4,7 @@ featured: false
 title: "Schmidt's Creek South"
 description: "Community space under the trees anchored by local retail."
 date: 2023-01-31
-year: Ongoing
+year: Designed
 categories:
   - COMMERCIAL
   - COMMUNITY

@@ -1,6 +1,7 @@
 ---
 draft: false
-featured: false
+featured: true
+featuredPosition: 5
 title: "New Anam City"
 description: "Vision plan for a new town prototype balancing social, economic, and ecological imperatives"
 date: 2011-01-01
@@ -9,7 +10,7 @@ categories:
   - AFRICA
   - URBAN
 location: "Anambra State, Nigeria"  # e.g., "Austin, TX"
-status: "In Development"    # e.g., "Built", "In Progress"
+status: "Ongoing"    # e.g., "Built", "In Progress"
 collaborators:
 position:
 ---
@@ -25,15 +26,3 @@ Derived from traditional landscape practices and induced by environmental constr
 
 ## Software
 Given that the last half-century of advances in intermediate and appropriate technology are largely absent from everyday life in Nigeria, Anam City prioritizes technology transfer first, local capacity-building via social programming second and targeted indigenous innovation third. Our goal is not to reinvent the wheel, but to leverage accessible technology toolkits to help accelerate the Anam community's natural rate of development. Our method is to install open technology streams into the community's operating system (social relations and kinship networks, customary governance structures, traditional value register and web of cultural belief systems). Once established, such channels can be shared community-wide and updated or upgraded iteratively. Coding social technologies into the existing ways that people live and work allows for user-driven adoption of new sustainability practices.
-
-**Press:**
-International New Towns Institute (2012)
-Harvard Graduate School of Design (2011)
-Urban Design Forum (2011)
-
-**Presentations:**
-Urban Thinkers Campus: Education for the City We Need conference, Delft University of Technology’s Faculty of Architecture and the Built Environment, organized as part of the UN-Habitat World Urban Campaign jointly with the TU Delft workshop, Urban Lab: Adaptive Planning for African New Towns (2017)
-Global Dialogues: Displacement_Water, Columbia University GSAPP Urban Design Program and AIA-NY (2017)
-Harvard African Development Conference, Cambridge, Massachusetts (2013)
-Clinton Global Initiative by the Chife Foundation (Nigeria) in the Built Environment Track (2012-2014)
-Smart City Expo, Barcelona, Spain (2011)

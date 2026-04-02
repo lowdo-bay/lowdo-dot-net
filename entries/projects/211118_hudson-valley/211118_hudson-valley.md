@@ -1,9 +1,10 @@
 ---
 draft: false
-featured: false
+featured: true
+featuredPosition: 8
 title: "Greenhouse"
 description: "Naturhus-inspired residence and music studio"
-date: 2028-11-18
+date: 2028-12-01
 year: 2028
 categories:
   - HOUSING
@@ -12,6 +13,10 @@ status: "In Progress"    # e.g., "Built", "In Progress"
 collaborators:
   - name: "Spiegel Aihara Workshop"
     role: "Landscape Designer"
+  - name: "LIA Engineering LLC"
+    role: "Structural Engineer"
+  - name: "Ecobuild NY"
+    role: "General Contractor"
 position:
 ---
 

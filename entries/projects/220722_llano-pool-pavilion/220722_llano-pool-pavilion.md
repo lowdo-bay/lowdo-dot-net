@@ -8,7 +8,7 @@ year: 2022
 categories:
   - COMMERCIAL
 location: "Hill Country, TX"  # e.g., "Austin, TX"
-status: "In Progress"    # e.g., "Built", "In Progress"
+status: "Designed"   # e.g., "Built", "In Progress"
 collaborators:
   - name: "Campbell Landscape Architecture"
     role: "Landscape Architect"

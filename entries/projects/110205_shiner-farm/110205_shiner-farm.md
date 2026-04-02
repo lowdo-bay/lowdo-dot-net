@@ -11,6 +11,12 @@ categories:
 location: "Shiner, TX"  # e.g., "Austin, TX"
 status: "Built"    # e.g., "Built", "In Progress"
 collaborators:
+  - name: "Feldt Consultant Engineers"
+    role: "Structural Engineer"
+  - name: "Terracon Consultants"
+    role: "Geotechnical Engineer"
+  - name: "Chase"
+    role: "Insulation"
 position:
 ---
 

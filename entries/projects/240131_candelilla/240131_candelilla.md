@@ -3,8 +3,8 @@ draft: false
 featured: false
 title: "Candelilla"
 description: "Housing that integrates density within a sensitive environmental and cultural context"
-date: 2024-01-31
-year: 2024
+date: 2027-01-31
+year: 2027
 categories:
   - HOUSING
   - COMMUNITY

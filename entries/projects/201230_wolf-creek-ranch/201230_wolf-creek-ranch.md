@@ -1,6 +1,7 @@
 ---
 draft: false
 featured: true
+featuredPosition: 2
 title: Wolf Creek Ranch
 description: Sustainable retreat harmonizing nature and landscape.
 year: 2024
@@ -18,6 +19,36 @@ collaborators:
     name: "Persyn Engineering"
   - role: "Photography"
     name: "Daisuke Hirabayashi"
+  - name: "All Star Land Survey"
+    role: "Surveys"
+  - name: "Porter Septic"
+    role: "Septic and Excavation"
+  - name: "Harvested Rain Solutions"
+    role: "Rainwater Collection"
+  - name: "Lago Plumbing"
+    role: "Plumbing"
+  - name: "SCC Industrial"
+    role: "Foundation Site Prep"
+  - name: "Lewis Brothers Concrete"
+    role: "Foundation"
+  - name: "Longhorn Welding"
+    role: "Steel Fabrication and Erection"
+  - name: "Sergio Framer"
+    role: "Framing"
+  - name: "BioTex Foam"
+    role: "Insulation"
+  - name: "Nic Perez"
+    role: "Roofing and Gutters"
+  - name: "Francisco Perez"
+    role: "Tile"
+  - name: "Quick Connect Electrical"
+    role: "Electrical"
+  - name: "RC Drywall"
+    role: "Drywall"
+  - name: "Austin's Green Air"
+    role: "HVAC"
+  - name: "Jbar"
+    role: "Site Services"
 position: 
 ---
 

@@ -4,7 +4,7 @@ featured: false
 title: "Garden St. Residence"
 description: "Multiphase home framing everyday life."
 date: 2024-01-15
-year: 2024
+year: 2012 - 2024
 categories:
   - HOUSING
   - DESIGN+BUILD
@@ -19,6 +19,28 @@ collaborators:
     role: "Photography"
   - name: "Jared Quarnstrom"
     role: "Photography"
+  - name: "American Trees"
+    role: "Site Work"
+  - name: "Arborworks Tree Care"
+    role: "Site Work"
+  - name: "Mario Alcocer"
+    role: "Foundation"
+  - name: "MG Drilling"
+    role: "Foundation"
+  - name: "David Allison Electric"
+    role: "Electrical"
+  - name: "Dennis Steel"
+    role: "Steel"
+  - name: "Synergy Framing"
+    role: "Framing"
+  - name: "P&P Plumbing"
+    role: "Plumbing"
+  - name: "Nick Perez"
+    role: "Roofing"
+  - name: "Centex Mechanical"
+    role: "HVAC"
+  - name: "Tex Tar Waterproofing"
+    role: "Waterproofing"
 position:
 ---
 

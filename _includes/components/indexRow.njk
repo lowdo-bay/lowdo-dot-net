@@ -4,7 +4,7 @@
   <a href="{{ entry.data.link }}" class="index-row-link" target="_blank" rel="noopener">
 {% endif %}
 
-<div class="index-row grid grid--index" data-entry-type="{{ entry.data.entryType }}" data-categories="{% if entry.data.categories %}{{ entry.data.categories | join(',') | lower }}{% endif %}">
+<div class="index-row grid grid--index" data-entry-type="{{ entry.data.entryType }}" data-categories="{% if entry.data.categories and entry.data.categories.length %}{{ entry.data.categories | join(',') | lower }}{% endif %}">
 
   {# Column 1: Thumbnail Image #}
   <div class="index-col index-col--image">
