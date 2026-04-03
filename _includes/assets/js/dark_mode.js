@@ -9,16 +9,16 @@ if (currentColorscheme == "dark" || !currentColorscheme && prefersDarkScheme.mat
   isDark = true;
 }
 
-window.addEventListener("DOMContentLoaded", (event) => {
+window.addEventListener("DOMContentLoaded", () => {
 
   // Header color scheme toggle (light/dark modes)
   const csToggle = document.querySelector(".dark-toggle");
 
-  if (isDark) {
-    csToggle.checked = true;
-  }
-
   if (csToggle) {
+
+    if (isDark) {
+      csToggle.checked = true;
+    }
 
     csToggle.addEventListener("change", () => {
 

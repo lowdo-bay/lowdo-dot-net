@@ -31,6 +31,10 @@
     <link rel="canonical" href="{{ settings.metadata.site_url | url }}{{ page.url }}">
   {% endif %}
 
+  {% if settings.theme.theme_features.enable_dark_mode %}
+    <script>(function(){try{var s=localStorage.getItem("halide-color-scheme");if(s==="dark"||(s==null&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.setAttribute("dark",true);}}catch(e){}})();</script>
+  {% endif %}
+
   {# Set theme and base styles #}
   {% set css %}
     {% include "assets/css/theme.njk" %}
