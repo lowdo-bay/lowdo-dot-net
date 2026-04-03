@@ -1357,11 +1357,46 @@ body::after {
 /* Staff row wrapper (clickable expand/collapse) */
 .index-row-staff-wrapper {
 	cursor: pointer;
+	position: relative;
 }
 
-.index-row-staff-wrapper:hover .index-row::before,
-.index-row-staff-wrapper.is-expanded .index-row::before {
+/* Suppress ::before and ::after on the inner .index-row — wrapper owns them */
+.index-row-staff-wrapper > .index-row::before,
+.index-row-staff-wrapper > .index-row::after {
+	display: none;
+}
+
+/* Full-width background tint on the wrapper (expands with body) */
+.index-row-staff-wrapper::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100vw;
+	background-color: transparent;
+	transition: background-color var(--transition-time) ease;
+	z-index: -1;
+	pointer-events: none;
+}
+
+.index-row-staff-wrapper:hover::before,
+.index-row-staff-wrapper.is-expanded::before {
 	background-color: var(--color-accent-5);
+}
+
+/* Dashed bottom border on the wrapper (moves to bottom of expanded body) */
+.index-row-staff-wrapper::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100vw;
+	height: var(--grid-line-thickness);
+	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+	pointer-events: none;
 }
 
 /* Staff body panel */
