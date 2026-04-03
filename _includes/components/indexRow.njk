@@ -2,6 +2,8 @@
   <a href="{{ entry.url | url }}" class="index-row-link">
 {% elif entry.data.link %}
   <a href="{{ entry.data.link }}" class="index-row-link" target="_blank" rel="noopener">
+{% elif entry.data.entryType == 'staff' %}
+  <div class="index-row-staff-wrapper" role="button" tabindex="0" aria-expanded="false">
 {% endif %}
 
 <div class="index-row grid grid--index" data-entry-type="{{ entry.data.entryType }}" data-categories="{% if entry.data.categories and entry.data.categories.length %}{{ entry.data.categories | join(',') | lower }}{% endif %}">
@@ -62,6 +64,13 @@
 
 </div>
 
-{% if entry.data.entryType == 'project' or entry.data.link %}
+{% if entry.data.entryType == 'staff' %}
+<div class="index-row__body" aria-hidden="true">
+  <div class="index-row__body-inner">
+    {{ entry.templateContent | safe }}
+  </div>
+</div>
+</div>{# close .index-row-staff-wrapper #}
+{% elif entry.data.entryType == 'project' or entry.data.link %}
   </a>
 {% endif %}

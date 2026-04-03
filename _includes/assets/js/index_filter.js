@@ -119,3 +119,21 @@
     }
   }
 })();
+
+// Staff row expand/collapse
+(function() {
+  document.querySelectorAll('.index-row-staff-wrapper').forEach(function(wrapper) {
+    wrapper.addEventListener('click', function() {
+      var expanded = this.classList.toggle('is-expanded');
+      this.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      var body = this.querySelector('.index-row__body');
+      if (body) body.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+    });
+    wrapper.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+})();

@@ -1339,6 +1339,42 @@ body::after {
 	line-height: 1.4;
 }
 
+/* Staff entry: fixed small portrait image */
+[data-entry-type="staff"] .index-col--image img,
+[data-entry-type="staff"] .index-col--image picture {
+	width: 4rem;
+	height: 4rem;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+}
+
+/* Staff row wrapper (clickable expand/collapse) */
+.index-row-staff-wrapper {
+	cursor: pointer;
+}
+
+.index-row-staff-wrapper:hover .index-row::before,
+.index-row-staff-wrapper.is-expanded .index-row::before {
+	background-color: var(--color-accent-5);
+}
+
+/* Staff body panel */
+.index-row__body {
+	overflow: hidden;
+	max-height: 0;
+	transition: max-height 400ms ease;
+}
+
+.index-row__body-inner {
+	padding: var(--space-2) var(--space-2) var(--space-3);
+	font-size: var(--font-size-small);
+	line-height: 1.6;
+}
+
+.index-row-staff-wrapper.is-expanded .index-row__body {
+	max-height: 600px;
+}
+
 /* Mobile meta row (hidden on desktop) */
 .index-row__meta {
 	display: none;
