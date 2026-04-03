@@ -851,8 +851,14 @@ section: project
     width: 50%;
     z-index: 1;
   }
-  .photo-modal__zone-prev { left: 0; cursor: w-resize; }
-  .photo-modal__zone-next { right: 0; cursor: e-resize; }
+  .photo-modal__zone-prev {
+    left: 0;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="10 6 4 12 10 18"/></svg>') 12 12, auto;
+  }
+  .photo-modal__zone-next {
+    right: 0;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>') 12 12, auto;
+  }
   .photo-modal__zone-prev.is-disabled,
   .photo-modal__zone-next.is-disabled {
     cursor: default;
