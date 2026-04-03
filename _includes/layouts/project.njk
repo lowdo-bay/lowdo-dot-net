@@ -843,8 +843,21 @@ section: project
   .photo-modal.is-closing .photo-modal__card {
     animation: modal-card-in var(--transition-time) ease reverse forwards;
   }
-  .photo-modal__prev,
-  .photo-modal__next,
+  .photo-modal__zone-prev,
+  .photo-modal__zone-next {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 1;
+  }
+  .photo-modal__zone-prev { left: 0; cursor: w-resize; }
+  .photo-modal__zone-next { right: 0; cursor: e-resize; }
+  .photo-modal__zone-prev.is-disabled,
+  .photo-modal__zone-next.is-disabled {
+    cursor: default;
+    pointer-events: none;
+  }
   .photo-modal__close {
     flex-shrink: 0;
     width: 2.5rem;
@@ -862,14 +875,8 @@ section: project
     transition: background var(--transition-time) ease;
     outline: none;
   }
-  .photo-modal__prev:focus-visible,
-  .photo-modal__next:focus-visible,
-  .photo-modal__close:focus-visible {
-    background: var(--color-accent-5);
-  }
-  .photo-modal__close:hover,
-  .photo-modal__prev:hover,
-  .photo-modal__next:hover {
+  .photo-modal__close:focus-visible,
+  .photo-modal__close:hover {
     background: var(--color-accent-5);
   }
   .photo-modal__caption-row {
@@ -889,6 +896,7 @@ section: project
     white-space: nowrap;
   }
   .photo-modal__image-wrap {
+    position: relative;
     overflow: hidden;
     flex: 1;
     display: flex;
@@ -1421,13 +1429,13 @@ section: project
     <div class="photo-modal__scrim" id="photo-modal-scrim"></div>
     <div class="photo-modal__card">
       <div class="photo-modal__image-wrap">
+        <div class="photo-modal__zone-prev" id="photo-modal-zone-prev" aria-hidden="true"></div>
         <img class="photo-modal__img" id="photo-modal-img" src="" alt="" />
+        <div class="photo-modal__zone-next" id="photo-modal-zone-next" aria-hidden="true"></div>
       </div>
       <div class="photo-modal__caption-row">
         <div class="photo-modal__caption" id="photo-modal-caption"></div>
         <div class="photo-modal__counter" id="photo-modal-counter" aria-live="polite"></div>
-        <button class="photo-modal__prev" id="photo-modal-prev" aria-label="Previous image">←</button>
-        <button class="photo-modal__next" id="photo-modal-next" aria-label="Next image">→</button>
         <button class="photo-modal__close" id="photo-modal-close" aria-label="Close">×</button>
       </div>
     </div>
@@ -1604,9 +1612,10 @@ section: project
     var modalCaption = document.getElementById('photo-modal-caption');
     var modalCounter = document.getElementById('photo-modal-counter');
     var modalClose = document.getElementById('photo-modal-close');
-    var modalPrev = document.getElementById('photo-modal-prev');
-    var modalNext = document.getElementById('photo-modal-next');
     var modalScrim = document.getElementById('photo-modal-scrim');
+    var modalCard = modal.querySelector('.photo-modal__card');
+    var zonePrev = document.getElementById('photo-modal-zone-prev');
+    var zoneNext = document.getElementById('photo-modal-zone-next');
 
     function openModal(imgEl, caption, thumbIndex) {
       var thumb = allThumbs[thumbIndex];
@@ -1616,17 +1625,13 @@ section: project
       modalImg.src = fullSrc;
       modalCaption.textContent = caption || '';
       activeThumbIndex = thumbIndex;
-      // Update counter
       modalCounter.textContent = (thumbIndex + 1) + ' / ' + allThumbs.length;
       modal.removeAttribute('hidden');
       modal.classList.add('is-open');
       modal.classList.remove('is-closing');
       document.body.style.overflow = 'hidden';
-      // Disable prev/next at boundaries
-      modalPrev.disabled = activeThumbIndex <= 0;
-      modalNext.disabled = activeThumbIndex >= allThumbs.length - 1;
-      modalPrev.style.opacity = modalPrev.disabled ? '0.3' : '1';
-      modalNext.style.opacity = modalNext.disabled ? '0.3' : '1';
+      zonePrev.classList.toggle('is-disabled', activeThumbIndex <= 0);
+      zoneNext.classList.toggle('is-disabled', activeThumbIndex >= allThumbs.length - 1);
       modalClose.focus();
     }
 
@@ -1662,26 +1667,31 @@ section: project
       });
     });
 
-    // Close button
+    // Close button and scrim
     modalClose.addEventListener('click', closeModal);
-    // Scrim click
     modalScrim.addEventListener('click', closeModal);
-    // Prev/Next buttons
-    modalPrev.addEventListener('click', function(e) {
-      e.stopPropagation();
-      navigateModal(-1);
-    });
-    modalNext.addEventListener('click', function(e) {
-      e.stopPropagation();
-      navigateModal(+1);
-    });
-    // Escape key
+
+    // Click zones
+    zonePrev.addEventListener('click', function() { navigateModal(-1); });
+    zoneNext.addEventListener('click', function() { navigateModal(+1); });
+
+    // Keyboard navigation
     document.addEventListener('keydown', function(e) {
       if (!modal.classList.contains('is-open')) return;
       if (e.key === 'Escape') closeModal();
       if (e.key === 'ArrowLeft') navigateModal(-1);
       if (e.key === 'ArrowRight') navigateModal(+1);
     });
+
+    // Touch swipe
+    var touchStartX = 0;
+    modalCard.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+    modalCard.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) navigateModal(dx < 0 ? 1 : -1);
+    }, { passive: true });
   }
   // Portrait header: set --portrait-image-bleed so Trade/Awards tables start
   // just below the image bottom edge
