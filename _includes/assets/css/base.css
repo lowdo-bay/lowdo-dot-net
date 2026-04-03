@@ -1381,6 +1381,24 @@ body::after {
 	max-height: 600px;
 }
 
+/* Desktop: make staff wrapper a grid so body can be positioned in column 3 */
+@media (min-width: 840px) {
+	.index-row-staff-wrapper {
+		display: grid;
+		grid-template-columns: 4fr 4fr 7fr 1fr;
+	}
+
+	/* .index-row spans all 4 columns so its layout is unaffected */
+	.index-row-staff-wrapper > .index-row {
+		grid-column: 1 / -1;
+	}
+
+	/* Body panel appears only in column 3 */
+	.index-row-staff-wrapper > .index-row__body {
+		grid-column: 3;
+	}
+}
+
 /* Mobile meta row (hidden on desktop) */
 .index-row__meta {
 	display: none;
