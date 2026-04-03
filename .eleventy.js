@@ -126,6 +126,34 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   
   });
 
+  // Shortcode to return just the URL of the largest generated JPEG for a given image.
+  // Used to set data-fullsrc on gallery thumbnails so the lightbox can load a full-size image.
+  eleventyConfig.addAsyncShortcode("getImageSrc", async function(params) {
+    let { src, width = 2400, quality = 85 } = params;
+    if (!src) return '';
+    src = src.startsWith("/") ? src.slice(1) : src;
+    if ((src.startsWith('./') || !src.includes('/')) && this.page && this.page.inputPath) {
+      const filename = src.startsWith('./') ? src.slice(2) : src;
+      const pathParts = this.page.inputPath.split('/');
+      pathParts.pop();
+      src = pathParts.join('/') + '/' + filename;
+    }
+    try {
+      const metadata = await Image(src, {
+        widths: [width],
+        formats: ["jpeg"],
+        sharpJpegOptions: { quality },
+        urlPath: "/assets/images/",
+        outputDir: "./_site/assets/images/",
+      });
+      const jpegs = metadata.jpeg;
+      return jpegs[jpegs.length - 1].url;
+    } catch (e) {
+      console.error('getImageSrc error for:', src, e.message);
+      return '';
+    }
+  });
+
   // Add 11ty helmet plugin, for appending elements to <head>
   eleventyConfig.addPlugin(eleventyHelmetPlugin);
 

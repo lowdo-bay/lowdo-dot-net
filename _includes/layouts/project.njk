@@ -921,6 +921,7 @@ section: project
     height: auto;
     object-fit: contain;
     opacity: 1;
+    transition: opacity 0.2s ease;
   }
   .photo-modal__caption {
     flex: 1;
@@ -1232,7 +1233,7 @@ section: project
         } %}
 
         <div class="project-photo-cell">
-          <div class="photo-thumb" data-caption="{{ image.caption or '' }}">
+          <div class="photo-thumb" data-caption="{{ image.caption or '' }}" data-fullsrc="{% if not (image.src | endsWith('.gif')) %}{% getImageSrc { src: image.src, width: settings.config.image_width_lg, quality: settings.config.image_quality_fullsize } %}{% endif %}">
             {% if image.src | endsWith('.gif') %}
               <picture>
                 <img src="/{{ image.src }}" alt="{{ image.caption or title }}" loading="lazy" decoding="async" class="hover-fade">
@@ -1290,7 +1291,7 @@ section: project
           "outputQualityAvif": settings.images.avif.quality
         } %}
         <div class="project-drawing-cell">
-          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}">
+          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}" data-fullsrc="{% if not (drawing.src | endsWith('.gif')) %}{% getImageSrc { src: drawing.src, width: settings.config.image_width_lg, quality: settings.config.image_quality_fullsize } %}{% endif %}">
             {% if drawing.src | endsWith('.gif') %}
               <picture>
                 <img src="/{{ drawing.src }}" alt="{{ drawing.caption or (title + ' drawing') }}" loading="lazy" decoding="async" class="hover-fade">
@@ -1623,7 +1624,11 @@ section: project
     var modalScrim = document.getElementById('photo-modal-scrim');
 
     function openModal(imgEl, caption, thumbIndex) {
-      modalImg.src = imgEl.currentSrc || imgEl.src;
+      var thumb = allThumbs[thumbIndex];
+      var fullSrc = (thumb && thumb.dataset.fullsrc) || imgEl.currentSrc || imgEl.src;
+      modalImg.style.opacity = '0';
+      modalImg.onload = function() { modalImg.style.opacity = '1'; };
+      modalImg.src = fullSrc;
       modalCaption.textContent = caption || '';
       activeThumbIndex = thumbIndex;
       modal.removeAttribute('hidden');
