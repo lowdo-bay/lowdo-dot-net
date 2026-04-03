@@ -1340,6 +1340,12 @@ body::after {
 }
 
 /* Staff entry: fixed small portrait image */
+[data-entry-type="staff"] .index-col--image {
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-start;
+}
+
 [data-entry-type="staff"] .index-col--image img,
 [data-entry-type="staff"] .index-col--image picture {
 	width: 4rem;
