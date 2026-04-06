@@ -925,6 +925,28 @@ section: project
     opacity: 1;
     transition: opacity 0.2s ease;
   }
+  .photo-modal__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .photo-modal__placeholder.is-hidden {
+    opacity: 0;
+  }
+  .photo-modal__placeholder img {
+    display: block;
+    max-width: 90vw;
+    max-height: calc(90vh - 3rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: blur(12px);
+    transform: scale(1.04);
+  }
   .photo-modal__caption {
     flex: 1;
     padding: var(--space-2) var(--space-3);
@@ -1235,7 +1257,7 @@ section: project
         } %}
 
         <div class="project-photo-cell">
-          <div class="photo-thumb" data-caption="{{ image.caption or '' }}" data-fullsrc="{% if not (image.src | endsWith('.gif')) %}{% getImageSrc { src: image.src, width: settings.config.image_width_lg, quality: settings.config.image_quality_fullsize } %}{% endif %}">
+          <div class="photo-thumb" data-caption="{{ image.caption or '' }}" data-fullsrc="{% if not (image.src | endsWith('.gif')) %}{% getImageSrc { src: image.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}">
             {% if image.src | endsWith('.gif') %}
               <picture>
                 <img src="/{{ image.src }}" alt="{{ image.caption or title }}" loading="lazy" decoding="async" class="hover-fade">
@@ -1293,7 +1315,7 @@ section: project
           "outputQualityAvif": settings.images.avif.quality
         } %}
         <div class="project-drawing-cell">
-          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}" data-fullsrc="{% if not (drawing.src | endsWith('.gif')) %}{% getImageSrc { src: drawing.src, width: settings.config.image_width_lg, quality: settings.config.image_quality_fullsize } %}{% endif %}">
+          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}" data-fullsrc="{% if not (drawing.src | endsWith('.gif')) %}{% getImageSrc { src: drawing.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}">
             {% if drawing.src | endsWith('.gif') %}
               <picture>
                 <img src="/{{ drawing.src }}" alt="{{ drawing.caption or (title + ' drawing') }}" loading="lazy" decoding="async" class="hover-fade">
@@ -1441,6 +1463,9 @@ section: project
     <div class="photo-modal__card">
       <div class="photo-modal__image-wrap">
         <div class="photo-modal__zone-prev" id="photo-modal-zone-prev" aria-hidden="true"></div>
+        <div class="photo-modal__placeholder is-hidden" id="photo-modal-placeholder" aria-hidden="true">
+          <img id="photo-modal-placeholder-img" src="" alt="" />
+        </div>
         <img class="photo-modal__img" id="photo-modal-img" src="" alt="" />
         <div class="photo-modal__zone-next" id="photo-modal-zone-next" aria-hidden="true"></div>
       </div>
@@ -1619,6 +1644,7 @@ section: project
   if (modal) {
     var allThumbs = [];
     var activeThumbIndex = -1;
+    var loadGeneration = 0;
     var modalImg = document.getElementById('photo-modal-img');
     var modalCaption = document.getElementById('photo-modal-caption');
     var modalCounter = document.getElementById('photo-modal-counter');
@@ -1627,13 +1653,32 @@ section: project
     var modalCard = modal.querySelector('.photo-modal__card');
     var zonePrev = document.getElementById('photo-modal-zone-prev');
     var zoneNext = document.getElementById('photo-modal-zone-next');
+    var modalPlaceholder = document.getElementById('photo-modal-placeholder');
+    var modalPlaceholderImg = document.getElementById('photo-modal-placeholder-img');
 
     function openModal(imgEl, caption, thumbIndex) {
+      var generation = ++loadGeneration;
       var thumb = allThumbs[thumbIndex];
       var fullSrc = (thumb && thumb.dataset.fullsrc) || imgEl.currentSrc || imgEl.src;
+
+      // Show blurred thumbnail as placeholder immediately (already decoded in memory)
+      var thumbImgEl = thumb ? thumb.querySelector('img') : null;
+      if (thumbImgEl && thumbImgEl.currentSrc) {
+        modalPlaceholderImg.src = thumbImgEl.currentSrc;
+        modalPlaceholder.classList.remove('is-hidden');
+      } else {
+        modalPlaceholder.classList.add('is-hidden');
+      }
+
+      // Load full-res; hide placeholder and fade in once loaded
       modalImg.style.opacity = '0';
-      modalImg.onload = function() { modalImg.style.opacity = '1'; };
+      modalImg.onload = function() {
+        if (generation !== loadGeneration) return;
+        modalImg.style.opacity = '1';
+        modalPlaceholder.classList.add('is-hidden');
+      };
       modalImg.src = fullSrc;
+
       modalCaption.textContent = caption || '';
       activeThumbIndex = thumbIndex;
       modalCounter.textContent = (thumbIndex + 1) + ' / ' + allThumbs.length;
@@ -1644,6 +1689,8 @@ section: project
       zonePrev.classList.toggle('is-disabled', activeThumbIndex <= 0);
       zoneNext.classList.toggle('is-disabled', activeThumbIndex >= allThumbs.length - 1);
       modalClose.focus();
+
+      prefetchAdjacent(thumbIndex);
     }
 
     function navigateModal(direction) {
@@ -1668,6 +1715,19 @@ section: project
     document.querySelectorAll('.photo-thumb, .drawing-thumb').forEach(function(t) {
       allThumbs.push(t);
     });
+
+    // Prefetch adjacent gallery images so navigation feels instant
+    var prefetchCache = {};
+    function prefetchImage(src) {
+      if (!src || prefetchCache[src]) return;
+      prefetchCache[src] = true;
+      var img = new Image();
+      img.src = src;
+    }
+    function prefetchAdjacent(index) {
+      if (index - 1 >= 0) prefetchImage(allThumbs[index - 1].dataset.fullsrc);
+      if (index + 1 < allThumbs.length) prefetchImage(allThumbs[index + 1].dataset.fullsrc);
+    }
 
     // Wire clicks on all thumbs
     allThumbs.forEach(function(thumb, i) {

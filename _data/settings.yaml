@@ -138,5 +138,7 @@ config:
   image_width_lg: 2400
   # Quality for full-size images served in the gallery lightbox (separate from thumbnail quality)
   image_quality_fullsize: 85
+  # Quality for medium-size images served in the gallery lightbox (matches grid thumbnail quality for cache hits)
+  image_quality_mediumsrc: 75
   # define the optional system font stack
   font_stack_system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
