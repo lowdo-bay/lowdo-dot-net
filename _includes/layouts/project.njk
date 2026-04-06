@@ -922,8 +922,6 @@ section: project
     width: auto;
     height: auto;
     object-fit: contain;
-    opacity: 1;
-    transition: opacity 0.2s ease;
   }
   .photo-modal__placeholder {
     position: absolute;
@@ -1668,11 +1666,9 @@ section: project
         modalPlaceholder.classList.add('is-hidden');
       }
 
-      // Load full-res; hide placeholder and fade in once loaded
-      modalImg.style.opacity = '0';
+      // Load full-res; swap out placeholder the moment it's ready (no fade needed — placeholder provides continuity)
       modalImg.onload = function() {
         if (generation !== loadGeneration) return;
-        modalImg.style.opacity = '1';
         modalPlaceholder.classList.add('is-hidden');
       };
       modalImg.src = fullSrc;
