@@ -377,19 +377,27 @@ permalink: "/index.html"
     color: var(--color-accent-1);
     padding: var(--space-2);
     font-size: var(--font-size-base);
-    align-self: start;
+    align-self: center;
   }
 
   .tech-portfolio-diagram {
-    grid-column: span 3;
     padding: var(--space-2);
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 300px;
-    border: 1px dashed rgba(0, 20, 137, 0.2);
-    color: var(--color-accent-1);
-    font-size: var(--font-size-base);
+  }
+
+  .tech-portfolio-diagram-img {
+    width: 100%;
+    height: auto;
+    mix-blend-mode: multiply;
+    display: block;
+  }
+
+  html[dark] .tech-portfolio-diagram-img {
+    filter: grayscale(1) invert(1);
+    mix-blend-mode: lighten;
   }
 
   @media (max-width: 839px) {
@@ -926,14 +934,14 @@ permalink: "/index.html"
   <section class="tech-portfolio-section">
     <div class="grid grid--description">
 
-      {# Col 1: Description text #}
-      <div class="tech-portfolio-description markdown col-1">
+      {# Cols 1–2: Description text #}
+      <div class="tech-portfolio-description markdown col-1-2">
         LowDO's work spans a diverse network of projects, collaborators, and systems—from housing and civic infrastructure to fabrication and open-source tools. Our portfolio reflects deep connections across disciplines: architecture, construction, community organizing, and environmental stewardship. Each project is a node in an evolving network of ideas, partners, and places.
       </div>
 
-      {# Cols 2–4: Diagram placeholder #}
-      <div class="tech-portfolio-diagram col-2-3-4">
-        [ Diagram — drop PNG or SVG here ]
+      {# Cols 3–4: Diagram #}
+      <div class="tech-portfolio-diagram col-3-4">
+        <img src="/assets/images/Stellation Design.jpg" alt="Stellation Design diagram" class="tech-portfolio-diagram-img">
       </div>
 
     </div>
