@@ -937,10 +937,10 @@ section: project
   }
   .photo-modal__placeholder img {
     display: block;
+    width: 100%;
+    height: 100%;
     max-width: 90vw;
     max-height: calc(90vh - 3rem);
-    width: auto;
-    height: auto;
     object-fit: contain;
   }
   .photo-modal__caption {
@@ -1657,10 +1657,13 @@ section: project
       var thumb = allThumbs[thumbIndex];
       var fullSrc = (thumb && thumb.dataset.fullsrc) || imgEl.currentSrc || imgEl.src;
 
-      // Show blurred thumbnail as placeholder immediately (already decoded in memory)
+      // Show thumbnail as placeholder immediately (already decoded in memory)
+      // Set natural dimensions so CSS max-width/max-height scales it up to fill the modal
       var thumbImgEl = thumb ? thumb.querySelector('img') : null;
       if (thumbImgEl && thumbImgEl.currentSrc) {
         modalPlaceholderImg.src = thumbImgEl.currentSrc;
+        modalPlaceholderImg.width = thumbImgEl.naturalWidth;
+        modalPlaceholderImg.height = thumbImgEl.naturalHeight;
         modalPlaceholder.classList.remove('is-hidden');
       } else {
         modalPlaceholder.classList.add('is-hidden');
