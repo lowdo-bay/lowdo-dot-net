@@ -560,6 +560,7 @@ section: project
       left: 0;
       top: 0;
       width: calc(var(--content-width) / 2);
+      height: calc(var(--content-width) / 2 * var(--portrait-image-ratio));
       aspect-ratio: 1 / var(--portrait-image-ratio);
       margin: 0;
       overflow: visible;
@@ -943,6 +944,16 @@ section: project
     max-height: calc(90vh - 3rem);
     object-fit: contain;
   }
+
+  /* White background for PNG images with transparent backgrounds */
+  .photo-thumb[data-ispng="true"],
+  .drawing-thumb[data-ispng="true"] {
+    background-color: #ffffff;
+  }
+  .photo-modal__card.has-png-image {
+    background: #ffffff !important;
+  }
+
   .photo-modal__caption {
     flex: 1;
     padding: var(--space-2) var(--space-3);
@@ -1253,7 +1264,7 @@ section: project
         } %}
 
         <div class="project-photo-cell">
-          <div class="photo-thumb" data-caption="{{ image.caption or '' }}" data-fullsrc="{% if not (image.src | endsWith('.gif')) %}{% getImageSrc { src: image.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}">
+          <div class="photo-thumb" data-caption="{{ image.caption or '' }}" data-fullsrc="{% if not (image.src | endsWith('.gif')) %}{% getImageSrc { src: image.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}" data-ispng="{{ 'true' if image.src | endsWith('.png') else '' }}">
             {% if image.src | endsWith('.gif') %}
               <picture>
                 <img src="/{{ image.src }}" alt="{{ image.caption or title }}" loading="lazy" decoding="async" class="hover-fade">
@@ -1311,7 +1322,7 @@ section: project
           "outputQualityAvif": settings.images.avif.quality
         } %}
         <div class="project-drawing-cell">
-          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}" data-fullsrc="{% if not (drawing.src | endsWith('.gif')) %}{% getImageSrc { src: drawing.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}">
+          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}" data-fullsrc="{% if not (drawing.src | endsWith('.gif')) %}{% getImageSrc { src: drawing.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}" data-ispng="{{ 'true' if drawing.src | endsWith('.png') else '' }}">
             {% if drawing.src | endsWith('.gif') %}
               <picture>
                 <img src="/{{ drawing.src }}" alt="{{ drawing.caption or (title + ' drawing') }}" loading="lazy" decoding="async" class="hover-fade">
@@ -1675,7 +1686,8 @@ section: project
         modalPlaceholder.classList.add('is-hidden');
       };
       modalImg.src = fullSrc;
-
+      var isPng = thumb && thumb.dataset.ispng === 'true';
+      modalCard.classList.toggle('has-png-image', isPng);
       modalCaption.textContent = caption || '';
       activeThumbIndex = thumbIndex;
       modalCounter.textContent = (thumbIndex + 1) + ' / ' + allThumbs.length;
