@@ -1592,6 +1592,10 @@ body::after {
 		max-width: 50%;
 	}
 
+	[data-entry-type="staff"] .index-col--image {
+		justify-content: flex-start;
+	}
+
 	.index-col--item {
 		order: 2;
 		margin-bottom: var(--space-2);
@@ -1712,6 +1716,10 @@ body::after {
 		grid-area: image;
 		max-width: unset;
 		margin-bottom: var(--space-2);
+	}
+
+	[data-entry-type="staff"] .index-col--image {
+		justify-content: flex-start;
 	}
 
 	.index-col--item {

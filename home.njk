@@ -74,7 +74,7 @@ permalink: "/index.html"
     }
 
     .project-header .grid__item--span-2-left {
-      padding: 0;
+      padding: var(--space-2) var(--space-2) 0;
       margin: 0;
       overflow: hidden;
       height: 45vw;
@@ -227,42 +227,7 @@ permalink: "/index.html"
     grid-row: span 3;
   }
 
-  /* Details/summary styles for body text expansion */
-  .expertise-expand {
-    all: unset;
-    display: block;
-  }
-
-  .expertise-expand .expertise-body-content {
-    transition: max-height 0.3s ease-out;
-  }
-
-  .expertise-expand summary {
-    color: var(--color-accent-3);
-    font-weight: 500;
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    line-height: calc(1.6 * var(--line-height-scale) / 100);
-    padding: var(--space-2);
-    margin-top: var(--space-2);
-    user-select: none;
-    list-style: none;
-  }
-
-  .expertise-expand summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .expertise-expand summary:hover {
-    text-decoration: underline;
-  }
-
-  .expertise-expand[open] summary {
-    margin-bottom: var(--space-2);
-  }
-
   .expertise-body-content {
-    padding: var(--space-2) var(--space-2) 0 0;
   }
 
   .expertise-body-content p {
@@ -275,30 +240,29 @@ permalink: "/index.html"
     margin-bottom: 0;
   }
 
-  /* Desktop: force details open and hide summary toggle */
+  /* Desktop: dashed dividers above lead and body rows — show only on second column */
   @media (min-width: 840px) {
-    .expertise-expand {
-      display: block;
-    }
-
-    .expertise-expand summary {
+    .expertise-section .row-2::before,
+    .expertise-section .row-3::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200vw;
+      height: var(--grid-line-thickness);
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+      z-index: 1;
       display: none;
     }
 
-    .expertise-expand .expertise-body-content {
-      display: block !important;
-      max-height: none !important;
-      overflow: visible !important;
+    .expertise-item:nth-of-type(2) .row-2::before,
+    .expertise-item:nth-of-type(2) .row-3::before {
+      display: block;
     }
 
-    /* Force open state on desktop */
-    .expertise-expand:not([open]) .expertise-body-content {
-      max-height: none !important;
-      overflow: visible !important;
-    }
-
-    .expertise-expand:not([open]) .expertise-body-content::after {
-      display: none !important;
+    .expertise-section .grid {
+      overflow: visible;
     }
   }
 
@@ -334,15 +298,10 @@ permalink: "/index.html"
       display: none;
     }
 
-    /* Change image aspect ratio on mobile for better vertical economy */
-    .expertise-image {
-      aspect-ratio: 16 / 9 !important;
-    }
-
     /* Add horizontal grid lines between sections within each card */
     .expertise-lead {
       padding: var(--space-2);
-      padding-top: 0;
+      padding-top: var(--space-2);
       position: relative;
     }
 
@@ -360,7 +319,7 @@ permalink: "/index.html"
 
     .expertise-body {
       padding: var(--space-2);
-      padding-top: 0;
+      padding-top: var(--space-2);
       position: relative;
     }
 
@@ -374,59 +333,6 @@ permalink: "/index.html"
       height: var(--grid-line-thickness);
       border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
       z-index: 1;
-    }
-
-    /* On mobile, force details closed and truncate content with fade */
-    .expertise-expand {
-      display: block;
-    }
-
-    .expertise-expand .expertise-body-content {
-      max-height: 3.6em;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .expertise-expand .expertise-body-content::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1.5em;
-      background: linear-gradient(transparent, var(--color-bg));
-      pointer-events: none;
-    }
-
-    /* When expanded on mobile, show full content and remove truncation */
-    .expertise-expand[open] .expertise-body-content {
-      max-height: none;
-    }
-
-    .expertise-expand[open] .expertise-body-content::after {
-      display: none;
-    }
-
-    /* Summary styling on mobile */
-    .expertise-expand summary {
-      padding: var(--space-2) var(--space-2) 0 0;
-      margin-top: 0;
-      margin-bottom: 0;
-      font-size: 0;
-    }
-
-    .expertise-expand summary::before {
-      font-size: var(--font-size-base);
-    }
-
-    /* Initially open with [open] attribute, show "see less" */
-    .expertise-expand[open] summary::before {
-      content: 'see less';
-    }
-
-    /* When user clicks to close it, [open] is removed, show "see more" */
-    .expertise-expand:not([open]) summary::before {
-      content: 'see more';
     }
   }
 
@@ -471,19 +377,27 @@ permalink: "/index.html"
     color: var(--color-accent-1);
     padding: var(--space-2);
     font-size: var(--font-size-base);
-    align-self: start;
+    align-self: center;
   }
 
   .tech-portfolio-diagram {
-    grid-column: span 3;
     padding: var(--space-2);
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 300px;
-    border: 1px dashed rgba(0, 20, 137, 0.2);
-    color: var(--color-accent-1);
-    font-size: var(--font-size-base);
+  }
+
+  .tech-portfolio-diagram-img {
+    width: 100%;
+    height: auto;
+    mix-blend-mode: multiply;
+    display: block;
+  }
+
+  html[dark] .tech-portfolio-diagram-img {
+    filter: grayscale(1) invert(1);
+    mix-blend-mode: lighten;
   }
 
   @media (max-width: 839px) {
@@ -919,13 +833,10 @@ permalink: "/index.html"
 
       {# Architects Body Text (Row 3) #}
       <div class="expertise-body row-3">
-        <details class="expertise-expand" open>
-          <summary>read more...</summary>
-          <div class="expertise-body-content markdown">
-            <p>At Low Design Office, we leverage low-cost materials, low-energy technologies, and low-carbon strategies to deliver inspiring and impactful environments.</p>
-            <p>By rethinking design and delivery methods, we lower barriers to access while raising the standard for efficiency in building construction. Our "more with less" approach transforms scarcity into innovation, making custom architecture more sustainable, equitable, and efficient than traditional approaches.</p>
-          </div>
-        </details>
+        <div class="expertise-body-content markdown">
+          <p>At Low Design Office, we leverage low-cost materials, low-energy technologies, and low-carbon strategies to deliver inspiring and impactful environments.</p>
+          <p>By rethinking design and delivery methods, we lower barriers to access while raising the standard for efficiency in building construction. Our "more with less" approach transforms scarcity into innovation, making custom architecture more sustainable, equitable, and efficient than traditional approaches.</p>
+        </div>
       </div>
 
       </div>
@@ -966,12 +877,9 @@ permalink: "/index.html"
 
       {# Builders Body Text (Row 3) #}
       <div class="expertise-body row-3">
-        <details class="expertise-expand" open>
-          <summary>read more...</summary>
-          <div class="expertise-body-content markdown">
-            <p>Whether in the studio or on the jobsite, we treat all participants as collaborators, fostering open dialogue that transforms site-specific challenges into adaptable, efficient, and sustainable solutions that minimize stress on people and ecosystems alike. This hands-on, integrated process not only deepens our knowledge but also sets a foundation for innovation and trust in every project.</p>
-          </div>
-        </details>
+        <div class="expertise-body-content markdown">
+          <p>Whether in the studio or on the jobsite, we treat all participants as collaborators, fostering open dialogue that transforms site-specific challenges into adaptable, efficient, and sustainable solutions that minimize stress on people and ecosystems alike. This hands-on, integrated process not only deepens our knowledge but also sets a foundation for innovation and trust in every project.</p>
+        </div>
       </div>
 
       </div>
@@ -1012,12 +920,9 @@ permalink: "/index.html"
 
       {# Systems-Designers Body Text (Row 3) #}
       <div class="expertise-body row-3">
-        <details class="expertise-expand" open>
-          <summary>read more...</summary>
-          <div class="expertise-body-content markdown">
-            <p>We are community-focused and systems-based, leading design for planetary and social equity. By leveraging the power of thinking small, we transform resource constraints into opportunities for innovation—using low-tech, low-carbon methods, and open-source designs to realize more with less. Through participatory processes, we strive for efficiency, affordability, and equity, incrementally improving places for people and planet.</p>
-          </div>
-        </details>
+        <div class="expertise-body-content markdown">
+          <p>We are community-focused and systems-based, leading design for planetary and social equity. By leveraging the power of thinking small, we transform resource constraints into opportunities for innovation—using low-tech, low-carbon methods, and open-source designs to realize more with less. Through participatory processes, we strive for efficiency, affordability, and equity, incrementally improving places for people and planet.</p>
+        </div>
       </div>
 
       </div>
@@ -1029,14 +934,14 @@ permalink: "/index.html"
   <section class="tech-portfolio-section">
     <div class="grid grid--description">
 
-      {# Col 1: Description text #}
-      <div class="tech-portfolio-description markdown col-1">
+      {# Cols 1–2: Description text #}
+      <div class="tech-portfolio-description markdown col-1-2">
         LowDO's work spans a diverse network of projects, collaborators, and systems—from housing and civic infrastructure to fabrication and open-source tools. Our portfolio reflects deep connections across disciplines: architecture, construction, community organizing, and environmental stewardship. Each project is a node in an evolving network of ideas, partners, and places.
       </div>
 
-      {# Cols 2–4: Diagram placeholder #}
-      <div class="tech-portfolio-diagram col-2-3-4">
-        [ Diagram — drop PNG or SVG here ]
+      {# Cols 3–4: Diagram #}
+      <div class="tech-portfolio-diagram col-3-4">
+        <img src="/assets/images/Stellation Design.jpg" alt="Stellation Design diagram" class="tech-portfolio-diagram-img">
       </div>
 
     </div>
