@@ -583,6 +583,28 @@ img {
 		padding-right: var(--space-2);
 	}
 
+	/* Index page: dashed left border on menu drawer */
+	/* Injected as .header-menu__drawer-line by menu.js — can't use ::after on header (taken by bottom border) */
+	/* Can't use ::before/::after on the drawer itself (parent clip-path clips them away) */
+	html[data-current="all"] .header-menu__drawer-line {
+		position: absolute;
+		right: calc(var(--content-margin) + var(--content-width) / 4);
+		top: 100%;
+		width: 0;
+		height: var(--drawer-height, 0px);
+		border-left: var(--grid-line-thickness) dashed var(--grid-line-color);
+		clip-path: inset(0 0 100% 0);
+		transition: clip-path 250ms ease, visibility 250ms ease;
+		visibility: hidden;
+		pointer-events: none;
+		z-index: 998;
+	}
+
+	html[data-current="all"] .header-menu__drawer-line.is-open {
+		clip-path: inset(0 0 0 0);
+		visibility: visible;
+	}
+
 }
 
 /* Desktop Breakpoint */
