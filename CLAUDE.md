@@ -29,7 +29,7 @@ An architecture and design studio portfolio website based in Austin, Texas.
 
 5. **Open a pull request** — Create a PR targeting main with a descriptive title and description of changes.
 
-6. **Merge and clean up** — After approval/review, merge to main (which auto-deploys) and delete the branch.
+6. **Merge and clean up** — After approval/review, merge to main (which auto-deploys).
 
 
 ## Design Goals
