@@ -689,7 +689,7 @@ section: project
     position: fixed;
     pointer-events: none;
     z-index: 1000;
-    background: white;
+    background: var(--color-background);
     color: var(--color-accent);
     padding: var(--space-2) var(--space-3);
     font-size: var(--font-size-small);
@@ -720,7 +720,7 @@ section: project
     position: fixed;
     pointer-events: none;
     z-index: 1000;
-    background: white;
+    background: var(--color-background);
     color: var(--color-accent);
     padding: var(--space-2) var(--space-3);
     font-size: var(--font-size-small);
@@ -737,6 +737,12 @@ section: project
   .drawing-tooltip__hint {
     display: block;
     font-weight: normal;
+  }
+
+  :root[dark] .photo-tooltip,
+  :root[dark] .drawing-tooltip {
+    background: #111111;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
   }
 
   /* Add vertical spacing above design toolkit and related projects sections */
@@ -842,8 +848,12 @@ section: project
   .photo-modal__caption-row {
     display: flex;
     align-items: stretch;
-    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    border: var(--grid-line-thickness) solid var(--grid-line-color);
     cursor: default;
+  }
+
+  :root[dark] .photo-modal__caption-row {
+    background: #000000;
   }
   .photo-modal__counter {
     flex-shrink: 0;
@@ -856,6 +866,11 @@ section: project
     border-left: var(--grid-line-thickness) solid var(--grid-line-color);
     white-space: nowrap;
   }
+
+  :root[dark] .photo-modal__counter {
+    opacity: 0.8;
+  }
+
   .photo-modal__image-wrap {
     position: relative;
     overflow: hidden;
