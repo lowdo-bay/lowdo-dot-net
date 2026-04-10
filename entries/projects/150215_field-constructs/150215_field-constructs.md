@@ -1,21 +1,23 @@
 ---
 draft: false
 featured: false
-title: "Bending the Rules"
-description: "Exploring ideas of access and equity with an installation of colorful event wristbands"
-date: 2015-02-15
+title: Bending the Rules
+description: >-
+  Exploring ideas of access and equity with an installation of colorful event
+  wristbands
+date: 2015-02-15T00:00:00.000Z
 year: 2015
 categories:
   - INSTALLATION
   - COMPETITION
-location: "Austin, TX"  # e.g., "Austin, TX"
-status: "Competition"    # e.g., "Built", "In Progress"
+location: 'Austin, TX'
+status: Competition
 collaborators:
-  - name: "Variable Projects"
-    role: "Collaborator"
-  - name: "VIF Studio"
-    role: "Collaborator"
-position:
+  - name: Variable Projects
+    role: Collaborator
+  - name: VIF Studio
+    role: Collaborator
+type: project
 ---
 In collaboration with Variable Projects and VIF Studio, Bending the Rules is a design competition entry for the Field Constructs art installation in Austin, TX. Our proposal aimed to engage critical thinking about how Austin’s urban evolution addresses the many factors that contribute to Austin as a place—including not only the young, the hip, and the weird, but also the historic neighborhoods, the under-represented communities, and the natural hill-country landscape.
 

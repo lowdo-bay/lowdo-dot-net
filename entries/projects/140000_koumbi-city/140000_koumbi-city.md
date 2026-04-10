@@ -1,18 +1,19 @@
 ---
 draft: false
 featured: false
-title: "Koumbi City"
-description: "Community-driven masterplan weaving housing, public space, and resilient infrastructure"
-date: 2014-01-31
+title: Koumbi City
+description: >-
+  Community-driven masterplan weaving housing, public space, and resilient
+  infrastructure
+date: 2014-01-31T00:00:00.000Z
 year: 2014
 categories:
   - AFRICA
   - URBAN
   - COMMUNITY
-location: "Koumbi City, Ghana"  # e.g., "Austin, TX"
-status: "Designed"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Koumbi City, Ghana'
+status: Designed
+type: project
 ---
 
 Koumbi City — a greenfield development in the Dawhenya • Afienya • Shai (DAS) triangle — is the next phase of large-scale planned urban development in Greater Accra-Tema (pop. 3mil).

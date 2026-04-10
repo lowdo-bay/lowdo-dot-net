@@ -1,23 +1,23 @@
 ---
 draft: false
 featured: false
-title: "Barn House"
-description: "Is it a barn, or a house?"
-date: 2011-02-05
+title: Barn House
+description: 'Is it a barn, or a house?'
+date: 2011-02-05T00:00:00.000Z
 year: 2012
 categories:
   - HOUSING
   - DESIGN+BUILD
-location: "Shiner, TX"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+location: 'Shiner, TX'
+status: Built
 collaborators:
-  - name: "Feldt Consultant Engineers"
-    role: "Structural Engineer"
-  - name: "Terracon Consultants"
-    role: "Geotechnical Engineer"
-  - name: "Chase"
-    role: "Insulation"
-position:
+  - name: Feldt Consultant Engineers
+    role: Structural Engineer
+  - name: Terracon Consultants
+    role: Geotechnical Engineer
+  - name: Chase
+    role: Insulation
+type: project
 ---
 
 The farmhouse has long served as an iconic link between human society and the earth. Located in the expansive rural landscape of southeast Texas, this project connects "home" with outside landscape at varying depths through moments of everyday use. While a house in a more urban setting must obscure its contents--protect those within it--a farmhouse removed from urban contexts, standing alone on acres of land, can celebrate transparency and the proliferation of uninterrupted visual corridors.

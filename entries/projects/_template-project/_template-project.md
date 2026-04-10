@@ -1,22 +1,21 @@
 ---
 draft: true
 featured: false
-featuredPosition:  # Control the order of featured projects on the homepage.
-title: "Your Project Name"
-description: "A short summary of the project (1-2 sentences)"
-date: 2024-01-15
+title: Your Project Name
+description: A short summary of the project (1-2 sentences)
+date: 2024-01-15T00:00:00.000Z
 year: 2024
 categories:
   - HOUSING
   - SUSTAINABLE
-location: ""  # e.g., "Austin, TX"
-status: ""    # e.g., "Built", "In Progress"
+location: ''
+status: ''
 collaborators:
-  - name: "Partner Name"
-    role: "Structural Engineer"
-  - name: "Another Partner"
-    role: "General Contractor"
-position:
+  - name: Partner Name
+    role: Structural Engineer
+  - name: Another Partner
+    role: General Contractor
+type: project
 ---
 
 Write your project description here. This text appears on the project detail page below the header image.

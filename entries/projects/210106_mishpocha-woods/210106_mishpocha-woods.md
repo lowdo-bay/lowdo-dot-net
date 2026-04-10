@@ -2,27 +2,27 @@
 draft: false
 featured: true
 featuredPosition: 7
-title: "Mishpocha Woods Compound"
+title: Mishpocha Woods Compound
 description: An affordable and ecologically sensitive model for building community.
-date: 2024-02-01
+date: 2024-02-01T00:00:00.000Z
 year: 2024
 categories:
   - HOUSING
   - DESIGN+BUILD
   - COMMUNITY
   - ADAPTIVE HOUSING
-location: "Austin, TX"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+location: 'Austin, TX'
+status: Built
 collaborators:
-  - name: "Persyn Engineering"
-    role: "Structural Engineer"
-  - name: "Fort"
-    role: "Structural Engineer"
-  - name: "JM Structural"
-    role: "Structural Engineer"
-  - name: "Leonid Furmansky"
-    role: "Photography"
-position:
+  - name: Persyn Engineering
+    role: Structural Engineer
+  - name: Fort
+    role: Structural Engineer
+  - name: JM Structural
+    role: Structural Engineer
+  - name: Leonid Furmansky
+    role: Photography
+type: project
 ---
 
 "It's like I had a dinner party 10 years ago and no one left." - Robin, Mishpocha Woods client and GC

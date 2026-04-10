@@ -8,6 +8,9 @@
   publish = "_site"
   command = "eleventy"
 
+[functions]
+  directory = "netlify/functions"
+
 # Cache generated content between builds (e.g. images)
 # [[plugins]]
 # package = "netlify-plugin-11ty"

@@ -1,47 +1,47 @@
 ---
 draft: false
 featured: false
-title: "Garden St. Residence"
-description: "Multiphase home framing everyday life."
-date: 2024-01-15
+title: Garden St. Residence
+description: Multiphase home framing everyday life.
+date: 2024-01-15T00:00:00.000Z
 year: 2012 - 2024
 categories:
   - HOUSING
   - DESIGN+BUILD
   - REMODEL
   - ADDITION
-location: "Austin, TX"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+location: 'Austin, TX'
+status: Built
 collaborators:
-  - name: "JM Structural"
-    role: "Structural Engineer"
-  - name: "Casey Dunn"
-    role: "Photography"
-  - name: "Jared Quarnstrom"
-    role: "Photography"
-  - name: "American Trees"
-    role: "Site Work"
-  - name: "Arborworks Tree Care"
-    role: "Site Work"
-  - name: "Mario Alcocer"
-    role: "Foundation"
-  - name: "MG Drilling"
-    role: "Foundation"
-  - name: "David Allison Electric"
-    role: "Electrical"
-  - name: "Dennis Steel"
-    role: "Steel"
-  - name: "Synergy Framing"
-    role: "Framing"
-  - name: "P&P Plumbing"
-    role: "Plumbing"
-  - name: "Nick Perez"
-    role: "Roofing"
-  - name: "Centex Mechanical"
-    role: "HVAC"
-  - name: "Tex Tar Waterproofing"
-    role: "Waterproofing"
-position:
+  - name: JM Structural
+    role: Structural Engineer
+  - name: Casey Dunn
+    role: Photography
+  - name: Jared Quarnstrom
+    role: Photography
+  - name: American Trees
+    role: Site Work
+  - name: Arborworks Tree Care
+    role: Site Work
+  - name: Mario Alcocer
+    role: Foundation
+  - name: MG Drilling
+    role: Foundation
+  - name: David Allison Electric
+    role: Electrical
+  - name: Dennis Steel
+    role: Steel
+  - name: Synergy Framing
+    role: Framing
+  - name: P&P Plumbing
+    role: Plumbing
+  - name: Nick Perez
+    role: Roofing
+  - name: Centex Mechanical
+    role: HVAC
+  - name: Tex Tar Waterproofing
+    role: Waterproofing
+type: project
 ---
 
 This house weaves green building and contemporary design into the context of its East Austin neighborhood -- on a tight budget. It was conceived as a framing system for the lives of those within, using a variety of implicit framing devices at different scales to create subtly distinct moments that can be experienced separately or simultaneously.

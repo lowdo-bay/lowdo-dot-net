@@ -1,18 +1,18 @@
 ---
 draft: false
 featured: false
-title: "Pool Pavilion"
-description: "Immersive oasis opening to the elements in the Texas Hill Country"
-date: 2022-07-22
+title: Pool Pavilion
+description: Immersive oasis opening to the elements in the Texas Hill Country
+date: 2022-07-22T00:00:00.000Z
 year: 2022
 categories:
   - COMMERCIAL
-location: "Hill Country, TX"  # e.g., "Austin, TX"
-status: "Designed"   # e.g., "Built", "In Progress"
+location: 'Hill Country, TX'
+status: Designed
 collaborators:
-  - name: "Campbell Landscape Architecture"
-    role: "Landscape Architect"
-position:
+  - name: Campbell Landscape Architecture
+    role: Landscape Architect
+type: project
 ---
 
 Concept design for a pool and restaurant-bar-retreat immersed in Texas hill country.

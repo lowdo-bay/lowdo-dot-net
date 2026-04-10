@@ -1,22 +1,22 @@
 ---
 draft: false
 featured: false
-title: "Flex Appeal"
-description: "Adaptive housing that addresses affordability and equitable communities"
-date: 2021-01-09
+title: Flex Appeal
+description: Adaptive housing that addresses affordability and equitable communities
+date: 2021-01-09T00:00:00.000Z
 year: 2021
 categories:
   - HOUSING
   - ADAPTIVE HOUSING
   - COMPETITION
-location: "Los Angeles, CA"  # e.g., "Austin, TX"
-status: "Honorable Mention"    # e.g., "Built", "In Progress"
+location: 'Los Angeles, CA'
+status: Honorable Mention
 collaborators:
-  - name: "Kounkuey Design Initiative"
-    role: "Design Collaborator"
-  - name: "Positive Energy"
-    role: "Design Collaborator"
-position:
+  - name: Kounkuey Design Initiative
+    role: Design Collaborator
+  - name: Positive Energy
+    role: Design Collaborator
+type: project
 ---
 
 2021 Honorable Mention in LA Low-rise Competition.

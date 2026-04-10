@@ -10,14 +10,10 @@ A visual guide to where everything lives in the LowDO repository.
 lowdo-dot-net/
 ├── entries/           ← YOU EDIT HERE (all content)
 │   ├── projects/      ← Design projects (get own pages)
-│   ├── news/          ← News items (index only)
-│   ├── awards/        ← Awards and honors (index only)
-│   ├── features/      ← Press and publications (index only)
-│   ├── lectures/      ← Talks and presentations (index only)
-│   ├── exhibitions/   ← Gallery shows (index only)
-│   └── staff/         ← Team updates (index only)
+│   └── other/         ← All other entries (index only)
 ├── _data/
 │   └── settings.yaml  ← YOU EDIT HERE (site customization)
+├── admin/             ← Password-protected admin panel (/admin/)
 ├── docs/              ← YOU ARE HERE (this documentation)
 ├── _includes/         ← DON'T EDIT (HTML templates)
 ├── assets/            ← DON'T EDIT (site resources)
@@ -69,7 +65,7 @@ This is where you'll spend most of your time:
 
 ```
 entries/
-├── projects/                        ← Design projects
+├── projects/                        ← Design projects (get own pages)
 │   ├── casa-marianella/
 │   │   ├── casa-marianella.md       ← Content file
 │   │   ├── header.jpg               ← Thumbnail image
@@ -79,15 +75,29 @@ entries/
 │       ├── wolf-creek-ranch.md
 │       ├── header.jpg
 │       └── 01-wide-view.jpg
-├── news/                            ← News items
-│   └── emerging-voices-award/
-│       ├── emerging-voices-award.md
-│       └── thumb.jpg
-├── awards/                          ← Awards and recognitions
-├── features/                        ← Press coverage
-├── lectures/                        ← Talks and presentations
-├── exhibitions/                     ← Gallery shows
-└── staff/                           ← Team updates
+└── other/                           ← All non-project entries (index only)
+    ├── emerging-voices-award/
+    │   ├── emerging-voices-award.md ← type: award
+    │   └── thumb.jpg
+    ├── austin-chronicle-feature/
+    │   └── austin-chronicle-feature.md  ← type: feature
+    └── ut-lecture-2024/
+        └── ut-lecture-2024.md       ← type: lecture
+```
+
+### Entry Type Field
+
+Every entry's type (project, award, feature, lecture, etc.) is set by a `type:` field in its frontmatter — not by its folder. The folder only controls whether the entry gets its own page:
+
+- `entries/projects/` → gets a detail page at `/project/{slug}/`
+- `entries/other/` → index only, no detail page
+
+```yaml
+---
+type: award        ← Sets the type label shown in the index filter
+draft: false
+title: "Emerging Voices Award"
+---
 ```
 
 ### Key Pattern
@@ -95,7 +105,7 @@ entries/
 Every entry follows this structure:
 
 ```
-entries/{type}/{entry-name}/
+entries/{projects-or-other}/{entry-name}/
 ├── {entry-name}.md     ← Markdown file (same name as folder)
 └── image.jpg           ← Optional image(s)
 ```
@@ -116,7 +126,7 @@ casa-marianella/
 
 ---
 
-## Entry Type Folders
+## Entry Folders
 
 ### `entries/projects/` (Get Own Pages)
 
@@ -124,7 +134,7 @@ Projects get individual detail pages at `/project/{name}/`:
 
 ```
 projects/casa-marianella/
-├── casa-marianella.md       ← Required: content and metadata
+├── casa-marianella.md       ← Required: content (must include type: project)
 ├── header.jpg               ← Recommended: main thumbnail
 ├── 01-exterior-view.jpg     ← Optional: gallery image
 ├── 02-interior-space.jpg    ← Optional: gallery image
@@ -133,25 +143,17 @@ projects/casa-marianella/
 
 All images in the folder (except `header.*`/`thumb.*`) are auto-added to the gallery.
 
-### `entries/news/` (Index Only)
+### `entries/other/` (Index Only)
 
-News items appear in the comprehensive index but don't get their own pages:
+All non-project entries live here — news, awards, features, lectures, exhibitions, staff updates. They appear in the comprehensive index but don't get their own pages. The `type:` frontmatter field controls the label shown in the index and filters.
 
 ```
-news/studio-expansion/
-├── studio-expansion.md      ← Required: content and metadata
-└── thumb.jpg                ← Optional: thumbnail for index
+other/emerging-voices-award/
+├── emerging-voices-award.md    ← Required (includes type: award)
+└── thumb.jpg                   ← Optional: thumbnail for index
 ```
 
-### Other Types (Index Only)
-
-Same structure as news:
-
-- `awards/` - Awards and recognitions
-- `features/` - Press coverage and publications
-- `lectures/` - Talks and presentations
-- `exhibitions/` - Gallery shows
-- `staff/` - Team updates
+**Supported types:** `news`, `award`, `feature`, `lecture`, `exhibition`, `staff` — or any custom type you create.
 
 ---
 
@@ -295,17 +297,17 @@ _site/all/
 
 ## Where to Put Things: Quick Reference
 
-| What You're Adding | Where It Goes | Example |
-|-------------------|---------------|---------|
-| Design project | `entries/projects/{name}/` | `entries/projects/casa-marianella/` |
-| News item | `entries/news/{name}/` | `entries/news/studio-expansion/` |
-| Award | `entries/awards/{name}/` | `entries/awards/emerging-voices/` |
-| Press feature | `entries/features/{name}/` | `entries/features/austin-chronicle/` |
-| Lecture | `entries/lectures/{name}/` | `entries/lectures/ut-talk/` |
-| Exhibition | `entries/exhibitions/{name}/` | `entries/exhibitions/gallery-show/` |
-| Staff update | `entries/staff/{name}/` | `entries/staff/new-hire-ann/` |
-| Site colors | `_data/settings.yaml` | (edit the `colors:` section) |
-| Site title/info | `_data/settings.yaml` | (edit the `title:`, `email:` fields) |
+| What You're Adding | Where It Goes | Type field |
+|-------------------|---------------|------------|
+| Design project | `entries/projects/{name}/` | `type: project` |
+| News item | `entries/other/{name}/` | `type: news` |
+| Award | `entries/other/{name}/` | `type: award` |
+| Press feature | `entries/other/{name}/` | `type: feature` |
+| Lecture | `entries/other/{name}/` | `type: lecture` |
+| Exhibition | `entries/other/{name}/` | `type: exhibition` |
+| Staff update | `entries/other/{name}/` | `type: staff` |
+| Site colors | `_data/settings.yaml` | — |
+| Site title/info | `_data/settings.yaml` | — |
 
 ---
 

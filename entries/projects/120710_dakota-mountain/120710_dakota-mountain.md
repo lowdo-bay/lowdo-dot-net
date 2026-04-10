@@ -2,50 +2,50 @@
 draft: false
 featured: true
 featuredPosition: 3
-title: "Dakota Mountain"
-description: "Climate-responsive house for co-living"
-date: 2019-07-10
+title: Dakota Mountain
+description: Climate-responsive house for co-living
+date: 2019-07-10T00:00:00.000Z
 year: 2019
 categories:
   - HOUSING
   - DESIGN+BUILD
   - ADAPTIVE HOUSING
-location: "Dripping Springs, TX"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+location: 'Dripping Springs, TX'
+status: Built
 collaborators:
-  - name: "Persyn Engineering"
-    role: "Structural Engineer"
-  - name: "Chase Daniel"
-    role: "Photography"
-  - name: "Mario Alcocer"
-    role: "Foundation and Site Work"
-  - name: "Chabert Plumbing"
-    role: "Plumbing"
-  - name: "S2N Electric"
-    role: "Electrical"
-  - name: "Jason Wiggins"
-    role: "Framing, Finish Work, Painting, Doors, and Site Work"
-  - name: "Low Design Labor"
-    role: "Framing"
-  - name: "Nic Perez"
-    role: "Roofing"
-  - name: "Harvested Rain Solutions"
-    role: "Rainwater Collection"
-  - name: "Jean Gonzales"
-    role: "Framing, Finish Work, and Painting"
-  - name: "Master Roofing"
-    role: "Siding"
-  - name: "RC Drywall"
-    role: "Drywall"
-  - name: "Kenneth Bollom"
-    role: "Painting and Finish Work"
-  - name: "FCS Granite"
-    role: "Countertops"
-  - name: "Larry"
-    role: "Septic"
-  - name: "American Trees"
-    role: "Site Work"
-position:
+  - name: Persyn Engineering
+    role: Structural Engineer
+  - name: Chase Daniel
+    role: Photography
+  - name: Mario Alcocer
+    role: Foundation and Site Work
+  - name: Chabert Plumbing
+    role: Plumbing
+  - name: S2N Electric
+    role: Electrical
+  - name: Jason Wiggins
+    role: 'Framing, Finish Work, Painting, Doors, and Site Work'
+  - name: Low Design Labor
+    role: Framing
+  - name: Nic Perez
+    role: Roofing
+  - name: Harvested Rain Solutions
+    role: Rainwater Collection
+  - name: Jean Gonzales
+    role: 'Framing, Finish Work, and Painting'
+  - name: Master Roofing
+    role: Siding
+  - name: RC Drywall
+    role: Drywall
+  - name: Kenneth Bollom
+    role: Painting and Finish Work
+  - name: FCS Granite
+    role: Countertops
+  - name: Larry
+    role: Septic
+  - name: American Trees
+    role: Site Work
+type: project
 ---
 
 “A sustainable house, indeed, but not an expensive house... What the house offers as a piece of architecture and as a solution for the future of sustainable development is worth so much more.” 

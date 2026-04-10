@@ -1,25 +1,25 @@
 ---
 draft: false
 featured: false
-title: "Rolling in Thyme and Dough"
-description: "Addition for a bistro operating out of a historic building"
-date: 2012-01-16
+title: Rolling in Thyme and Dough
+description: Addition for a bistro operating out of a historic building
+date: 2012-01-16T00:00:00.000Z
 year: 2012
 categories:
   - COMMERCIAL
   - DESIGN+BUILD
   - ADDITION
   - ADAPTIVE REUSE
-location: "Dripping Springs, TX"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
+location: 'Dripping Springs, TX'
+status: Built
 collaborators:
-  - name: "CMA Engineering"
-    role: "Civil Engineer"
-  - name: "Hinkle"
-    role: "Drywall"
-  - name: "Chase"
-    role: "Insulation"
-position:
+  - name: CMA Engineering
+    role: Civil Engineer
+  - name: Hinkle
+    role: Drywall
+  - name: Chase
+    role: Insulation
+type: project
 ---
 
 Rolling in Thyme and Dough began as an organic produce vendor in 2006 and has transformed into a Dripping Springs hot spot -- a place where people can relax, work, and enjoy a wide assortment of food. It has done so by preserving the existing home it operates out of (originally built in the 1890's), building on the town's historic fabric in a manner which enhances the ambience of the community.
