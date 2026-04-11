@@ -24,13 +24,33 @@ Think of frontmatter as a form that tells the system about your content.
 
 ## Required Fields
 
-Every entry MUST have these three fields:
+Every entry MUST have these fields:
 
 | Field | What It Does | Format | Example |
 |-------|-------------|--------|---------|
+| `type` | Entry type — controls filter label and project-only features | Lowercase text | `type: award` |
 | `draft` | Controls visibility | `true` or `false` | `draft: false` |
 | `title` | Main heading | Text in quotes | `title: "Casa Marianella"` |
 | `date` | When it happened | YYYY-MM-DD | `date: 2023-06-15` |
+
+### type
+
+**What it does:** Sets the entry's type — determines its filter label in the index and which fields apply (e.g. only projects get galleries and collaborators).
+
+**Format:** Lowercase text, no quotes
+
+**Standard values:** `project`, `news`, `award`, `feature`, `lecture`, `exhibition`, `staff`
+
+**Custom values:** You can invent any type — it will appear as a filter option automatically.
+
+**Example:**
+```yaml
+type: award
+```
+
+**Note:** Entries in `entries/projects/` should use `type: project`. All other entries live in `entries/other/` and use any other type value.
+
+---
 
 ### draft
 
@@ -145,7 +165,7 @@ position: 1
 
 ## Project-Specific Fields
 
-These fields ONLY work for entries in `entries/projects/`:
+These fields ONLY work for entries with `type: project` in `entries/projects/`:
 
 ### year
 
@@ -274,7 +294,7 @@ description: "A community resource center providing housing and support services
 
 ## Update-Specific Fields
 
-These fields work for News, Awards, Features, Lectures, Exhibitions, Staff:
+These fields work for non-project entries (news, award, feature, lecture, exhibition, staff):
 
 ### link
 
@@ -342,7 +362,7 @@ relatedProjects:
 
 **Tips:**
 - Use the **folder name** of the project (the slug in the URL, e.g. `/project/wolf-creek-ranch/` → `wolf-creek-ranch`)
-- Only works for entries in `entries/awards/`, `entries/features/`, `entries/news/`, `entries/lectures/`, `entries/exhibitions/`, and `entries/staff/`
+- Only works for non-project entries in `entries/other/`
 - The entry will display on each project page with its title, categories, and date
 - If the entry has a `link` field, the title will be clickable
 

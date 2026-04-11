@@ -1,17 +1,16 @@
 ---
 draft: false
 featured: false
-title: "Anam City School"
-description: "Resilient and self-sustaining architecture"
-date: 2011-04-08
+title: Anam City School
+description: Resilient and self-sustaining architecture
+date: 2011-04-08T00:00:00.000Z
 year: 2011
 categories:
   - AFRICA
   - COMMUNITY
-location: "Anam, Nigeria"  # e.g., "Austin, TX"
-status: "Unbuilt"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Anam, Nigeria'
+status: Unbuilt
+type: project
 ---
 
 The Anam City School is a five-block, eight-classroom campus designed to serve children from four surrounding remote villages of Ebenebe, as part of the Anam City Masterplan, the school embodies the masterplan’s vision of building community infrastructure that is both resilient and self-sustaining.

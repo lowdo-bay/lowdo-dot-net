@@ -6,9 +6,17 @@ Step-by-step guide for adding non-project entries (news, awards, features, lectu
 
 ## Editing Options
 
-You can add entries in two ways:
+You can add entries in three ways:
 
-### Option 1: GitHub Web Editor (No Installation)
+### Option 1: Admin Panel (Easiest)
+
+Use the password-protected admin at `/admin/`:
+- ✅ No files to create manually
+- ✅ Works in any browser
+- ✅ Inline editing for all fields
+- ✅ See [Using the Admin Panel](../08-admin/using-the-admin.md)
+
+### Option 2: GitHub Web Editor (No Installation)
 
 Use GitHub.com to create files directly in your browser:
 - ✅ No software to install
@@ -58,16 +66,7 @@ These entry types appear ONLY in the comprehensive index (they don't get their o
 ### Step 1: Go to GitHub.com
 
 1. Navigate to https://github.com/lowdo-bay/lowdo-dot-net
-2. Choose the appropriate folder for your entry type:
-
-| Type | Folder |
-|------|--------|
-| News | `entries/news/` |
-| Award | `entries/awards/` |
-| Feature | `entries/features/` |
-| Lecture | `entries/lectures/` |
-| Exhibition | `entries/exhibitions/` |
-| Staff | `entries/staff/` |
+2. All non-project entries go in the same folder: `entries/other/`
 
 ### Step 2: Create the Entry File
 
@@ -92,6 +91,7 @@ Copy this template and fill in your details:
 ```yaml
 ---
 draft: false
+type: award
 title: "Emerging Voices Award"
 subtitle: "Architectural League of New York"
 date: 2021-12-31
@@ -117,7 +117,7 @@ You can add details about the award, news, or event.
 
 ### Step 5: Upload Thumbnail Image (Optional)
 
-1. Navigate to your entry folder: `entries/{type}/your-entry-name/`
+1. Navigate to your entry folder: `entries/other/your-entry-name/`
 2. Click **"Add file"** → **"Upload files"**
 3. Upload an image named `thumb.jpg` or `header.jpg`
 4. Make sure to **commit to the same branch** you created earlier
@@ -141,15 +141,15 @@ You can add details about the award, news, or event.
 
 ### Step 1: Choose the Right Folder
 
-Navigate to the appropriate folder for your entry type (see table above).
+All non-project entries go in `entries/other/`. The entry type is set by the `type:` field in the file, not by its folder.
 
 ---
 
 ### Step 2: Create a Folder
 
-Create a new folder with a descriptive name.
+Create a new folder inside `entries/other/` with a descriptive name.
 
-**Same naming rules as projects:**
+**Naming rules:**
 - Lowercase letters only
 - Hyphens instead of spaces
 - Be descriptive
@@ -159,7 +159,7 @@ Create a new folder with a descriptive name.
 
 **Example:**
 ```
-entries/awards/emerging-voices-award/
+entries/other/emerging-voices-award/
 ```
 
 ---
@@ -189,6 +189,7 @@ Copy this template and fill in your details:
 ```yaml
 ---
 draft: false
+type: award
 title: "Emerging Voices Award"
 subtitle: "Architectural League of New York"
 date: 2021-12-31
@@ -212,7 +213,7 @@ Drop a thumbnail image in the folder.
 Name it `header.jpg` or `thumb.jpg`:
 
 ```
-entries/awards/emerging-voices-award/
+entries/other/emerging-voices-award/
 ├── emerging-voices-award.md
 └── thumb.jpg                    ← Optional thumbnail
 ```

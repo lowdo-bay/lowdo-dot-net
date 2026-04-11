@@ -1,0 +1,16 @@
+---
+draft: false
+title: What a scrapyard in Ghana can teach us about innovation
+subtitle: TED Talk
+description: DK Osseo-Asare gives a TED Talk on AMP Spacecraft
+date: 2017-08-01T00:00:00.000Z
+categories:
+  - AFRICA
+  - AMP
+link: >-
+  https://www.ted.com/talks/dk_osseo_asare_what_a_scrapyard_in_ghana_can_teach_us_about_innovation
+relatedProjects:
+  - 240122_spacecraft
+type: lecture
+---
+

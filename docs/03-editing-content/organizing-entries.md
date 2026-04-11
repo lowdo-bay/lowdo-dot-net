@@ -41,16 +41,18 @@ categories:
 
 See [Category Guidelines](../07-reference/category-guidelines.md) for the complete list.
 
-### Consolidating or Reorganizing Categories
+### Renaming or Reorganizing Categories
 
-If you want to consolidate, rename, or reorganize categories across multiple projects, **use an AI assistant** to help:
+The easiest way to rename or consolidate categories is through the **admin panel**:
 
-1. Ask AI to review all entries and suggest category changes
-2. Have AI provide a detailed list of which entries need updating
-3. Apply the changes systematically across your entries
-4. Test on preview before merging
+1. Go to `/admin/` and log in
+2. Click **Manage Labels** in the toolbar
+3. Under the **Categories** tab, click **Rename** next to any category
+4. Type the new name and press Enter or click Save
+5. All entries with that category are updated automatically
+6. Click **Save Changes** to commit everything to GitHub
 
-See [Using AI Assistants](../05-tools-and-workflow/using-ai-assistants.md#consolidating-categories) for examples.
+See [Using the Admin Panel](../08-admin/using-the-admin.md) for full details.
 
 ---
 

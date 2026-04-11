@@ -2,17 +2,18 @@
 draft: false
 featured: true
 featuredPosition: 5
-title: "New Anam City"
-description: "Vision plan for a new town prototype balancing social, economic, and ecological imperatives"
-date: 2011-01-01
+title: New Anam City
+description: >-
+  Vision plan for a new town prototype balancing social, economic, and
+  ecological imperatives
+date: 2011-01-01T00:00:00.000Z
 year: 2011 - Present
 categories:
   - AFRICA
   - URBAN
-location: "Anambra State, Nigeria"  # e.g., "Austin, TX"
-status: "Ongoing"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Anambra State, Nigeria'
+status: Ongoing
+type: project
 ---
 
 New town in Anambra State, Nigeria

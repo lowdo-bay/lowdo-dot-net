@@ -5,51 +5,51 @@ featuredPosition: 2
 title: Wolf Creek Ranch
 description: Sustainable retreat harmonizing nature and landscape.
 year: 2024
-date: 2024-11-10
+date: 2024-11-10T00:00:00.000Z
 categories:
   - HOUSING
   - DESIGN+BUILD
   - ADAPTIVE HOUSING
-location: "Burnet, TX, USA"
-status: "Built"
+location: 'Burnet, TX, USA'
+status: Built
 collaborators:
-  - role: "Decking & Siding"
-    name: "Timbertown"
-  - role: "Structural"
-    name: "Persyn Engineering"
-  - role: "Photography"
-    name: "Daisuke Hirabayashi"
-  - name: "All Star Land Survey"
-    role: "Surveys"
-  - name: "Porter Septic"
-    role: "Septic and Excavation"
-  - name: "Harvested Rain Solutions"
-    role: "Rainwater Collection"
-  - name: "Lago Plumbing"
-    role: "Plumbing"
-  - name: "SCC Industrial"
-    role: "Foundation Site Prep"
-  - name: "Lewis Brothers Concrete"
-    role: "Foundation"
-  - name: "Longhorn Welding"
-    role: "Steel Fabrication and Erection"
-  - name: "Sergio Framer"
-    role: "Framing"
-  - name: "BioTex Foam"
-    role: "Insulation"
-  - name: "Nic Perez"
-    role: "Roofing and Gutters"
-  - name: "Francisco Perez"
-    role: "Tile"
-  - name: "Quick Connect Electrical"
-    role: "Electrical"
-  - name: "RC Drywall"
-    role: "Drywall"
-  - name: "Austin's Green Air"
-    role: "HVAC"
-  - name: "Jbar"
-    role: "Site Services"
-position: 
+  - role: Decking & Siding
+    name: Timbertown
+  - role: Structural
+    name: Persyn Engineering
+  - role: Photography
+    name: Daisuke Hirabayashi
+  - name: All Star Land Survey
+    role: Surveys
+  - name: Porter Septic
+    role: Septic and Excavation
+  - name: Harvested Rain Solutions
+    role: Rainwater Collection
+  - name: Lago Plumbing
+    role: Plumbing
+  - name: SCC Industrial
+    role: Foundation Site Prep
+  - name: Lewis Brothers Concrete
+    role: Foundation
+  - name: Longhorn Welding
+    role: Steel Fabrication and Erection
+  - name: Sergio Framer
+    role: Framing
+  - name: BioTex Foam
+    role: Insulation
+  - name: Nic Perez
+    role: Roofing and Gutters
+  - name: Francisco Perez
+    role: Tile
+  - name: Quick Connect Electrical
+    role: Electrical
+  - name: RC Drywall
+    role: Drywall
+  - name: Austin's Green Air
+    role: HVAC
+  - name: Jbar
+    role: Site Services
+type: project
 ---
 
 The Wolf Creek Ranch weaves through rolling hills and limestone rock outcrops adjacent to Lake Buchanan, providing stunning views, ample sun, and a prevalent breeze. The owners wanted to embrace and respond to these natural characteristics while also prioritizing an economy of means. The design became another iteration of resource conscious, performance-driven strategies that pro-actively respond to the landscape and create a welcoming environment for all generations who might use the house.

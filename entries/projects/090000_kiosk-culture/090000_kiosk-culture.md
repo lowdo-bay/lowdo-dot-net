@@ -1,17 +1,16 @@
 ---
 draft: false
 featured: false
-title: "Kiosk Culture"
-description: "Studying informal mechanics of the African city"
-date: 2009-01-01
+title: Kiosk Culture
+description: Studying informal mechanics of the African city
+date: 2009-01-01T00:00:00.000Z
 year: 2009 - 2017
 categories:
   - AFRICA
   - EXHIBITION
-location: "Accra + Tema, Ghana"  # e.g., "Austin, TX"
-status: "Research"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Accra + Tema, Ghana'
+status: Research
+type: project
 ---
 
 **Africa today has among the highest rates of urbanization on the planet. In the twin cities Accra and Tema, the human settlement closest to the earth's geographic origin 0-0, this urban growth puts pressure on networks of electricity, transportation and ecology.**

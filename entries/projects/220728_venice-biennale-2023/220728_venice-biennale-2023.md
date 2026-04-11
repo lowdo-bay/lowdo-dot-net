@@ -1,18 +1,17 @@
 ---
 draft: false
 featured: false
-title: "Enviromolecular: Venice Biennale 2023"
-description: "2023 exhibit in the Dangerous Liasons section of the Arsenale"
-date: 2023-05-20
+title: 'Enviromolecular: Venice Biennale 2023'
+description: 2023 exhibit in the Dangerous Liasons section of the Arsenale
+date: 2023-05-20T00:00:00.000Z
 year: 2023
 categories:
   - EXHIBITION
   - AMP
   - AFRICA
-location: "Venice, Italy"  # e.g., "Austin, TX"
-status: "Exhibition"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Venice, Italy'
+status: Exhibition
+type: project
 ---
 
 “Enviromolecular” refers to basic structure for life support and a “chemical” approach to building dynamic space. Atoms conjoin periodically to form molecules, minimum microstructures capable of performing a material’s chemical behavior – how matter interacts, electronically – enabling quantum effects to register harmonically at human-scale.

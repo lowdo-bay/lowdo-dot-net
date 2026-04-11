@@ -116,17 +116,22 @@ An architecture and design studio portfolio website based in Austin, Texas.
 
 ```
 _data/settings.yaml    # Site-wide configuration (edit this for theme changes)
-entries/               # All content entries (projects, news, awards, etc.)
-  projects/            # Project entries with individual pages
-  news/                # News entries
-  awards/              # Award entries
-  features/            # Feature/publication entries
-  lectures/            # Lecture entries
-  exhibitions/         # Exhibition entries
-  staff/               # Staff update entries
+entries/               # All content entries
+  projects/            # Project entries — get individual pages at /project/{slug}/
+  other/               # All non-project entries (news, awards, features, etc.)
 _includes/components/  # Reusable template components
-assets/uploads/        # Images uploaded via CMS
+admin/                 # Password-protected admin page (/admin/)
+netlify/functions/     # Serverless functions (admin auth + GitHub commit API)
+scripts/               # One-time utility scripts (e.g. migration)
 ```
+
+### Entry Type System
+
+Entry type is stored in the `type:` frontmatter field of each `.md` file. The folder determines only whether an entry gets a detail page:
+- `entries/projects/` — `type: project`, gets `/project/{slug}/` page + image gallery
+- `entries/other/` — any other type (news, award, feature, lecture, exhibition, staff), index only
+
+Changing between non-project types is a frontmatter-only operation. Changing to/from project requires moving the file between folders.
 
 ---
 
@@ -135,20 +140,22 @@ assets/uploads/        # Images uploaded via CMS
 The Comprehensive Index at `/index/` displays all entry types in a filterable spreadsheet-style layout.
 
 ### Supported Entry Types
-- **projects** - Design and build projects (get individual detail pages)
+- **project** - Design and build projects (get individual detail pages)
 - **news** - Announcements and news items
-- **awards** - Awards and recognitions
-- **features** - Publications and media features
-- **lectures** - Talks and presentations
-- **exhibitions** - Gallery shows and exhibitions
+- **award** - Awards and recognitions
+- **feature** - Publications and media features
+- **lecture** - Talks and presentations
+- **exhibition** - Gallery shows and exhibitions
 - **staff** - Team updates (new hires, departures, etc.)
 
 ### Adding a New Entry
 
-1. Navigate to `entries/{type}/` (e.g., `entries/news/`)
-2. Create a folder with the entry name (use kebab-case): `my-entry-name/`
-3. Create a markdown file with the same name: `my-entry-name.md`
-4. Add frontmatter and content
+**Via admin panel (recommended):** Go to `/admin/`, click `+ New Entry`, fill in fields, save.
+
+**Manually:**
+1. Create a folder in `entries/projects/` (for projects) or `entries/other/` (for everything else)
+2. Create a markdown file with the same name as the folder
+3. Add `type:` and other frontmatter fields
 
 ### Frontmatter Reference
 
@@ -156,6 +163,7 @@ The Comprehensive Index at `/index/` displays all entry types in a filterable sp
 ```yaml
 ---
 draft: false
+type: award          # Entry type — determines filter label and project-only fields
 title: "Entry Title"
 date: 2024-01-15
 ---
@@ -172,74 +180,61 @@ position: 1  # Sort order (lower = first)
 
 ### Metadata by Entry Type
 
-The comprehensive index displays entries in two main categories:
-
-**Projects** (`entries/projects/`)
+**Projects** (`entries/projects/`, `type: project`)
 - Get individual detail pages at `/project/{slug}/`
 - Display collaborators in Column 3 (below categories)
 
 ```yaml
 ---
 draft: false
+type: project
 title: "Project Name"
-subtitle: "Brief tagline"        # Shown in Column 2
+subtitle: "Brief tagline"
 date: 2024-01-15
-year: 2024                        # Optional: display year instead of full date
+year: 2024
 categories:
   - HOUSING
   - SUSTAINABLE
-  - DESIGN+BUILD
-collaborators:                    # Shown in Column 3
+collaborators:
   - name: "Partner Name"
     role: "Structural Engineer"
-  - name: "Another Partner"
-    role: "General Contractor"
 position: 1
 ---
 ```
 
-**Updates** (`entries/news/`, `awards/`, `features/`, `lectures/`, `exhibitions/`, `staff/`)
+**Updates** (`entries/other/`, any non-project `type:`)
 - Index-only display (no individual pages)
-- Display description in Column 3 (below categories)
 - Can link to external URLs
 
 ```yaml
 ---
 draft: false
+type: award
 title: "Update Title"
-subtitle: "Brief tagline"         # Shown in Column 2
-description: "Short description"  # Shown in Column 3
+subtitle: "Brief tagline"
+description: "Short description"
 date: 2024-01-15
-categories: []                    # Updates don't use topic categories
-link: "https://external-url.com"  # Makes title clickable (opens in new tab)
+link: "https://external-url.com"
 position: 2
 ---
 ```
 
-**Field Usage Summary:**
-- `subtitle` - Brief tagline shown in Column 2 below title (all entries)
-- `collaborators` - Array of partners shown in Column 3 for **Projects only**
-- `description` - Short text shown in Column 3 for **Updates only**
-- `link` - External URL for Updates (makes title clickable)
-- `year` - For projects, can be used instead of full date
+### Category and Type Management
 
-### Category Consolidation and Reorganization
-
-When consolidating or reorganizing categories across multiple entries, **use an AI assistant** to help review entries and suggest changes. See the [User Documentation on AI assistants](docs/05-tools-and-workflow/using-ai-assistants.md#consolidating-categories) for workflow and example prompts.
+Categories and types can be renamed in bulk from the admin panel: `/admin/` → **Manage Labels**. This renames the label across all entries in one operation without needing to edit files individually.
 
 ### Adding Images
 
 Drop an image file in the entry folder for automatic thumbnail:
 - `header.jpg` or `header.png` - Preferred naming
 - `thumb.jpg` or `thumb.png` - Alternative naming
-- Any image file will work as fallback
 
 For **projects only**, additional images are auto-discovered for the gallery on the detail page.
 
-### Example: Adding a News Entry
+### Example: Adding an Award Entry
 
 ```
-entries/news/emerging-voices-award/
+entries/other/emerging-voices-award/
 ├── emerging-voices-award.md
 └── thumb.jpg
 ```
@@ -248,12 +243,12 @@ entries/news/emerging-voices-award/
 # emerging-voices-award.md
 ---
 draft: false
+type: award
 title: "Emerging Voices Award"
 subtitle: "Architectural League of New York"
 date: 2021-12-31
 categories:
   - AWARD
-  - NEWS
 link: "https://archleague.org/..."
 relatedProjects:
   - "000000_project-slug"

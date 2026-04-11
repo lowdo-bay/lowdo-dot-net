@@ -157,6 +157,16 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   // Add 11ty helmet plugin, for appending elements to <head>
   eleventyConfig.addPlugin(eleventyHelmetPlugin);
 
+  // Filter to extract markdown body (content below frontmatter) from raw input
+  eleventyConfig.addFilter("markdownBody", function(rawInput) {
+    if (!rawInput) return '';
+    const parts = rawInput.split('---');
+    // rawInput starts with "---\n...frontmatter...\n---\n...body..."
+    // So parts[0] is empty, parts[1] is frontmatter, parts[2+] is body
+    if (parts.length < 3) return '';
+    return parts.slice(2).join('---').trim();
+  });
+
   // Add support for YAML data files with .yaml extension
   eleventyConfig.addDataExtension("yaml", contents => yaml.load(contents));
 
@@ -185,6 +195,18 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
       // Secondary sort: date (newer first)
       return new Date(b.data.date) - new Date(a.data.date);
     });
+  });
+
+  // All entries including drafts — used by admin page only
+  eleventyConfig.addCollection("allEntries", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("entries/**/*.md")
+      .filter(entry => !entry.fileSlug.startsWith('_template'))
+      .sort((a, b) => {
+        const posA = a.data.position ?? 999;
+        const posB = b.data.position ?? 999;
+        if (posA !== posB) return posA - posB;
+        return new Date(b.data.date) - new Date(a.data.date);
+      });
   });
 
   // Collection of all unique entry types from subfolders

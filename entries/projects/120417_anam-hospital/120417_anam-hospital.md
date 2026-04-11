@@ -1,17 +1,16 @@
 ---
 draft: false
 featured: false
-title: "Anam City Health Center"
-description: "Experimental model for site-specific African development"
-date: 2012-04-17
+title: Anam City Health Center
+description: Experimental model for site-specific African development
+date: 2012-04-17T00:00:00.000Z
 year: 2012
 categories:
   - AFRICA
   - COMMUNITY
-location: "Anam, Nigeria"  # e.g., "Austin, TX"
-status: "Unbuilt"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Anam, Nigeria'
+status: Unbuilt
+type: project
 ---
 
 The Anam New City project is an experimental model for site-specific African development, integrating urban densities of opportunity with rural strategies for productive landscapes through a hybrid RURBAN framework. At the heart of Anam New City is a comprehensive network of programmatic nodes designed to meet the social, economic, educational, and ecological needs of the community:

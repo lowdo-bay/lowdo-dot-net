@@ -1,18 +1,17 @@
 ---
 draft: false
 featured: false
-title: "Beauregard House"
-description: "Remodel of a historic house into a multifunctional study in material effects"
-date: 2017-04-29
+title: Beauregard House
+description: Remodel of a historic house into a multifunctional study in material effects
+date: 2017-04-29T00:00:00.000Z
 year: 2017
 categories:
   - HOUSING
   - REMODEL
   - DESIGN+BUILD
-location: "San Antonio, TX"  # e.g., "Austin, TX"
-status: "Built"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'San Antonio, TX'
+status: Built
+type: project
 ---
 
 The Beauregard House is a transitional building, designed around ideas of salvage / revitalize / reinterpret. The transitional nature of the design allows it to serve its multiple functions of home, office, and vacation rental.

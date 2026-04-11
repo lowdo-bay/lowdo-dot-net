@@ -1,17 +1,16 @@
 ---
 draft: false
 featured: false
-title: "Schmidt's Creek South"
-description: "Community space under the trees anchored by local retail."
-date: 2023-01-31
+title: Schmidt's Creek South
+description: Community space under the trees anchored by local retail.
+date: 2023-01-31T00:00:00.000Z
 year: Designed
 categories:
   - COMMERCIAL
   - COMMUNITY
-location: "Hutto, TX"  # e.g., "Austin, TX"
-status: "In Progress"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Hutto, TX'
+status: In Progress
+type: project
 ---
 
 Community space under the trees anchored by local retail.

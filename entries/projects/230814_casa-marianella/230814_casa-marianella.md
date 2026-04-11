@@ -1,67 +1,67 @@
 ---
 draft: false
 title: Casa Marianella
-description: "New communal home and landscape for a women and childrens' campus"
+description: New communal home and landscape for a women and childrens' campus
 year: 2027
-date: 2027-03-01
+date: 2027-03-01T00:00:00.000Z
 categories:
   - HOUSING
   - DESIGN+BUILD
   - COMMUNITY
-location: "Austin, TX"  # e.g., "Austin, TX"
-status: "Under Construction"    # e.g., "Built", "In Progress"
+location: 'Austin, TX'
+status: Under Construction
 collaborators:
-  - name: "Forge"
-    role: "Landscape Architect"
-  - name: "Fort"
-    role: "Structural Engineer"
-  - name: "Civilitude"
-    role: "Civil Engineer"
-  - name: "MLA Geotechnical"
-    role: "Geotechnical Engineer"
-  - name: "Emily Eisenhart"
-    role: "Mural Design"
-  - name: "Mario Alcocer"
-    role: "Foundation"
-  - name: "Lago Plumbing"
-    role: "Plumbing and Set Out"
-  - name: "Wilkins Electric"
-    role: "Electrical Rough in and Set Out"
-  - name: "Longhorn Welding"
-    role: "Steel"
-  - name: "Albert Guzman"
-    role: "Framing"
-  - name: "ABC"
-    role: "Pest Prevention"
-  - name: "Nic Perez"
-    role: "Roofing and Siding"
-  - name: "Nueva Era Plumbing"
-    role: "Water/Sewer Tap"
-  - name: "Austins Green Air"
-    role: "HVAC Rough in and Set Out"
-  - name: "Biofoam"
-    role: "Insulation"
-  - name: "RVC"
-    role: "Drywall and Painting"
-  - name: "Shalom"
-    role: "Tile"
-  - name: "Concrete Industrial Solutions"
-    role: "Flooring"
-  - name: "Richard Castillo"
-    role: "Flooring"
-  - name: "Bellmont"
-    role: "Cabinets"
-  - name: "Trim Ron"
-    role: "Trim Carpentry"
-  - name: "Hartstone"
-    role: "Countertops"
-  - name: "Arrow Glass/Brothers Glass"
-    role: "Shower Glass and Mirrors"
-  - name: "Brooke Murray"
-    role: "Landscape Finish"
-  - name: "Rocio"
-    role: "Final Clean"
-position:
+  - name: Forge
+    role: Landscape Architect
+  - name: Fort
+    role: Structural Engineer
+  - name: Civilitude
+    role: Civil Engineer
+  - name: MLA Geotechnical
+    role: Geotechnical Engineer
+  - name: Emily Eisenhart
+    role: Mural Design
+  - name: Mario Alcocer
+    role: Foundation
+  - name: Lago Plumbing
+    role: Plumbing and Set Out
+  - name: Wilkins Electric
+    role: Electrical Rough in and Set Out
+  - name: Longhorn Welding
+    role: Steel
+  - name: Albert Guzman
+    role: Framing
+  - name: ABC
+    role: Pest Prevention
+  - name: Nic Perez
+    role: Roofing and Siding
+  - name: Nueva Era Plumbing
+    role: Water/Sewer Tap
+  - name: Austins Green Air
+    role: HVAC Rough in and Set Out
+  - name: Biofoam
+    role: Insulation
+  - name: RVC
+    role: Drywall and Painting
+  - name: Shalom
+    role: Tile
+  - name: Concrete Industrial Solutions
+    role: Flooring
+  - name: Richard Castillo
+    role: Flooring
+  - name: Bellmont
+    role: Cabinets
+  - name: Trim Ron
+    role: Trim Carpentry
+  - name: Hartstone
+    role: Countertops
+  - name: Arrow Glass/Brothers Glass
+    role: Shower Glass and Mirrors
+  - name: Brooke Murray
+    role: Landscape Finish
+  - name: Rocio
+    role: Final Clean
+type: project
 ---
 
 LowDO and FORGE Landscape Architecture have designed a new community dwelling, garden, and playscape for Casa Marianella. Casa is a non-profit that provides essential shelter and support for immigrants and refugees, and the project will create shared spaces for their Posada campus, which exclusively serves women and children who have traveled to Austin from myriad countries across the Americas and Africa. Casa promotes self-sufficiency by offering these women and their families a temporary home and supportive services to place children in school, find jobs, complete paperwork, and adjust to living in a new culture after often-traumatic journeys.

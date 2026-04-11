@@ -1,17 +1,16 @@
 ---
 draft: false
 featured: false
-title: "Nyame Dua"
-description: "Exhibition at the Venice Biennale 2025"
-date: 2025-05-10
+title: Nyame Dua
+description: Exhibition at the Venice Biennale 2025
+date: 2025-05-10T00:00:00.000Z
 year: 2025
 categories:
   - EXHIBITION
   - RESEARCH
-location: "Venice, Italy"  # e.g., "Austin, TX"
-status: "Exhibition"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Venice, Italy'
+status: Exhibition
+type: project
 ---
 
 **Architecture Amid the Elements**

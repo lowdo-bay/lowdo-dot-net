@@ -23,6 +23,10 @@
 - [Making Commits](05-tools-and-workflow/making-commits.md) — How to save and publish changes
 - [Local Development](05-tools-and-workflow/code-editor-setup.md) — VS Code setup and preview
 
+## Admin Panel
+
+- [Using the Admin Panel](08-admin/using-the-admin.md) — Manage entries, edit fields, rename categories/types, and publish changes
+
 ## Help & Reference
 
 - [Troubleshooting](06-troubleshooting/common-issues.md) — Fix common issues

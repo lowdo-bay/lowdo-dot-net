@@ -1,19 +1,18 @@
 ---
 draft: false
 featured: false
-title: "Chale Wote Festival"
-description: "Performance arena for the annual street arts celebration"
-date: 2013-06-15
+title: Chale Wote Festival
+description: Performance arena for the annual street arts celebration
+date: 2013-06-15T00:00:00.000Z
 year: 2013
 categories:
   - INSTALLATION
   - AFRICA
   - COMMUNITY
   - BAMBOT
-location: "Accra, Ghana"  # e.g., "Austin, TX"
-status: "Temporary Installation"    # e.g., "Built", "In Progress"
-collaborators:
-position:
+location: 'Accra, Ghana'
+status: Temporary Installation
+type: project
 ---
 
 Installing stage-as-TV-set in the context of Otublohum Square anchors the

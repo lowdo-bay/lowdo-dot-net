@@ -1,28 +1,31 @@
 ---
 draft: false
 featured: false
-title: "Bambot: Fufuzela MoMA PS1 YAP"
-description: "Finalist submission for 2019 MoMA PS1 Young Architects Program, Queens NY"
-date: 2019-07-30
+title: 'Bambot: Fufuzela MoMA PS1 YAP'
+description: 'Finalist submission for 2019 MoMA PS1 Young Architects Program, Queens NY'
+date: 2019-07-30T00:00:00.000Z
 year: 2019
 categories:
   - EXHIBITION
   - BAMBOT
   - COMPETITION
-location: "Queens, NY"  # e.g., "Austin, TX"
-status: "Finalist"    # e.g., "Built", "In Progress"
+location: 'Queens, NY'
+status: Finalist
 collaborators:
-  - name: "Panurban, Dr. Yasmine Abbas"
-    role: "Atmospheres design"
-  - name: "Faber Futures, Natsai Chieza with Dr. Brenda Parker"
-    role: "Canopy Biodesign"
-  - name: "Drophouse Design, Christian Klein and Matt Satter"
-    role: "Fabrication and Joint Design"
-  - name: "Fort Structures, Sam Covey"
-    role: "Structural Consultant"
-  - name: "Penn State Stuckeman School, Humanitarian Materials Lab, Sam Rubenstein and Danielle Vickers; Digital Fabrication Lab, Jamie Heilman and Dani Spewak"
-    role: "Production Support"
-position:
+  - name: 'Panurban, Dr. Yasmine Abbas'
+    role: Atmospheres design
+  - name: 'Faber Futures, Natsai Chieza with Dr. Brenda Parker'
+    role: Canopy Biodesign
+  - name: 'Drophouse Design, Christian Klein and Matt Satter'
+    role: Fabrication and Joint Design
+  - name: 'Fort Structures, Sam Covey'
+    role: Structural Consultant
+  - name: >-
+      Penn State Stuckeman School, Humanitarian Materials Lab, Sam Rubenstein
+      and Danielle Vickers; Digital Fabrication Lab, Jamie Heilman and Dani
+      Spewak
+    role: Production Support
+type: project
 ---
 
 FUFUZELA are free modular mobile #BAMBOTS (bamboo micro-infrastructure) that interoperate at the scale between furniture and architecture. Designed for self-assembly, fufuzela are—like deer and sheep—irregular plurals that are simultaneously one and many. In a world at war with itself, how can we accommodate the multiplicity of a multicultural multiverse? **Fufuzela create scaffolding for shared experience**: By embodying material ecologies of symbiosis, fufuzela enable new forms of stigmergic interspecies interaction with the city and one another.

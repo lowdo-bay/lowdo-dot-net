@@ -1,20 +1,20 @@
 ---
 draft: false
 featured: false
-title: "Kiosk Museum"
-description: "Mobile hub for cultural memory"
-date: 2015-01-01
+title: Kiosk Museum
+description: Mobile hub for cultural memory
+date: 2015-01-01T00:00:00.000Z
 year: 2015 - 2016
 categories:
   - AFRICA
   - EXHIBITION
   - INSTALLATION
-location: "Accra, Ghana"  # e.g., "Austin, TX"
-status: "Exhibition"    # e.g., "Built", "In Progress"
+location: 'Accra, Ghana'
+status: Exhibition
 collaborators:
-  - name: "Nana Oforiatta Ayim"
-    role: "Collaborator"
-position:
+  - name: Nana Oforiatta Ayim
+    role: Collaborator
+type: project
 ---
 
 This project was a collaboration with Nana Oforiatta Ayim, the curator, writer and film-maker who founded the ANO Institute to surface new narratives out of Africa toward development through culture. As part of the launch of her Cultural Encyclopaedia project, initiated as part of LACMA's Art + Technology Lab, she proposed the idea of leveraging the accessibility of the humble kiosk—a pervasive micro-architectural typology that forms a distributed infrastructural network in cities in Ghana and much of West Africa (see Kiosk Culture research) to deploy an experimental "cultural hub" that could both disseminate, discover and propagate cultural knowledge.
