@@ -54,6 +54,7 @@
   var tbody = document.getElementById('entries-tbody');
   var searchInput = document.getElementById('search-input');
   var typeFiltersEl = document.getElementById('type-filters');
+  var draftFiltersEl = document.getElementById('draft-filters');
   var selectAllCb = document.getElementById('select-all');
   var bulkActions = document.getElementById('bulk-actions');
   var selectedCountEl = document.getElementById('selected-count');
@@ -61,9 +62,6 @@
   var changeCountEl = document.getElementById('change-count');
   var logoutBtn = document.getElementById('logout-btn');
   var newEntryBtn = document.getElementById('new-entry-btn');
-  var categoryDropdown = document.getElementById('category-dropdown');
-  var categorySearchInput = document.getElementById('category-search');
-  var categoryList = document.getElementById('category-list');
   var bulkModal = document.getElementById('bulk-modal');
   var bulkModalTitle = document.getElementById('bulk-modal-title');
   var bulkCategoryInput = document.getElementById('bulk-category-input');
@@ -111,6 +109,15 @@
   var epRelatedProjectInput = document.getElementById('ep-related-project-input');
   var epRelatedProjectSuggestions = document.getElementById('ep-related-project-suggestions');
   var epBody = document.getElementById('ep-body');
+  var epSlug = document.getElementById('ep-slug');
+  var epDraft = document.getElementById('ep-draft');
+  var epTypeValue = document.getElementById('ep-type-value');
+  var epTypeChange = document.getElementById('ep-type-change');
+  var epCategoriesTags = document.getElementById('ep-categories-tags');
+  var epCategoryInput = document.getElementById('ep-category-input');
+  var epCategorySuggestions = document.getElementById('ep-category-suggestions');
+  var epPreviewToggle = document.getElementById('ep-preview-toggle');
+  var epBodyPreview = document.getElementById('ep-body-preview');
 
   // ---- Auth ----
   function showLogin() {
@@ -126,9 +133,22 @@
     if (!adminInitialized) {
       adminInitialized = true;
       buildTypeFilters();
+      // Track actual toolbar height for sticky table header
+      var adminToolbar = document.querySelector('.admin-toolbar');
+      var ro = new ResizeObserver(function(entries) {
+        var h = Math.ceil(entries[0].contentRect.height);
+        document.documentElement.style.setProperty('--admin-toolbar-actual-height', h + 'px');
+      });
+      ro.observe(adminToolbar);
     }
     renderTable();
   }
+
+  // ---- Draft filter ----
+  draftFiltersEl.addEventListener('change', function(e) {
+    draftFilter = e.target.value;
+    renderTable();
+  });
 
   sessionStorage.removeItem('admin_token');
 
@@ -380,27 +400,28 @@
       // Draft toggle
       html += '<td class="col-draft"><label class="draft-toggle"><input type="checkbox" class="draft-cb"' + (entry.draft ? ' checked' : '') + '><span class="draft-dot"></span></label></td>';
 
-      // Slug
-      html += '<td class="col-slug"><span class="cell-slug">' + escHtml(entry.slug) + '</span></td>';
-
       // Title
-      html += '<td class="col-title">' + escHtml(entry.title || '') + '</td>';
+      html += '<td class="col-title">' + escHtml(entry.title || entry.slug || '') + '</td>';
 
-      // Categories
+      // Categories (read-only)
       html += '<td class="col-categories"><div class="category-cell">';
-      (entry.categories || []).forEach(function(cat) {
-        html += '<span class="cat-tag">' + escHtml(cat) + '<span class="cat-tag__remove" data-cat="' + escHtml(cat) + '">&times;</span></span>';
-      });
-      html += '<button class="cat-add-btn" data-action="add-category">+</button>';
+      if ((entry.categories || []).length === 0) {
+        html += '<span class="cell-empty">&mdash;</span>';
+      } else {
+        (entry.categories || []).forEach(function(cat) {
+          html += '<span class="cat-tag">' + escHtml(cat) + '</span>';
+        });
+      }
       html += '</div></td>';
 
-      // Type
-      html += '<td class="col-type"><div class="type-cell">';
+      // Type (read-only)
+      html += '<td class="col-type">';
       if (entry.entryType) {
-        html += '<span class="cat-tag type-tag">' + escHtml(entry.entryType.toUpperCase()) + '<span class="cat-tag__remove type-tag__change" data-action="edit-type" title="Change type">\u2715</span></span>';
+        html += '<span class="cat-tag">' + escHtml(entry.entryType.toUpperCase()) + '</span>';
+      } else {
+        html += '<span class="cell-empty">&mdash;</span>';
       }
-      html += '<button class="cat-add-btn" data-action="edit-type">+</button>';
-      html += '</div></td>';
+      html += '</td>';
 
       // Date
       html += '<td class="col-date">' + escHtml(toDateInputValue(entry.date)) + '</td>';
@@ -435,8 +456,6 @@
   }
 
   // ---- Table event delegation ----
-  var activeCategoryPath = null;
-
   tbody.addEventListener('change', function(e) {
     var row = e.target.closest('tr');
     if (!row) return;
@@ -467,36 +486,6 @@
     var row = e.target.closest('tr');
     if (!row) return;
     var path = row.dataset.path;
-
-    // Remove category tag
-    if (e.target.classList.contains('cat-tag__remove')) {
-      var cat = e.target.dataset.cat;
-      var entry = findEntry(path);
-      if (entry) {
-        entry.categories = (entry.categories || []).filter(function(c) { return c !== cat; });
-        updateChanges();
-        renderTable();
-      }
-      return;
-    }
-
-    // Add category button
-    if (e.target.dataset.action === 'add-category') {
-      e.stopPropagation();
-      activeCategoryPath = path;
-      showCategoryDropdown(e.target);
-      return;
-    }
-
-    // Edit type (click on tag × button, tag itself, or + button)
-    if (e.target.dataset.action === 'edit-type') {
-      e.stopPropagation();
-      // Find the type-cell to anchor the dropdown
-      var typeCell = e.target.closest('.type-cell');
-      var anchor = typeCell ? typeCell.querySelector('.cat-add-btn') : e.target;
-      showTypeDropdown(anchor || e.target, path);
-      return;
-    }
 
     // Open edit panel
     if (e.target.dataset.action === 'open-edit') {
@@ -583,87 +572,16 @@
     pendingDeletePath = null;
   });
 
-  // ---- Category dropdown ----
-  function showCategoryDropdown(anchor) {
-    var rect = anchor.getBoundingClientRect();
-    categoryDropdown.style.top = (rect.bottom + window.scrollY) + 'px';
-    categoryDropdown.style.left = (rect.left + window.scrollX) + 'px';
-    categoryDropdown.hidden = false;
-    categorySearchInput.value = '';
-    renderCategoryList('');
-    categorySearchInput.focus();
-  }
-
-  function hideCategoryDropdown() {
-    categoryDropdown.hidden = true;
-    activeCategoryPath = null;
-  }
-
-  categorySearchInput.addEventListener('input', function() {
-    renderCategoryList(this.value.trim());
-  });
-
-  categorySearchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      var val = this.value.trim().toUpperCase();
-      if (val) addCategoryToEntry(activeCategoryPath, val);
-    }
-    if (e.key === 'Escape') hideCategoryDropdown();
-  });
-
-  function renderCategoryList(query) {
-    var upper = query.toUpperCase();
-    var entry = findEntry(activeCategoryPath);
-    var current = entry ? (entry.categories || []) : [];
-
-    var filtered = canonicalCategories.filter(function(c) {
-      if (current.indexOf(c) !== -1) return false;
-      if (!upper) return true;
-      return c.indexOf(upper) !== -1;
-    });
-
-    var html = '';
-    filtered.forEach(function(c) {
-      html += '<li data-value="' + escHtml(c) + '">' + escHtml(c) + '</li>';
-    });
-
-    if (upper && canonicalCategories.indexOf(upper) === -1) {
-      html += '<li class="is-new" data-value="' + escHtml(upper) + '">' + escHtml(upper) + '</li>';
-    }
-
-    categoryList.innerHTML = html;
-  }
-
-  categoryList.addEventListener('click', function(e) {
-    var li = e.target.closest('li');
-    if (!li) return;
-    addCategoryToEntry(activeCategoryPath, li.dataset.value);
-  });
-
-  function addCategoryToEntry(filePath, category) {
-    var entry = findEntry(filePath);
-    if (!entry) return;
-    if (!entry.categories) entry.categories = [];
-    if (entry.categories.indexOf(category) !== -1) return;
-    entry.categories.push(category);
-    if (canonicalCategories.indexOf(category) === -1) {
-      canonicalCategories.push(category);
-      canonicalCategories.sort();
-    }
-    hideCategoryDropdown();
-    updateChanges();
-    renderTable();
-  }
-
   document.addEventListener('click', function(e) {
-    if (!categoryDropdown.hidden && !categoryDropdown.contains(e.target) && !e.target.classList.contains('cat-add-btn')) {
-      hideCategoryDropdown();
-    }
     document.querySelectorAll('.type-dropdown').forEach(function(dd) { dd.remove(); });
     if (epRelatedProjectSuggestions && !epRelatedProjectSuggestions.hidden) {
       if (!epRelatedProjectInput.contains(e.target) && !epRelatedProjectSuggestions.contains(e.target)) {
         epRelatedProjectSuggestions.hidden = true;
+      }
+    }
+    if (epCategorySuggestions && !epCategorySuggestions.hidden) {
+      if (!epCategoryInput.contains(e.target) && !epCategorySuggestions.contains(e.target)) {
+        epCategorySuggestions.hidden = true;
       }
     }
   });
@@ -711,6 +629,13 @@
         entry.filePath = newPath;
       }
       entry.entryType = typeName;
+      // Sync panel if open
+      if (!editPanel.hidden) {
+        epTypeValue.textContent = typeName.toUpperCase();
+        var proj = isProject(typeName);
+        document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
+        document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+      }
       updateChanges();
       renderTable();
       dd.remove();
@@ -747,9 +672,20 @@
     });
 
     renderTypeList('');
-    anchor.closest('.type-cell').appendChild(dd);
+    // Position dropdown relative to anchor
+    var rect = anchor.getBoundingClientRect();
+    dd.style.position = 'fixed';
+    dd.style.top = rect.bottom + 'px';
+    dd.style.left = rect.left + 'px';
+    document.body.appendChild(dd);
     input.focus();
   }
+
+  // ---- Type change button in panel ----
+  epTypeChange.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (activeEditPath) showTypeDropdown(epTypeChange, activeEditPath);
+  });
 
   // ---- Edit panel ----
   function openEditPanel(filePath) {
@@ -760,10 +696,17 @@
     editPanelTitle.textContent = entry._isNew ? 'New Entry' : 'Edit: ' + (entry.title || entry.slug);
 
     // Populate fields
+    epSlug.value = entry.slug || '';
+    epSlug.readOnly = !entry._isNew;
+    epDraft.checked = !!entry.draft;
+    epTypeValue.textContent = (entry.entryType || '').toUpperCase();
     epTitle.value = entry.title || '';
     epSubtitle.value = entry.subtitle || '';
     epDescription.value = entry.description || '';
     epDate.value = toDateInputValue(entry.date);
+    renderPanelCategoryTags(entry.categories || []);
+    epCategoryInput.value = '';
+    epCategorySuggestions.hidden = true;
     epLink.value = entry.link || '';
     epPosition.value = entry.position != null ? entry.position : '';
     epYear.value = entry.year || '';
@@ -773,11 +716,16 @@
     epFeaturedPositionGroup.hidden = !entry.featured;
     epFeaturedPosition.value = entry.featuredPosition != null ? entry.featuredPosition : '';
     epBody.value = entry.body || '';
+    epBodyPreview.hidden = true;
+    epBody.hidden = false;
+    epPreviewToggle.textContent = 'Preview';
 
     // Show/hide project-only and non-project fields
     var proj = isProject(entry.entryType);
     document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
     document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+    // Featured position always starts hidden, shown by featured toggle
+    epFeaturedPositionGroup.hidden = !entry.featured;
 
     // Collaborators
     renderCollaboratorsList(entry.collaborators || []);
@@ -811,6 +759,8 @@
     var entry = findEntry(activeEditPath);
     if (!entry) return;
 
+    entry.draft = epDraft.checked;
+    entry.categories = getPanelCategories();
     entry.title = epTitle.value.trim();
     entry.subtitle = epSubtitle.value.trim();
     entry.description = epDescription.value.trim();
@@ -824,16 +774,18 @@
     entry.featuredPosition = epFeatured.checked && epFeaturedPosition.value !== '' ? Number(epFeaturedPosition.value) : null;
     entry.body = epBody.value;
 
-    // Update slug for new entries based on title
-    if (entry._isNew && entry.title) {
+    // Update slug for new entries
+    if (entry._isNew) {
       var oldPath = entry.filePath;
-      var newSlug = generateSlug(entry.title);
+      var manualSlug = epSlug.value.trim();
+      var newSlug = manualSlug || generateSlug(entry.title || 'new-entry');
       entry.slug = newSlug;
       var folder = typeFolder(entry.entryType);
       var newPath = 'entries/' + folder + '/' + newSlug + '/' + newSlug + '.md';
       entry.filePath = newPath;
       activeEditPath = newPath;
       selectedPaths.delete(oldPath);
+      epSlug.value = newSlug;
     }
 
     // Update panel title
@@ -890,6 +842,75 @@
       entry.collaborators.splice(idx, 1);
       renderCollaboratorsList(entry.collaborators);
     }
+  });
+
+  // ---- Panel category editor ----
+  function renderPanelCategoryTags(categories) {
+    epCategoriesTags.innerHTML = '';
+    (categories || []).forEach(function(cat) {
+      var tag = document.createElement('span');
+      tag.className = 'cat-tag';
+      tag.innerHTML = escHtml(cat) + '<span class="cat-tag__remove" data-cat="' + escHtml(cat) + '">&times;</span>';
+      epCategoriesTags.appendChild(tag);
+    });
+  }
+
+  function getPanelCategories() {
+    var cats = [];
+    epCategoriesTags.querySelectorAll('.cat-tag__remove').forEach(function(el) {
+      cats.push(el.dataset.cat);
+    });
+    return cats;
+  }
+
+  epCategoriesTags.addEventListener('click', function(e) {
+    if (e.target.classList.contains('cat-tag__remove')) {
+      e.target.closest('.cat-tag').remove();
+    }
+  });
+
+  epCategoryInput.addEventListener('input', function() {
+    var query = this.value.trim().toUpperCase();
+    if (!query) { epCategorySuggestions.hidden = true; return; }
+    var current = getPanelCategories();
+    var matches = canonicalCategories.filter(function(c) {
+      return current.indexOf(c) === -1 && c.indexOf(query) !== -1;
+    });
+    var html = matches.map(function(c) {
+      return '<li data-value="' + escHtml(c) + '">' + escHtml(c) + '</li>';
+    }).join('');
+    if (canonicalCategories.indexOf(query) === -1) {
+      html += '<li class="is-new" data-value="' + escHtml(query) + '">' + escHtml(query) + '</li>';
+    }
+    epCategorySuggestions.innerHTML = html;
+    epCategorySuggestions.hidden = html === '';
+  });
+
+  function addPanelCategory(val) {
+    val = val.toUpperCase();
+    var current = getPanelCategories();
+    if (!val || current.indexOf(val) !== -1) return;
+    renderPanelCategoryTags(current.concat([val]));
+    if (canonicalCategories.indexOf(val) === -1) {
+      canonicalCategories.push(val);
+      canonicalCategories.sort();
+    }
+    epCategoryInput.value = '';
+    epCategorySuggestions.hidden = true;
+  }
+
+  epCategorySuggestions.addEventListener('click', function(e) {
+    var li = e.target.closest('li');
+    if (!li) return;
+    addPanelCategory(li.dataset.value);
+  });
+
+  epCategoryInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addPanelCategory(this.value.trim());
+    }
+    if (e.key === 'Escape') epCategorySuggestions.hidden = true;
   });
 
   // ---- Related projects editor ----
@@ -959,6 +980,52 @@
     epRelatedProjectInput.value = '';
     epRelatedProjectSuggestions.hidden = true;
   }
+
+  // ---- Markdown preview ----
+  function simpleMarkdown(text) {
+    if (!text) return '';
+    var lines = text.split('\n');
+    var html = '';
+    var inList = false;
+    lines.forEach(function(rawLine) {
+      var line = rawLine
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/`(.+?)`/g, '<code>$1</code>');
+      if (/^### /.test(line)) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += '<h3>' + line.slice(4) + '</h3>';
+      } else if (/^## /.test(line)) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += '<h2>' + line.slice(3) + '</h2>';
+      } else if (/^# /.test(line)) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += '<h1>' + line.slice(2) + '</h1>';
+      } else if (/^[-*] /.test(line)) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += '<li>' + line.slice(2) + '</li>';
+      } else if (line.trim() === '') {
+        if (inList) { html += '</ul>'; inList = false; }
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += '<p>' + line + '</p>';
+      }
+    });
+    if (inList) html += '</ul>';
+    return html;
+  }
+
+  var previewMode = false;
+  epPreviewToggle.addEventListener('click', function() {
+    previewMode = !previewMode;
+    epBody.hidden = previewMode;
+    epBodyPreview.hidden = !previewMode;
+    this.textContent = previewMode ? 'Edit' : 'Preview';
+    if (previewMode) epBodyPreview.innerHTML = simpleMarkdown(epBody.value);
+  });
 
   // ---- Manage labels modal (rename categories + types) ----
 
