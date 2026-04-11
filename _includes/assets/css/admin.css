@@ -183,7 +183,7 @@ body {
 
 /* Table */
 .admin-table-wrap {
-  overflow-x: auto;
+  overflow-x: visible;
 }
 .admin-table {
   width: 100%;
