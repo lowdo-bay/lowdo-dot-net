@@ -206,7 +206,8 @@ body {
   position: sticky;
   top: calc(var(--admin-header-height) + var(--admin-toolbar-actual-height, var(--admin-toolbar-height)));
   z-index: 98;
-  border-bottom: 2px solid var(--admin-primary);
+  border-bottom: none;
+  box-shadow: inset 0 -2px 0 var(--admin-primary);
 }
 .admin-table th.sortable { cursor: pointer; }
 .admin-table th.sortable:hover { color: var(--admin-text); }
