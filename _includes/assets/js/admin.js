@@ -61,24 +61,29 @@
   var bulkActions = document.getElementById('bulk-actions');
   var selectedCountEl = document.getElementById('selected-count');
   var saveBtn = document.getElementById('save-btn');
+  var clearBtn = document.getElementById('clear-btn');
+  var clearModal = document.getElementById('clear-modal');
+  var clearModalConfirm = document.getElementById('clear-modal-confirm');
+  var clearModalCancel = document.getElementById('clear-modal-cancel');
   var changeCountEl = document.getElementById('change-count');
   var logoutBtn = document.getElementById('logout-btn');
   var newEntryBtn = document.getElementById('new-entry-btn');
   var bulkModal = document.getElementById('bulk-modal');
-  var bulkModalTitle = document.getElementById('bulk-modal-title');
   var bulkCategoryInput = document.getElementById('bulk-category-input');
   var bulkCategorySuggestions = document.getElementById('bulk-category-suggestions');
   var bulkModalConfirm = document.getElementById('bulk-modal-confirm');
   var bulkModalCancel = document.getElementById('bulk-modal-cancel');
-  var bulkAddBtn = document.getElementById('bulk-add-btn');
-  var bulkRemoveBtn = document.getElementById('bulk-remove-btn');
+  var bulkActionsBtn = document.getElementById('bulk-actions-btn');
+  var bulkTabAdd = document.getElementById('bulk-tab-add');
+  var bulkTabRemove = document.getElementById('bulk-tab-remove');
   var manageBtn = document.getElementById('manage-btn');
   var manageModal = document.getElementById('manage-modal');
   var manageModalClose = document.getElementById('manage-modal-close');
-  var manageCategoriesList = document.getElementById('manage-categories-list');
-  var manageTypesList = document.getElementById('manage-types-list');
+  var manageCategoriesList = document.querySelector('#manage-categories-list tbody');
+  var manageTypesList = document.querySelector('#manage-types-list tbody');
   var manageCategoriesPanel = document.getElementById('manage-categories-panel');
   var manageTypesPanel = document.getElementById('manage-types-panel');
+  var manageCombineBtn = document.getElementById('manage-combine-btn');
   var deleteModal = document.getElementById('delete-modal');
   var deleteModalMsg = document.getElementById('delete-modal-msg');
   var deleteModalConfirm = document.getElementById('delete-modal-confirm');
@@ -246,6 +251,14 @@
       item.textContent = t;
       frag.appendChild(item);
     });
+    if (entries.some(function(e) { return !e.entryType; })) {
+      var noTypeItem = document.createElement('button');
+      noTypeItem.className = 'admin-dropdown__item';
+      noTypeItem.type = 'button';
+      noTypeItem.dataset.value = '';
+      noTypeItem.textContent = 'NO TYPE';
+      frag.appendChild(noTypeItem);
+    }
     drawer.appendChild(frag);
 
     function updateLabel() {
@@ -331,6 +344,14 @@
       item.textContent = c;
       frag.appendChild(item);
     });
+    if (entries.some(function(e) { return !e.categories || e.categories.length === 0; })) {
+      var noCatItem = document.createElement('button');
+      noCatItem.className = 'admin-dropdown__item';
+      noCatItem.type = 'button';
+      noCatItem.dataset.value = '';
+      noCatItem.textContent = 'NO CATEGORY';
+      frag.appendChild(noCatItem);
+    }
     drawer.appendChild(frag);
 
     function updateLabel() {
@@ -465,6 +486,8 @@
   }
 
   // ---- Update changes ----
+  var canonicalCategoriesChanged = false;
+
   function updateChanges() {
     changes = {};
     entries.forEach(function(e) {
@@ -507,10 +530,20 @@
       changes[e.filePath] = change;
     });
 
+    if (canonicalCategoriesChanged) {
+      changes['_data/canonicalCategories.yaml'] = {
+        filePath: '_data/canonicalCategories.yaml',
+        action: 'updateCategories',
+        categories: canonicalCategories.slice()
+      };
+    }
+
     var count = Object.keys(changes).length;
     changeCountEl.hidden = count === 0;
     changeCountEl.textContent = count + ' change' + (count === 1 ? '' : 's');
     saveBtn.disabled = count === 0;
+    clearBtn.disabled = count === 0;
+    clearBtn.hidden = count === 0;
   }
 
   // ---- Render table ----
@@ -526,7 +559,9 @@
     if (categoryFilter !== 'all') {
       filtered = filtered.filter(function(e) {
         var cats = (e.categories || []).map(function(c) { return c.toLowerCase(); });
-        return categoryFilter.some(function(c) { return cats.indexOf(c) !== -1; });
+        return categoryFilter.some(function(c) {
+          return c === '' ? cats.length === 0 : cats.indexOf(c) !== -1;
+        });
       });
     }
 
@@ -577,6 +612,15 @@
       // Title
       html += '<td class="col-title">' + escHtml(entry.title || entry.slug || '') + '</td>';
 
+      // Type (read-only)
+      html += '<td class="col-type">';
+      if (entry.entryType) {
+        html += '<span class="cat-tag">' + escHtml(entry.entryType.toUpperCase()) + '</span>';
+      } else {
+        html += '<span class="cat-tag cat-tag--muted">NO TYPE</span>';
+      }
+      html += '</td>';
+
       // Categories (read-only)
       html += '<td class="col-categories"><div class="category-cell">';
       if ((entry.categories || []).length === 0) {
@@ -587,15 +631,6 @@
         });
       }
       html += '</div></td>';
-
-      // Type (read-only)
-      html += '<td class="col-type">';
-      if (entry.entryType) {
-        html += '<span class="cat-tag">' + escHtml(entry.entryType.toUpperCase()) + '</span>';
-      } else {
-        html += '<span class="cell-empty">&mdash;</span>';
-      }
-      html += '</td>';
 
       // Date
       html += '<td class="col-date">' + escHtml(toDateInputValue(entry.date)) + '</td>';
@@ -625,7 +660,6 @@
 
   function updateSelectionUI() {
     var count = selectedPaths.size;
-    bulkActions.hidden = count === 0;
     selectedCountEl.textContent = count + ' selected';
   }
 
@@ -763,6 +797,7 @@
   // ---- Type editing ----
   // All known types. The server maps project→projects/, everything else→other/.
   var knownTypes = ['project', 'news', 'award', 'feature', 'lecture', 'exhibition', 'staff'];
+  var initialKnownTypes = knownTypes.slice();
 
   // Returns the entries/ subfolder for a given type
   function typeFolder(entryType) {
@@ -1211,6 +1246,7 @@
     if (idx !== -1) canonicalCategories.splice(idx, 1, newName);
     else canonicalCategories.push(newName);
     canonicalCategories.sort();
+    canonicalCategoriesChanged = true;
     // Update every entry that has this category
     entries.forEach(function(e) {
       if (!e.categories) return;
@@ -1219,6 +1255,51 @@
     });
     updateChanges();
     renderTable();
+  }
+
+  function deleteCategory(name) {
+    var idx = canonicalCategories.indexOf(name);
+    if (idx !== -1) canonicalCategories.splice(idx, 1);
+    canonicalCategoriesChanged = true;
+    // Strip category from every entry that has it
+    entries.forEach(function(e) {
+      if (!e.categories) return;
+      var ci = e.categories.indexOf(name);
+      if (ci !== -1) e.categories.splice(ci, 1);
+    });
+    updateChanges();
+    renderTable();
+  }
+
+  function deleteType(name) {
+    if (name === 'project') {
+      alert('The "project" type cannot be deleted.');
+      return;
+    }
+    var idx = knownTypes.indexOf(name);
+    if (idx !== -1) knownTypes.splice(idx, 1);
+    entries.forEach(function(e) {
+      if (e.entryType === name) e.entryType = null;
+    });
+    updateChanges();
+    renderTable();
+    refreshTypeFilterNoTypeItem();
+  }
+
+  function refreshTypeFilterNoTypeItem() {
+    var drawer = typeFiltersEl.querySelector('.admin-dropdown__drawer');
+    var existing = drawer.querySelector('[data-value=""]');
+    var hasNoType = entries.some(function(e) { return !e.entryType; });
+    if (hasNoType && !existing) {
+      var item = document.createElement('button');
+      item.className = 'admin-dropdown__item';
+      item.type = 'button';
+      item.dataset.value = '';
+      item.textContent = 'NO TYPE';
+      drawer.appendChild(item);
+    } else if (!hasNoType && existing) {
+      existing.remove();
+    }
   }
 
   function renameType(oldName, newName) {
@@ -1245,11 +1326,39 @@
     renderTable();
   }
 
-  function renderManageList(ul, items, onRename) {
-    ul.innerHTML = '';
+  function renderManageList(tbody, items, onRename, onDelete, isCategories, onSelectionChange) {
+    tbody.innerHTML = '';
     items.forEach(function(name) {
-      var li = document.createElement('li');
-      li.className = 'manage-list-item';
+      // Count entries using this label
+      var count = 0;
+      if (isCategories) {
+        entries.forEach(function(e) {
+          if (e.categories && e.categories.indexOf(name) !== -1) count++;
+        });
+      } else {
+        entries.forEach(function(e) {
+          if (e.entryType === name) count++;
+        });
+      }
+
+      var tr = document.createElement('tr');
+
+      // Select cell
+      var tdSelect = document.createElement('td');
+      tdSelect.className = 'manage-col-select';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.className = 'manage-row-checkbox';
+      cb.dataset.name = name;
+      cb.addEventListener('change', function() {
+        if (onSelectionChange) onSelectionChange();
+      });
+      tdSelect.appendChild(cb);
+      tr.appendChild(tdSelect);
+
+      // Label cell
+      var tdLabel = document.createElement('td');
+      tdLabel.className = 'manage-col-label';
 
       var label = document.createElement('span');
       label.className = 'manage-list-label';
@@ -1261,8 +1370,20 @@
       input.value = name.toUpperCase();
       input.hidden = true;
 
+      tdLabel.appendChild(label);
+      tdLabel.appendChild(input);
+
+      // Count cell
+      var tdCount = document.createElement('td');
+      tdCount.className = 'manage-col-count';
+      tdCount.textContent = count || '';
+
+      // Actions cell
+      var tdActions = document.createElement('td');
+      tdActions.className = 'manage-col-actions';
+
       var editBtn = document.createElement('button');
-      editBtn.className = 'btn btn--small';
+      editBtn.className = 'btn btn--small btn--secondary';
       editBtn.textContent = 'Rename';
 
       editBtn.addEventListener('click', function() {
@@ -1270,6 +1391,7 @@
           // Enter edit mode
           input.value = name.toUpperCase();
           label.hidden = true;
+          if (delBtn) delBtn.hidden = true;
           input.hidden = false;
           editBtn.textContent = 'Save';
           input.focus();
@@ -1279,12 +1401,11 @@
           var newVal = input.value.trim();
           if (newVal && newVal !== name.toUpperCase()) {
             onRename(name, newVal);
-            // Refresh the whole list after rename
-            renderManageList(ul, items.map(function(n) { return n === name ? newVal.toLowerCase() : n; }), onRename);
             return;
           }
           // No change — just cancel
           label.hidden = false;
+          if (delBtn) delBtn.hidden = false;
           input.hidden = true;
           editBtn.textContent = 'Rename';
         }
@@ -1294,27 +1415,115 @@
         if (e.key === 'Enter') editBtn.click();
         if (e.key === 'Escape') {
           label.hidden = false;
+          if (delBtn) delBtn.hidden = false;
           input.hidden = true;
           editBtn.textContent = 'Rename';
         }
       });
 
-      li.appendChild(label);
-      li.appendChild(input);
-      li.appendChild(editBtn);
-      ul.appendChild(li);
+      var delBtn = null;
+      if (onDelete) {
+        delBtn = document.createElement('button');
+        delBtn.className = 'btn btn--small btn--danger';
+        delBtn.textContent = 'Del';
+        delBtn.addEventListener('click', function() {
+          if (count > 0 && !window.confirm('Remove "' + name.toUpperCase() + '" from all ' + count + ' entries?')) return;
+          onDelete(name);
+        });
+      }
+      tdActions.appendChild(editBtn);
+      if (delBtn) tdActions.appendChild(delBtn);
+
+      tr.appendChild(tdLabel);
+      tr.appendChild(tdCount);
+      tr.appendChild(tdActions);
+      tbody.appendChild(tr);
     });
   }
 
+  function getSelectedManageNames(tbody) {
+    var checked = tbody.querySelectorAll('.manage-row-checkbox:checked');
+    return Array.prototype.map.call(checked, function(cb) { return cb.dataset.name; });
+  }
+
+  function updateCombineBtn() {
+    // Determine which panel is active
+    var activeIsCategories = !manageCategoriesPanel.hidden;
+    var tbody = activeIsCategories ? manageCategoriesList : manageTypesList;
+    var selected = getSelectedManageNames(tbody);
+    if (selected.length >= 2) {
+      manageCombineBtn.textContent = 'Combine ' + selected.length + ' Labels';
+      manageCombineBtn.hidden = false;
+    } else {
+      manageCombineBtn.hidden = true;
+    }
+  }
+
   function openManageModal() {
-    renderManageList(manageCategoriesList, canonicalCategories.slice(), function(oldName, newName) {
+    function onCategoryRename(oldName, newName) {
       renameCategory(oldName, newName.toUpperCase());
-      renderManageList(manageCategoriesList, canonicalCategories.slice(), arguments.callee);
-    });
-    renderManageList(manageTypesList, knownTypes.slice(), function(oldName, newName) {
+      renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
+      updateCombineBtn();
+    }
+    function onCategoryDelete(name) {
+      deleteCategory(name);
+      renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
+      updateCombineBtn();
+    }
+    function onTypeRename(oldName, newName) {
       renameType(oldName, newName.toLowerCase());
-      renderManageList(manageTypesList, knownTypes.slice(), arguments.callee);
-    });
+      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+      updateCombineBtn();
+    }
+    function onTypeDelete(name) {
+      deleteType(name);
+      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+      updateCombineBtn();
+    }
+
+    function combineSelected() {
+      var activeIsCategories = !manageCategoriesPanel.hidden;
+      var tbody = activeIsCategories ? manageCategoriesList : manageTypesList;
+      var selected = getSelectedManageNames(tbody);
+      if (selected.length < 2) return;
+      var target = window.prompt('Combine into label (all selected will be renamed to this):', selected[0].toUpperCase());
+      if (!target) return;
+      target = target.trim();
+      if (!target) return;
+      // Apply renames: for each selected name, rename to target
+      selected.forEach(function(name) {
+        if (activeIsCategories) {
+          renameCategory(name, target.toUpperCase());
+        } else {
+          renameType(name, target.toLowerCase());
+        }
+      });
+      // Deduplicate in case the target already existed before combining
+      if (activeIsCategories) {
+        var seen = {};
+        canonicalCategories = canonicalCategories.filter(function(c) {
+          if (seen[c]) return false;
+          seen[c] = true;
+          return true;
+        });
+        renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
+      } else {
+        var seenT = {};
+        knownTypes = knownTypes.filter(function(t) {
+          if (seenT[t]) return false;
+          seenT[t] = true;
+          return true;
+        });
+        renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+      }
+      updateCombineBtn();
+    }
+
+    manageCombineBtn.onclick = combineSelected;
+
+    renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
+    renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+    manageCombineBtn.hidden = true;
     manageModal.hidden = false;
   }
 
@@ -1330,29 +1539,48 @@
     });
     manageCategoriesPanel.hidden = tab !== 'categories';
     manageTypesPanel.hidden = tab !== 'types';
+    updateCombineBtn();
   });
 
   // ---- Bulk operations ----
   var bulkMode = null;
 
-  bulkAddBtn.addEventListener('click', function() {
-    bulkMode = 'add';
-    bulkModalTitle.textContent = 'Add Category to Selected';
+  function openBulkModal(mode) {
+    bulkMode = mode;
+    bulkTabAdd.classList.toggle('is-active', mode === 'add');
+    bulkTabRemove.classList.toggle('is-active', mode === 'remove');
+    var tbody = document.getElementById('bulk-entries-body');
+    tbody.innerHTML = '';
+    entries.forEach(function(e) {
+      if (!selectedPaths.has(e.filePath)) return;
+      var tr = document.createElement('tr');
+      var tdTitle = document.createElement('td');
+      tdTitle.className = 'bulk-col-title manage-list-label';
+      tdTitle.textContent = e.title || e.slug;
+      var tdCats = document.createElement('td');
+      tdCats.className = 'bulk-col-categories manage-list-label';
+      tdCats.textContent = (e.categories || []).join(', ');
+      tr.appendChild(tdTitle);
+      tr.appendChild(tdCats);
+      tbody.appendChild(tr);
+    });
     bulkCategoryInput.value = '';
     bulkCategorySuggestions.innerHTML = '';
     bulkModal.hidden = false;
     bulkCategoryInput.focus();
     renderBulkSuggestions('');
+  }
+
+  bulkActionsBtn.addEventListener('click', function() {
+    openBulkModal('add');
   });
 
-  bulkRemoveBtn.addEventListener('click', function() {
-    bulkMode = 'remove';
-    bulkModalTitle.textContent = 'Remove Category from Selected';
-    bulkCategoryInput.value = '';
-    bulkCategorySuggestions.innerHTML = '';
-    bulkModal.hidden = false;
-    bulkCategoryInput.focus();
-    renderBulkSuggestions('');
+  bulkTabAdd.addEventListener('click', function() {
+    openBulkModal('add');
+  });
+
+  bulkTabRemove.addEventListener('click', function() {
+    openBulkModal('remove');
   });
 
   bulkModalCancel.addEventListener('click', function() { bulkModal.hidden = true; });
@@ -1364,8 +1592,6 @@
   bulkCategoryInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      var val = this.value.trim().toUpperCase();
-      if (val) applyBulk(val);
     }
     if (e.key === 'Escape') bulkModal.hidden = true;
   });
@@ -1399,7 +1625,8 @@
   bulkCategorySuggestions.addEventListener('click', function(e) {
     var li = e.target.closest('li');
     if (!li) return;
-    applyBulk(li.dataset.value);
+    bulkCategoryInput.value = li.dataset.value;
+    bulkCategorySuggestions.innerHTML = '';
   });
 
   bulkModalConfirm.addEventListener('click', function() {
@@ -1425,6 +1652,48 @@
     updateChanges();
     renderTable();
   }
+
+  // ---- Clear changes ----
+  clearBtn.addEventListener('click', function() {
+    clearModal.hidden = false;
+  });
+  clearModalCancel.addEventListener('click', function() {
+    clearModal.hidden = true;
+  });
+  clearModalConfirm.addEventListener('click', function() {
+    clearModal.hidden = true;
+    // Revert entries to originals, remove new/deleted entries
+    entries = entries.filter(function(e) { return !e._isNew; });
+    entries.forEach(function(e) {
+      delete e._delete;
+      var orig = originals[e.filePath];
+      if (!orig) return;
+      e.categories = orig.categories.slice();
+      e.entryType = orig.entryType;
+      e.draft = orig.draft;
+      e.title = orig.title;
+      e.subtitle = orig.subtitle;
+      e.description = orig.description;
+      e.date = orig.date;
+      e.link = orig.link;
+      e.position = orig.position;
+      e.year = orig.year;
+      e.location = orig.location;
+      e.status = orig.status;
+      e.featured = orig.featured;
+      e.featuredPosition = orig.featuredPosition;
+      e.collaborators = JSON.parse(orig.collaborators);
+      e.relatedProjects = JSON.parse(orig.relatedProjects);
+      e.body = orig.body;
+    });
+    canonicalCategories = (window.__CATEGORIES__ || []).slice();
+    canonicalCategoriesChanged = false;
+    knownTypes = initialKnownTypes.slice();
+    changes = {};
+    closeEditPanel();
+    updateChanges();
+    renderTable();
+  });
 
   // ---- Save ----
   saveBtn.addEventListener('click', function() {
@@ -1473,6 +1742,7 @@
         originals[e.filePath] = snapshot(e);
       });
 
+      canonicalCategoriesChanged = false;
       changes = {};
       updateChanges();
 
