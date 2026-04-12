@@ -17,17 +17,53 @@ eleventyExcludeFromCollections: true
 </head>
 <body>
 
-  {# Login screen #}
+  {# Login screen — 4 columns × 5 rows grid #}
+  {# Cols: empty | logo | form | empty #}
+  {# Rows: spacer | heading | password | button | spacer #}
   <div id="login-screen" class="login-screen">
-    <div class="login-box">
+
+    {# Explicitly placed content cells #}
+    <div class="login-cell login-cell--logo">
+      <img src="/assets/uploads/favicon.png" alt="LowDO">
+    </div>
+    <div class="login-cell login-cell--heading">
       <h1>LowDO Admin</h1>
-      <p>Enter password to manage entries.</p>
+    </div>
+    <div class="login-cell login-cell--password">
       <form id="login-form">
-        <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
-        <button type="submit">Log In</button>
+        <input type="password" id="login-password" placeholder="Enter Password" autocomplete="current-password" required>
         <p id="login-error" class="error" hidden></p>
       </form>
     </div>
+    <div class="login-cell login-cell--button">
+      <button type="submit" form="login-form">Login</button>
+    </div>
+
+    {# Auto-placed filler cells to complete the grid (4×5 = 20, minus 4 explicitly-placed cells = 16) #}
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+
+    {# Lines painted last so they render above cell backgrounds #}
+    <div class="login-col-line"></div>
+    <div class="login-row-line login-row-line--top"></div>
+    <div class="login-row-line login-row-line--bottom"></div>
+    <div class="login-row-line login-row-line--heading"></div>
+    <div class="login-row-line login-row-line--password"></div>
+
   </div>
 
   {# Admin screen #}
@@ -46,26 +82,45 @@ eleventyExcludeFromCollections: true
 
     {# Toolbar #}
     <div class="admin-toolbar">
+      <div class="admin-toolbar__draft-filters admin-dropdown" id="draft-filters" data-value="all">
+        <button class="admin-dropdown__button" aria-expanded="false" type="button">
+          <span class="admin-dropdown__label">STATUS</span>
+          <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+            <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+          </svg>
+        </button>
+        <div class="admin-dropdown__drawer" aria-hidden="true">
+          <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+          <button class="admin-dropdown__item" type="button" data-value="draft">DRAFT</button>
+          <button class="admin-dropdown__item" type="button" data-value="published">PUBLISHED</button>
+        </div>
+      </div>
       <div class="admin-toolbar__search">
         <input type="text" id="search-input" placeholder="Search by title or slug...">
       </div>
-      <div class="admin-toolbar__filters" id="type-filters">
-        <label class="filter-chip">
-          <input type="checkbox" value="all" checked> ALL
-        </label>
-      </div>
-      <div class="admin-toolbar__draft-filters" id="draft-filters">
-        <label class="filter-chip">
-          <input type="radio" name="draft-filter" value="all" checked> ALL
-        </label>
-        <label class="filter-chip">
-          <input type="radio" name="draft-filter" value="draft"> DRAFT
-        </label>
-        <label class="filter-chip">
-          <input type="radio" name="draft-filter" value="published"> PUBLISHED
-        </label>
-      </div>
-      <div class="admin-toolbar__manage">
+      <div class="admin-toolbar__categories">
+        <div class="admin-dropdown admin-dropdown--multi" id="type-filters">
+          <button class="admin-dropdown__button" aria-expanded="false" type="button">
+            <span class="admin-dropdown__label">ALL TYPES</span>
+            <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+              <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+            </svg>
+          </button>
+          <div class="admin-dropdown__drawer" aria-hidden="true">
+            <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+          </div>
+        </div>
+        <div class="admin-dropdown admin-dropdown--multi" id="category-filters">
+          <button class="admin-dropdown__button" aria-expanded="false" type="button">
+            <span class="admin-dropdown__label">ALL CATEGORIES</span>
+            <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+              <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+            </svg>
+          </button>
+          <div class="admin-dropdown__drawer" aria-hidden="true">
+            <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+          </div>
+        </div>
         <button id="manage-btn" class="btn btn--small">Manage Labels</button>
       </div>
       <div class="admin-toolbar__bulk" id="bulk-actions" hidden>
