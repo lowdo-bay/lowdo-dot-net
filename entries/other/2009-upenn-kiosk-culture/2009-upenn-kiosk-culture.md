@@ -5,7 +5,7 @@ subtitle: 'Unspoken Borders: Ecologies of Inequality, University of Pennsylvania
 date: 2009-03-01T00:00:00.000Z
 categories:
   - AFRICA
-  - URBAN
+  - URBANISM
 description: >-
   Paper presented at the Unspoken Borders: Ecologies of Inequality conference at
   UPenn School of Architecture
@@ -13,5 +13,8 @@ link: 'https://www.academia.edu/28431327/Network_Power_in_a_West_African_New_Tow
 relatedProjects:
   - 090000_kiosk-culture
 type: lecture
+position: 999
+featured: false
+collaborators: []
 ---
 

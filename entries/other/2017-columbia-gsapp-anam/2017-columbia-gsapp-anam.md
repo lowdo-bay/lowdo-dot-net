@@ -5,7 +5,7 @@ subtitle: Columbia University GSAPP / AIA-NY
 date: 2017-04-27T00:00:00.000Z
 categories:
   - AFRICA
-  - URBAN
+  - URBANISM
 description: >-
   Presentation at the Columbia University GSAPP Urban Design Program and AIA-NY
   event
@@ -13,5 +13,8 @@ link: 'https://www.arch.columbia.edu/events/678-displacement-_water'
 relatedProjects:
   - 100000_new-anam-city
 type: lecture
+position: 999
+featured: false
+collaborators: []
 ---
 
