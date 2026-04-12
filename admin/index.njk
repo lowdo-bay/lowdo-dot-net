@@ -74,7 +74,7 @@ eleventyExcludeFromCollections: true
       <h1>LowDO Admin</h1>
       <div class="admin-header__actions">
         <span id="change-count" class="change-count" hidden>0 changes</span>
-        <button id="new-entry-btn" class="btn btn--secondary">+ New Entry</button>
+        <button id="clear-btn" class="btn btn--secondary" disabled hidden>Clear Changes</button>
         <button id="save-btn" class="btn btn--primary" disabled>Save Changes</button>
         <button id="logout-btn" class="btn btn--secondary">Logout</button>
       </div>
@@ -95,39 +95,41 @@ eleventyExcludeFromCollections: true
           <button class="admin-dropdown__item" type="button" data-value="published">PUBLISHED</button>
         </div>
       </div>
-      <div class="admin-toolbar__search">
-        <input type="text" id="search-input" placeholder="Search by title or slug...">
-      </div>
-      <div class="admin-toolbar__categories">
-        <div class="admin-dropdown admin-dropdown--multi" id="type-filters">
-          <button class="admin-dropdown__button" aria-expanded="false" type="button">
-            <span class="admin-dropdown__label">ALL TYPES</span>
-            <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
-              <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
-            </svg>
-          </button>
-          <div class="admin-dropdown__drawer" aria-hidden="true">
-            <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+      <div class="admin-toolbar__search-group">
+        <div class="admin-toolbar__search">
+          <input type="text" id="search-input" placeholder="Search by title or slug...">
+        </div>
+        <div class="admin-toolbar__categories">
+          <div class="admin-dropdown admin-dropdown--multi" id="type-filters">
+            <button class="admin-dropdown__button" aria-expanded="false" type="button">
+              <span class="admin-dropdown__label">ALL TYPES</span>
+              <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+              </svg>
+            </button>
+            <div class="admin-dropdown__drawer" aria-hidden="true">
+              <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+            </div>
+          </div>
+          <div class="admin-dropdown admin-dropdown--multi" id="category-filters">
+            <button class="admin-dropdown__button" aria-expanded="false" type="button">
+              <span class="admin-dropdown__label">ALL CATEGORIES</span>
+              <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+              </svg>
+            </button>
+            <div class="admin-dropdown__drawer" aria-hidden="true">
+              <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+            </div>
           </div>
         </div>
-        <div class="admin-dropdown admin-dropdown--multi" id="category-filters">
-          <button class="admin-dropdown__button" aria-expanded="false" type="button">
-            <span class="admin-dropdown__label">ALL CATEGORIES</span>
-            <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
-              <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
-            </svg>
-          </button>
-          <div class="admin-dropdown__drawer" aria-hidden="true">
-            <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
-          </div>
-        </div>
-        <button id="manage-btn" class="btn btn--small">Manage Labels</button>
       </div>
-      <div class="admin-toolbar__bulk" id="bulk-actions" hidden>
-        <span id="selected-count">0 selected</span>
-        <button id="bulk-add-btn" class="btn btn--small">+ Add Category</button>
-        <button id="bulk-remove-btn" class="btn btn--small btn--danger">- Remove Category</button>
+      <button id="manage-btn" class="btn btn--small">Manage Labels</button>
+      <button id="manage-collaborators-btn" class="btn btn--small">Manage Collaborators</button>
+      <div class="admin-toolbar__bulk" id="bulk-actions">
+        <button id="bulk-actions-btn" class="btn btn--small"><span id="selected-count">0 selected</span><span>Bulk Actions</span></button>
       </div>
+      <button id="new-entry-btn" class="btn btn--secondary">+ New Entry</button>
     </div>
 
     {# Table #}
@@ -138,8 +140,8 @@ eleventyExcludeFromCollections: true
             <th class="col-select"><input type="checkbox" id="select-all"></th>
             <th class="col-draft">Draft</th>
             <th class="col-title sortable" data-sort="title">Title</th>
-            <th class="col-categories">Categories</th>
             <th class="col-type sortable" data-sort="entryType">Type</th>
+            <th class="col-categories">Categories</th>
             <th class="col-date sortable" data-sort="date">Date</th>
             <th class="col-actions"></th>
           </tr>
@@ -284,33 +286,95 @@ eleventyExcludeFromCollections: true
 
     {# Bulk category modal #}
     <div id="bulk-modal" class="modal" hidden>
-      <div class="modal-content">
-        <h3 id="bulk-modal-title"></h3>
-        <input type="text" id="bulk-category-input" placeholder="Category name...">
-        <ul id="bulk-category-suggestions"></ul>
-        <div class="modal-actions">
-          <button id="bulk-modal-confirm" class="btn btn--primary">Apply</button>
-          <button id="bulk-modal-cancel" class="btn btn--secondary">Cancel</button>
+      <div class="modal-content modal-content--table">
+        <div class="manage-header">
+          <h3>Bulk Actions</h3>
+          <div class="manage-tabs">
+            <button id="bulk-tab-add" class="manage-tab is-active" type="button">+ Add Category</button>
+            <button id="bulk-tab-remove" class="manage-tab" type="button">− Remove Category</button>
+          </div>
+        </div>
+        <div class="bulk-body">
+          <div class="bulk-entries-col">
+            <table class="admin-table manage-table" id="bulk-entries-table">
+              <thead>
+                <tr>
+                  <th class="bulk-col-title">Entry</th>
+                  <th class="bulk-col-categories">Categories</th>
+                </tr>
+              </thead>
+              <tbody id="bulk-entries-body"></tbody>
+            </table>
+          </div>
+          <div class="bulk-category-col">
+            <input type="text" id="bulk-category-input" placeholder="Category name...">
+            <ul id="bulk-category-suggestions"></ul>
+          </div>
+        </div>
+        <div class="manage-footer">
+          <p class="manage-hint">Changes apply to all selected entries.</p>
+          <div class="manage-footer__actions">
+            <button id="bulk-modal-confirm" class="btn btn--primary">Apply</button>
+            <button id="bulk-modal-cancel" class="btn btn--secondary">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
 
     {# Manage labels modal (rename categories + types) #}
     <div id="manage-modal" class="modal" hidden>
-      <div class="modal-content modal-content--wide">
-        <h3>Manage Labels</h3>
-        <div class="manage-tabs">
-          <button class="manage-tab is-active" data-tab="categories">Categories</button>
-          <button class="manage-tab" data-tab="types">Types</button>
+      <div class="modal-content modal-content--table">
+        <div class="manage-header">
+          <h3>Manage Labels</h3>
+          <div class="manage-tabs">
+            <button class="manage-tab is-active" data-tab="types">Types</button>
+            <button class="manage-tab" data-tab="categories">Categories</button>
+          </div>
         </div>
-        <div id="manage-categories-panel" class="manage-panel">
-          <ul id="manage-categories-list" class="manage-list"></ul>
+        <div id="manage-categories-panel" class="manage-panel" hidden>
+          <table class="admin-table manage-table" id="manage-categories-list">
+            <thead>
+              <tr>
+                <th class="manage-col-select"></th>
+                <th class="manage-col-label">Label</th>
+                <th class="manage-col-count">Entries</th>
+                <th class="manage-col-actions"></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
-        <div id="manage-types-panel" class="manage-panel" hidden>
-          <ul id="manage-types-list" class="manage-list"></ul>
+        <div id="manage-types-panel" class="manage-panel">
+          <table class="admin-table manage-table" id="manage-types-list">
+            <thead>
+              <tr>
+                <th class="manage-col-select"></th>
+                <th class="manage-col-label">Label</th>
+                <th class="manage-col-count">Entries</th>
+                <th class="manage-col-actions"></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
+        <div class="manage-footer">
+          <p class="manage-hint">Renames and deletes apply when you save changes.</p>
+          <div class="manage-footer__actions">
+            <button id="manage-combine-btn" class="btn btn--secondary" hidden>Combine 0 Labels</button>
+            <button id="manage-modal-close" class="btn btn--secondary">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# Clear changes confirmation modal #}
+    <div id="clear-modal" class="modal" hidden>
+      <div class="modal-content">
+        <h3>Clear Changes</h3>
+        <p>Discard all unsaved changes and revert to the last saved state?</p>
         <div class="modal-actions">
-          <button id="manage-modal-close" class="btn btn--secondary">Done</button>
+          <button id="clear-modal-confirm" class="btn btn--primary btn--danger-solid">Discard Changes</button>
+          <button id="clear-modal-cancel" class="btn btn--secondary">Cancel</button>
         </div>
       </div>
     </div>

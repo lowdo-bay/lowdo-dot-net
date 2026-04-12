@@ -169,6 +169,16 @@ export async function handler(event) {
     for (const change of changes) {
       const { filePath, action } = change;
 
+      // ---- Update canonical categories list ----
+      if (action === 'updateCategories') {
+        const header = '# Canonical list of categories for entry tagging\n# Used by the admin page for autocomplete and the main site for filter display\n# Categories are uppercase by convention\n\n';
+        const yaml = (change.categories || []).map(c => `- ${c}`).join('\n') + '\n';
+        const blobSha = await createBlob(header + yaml);
+        treeItems.push({ path: filePath, mode: '100644', type: 'blob', sha: blobSha });
+        summaryParts.push('Update canonicalCategories');
+        continue;
+      }
+
       // ---- Delete entry ----
       if (action === 'delete') {
         const pathParts = filePath.split('/');
