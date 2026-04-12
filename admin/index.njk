@@ -9,23 +9,61 @@ eleventyExcludeFromCollections: true
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LowDO Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300..700&display=swap">
   <style>
     {% include "assets/css/admin.css" %}
   </style>
 </head>
 <body>
 
-  {# Login screen #}
+  {# Login screen — 4 columns × 5 rows grid #}
+  {# Cols: empty | logo | form | empty #}
+  {# Rows: spacer | heading | password | button | spacer #}
   <div id="login-screen" class="login-screen">
-    <div class="login-box">
+
+    {# Explicitly placed content cells #}
+    <div class="login-cell login-cell--logo">
+      <img src="/assets/uploads/favicon.png" alt="LowDO">
+    </div>
+    <div class="login-cell login-cell--heading">
       <h1>LowDO Admin</h1>
-      <p>Enter password to manage entries.</p>
+    </div>
+    <div class="login-cell login-cell--password">
       <form id="login-form">
-        <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
-        <button type="submit">Log In</button>
+        <input type="password" id="login-password" placeholder="Enter Password" autocomplete="current-password" required>
         <p id="login-error" class="error" hidden></p>
       </form>
     </div>
+    <div class="login-cell login-cell--button">
+      <button type="submit" form="login-form">Login</button>
+    </div>
+
+    {# Auto-placed filler cells to complete the grid (4×5 = 20, minus 4 explicitly-placed cells = 16) #}
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+    <div class="login-cell"></div>
+
+    {# Lines painted last so they render above cell backgrounds #}
+    <div class="login-col-line"></div>
+    <div class="login-row-line login-row-line--top"></div>
+    <div class="login-row-line login-row-line--bottom"></div>
+    <div class="login-row-line login-row-line--heading"></div>
+    <div class="login-row-line login-row-line--password"></div>
+
   </div>
 
   {# Admin screen #}
@@ -44,15 +82,45 @@ eleventyExcludeFromCollections: true
 
     {# Toolbar #}
     <div class="admin-toolbar">
+      <div class="admin-toolbar__draft-filters admin-dropdown" id="draft-filters" data-value="all">
+        <button class="admin-dropdown__button" aria-expanded="false" type="button">
+          <span class="admin-dropdown__label">STATUS</span>
+          <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+            <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+          </svg>
+        </button>
+        <div class="admin-dropdown__drawer" aria-hidden="true">
+          <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+          <button class="admin-dropdown__item" type="button" data-value="draft">DRAFT</button>
+          <button class="admin-dropdown__item" type="button" data-value="published">PUBLISHED</button>
+        </div>
+      </div>
       <div class="admin-toolbar__search">
         <input type="text" id="search-input" placeholder="Search by title or slug...">
       </div>
-      <div class="admin-toolbar__filters" id="type-filters">
-        <label class="filter-chip">
-          <input type="checkbox" value="all" checked> ALL
-        </label>
-      </div>
-      <div class="admin-toolbar__manage">
+      <div class="admin-toolbar__categories">
+        <div class="admin-dropdown admin-dropdown--multi" id="type-filters">
+          <button class="admin-dropdown__button" aria-expanded="false" type="button">
+            <span class="admin-dropdown__label">ALL TYPES</span>
+            <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+              <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+            </svg>
+          </button>
+          <div class="admin-dropdown__drawer" aria-hidden="true">
+            <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+          </div>
+        </div>
+        <div class="admin-dropdown admin-dropdown--multi" id="category-filters">
+          <button class="admin-dropdown__button" aria-expanded="false" type="button">
+            <span class="admin-dropdown__label">ALL CATEGORIES</span>
+            <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+              <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+            </svg>
+          </button>
+          <div class="admin-dropdown__drawer" aria-hidden="true">
+            <button class="admin-dropdown__item is-selected" type="button" data-value="all">ALL</button>
+          </div>
+        </div>
         <button id="manage-btn" class="btn btn--small">Manage Labels</button>
       </div>
       <div class="admin-toolbar__bulk" id="bulk-actions" hidden>
@@ -69,7 +137,6 @@ eleventyExcludeFromCollections: true
           <tr>
             <th class="col-select"><input type="checkbox" id="select-all"></th>
             <th class="col-draft">Draft</th>
-            <th class="col-slug sortable" data-sort="slug">Slug</th>
             <th class="col-title sortable" data-sort="title">Title</th>
             <th class="col-categories">Categories</th>
             <th class="col-type sortable" data-sort="entryType">Type</th>
@@ -89,82 +156,122 @@ eleventyExcludeFromCollections: true
       </div>
       <div class="edit-panel__body">
 
-        <div class="field-group">
-          <label>Title</label>
-          <input type="text" id="ep-title">
+        {# Section: Identity #}
+        <div class="ep-section">
+          <div class="ep-section__label">Identity</div>
+          <div class="field-group">
+            <label>Slug</label>
+            <input type="text" id="ep-slug" readonly>
+          </div>
+          <div class="field-group">
+            <label>Type</label>
+            <div class="ep-type-display">
+              <span id="ep-type-value" class="cat-tag type-tag"></span>
+              <button id="ep-type-change" class="btn btn--small">Change</button>
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label--inline">
+              <input type="checkbox" id="ep-draft"> Draft
+            </label>
+          </div>
         </div>
 
-        <div class="field-group">
-          <label>Subtitle</label>
-          <input type="text" id="ep-subtitle">
+        {# Section: Content #}
+        <div class="ep-section">
+          <div class="ep-section__label">Content</div>
+          <div class="field-group">
+            <label>Title</label>
+            <input type="text" id="ep-title">
+          </div>
+          <div class="field-group">
+            <label>Subtitle</label>
+            <input type="text" id="ep-subtitle">
+          </div>
+          <div class="field-group">
+            <label>Description</label>
+            <textarea id="ep-description" rows="2"></textarea>
+          </div>
+          <div class="field-group">
+            <label>Date</label>
+            <input type="date" id="ep-date">
+          </div>
         </div>
 
-        <div class="field-group">
-          <label>Description</label>
-          <textarea id="ep-description" rows="2"></textarea>
+        {# Section: Metadata #}
+        <div class="ep-section">
+          <div class="ep-section__label">Metadata</div>
+          <div class="field-group">
+            <label>Categories</label>
+            <div id="ep-categories-tags" class="tag-list"></div>
+            <div class="tag-input-wrap">
+              <input type="text" id="ep-category-input" placeholder="Add category..." autocomplete="off">
+              <ul id="ep-category-suggestions" class="tag-suggestions" hidden></ul>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Link (external URL)</label>
+            <input type="url" id="ep-link" placeholder="https://...">
+          </div>
+          <div class="field-group">
+            <label>Position (sort order)</label>
+            <input type="number" id="ep-position" placeholder="999">
+          </div>
+          <div class="field-group project-only">
+            <label>Year</label>
+            <input type="text" id="ep-year" placeholder="2024 or 2020 - Present">
+          </div>
+          <div class="field-group project-only">
+            <label>Location</label>
+            <input type="text" id="ep-location">
+          </div>
+          <div class="field-group project-only">
+            <label>Status</label>
+            <input type="text" id="ep-status" placeholder="Built / In Progress / Unbuilt">
+          </div>
         </div>
 
-        <div class="field-group">
-          <label>Date</label>
-          <input type="date" id="ep-date">
+        {# Section: Homepage (project-only) #}
+        <div class="ep-section project-only">
+          <div class="ep-section__label">Homepage</div>
+          <div class="field-group">
+            <label class="field-label--inline">
+              <input type="checkbox" id="ep-featured"> Featured on homepage
+            </label>
+          </div>
+          <div class="field-group" id="ep-featured-position-group" hidden>
+            <label>Featured Position</label>
+            <input type="number" id="ep-featured-position" min="1" placeholder="1">
+          </div>
         </div>
 
-        <div class="field-group">
-          <label>Link (external URL)</label>
-          <input type="url" id="ep-link" placeholder="https://...">
+        {# Section: Body #}
+        <div class="ep-section">
+          <div class="ep-section__label ep-section__label--row">
+            Body (Markdown)
+            <button id="ep-preview-toggle" class="btn btn--small">Preview</button>
+          </div>
+          <div class="field-group">
+            <textarea id="ep-body" rows="10" placeholder="Write markdown here..."></textarea>
+          </div>
+          <div id="ep-body-preview" class="ep-body-preview" hidden></div>
         </div>
 
-        <div class="field-group">
-          <label>Position (sort order)</label>
-          <input type="number" id="ep-position" placeholder="999">
-        </div>
-
-        {# Project-only fields #}
-        <div class="field-group project-only">
-          <label>Year</label>
-          <input type="text" id="ep-year" placeholder="2024 or 2020 - Present">
-        </div>
-
-        <div class="field-group project-only">
-          <label>Location</label>
-          <input type="text" id="ep-location">
-        </div>
-
-        <div class="field-group project-only">
-          <label>Status</label>
-          <input type="text" id="ep-status" placeholder="Built / In Progress / Unbuilt">
-        </div>
-
-        <div class="field-group project-only">
-          <label class="field-label--inline">
-            <input type="checkbox" id="ep-featured"> Featured on homepage
-          </label>
-        </div>
-
-        <div class="field-group project-only" id="ep-featured-position-group" hidden>
-          <label>Featured Position</label>
-          <input type="number" id="ep-featured-position" min="1" placeholder="1">
-        </div>
-
-        <div class="field-group project-only">
-          <label>Collaborators</label>
+        {# Section: Collaborators (project-only) #}
+        <div class="ep-section project-only">
+          <div class="ep-section__label">Collaborators</div>
           <div id="ep-collaborators-list" class="structured-list"></div>
           <button id="ep-add-collaborator" class="btn btn--small">+ Add Collaborator</button>
         </div>
 
-        {# Non-project fields #}
-        <div class="field-group non-project-only">
-          <label>Related Projects</label>
+        {# Section: Related Projects (non-project-only) #}
+        <div class="ep-section non-project-only">
+          <div class="ep-section__label">Related Projects</div>
           <div id="ep-related-projects-list" class="tag-list"></div>
           <div class="tag-input-wrap">
             <input type="text" id="ep-related-project-input" placeholder="Type project slug...">
             <ul id="ep-related-project-suggestions" class="tag-suggestions" hidden></ul>
           </div>
-        </div>
-
-        <div class="field-group">
-          <label>Body Text (Markdown)</label>
-          <textarea id="ep-body" rows="10" placeholder="Write markdown here..."></textarea>
         </div>
 
       </div>
@@ -174,12 +281,6 @@ eleventyExcludeFromCollections: true
       </div>
     </div>
     <div id="edit-panel-backdrop" class="edit-panel-backdrop" hidden></div>
-
-    {# Category autocomplete dropdown #}
-    <div id="category-dropdown" class="category-dropdown" hidden>
-      <input type="text" id="category-search" placeholder="Type to search or create...">
-      <ul id="category-list"></ul>
-    </div>
 
     {# Bulk category modal #}
     <div id="bulk-modal" class="modal" hidden>
