@@ -2,7 +2,7 @@
 draft: false
 title: 'Venice Architecture Biennale: Nyame Dua'
 subtitle: La Biennale di Venezia
-description: Exhibitor in the 19th International Architecture Exhibition, “The Perimeter of Architecture: Amid the Elements.”
+description: 'Exhibitor in the 19th International Architecture Exhibition, “The Perimeter of Architecture: Amid the Elements.”'
 date: 2025-05-20
 categories: []
 relatedProjects:
