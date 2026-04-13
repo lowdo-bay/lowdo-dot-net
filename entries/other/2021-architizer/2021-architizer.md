@@ -9,7 +9,7 @@ description: >-
 date: 2021-01-01T00:00:00.000Z
 categories: []
 link: 'https://winners.architizer.com/2021/Firms/best-of-the-year/africa/'
-featured: true
+featured: false
 type: award
 ---
 
