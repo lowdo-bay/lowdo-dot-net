@@ -9,6 +9,7 @@ date: 2006-01-02T00:00:00.000Z
 categories: []
 link: ''
 type: staff
+active: true
 ---
 
 DK's work explores sustainability by connecting form-making, technology, and geopolitics with environmental and social dimensions. He is a TED Global Fellow, Fulbright Scholar, and Africa 4 Tech Digital Champion.

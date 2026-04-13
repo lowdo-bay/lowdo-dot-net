@@ -294,6 +294,15 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
     return arr.slice(0, limit);
   });
 
+  // Sort staff entries by endDate (desc), falling back to date if endDate absent
+  eleventyConfig.addFilter("sortByEndDate", function(arr) {
+    return [...arr].sort((a, b) => {
+      const aYear = a.data.endDate ?? new Date(a.data.date).getFullYear();
+      const bYear = b.data.endDate ?? new Date(b.data.date).getFullYear();
+      return bYear - aYear;
+    });
+  });
+
   // A filter to limit and randomize output of collection items
   eleventyConfig.addFilter("randomLimit", (arr, limit, currPage) => {
     const pageArr = arr.filter((page) => page.url !== currPage);

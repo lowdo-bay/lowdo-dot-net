@@ -8,6 +8,7 @@ permalink: /about/index.html
   .about-section {
     position: relative;
     padding-top: 0 !important;
+    margin-bottom: var(--space-7) !important;
   }
 
   .about-section::before {
@@ -75,6 +76,94 @@ permalink: /about/index.html
     padding-top: var(--space-2);
     padding-bottom: var(--space-2);
   }
+
+  .staff-section {
+    position: relative;
+  }
+
+  .staff-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .staff-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .staff-section-label {
+    padding: var(--space-2);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-1);
+  }
+
+  .staff-row {
+    position: relative;
+  }
+
+  .staff-row::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  .staff-row__image {
+    padding: var(--space-2);
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .staff-row__image img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  .staff-row__meta {
+    padding: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .staff-row__name {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .staff-row__role {
+    font-size: var(--font-size-small);
+    color: var(--color-accent-1);
+  }
+
+  .staff-row__year {
+    font-size: var(--font-size-small);
+    color: var(--color-accent-2);
+  }
+
+  .staff-row__description {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    line-height: 1.6;
+  }
 </style>
 
 <article>
@@ -106,6 +195,66 @@ permalink: /about/index.html
       </div>
 
     </div>
+  </section>
+
+  <div class="staff-section-label">Staff</div>
+
+  <section class="staff-section mb--4">
+
+    {% for person in collections.entries | sort(false, false, "data.date") %}
+      {% if person.data.entryType == "staff" and person.data.active == true %}
+      <div class="staff-row grid grid--description">
+
+        <div class="col-1 staff-row__image">
+          {% if person.data.thumbnail and person.data.thumbnail.src %}
+            <img src="/{{ person.data.thumbnail.src }}" alt="{{ person.data.thumbnail.alt or person.data.title }}" loading="lazy">
+          {% endif %}
+        </div>
+
+        <div class="col-2 staff-row__meta">
+          <span class="staff-row__name">{{ person.data.title }}</span>
+          {% if person.data.subtitle %}<span class="staff-row__role">{{ person.data.subtitle }}</span>{% endif %}
+          {% if person.data.date %}<span class="staff-row__year">{{ person.data.date | formatDate("YYYY") }}–</span>{% endif %}
+        </div>
+
+        <div class="col-3-4--padded staff-row__description markdown">
+          {{ person.templateContent | safe }}
+        </div>
+
+      </div>
+      {% endif %}
+    {% endfor %}
+
+  </section>
+
+  <div class="staff-section-label">Past Collaborators</div>
+
+  <section class="staff-section mb--4">
+
+    {% for person in collections.entries | sortByEndDate %}
+      {% if person.data.entryType == "staff" and person.data.active == false %}
+      <div class="staff-row grid grid--description">
+
+        <div class="col-1 staff-row__image">
+          {% if person.data.thumbnail and person.data.thumbnail.src %}
+            <img src="/{{ person.data.thumbnail.src }}" alt="{{ person.data.thumbnail.alt or person.data.title }}" loading="lazy">
+          {% endif %}
+        </div>
+
+        <div class="col-2 staff-row__meta">
+          <span class="staff-row__name">{{ person.data.title }}</span>
+          {% if person.data.subtitle %}<span class="staff-row__role">{{ person.data.subtitle }}</span>{% endif %}
+          {% if person.data.date %}<span class="staff-row__year">{{ person.data.date | formatDate("YYYY") }}{% if person.data.endDate %}–{{ person.data.endDate }}{% else %}–{% endif %}</span>{% endif %}
+        </div>
+
+        <div class="col-3-4--padded staff-row__description markdown">
+          {{ person.templateContent | safe }}
+        </div>
+
+      </div>
+      {% endif %}
+    {% endfor %}
+
   </section>
 
 </article>
