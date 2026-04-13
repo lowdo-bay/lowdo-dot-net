@@ -20,4 +20,4 @@ collaborators:
 type: project
 ---
 
-This new residence, guest quarters, and music studio is connected through a greenhouse-like structure, a larger "bio-climate" which serves as a buffer against the harsh winter climate. Inspired by the Naturhus (Swedish for "Nature House") concept pioneered by eco-architect Bengt Warne, the design team and client have embraces Warne’s vision to create homes that function in synergy with nature, reducing their ecological impact and enhancing inhabitants' quality of life. Landscape designed in collaboration with Spiegel Aihara Workshop.
+This new residence, guest quarters, and music studio is connected through a greenhouse-like structure, a larger "bio-climate" which serves as a buffer against the harsh winter climate. Inspired by the Naturhus (Swedish for "Nature House") concept pioneered by eco-architect Bengt Warne, the design team and client embrace Warne’s vision to create homes that function in synergy with nature, reducing their ecological impact and enhancing inhabitants' quality of life. Landscape designed in collaboration with Spiegel Aihara Workshop.
