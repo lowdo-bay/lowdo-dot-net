@@ -3,9 +3,8 @@ draft: false
 title: Exhibitor
 subtitle: Venice Biennale
 description: Brief description of the award or recognition
-date: 2023
-categories:
-  - 
+date: 2023-01-01
+categories: []
 link: 'https://example.com/award-announcement'
 relatedProjects: 
   - 250510_venice-biennale

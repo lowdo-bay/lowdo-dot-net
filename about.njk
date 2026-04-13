@@ -109,8 +109,17 @@ permalink: /about/index.html
     color: var(--color-accent-1);
   }
 
+  .staff-section-label + .staff-section {
+    margin-top: 0;
+  }
+
+  .staff-section + .staff-section-label {
+    margin-top: var(--space-7);
+  }
+
   .staff-row {
     position: relative;
+    padding-bottom: var(--space-2);
   }
 
   .staff-row::after {
@@ -157,6 +166,12 @@ permalink: /about/index.html
   .staff-row__year {
     font-size: var(--font-size-small);
     color: var(--color-accent-2);
+  }
+
+  .staff-row__name-col {
+    padding: var(--space-2);
+    display: flex;
+    align-items: flex-start;
   }
 
   .staff-row__description {
@@ -235,16 +250,13 @@ permalink: /about/index.html
       {% if person.data.entryType == "staff" and person.data.active == false %}
       <div class="staff-row grid grid--description">
 
-        <div class="col-1 staff-row__image">
-          {% if person.data.thumbnail and person.data.thumbnail.src %}
-            <img src="/{{ person.data.thumbnail.src }}" alt="{{ person.data.thumbnail.alt or person.data.title }}" loading="lazy">
-          {% endif %}
+        <div class="col-1--padded staff-row__name-col">
+          <span class="staff-row__name">{{ person.data.title }}</span>
         </div>
 
         <div class="col-2 staff-row__meta">
-          <span class="staff-row__name">{{ person.data.title }}</span>
           {% if person.data.subtitle %}<span class="staff-row__role">{{ person.data.subtitle }}</span>{% endif %}
-          {% if person.data.date %}<span class="staff-row__year">{{ person.data.date | formatDate("YYYY") }}{% if person.data.endDate %}–{{ person.data.endDate }}{% else %}–{% endif %}</span>{% endif %}
+          {% if person.data.date %}<span class="staff-row__year">{% if person.data.endDate %}{{ person.data.date | formatDate("YYYY") }}–{{ person.data.endDate }}{% else %}{{ person.data.date | formatDate("YYYY") }}{% endif %}</span>{% endif %}
         </div>
 
         <div class="col-3-4--padded staff-row__description markdown">
