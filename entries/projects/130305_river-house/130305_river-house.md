@@ -11,8 +11,34 @@ categories:
 location: 'New Braunfels, TX'
 status: Built
 collaborators:
-  - role: Structural
+  - role: Structural Engineering
     name: JM Structural
+  - name: Leonid Furmansky
+    role: Photography
+  - name: Casey Dunn
+    role: Photography
+  - name: Low Design Office
+    role: Rough and Finish Carpentry
+  - name: Nic Perez
+    role: Metal Roofing
+  - name: Alcocer Construction
+    role: Concrete Work
+  - name: Jean Gonzales
+    role: Finish Carpentry, Tile, Painting
+  - name: Metal Craft 
+    role: Aluminum Sliding Doors
+  - name: Don Young Company  
+    role: Aluminum Windows
+  - name: Jimmy's Cypress 
+    role: Wood Siding
+  - name: Clark Plumbing
+    role: Plumbing
+  - name: Calton Electric
+    role: Electrical
+  - name: Romeo Ramirez
+    role: Wood Flooring Install
+  - name: Paisano Castillo
+    role: Wood Floor Finishing
 type: project
 ---
 
