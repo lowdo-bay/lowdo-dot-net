@@ -15,47 +15,39 @@ status: Built
 collaborators:
   - name: Fort
     role: Structural Engineer
-  - name: Daisuke Hirabayashi
-    role: Photography
-  - name: Mario Alcocer
-    role: 'Site Demo, Foundation, and Landscape Wall'
+  - name: Alcocer Construction
+    role: Foundation
   - name: Lago Plumbing
-    role: Plumbing and Set Out
+    role: Plumbing 
   - name: Wilkins Electric
-    role: Electrical Rough in and Set Out
-  - name: JT Stucco
-    role: Landscape Wall and Siding
+    role: Electrical 
+  - name: J&T Stucco
+    role: Stucco
   - name: Longhorn Welding
     role: Steel
   - name: Jose Maria Murcia
-    role: 'Framing, Siding, Screened Porch Finish, and Outdoor Decking'
+    role: Rough and Finish Carpentry
   - name: Nic Perez
     role: Roofing and Siding
-  - name: David Gola
-    role: Water Tap
   - name: Austin's Green Air
-    role: HVAC Rough in and Set Out
-  - name: Best Insulation
-    role: Insulation
-  - name: Kings MS
-    role: 'Drywall, Painting, and Trim Carpentry'
-  - name: Shalom
+    role: HVAC
+  - name: Shalom Home Remodeling
     role: Tile
   - name: Richard Castillo
     role: Flooring
   - name: Concrete Industrial Solutions
-    role: Flooring
+    role: Concrete Finishing
   - name: RVC
     role: Painting
   - name: Cortrim
     role: Trim Carpentry
   - name: Trim Ron
-    role: Trim Carpentry
+    role: Cabinets
   - name: Hartstone
     role: Countertops
   - name: Arrow Glass
     role: Shower Glass and Mirrors
-  - name: Rocio
+  - name: All Solutions Remodeling Services
     role: Final Clean
 type: project
 ---
