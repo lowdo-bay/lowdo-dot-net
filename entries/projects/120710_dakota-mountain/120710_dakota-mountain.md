@@ -17,32 +17,28 @@ collaborators:
     role: Structural Engineer
   - name: Chase Daniel
     role: Photography
-  - name: Mario Alcocer
+  - name: Alcocer Construction
     role: Foundation and Site Work
   - name: Chabert Plumbing
     role: Plumbing
   - name: S2N Electric
     role: Electrical
-  - name: Jason Wiggins
-    role: 'Framing, Finish Work, Painting, Doors, and Site Work'
-  - name: Low Design Labor
-    role: Framing
+  - name: Low Design Office
+    role: Rough and finish Carpentry
   - name: Nic Perez
     role: Roofing
-  - name: Harvested Rain Solutions
+  - name: Cqure Water
     role: Rainwater Collection
   - name: Jean Gonzales
     role: 'Framing, Finish Work, and Painting'
   - name: Master Roofing
-    role: Siding
+    role: Stucco
   - name: RC Drywall
     role: Drywall
   - name: Kenneth Bollom
     role: Painting and Finish Work
   - name: FCS Granite
     role: Countertops
-  - name: Larry
-    role: Septic
   - name: American Trees
     role: Site Work
 type: project
