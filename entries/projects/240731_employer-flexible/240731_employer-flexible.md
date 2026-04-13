@@ -11,10 +11,10 @@ categories:
 location: 'Billings, MT'
 status: Built
 collaborators:
-  - name: Collaborative Design Architects
-    role: Architect of Record
   - name: Air Controls Billings
-    role: HVAC
+    role: MEP
+  - name: Formation
+    role: General Contractor
 type: project
 ---
 
