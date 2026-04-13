@@ -8,7 +8,7 @@ description: >-
 date: 2019-09-18T00:00:00.000Z
 categories: []
 link: 'https://www.architectmagazine.com/practice/low-design-office_o'
-featured: true
+featured: false
 type: award
 ---
 
