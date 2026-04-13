@@ -11,7 +11,7 @@ categories: []
 link: 'https://vimeo.com/946612899'
 relatedProjects:
   - 210106_mishpocha-woods
-featured: true
+featured: false
 type: award
 ---
 
