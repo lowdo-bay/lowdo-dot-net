@@ -19,6 +19,8 @@ metadata:
       url: /
     - label: Project Index
       url: /all/
+    - label: About
+      url: /about/
   footer_legal:
     - label: Terms & Conditions
       url: /terms/

@@ -4,180 +4,269 @@ title: About
 permalink: /about/index.html
 ---
 
+<style>
+  .about-section {
+    position: relative;
+    padding-top: 0 !important;
+    margin-bottom: var(--space-7) !important;
+  }
+
+  .about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .about-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .about-header {
+    position: relative;
+    background-color: var(--color-accent-5);
+  }
+
+  .about-header::before {
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--grid-line-thickness));
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    background-color: var(--color-accent-5);
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    z-index: -1;
+  }
+
+  .about-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .about-header-label {
+    padding: var(--space-2);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    align-self: start;
+    color: var(--color-accent-1);
+  }
+
+  .about-header-text {
+    padding: var(--space-2);
+  }
+
+  .about-section .col-3-4--padded {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  .staff-section {
+    position: relative;
+  }
+
+  .staff-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .staff-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  }
+
+  .staff-section-label {
+    padding: var(--space-2);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-1);
+  }
+
+  .staff-section-label + .staff-section {
+    margin-top: 0;
+  }
+
+  .staff-section + .staff-section-label {
+    margin-top: var(--space-7);
+  }
+
+  .staff-row {
+    position: relative;
+    padding-bottom: var(--space-2);
+  }
+
+  .staff-row::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  .staff-row__image {
+    padding: var(--space-2);
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .staff-row__image img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  .staff-row__meta {
+    padding: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .staff-row__name {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .staff-row__role {
+    font-size: var(--font-size-small);
+    color: var(--color-accent-1);
+  }
+
+  .staff-row__year {
+    font-size: var(--font-size-small);
+    color: var(--color-accent-2);
+  }
+
+  .staff-row__name-col {
+    padding: var(--space-2);
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .staff-row__description {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    line-height: 1.6;
+  }
+</style>
+
 <article>
 
-  <header class="pb--4">
+  <header class="about-header mb--4">
+    <div class="grid grid--description">
 
-    <div class="grid grid--intro">
-
-      <div class="grid__item--span-4 mw--readable markdown">{{ settings.metadata.site_description | renderUsingMarkdown | safe }}</div>
+      <div class="col-1 about-header-label">About</div>
+      <div class="col-2"></div>
+      <div class="col-3-4--padded about-header-text markdown">
+        <p>LowDO is formulated around the proposition that high-art borrows from the low. Transformative innovation, in creative fields, most often originates when the creator must overcome limited means and resources to provide meaning in the work. We use this as a guiding principal to deliver high impact design for a broader public. Our goal is to find and finesse an integrative systems approach to building—what we call "low design"—through low tech and low carbon strategies.</p>
+      </div>
 
     </div>
-
   </header>
 
-  <section class="pb--4">
+  <section class="about-section mb--4">
     <div class="grid grid--description">
 
-      {# Single column placeholders - NO PADDING #}
-      <div class="col-1">
-        <div style="background: #E0E2F1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 1<br>No padding
-        </div>
+      <div class="col-1-2" style="padding: var(--space-1); display: flex; align-self: stretch;">
+        <img src="/assets/images/about-todobien.jpg" alt="Todo Bien" style="width: 100%; height: 100%; object-fit: cover; display: block;">
       </div>
 
-      <div class="col-2">
-        <div style="background: #E0E2F1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 2<br>No padding
-        </div>
-      </div>
-
-      <div class="col-3">
-        <div style="background: #E0E2F1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 3<br>No padding
-        </div>
-      </div>
-
-      <div class="col-4">
-        <div style="background: #E0E2F1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 4<br>No padding
-        </div>
+      <div class="col-3-4--padded markdown">
+        <p>As architects who build, we bridge design and construction to deliver comprehensive solutions. Our process supports clients in defining objectives, planning strategically, executing efficiently and creating spaces that are sustainable and purposeful.</p>
+        <p>We aim to build societal equity by lowering barriers to access and empowering communities through inclusive innovation. Collaboration defines our work. We engage with partners in respective communities as active participants, valuing the knowledge of those who operate and maintain spaces over time. This shared intelligence ensures outcomes that remain relevant well beyond project completion.</p>
+        <p>We believe that spaces shape well-being, that humans and ecologies perform best at low stress levels, and that optimizing efficiency with harmony can maximize the power of built environments. We craft high-impact buildings, landscapes and cities with low carbon footprints to bring life into balance for people and place.
+</p>
       </div>
 
     </div>
   </section>
 
-  <section class="pb--4">
-    <div class="grid grid--description">
+  <div class="staff-section-label">Staff</div>
 
-      {# Single column placeholders - WITH PADDING #}
-      <div class="col-1--padded">
-        <div style="background: #D0D2E1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 1<br>With padding
+  <section class="staff-section mb--4">
+
+    {% for person in collections.entries | sort(false, false, "data.date") %}
+      {% if person.data.entryType == "staff" and person.data.active == true %}
+      <div class="staff-row grid grid--description">
+
+        <div class="col-1 staff-row__image">
+          {% if person.data.thumbnail and person.data.thumbnail.src %}
+            <img src="/{{ person.data.thumbnail.src }}" alt="{{ person.data.thumbnail.alt or person.data.title }}" loading="lazy">
+          {% endif %}
         </div>
-      </div>
 
-      <div class="col-2--padded">
-        <div style="background: #D0D2E1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 2<br>With padding
+        <div class="col-2 staff-row__meta">
+          <span class="staff-row__name">{{ person.data.title }}</span>
+          {% if person.data.subtitle %}<span class="staff-row__role">{{ person.data.subtitle }}</span>{% endif %}
+          {% if person.data.date %}<span class="staff-row__year">{{ person.data.date | formatDate("YYYY") }}–</span>{% endif %}
         </div>
-      </div>
 
-      <div class="col-3--padded">
-        <div style="background: #D0D2E1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 3<br>With padding
+        <div class="col-3-4--padded staff-row__description markdown">
+          {{ person.templateContent | safe }}
         </div>
-      </div>
 
-      <div class="col-4--padded">
-        <div style="background: #D0D2E1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 4<br>With padding
-        </div>
       </div>
+      {% endif %}
+    {% endfor %}
 
-    </div>
   </section>
 
-  <section class="pb--4">
-    <div class="grid grid--description">
+  <div class="staff-section-label">Past Collaborators</div>
 
-      {# Two-column spans - NO PADDING #}
-      <div class="col-1-2">
-        <div style="background: #C0C2D1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Columns 1-2<br>No padding
+  <section class="staff-section mb--4">
+
+    {% for person in collections.entries | sortByEndDate %}
+      {% if person.data.entryType == "staff" and person.data.active == false %}
+      <div class="staff-row grid grid--description">
+
+        <div class="col-1--padded staff-row__name-col">
+          <span class="staff-row__name">{{ person.data.title }}</span>
         </div>
-      </div>
 
-      <div class="col-3-4">
-        <div style="background: #C0C2D1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Columns 3-4<br>No padding
+        <div class="col-2 staff-row__meta">
+          {% if person.data.subtitle %}<span class="staff-row__role">{{ person.data.subtitle }}</span>{% endif %}
+          {% if person.data.date %}<span class="staff-row__year">{% if person.data.endDate %}{{ person.data.date | formatDate("YYYY") }}–{{ person.data.endDate }}{% else %}{{ person.data.date | formatDate("YYYY") }}{% endif %}</span>{% endif %}
         </div>
-      </div>
 
-    </div>
-  </section>
-
-  <section class="pb--4">
-    <div class="grid grid--description">
-
-      {# Two-column spans - WITH PADDING #}
-      <div class="col-1-2--padded">
-        <div style="background: #B0B2C1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Columns 1-2<br>With padding
+        <div class="col-3-4--padded staff-row__description markdown">
+          {{ person.templateContent | safe }}
         </div>
+
       </div>
+      {% endif %}
+    {% endfor %}
 
-      <div class="col-3-4--padded">
-        <div style="background: #B0B2C1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Columns 3-4<br>With padding
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="pb--4">
-    <div class="grid grid--description">
-
-      {# Three-column span - NO PADDING #}
-      <div class="col-1-2-3">
-        <div style="background: #A0A2B1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Columns 1-2-3<br>No padding
-        </div>
-      </div>
-
-      <div class="col-4">
-        <div style="background: #E0E2F1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 4<br>No padding
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="pb--4">
-    <div class="grid grid--description">
-
-      {# Three-column span - WITH PADDING #}
-      <div class="col-1-2-3--padded">
-        <div style="background: #9092A1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Columns 1-2-3<br>With padding
-        </div>
-      </div>
-
-      <div class="col-4--padded">
-        <div style="background: #D0D2E1; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Column 4<br>With padding
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="pb--4">
-    <div class="grid grid--description">
-
-      {# Full width - NO PADDING #}
-      <div class="col-1-2-3-4">
-        <div style="background: #808291; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Columns 1-2-3-4<br>Full width<br>No padding
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="pb--4">
-    <div class="grid grid--description">
-
-      {# Full width - WITH PADDING #}
-      <div class="col-1-2-3-4--padded">
-        <div style="background: #707281; height: 8rem; display: flex; align-items: center; justify-content: center; text-align: center;">
-          Columns 1-2-3-4<br>Full width<br>With padding
-        </div>
-      </div>
-
-    </div>
   </section>
 
 </article>

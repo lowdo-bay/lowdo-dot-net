@@ -21,7 +21,7 @@ An architecture and design studio portfolio website based in Austin, Texas.
 
 1. **Create a feature branch** — Never commit directly to main. Use `feature/description` or `fix/description` naming.
 
-2. **Start the dev server** — After switching to your branch, run `npm start` and keep it running while you work.
+2. **Start the dev server** — After switching to your branch, run `npm run serve` and keep it running while you work.
 
 3. **Make changes** — Edit files as needed. The dev server auto-reloads.
 
@@ -82,33 +82,6 @@ An architecture and design studio portfolio website based in Austin, Texas.
 - [x] Netlify hosting and deployment
 - [x] Automatic CSP headers
 - [x] Custom 404 page
-
----
-
-## Wishlist / Future Features
-
-### High Priority
-- [x] Data filtering/categories (Comprehensive Index with checkbox filters)
-- [ ] Image lightbox/gallery viewer
-
-### Medium Priority
-- [ ] Project search functionality
-- [ ] Related projects suggestions
-- [ ] Print stylesheet for project pages
-
-### Low Priority / Nice to Have
-- [x] Blog/news section (via Comprehensive Index entry types)
-- [ ] Project timeline/archive view
-- [ ] Multi-language support (i18n)
-- [ ] Client testimonials section
-- [ ] Team/people page
-
-### Technical Improvements
-- [ ] Implement service worker for offline support
-- [ ] Add structured data (JSON-LD) for SEO
-- [ ] Improve Lighthouse scores to 100 across all metrics
-- [ ] Add visual regression testing
-- [ ] Implement critical CSS extraction per-page
 
 ---
 
@@ -219,6 +192,24 @@ position: 2
 ---
 ```
 
+**Staff** (`entries/other/`, `type: staff`)
+- Appear in the staff table on the About page
+- `active: true/false` controls whether the person appears on the About page
+- Markdown body is used as the bio
+
+```yaml
+---
+draft: false
+type: staff
+title: "Full Name"
+subtitle: "Role / Title"
+date: 2024-01-15    # Start date — displayed as year on About page
+active: true        # true = shown on About page, false = hidden
+---
+
+Bio text here.
+```
+
 ### Category and Type Management
 
 Categories and types can be renamed in bulk from the admin panel: `/admin/` → **Manage Labels**. This renames the label across all entries in one operation without needing to edit files individually.
@@ -260,7 +251,7 @@ LowDO has been selected for the Architectural League's Emerging Voices program..
 ## Development Commands
 
 ```bash
-npm start              # Start development server
+npm run serve          # Start development server
 npm run build          # Production build
 netlify dev            # Full Netlify dev environment
 ```
