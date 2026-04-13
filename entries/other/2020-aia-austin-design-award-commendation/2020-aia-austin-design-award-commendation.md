@@ -1,6 +1,6 @@
 ---
 draft: false
-title: 'Design Award Commendation: Social Impact'
+title: 'AIA Austin Design Award: Dakota Mountain Residence'
 subtitle: AIA Austin
 description: >-
   LowDO received a Commendation in the Sustainability category at the AIA Austin
