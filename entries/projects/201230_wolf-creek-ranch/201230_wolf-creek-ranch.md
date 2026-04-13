@@ -17,34 +17,27 @@ collaborators:
     name: Timbertown
   - role: Structural
     name: Persyn Engineering
-  - role: Photography
-    name: Daisuke Hirabayashi
-  - name: All Star Land Survey
+  - name: All Star Land Surveying
     role: Surveys
   - name: Porter Septic
-    role: Septic and Excavation
-  - name: Harvested Rain Solutions
+    role: Septic 
+  - name: Cqure Water
     role: Rainwater Collection
   - name: Lago Plumbing
     role: Plumbing
-  - name: SCC Industrial
-    role: Foundation Site Prep
   - name: Lewis Brothers Concrete
     role: Foundation
   - name: Longhorn Welding
     role: Steel Fabrication and Erection
-  - name: Sergio Framer
-    role: Framing
   - name: BioTex Foam
     role: Insulation
   - name: Nic Perez
-    role: Roofing and Gutters
-  - name: Francisco Perez
+    role: Roofing and Metal Siding
+  - name: Shalom Home Remodeling
     role: Tile
   - name: Quick Connect Electrical
     role: Electrical
   - name: RC Drywall
-    role: Drywall
   - name: Austin's Green Air
     role: HVAC
   - name: Jbar
