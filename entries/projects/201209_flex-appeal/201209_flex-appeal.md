@@ -13,9 +13,9 @@ location: 'Los Angeles, CA'
 status: Honorable Mention
 collaborators:
   - name: Kounkuey Design Initiative
-    role: Design Collaborator
+    role: Landscape and Urban Design
   - name: Positive Energy
-    role: Design Collaborator
+    role: MEP
 type: project
 ---
 
