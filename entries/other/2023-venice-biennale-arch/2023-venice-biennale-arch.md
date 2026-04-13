@@ -12,4 +12,3 @@ relatedProjects:
 type: exhibition
 showInAwardsTable: true
 ---
-

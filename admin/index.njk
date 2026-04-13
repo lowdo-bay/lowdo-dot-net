@@ -247,6 +247,16 @@ eleventyExcludeFromCollections: true
           </div>
         </div>
 
+        {# Section: Homepage (non-project-only) #}
+        <div class="ep-section non-project-only">
+          <div class="ep-section__label">Homepage</div>
+          <div class="field-group">
+            <label class="field-label--inline">
+              <input type="checkbox" id="ep-show-in-awards-table"> Show in Awards table on homepage
+            </label>
+          </div>
+        </div>
+
         {# Section: Body #}
         <div class="ep-section">
           <div class="ep-section__label ep-section__label--row">
@@ -420,6 +430,7 @@ eleventyExcludeFromCollections: true
         draft: {{ (entry.data.draft or false) | dump | safe }},
         featured: {{ (entry.data.featured or false) | dump | safe }},
         featuredPosition: {{ (entry.data.featuredPosition or null) | dump | safe }},
+        showInAwardsTable: {{ (entry.data.showInAwardsTable or false) | dump | safe }},
         collaborators: {{ (entry.data.collaborators or []) | dump | safe }},
         relatedProjects: {{ (entry.data.relatedProjects or []) | dump | safe }},
         body: {{ (entry.rawInput | markdownBody or "") | dump | safe }},

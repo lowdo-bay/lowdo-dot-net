@@ -1,14 +1,13 @@
 ---
 draft: false
-title: Exhibitor
-subtitle: Venice Biennale
-description: Brief description of the award or recognition
-date: 2023-01-01
+title: 'Venice Architecture Biennale: Nyame Dua'
+subtitle: La Biennale di Venezia
+description: 'Exhibitor in the 19th International Architecture Exhibition, “The Perimeter of Architecture: Amid the Elements.”'
+date: 2025-05-20
 categories: []
-link: 'https://example.com/award-announcement'
-relatedProjects: 
+relatedProjects:
   - 250510_venice-biennale
-featured: true
+showInAwardsTable: true
 type: award
 ---
 

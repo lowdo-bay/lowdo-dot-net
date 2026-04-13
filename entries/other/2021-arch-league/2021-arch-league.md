@@ -10,7 +10,7 @@ description: >-
 date: 2021-01-15T00:00:00.000Z
 categories: []
 link: 'https://archleague.org/low-design-office/'
-featured: true
+showInAwardsTable: true
 type: award
 ---
 

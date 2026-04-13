@@ -9,6 +9,7 @@ date: 2024-06-01T00:00:00.000Z
 categories: []
 link: >-
   https://www.waltonfamilyfoundation.org/grants/northwest-arkansas-design-excellence
+showInAwardsTable: true
 type: award
 ---
 
