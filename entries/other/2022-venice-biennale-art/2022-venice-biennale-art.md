@@ -7,6 +7,6 @@ description: >-
   ten Fufuzela installations
 date: 2022-04-23T00:00:00.000Z
 categories: []
-type: exhibition
+type: award
 ---
 
