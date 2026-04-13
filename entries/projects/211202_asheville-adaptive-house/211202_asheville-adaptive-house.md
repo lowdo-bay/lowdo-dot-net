@@ -20,4 +20,4 @@ collaborators:
 type: project
 ---
 
-Residence that can seamlessly operate as a single-family or dual-family home.
+Triplex that can seamlessly convert to a duplex or single family through simple programmatic arrangements on a steep sloping site.
