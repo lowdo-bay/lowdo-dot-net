@@ -7,7 +7,7 @@ date: 2025-05-20
 categories: []
 relatedProjects:
   - 250510_venice-biennale
-featured: true
+showInAwardsTable: true
 type: award
 ---
 

@@ -971,7 +971,7 @@ permalink: "/index.html"
 
       {# Data rows #}
       {% for entry in collections.entries %}
-        {% if entry.data.entryType === "award" and entry.data.featured === true and entry.data.draft !== true %}
+        {% if entry.data.showInAwardsTable === true and entry.data.draft !== true %}
           <div class="awards-table-row">
             <div class="awards-col-cell">{{ entry.data.title }}</div>
             <div class="awards-col-cell">{{ entry.data.subtitle }}</div>
