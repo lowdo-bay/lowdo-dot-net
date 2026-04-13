@@ -1,6 +1,6 @@
 ---
 draft: false
-title: AIA Austin Award: Mishpocha Woods Compound
+title: 'AIA Austin Award: Mishpocha Woods Compound'
 subtitle: AIA Austin
 description: >-
   LowDO recieved the program’s highest honor, given to projects that demonstrate
