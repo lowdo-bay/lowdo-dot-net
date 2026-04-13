@@ -1,12 +1,10 @@
 ---
 draft: false
-title: Selected Exhibitor
-subtitle: Venice Biennale
-description: 
-date: 2025-05-10
-categories:
-  - 
-link: 'https://example.com/award-announcement'
+title: 'Venice Architecture Biennale: Nyame Dua'
+subtitle: La Biennale di Venezia
+description: Exhibitor in the 19th International Architecture Exhibition, “The Perimeter of Architecture: Amid the Elements.”
+date: 2025-05-20
+categories: []
 relatedProjects:
   - 250510_venice-biennale
 featured: true
