@@ -2,7 +2,7 @@
 draft: false
 featured: false
 title: Public School
-description: Harvard Graduate School of Design Thesis
+description: Rethinking the Contemporary Urban School
 date: 2009-05-31T00:00:00.000Z
 year: 2009
 categories:
