@@ -21,12 +21,10 @@ collaborators:
     role: Photography
   - name: American Trees
     role: Site Work
-  - name: Arborworks Tree Care
-    role: Site Work
-  - name: Mario Alcocer
+  - name: Alcocer Construction
     role: Foundation
   - name: MG Drilling
-    role: Foundation
+    role: Pier Drilling
   - name: David Allison Electric
     role: Electrical
   - name: Dennis Steel
@@ -36,11 +34,9 @@ collaborators:
   - name: P&P Plumbing
     role: Plumbing
   - name: Nick Perez
-    role: Roofing
+    role: Roofing and Metal Siding
   - name: Centex Mechanical
     role: HVAC
-  - name: Tex Tar Waterproofing
-    role: Waterproofing
 type: project
 ---
 
