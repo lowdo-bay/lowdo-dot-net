@@ -98,6 +98,7 @@ function applyChangesToFile(fileContent, change) {
   if (change.position !== undefined)          d.position = change.position !== '' ? Number(change.position) : null;
   if (change.featured !== undefined)          d.featured = change.featured;
   if (change.featuredPosition !== undefined)  d.featuredPosition = change.featuredPosition ? Number(change.featuredPosition) : null;
+  if (change.showInAwardsTable !== undefined) d.showInAwardsTable = change.showInAwardsTable;
   if (change.collaborators !== undefined)     d.collaborators = change.collaborators;
   if (change.relatedProjects !== undefined)   d.relatedProjects = change.relatedProjects;
 
@@ -128,6 +129,7 @@ function buildNewEntryContent(change) {
   if (change.status)        d.status = change.status;
   if (change.featured)      d.featured = change.featured;
   if (change.featuredPosition) d.featuredPosition = Number(change.featuredPosition);
+  if (change.showInAwardsTable) d.showInAwardsTable = change.showInAwardsTable;
   if (change.collaborators && change.collaborators.length) d.collaborators = change.collaborators;
   if (change.relatedProjects && change.relatedProjects.length) d.relatedProjects = change.relatedProjects;
 

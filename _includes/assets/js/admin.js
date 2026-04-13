@@ -40,6 +40,7 @@
       status: e.status,
       featured: e.featured,
       featuredPosition: e.featuredPosition,
+      showInAwardsTable: e.showInAwardsTable,
       collaborators: JSON.stringify(e.collaborators || []),
       relatedProjects: JSON.stringify(e.relatedProjects || []),
       body: e.body
@@ -110,6 +111,7 @@
   var epFeatured = document.getElementById('ep-featured');
   var epFeaturedPositionGroup = document.getElementById('ep-featured-position-group');
   var epFeaturedPosition = document.getElementById('ep-featured-position');
+  var epShowInAwardsTable = document.getElementById('ep-show-in-awards-table');
   var epCollaboratorsList = document.getElementById('ep-collaborators-list');
   var epAddCollaborator = document.getElementById('ep-add-collaborator');
   var epRelatedProjectsList = document.getElementById('ep-related-projects-list');
@@ -523,6 +525,7 @@
       change.status = e.status;
       change.featured = e.featured;
       change.featuredPosition = e.featuredPosition;
+      change.showInAwardsTable = e.showInAwardsTable;
       change.collaborators = e.collaborators;
       change.relatedProjects = e.relatedProjects;
       change.body = e.body;
@@ -730,6 +733,7 @@
       draft: true,
       featured: false,
       featuredPosition: null,
+      showInAwardsTable: false,
       collaborators: [],
       relatedProjects: [],
       body: '',
@@ -924,6 +928,7 @@
     epFeatured.checked = !!entry.featured;
     epFeaturedPositionGroup.hidden = !entry.featured;
     epFeaturedPosition.value = entry.featuredPosition != null ? entry.featuredPosition : '';
+    epShowInAwardsTable.checked = !!entry.showInAwardsTable;
     epBody.value = entry.body || '';
     epBodyPreview.hidden = true;
     epBody.hidden = false;
@@ -981,6 +986,7 @@
     entry.status = epStatus.value.trim();
     entry.featured = epFeatured.checked;
     entry.featuredPosition = epFeatured.checked && epFeaturedPosition.value !== '' ? Number(epFeaturedPosition.value) : null;
+    entry.showInAwardsTable = epShowInAwardsTable.checked;
     entry.body = epBody.value;
 
     // Update slug for new entries
@@ -1682,6 +1688,7 @@
       e.status = orig.status;
       e.featured = orig.featured;
       e.featuredPosition = orig.featuredPosition;
+      e.showInAwardsTable = orig.showInAwardsTable;
       e.collaborators = JSON.parse(orig.collaborators);
       e.relatedProjects = JSON.parse(orig.relatedProjects);
       e.body = orig.body;

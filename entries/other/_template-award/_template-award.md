@@ -9,7 +9,7 @@ categories:
 link: 'https://example.com/award-announcement'
 relatedProjects:
   - ''
-featured: false
+showInAwardsTable: false
 type: award
 ---
 

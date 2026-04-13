@@ -8,7 +8,7 @@ description: >-
 date: 2021-10-01T00:00:00.000Z
 categories: []
 link: 'https://aninteriormag.com/an-interior-top-50-architects-2021/'
-featured: true
+showInAwardsTable: true
 type: award
 ---
 

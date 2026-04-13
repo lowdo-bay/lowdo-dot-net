@@ -243,6 +243,8 @@ status: "Built"
 
 **What it does:** Marks a project as featured so it appears in the Featured Projects section on the homepage.
 
+**Applies to:** Projects only (`type: project`). For awards, use `showInAwardsTable` instead.
+
 **Format:** `true` or `false` (no quotes)
 
 **Example:**
@@ -386,6 +388,24 @@ link: "https://example.com"
 
 The award will appear in the "Awards & Recognition" section of both `/project/wolf-creek-ranch/` and `/project/casa-marianella/`.
 
+### showInAwardsTable
+
+**What it does:** Shows this entry in the Awards & Recognition table on the homepage.
+
+**Applies to:** Non-project entries only (typically `type: award`). This field is ignored on projects — use `featured` for projects instead.
+
+**Format:** `true` or `false` (no quotes)
+
+**Example:**
+```yaml
+showInAwardsTable: true
+```
+
+**Tips:**
+- `showInAwardsTable: true` — entry appears in the Awards table on the homepage (title, organization, year)
+- `showInAwardsTable: false` (default) — entry is not shown in the homepage Awards table
+- This field works regardless of the entry's `type` — if you rename `type: award` to something else, the entry will still appear in the table
+
 ---
 
 ## Field Type Guide
@@ -487,6 +507,7 @@ categories:
   - PRESS
 link: "https://archleague.org/article/emerging-voices/"
 description: "Selected for prestigious Emerging Voices program"
+showInAwardsTable: true
 ---
 ```
 
