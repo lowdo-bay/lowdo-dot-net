@@ -185,6 +185,28 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
     const allEntries = collectionApi.getFilteredByGlob("entries/**/*.md")
       .filter(entry => entry.data.draft !== true);
 
+    const parseDate = (dateObj) => {
+      // For sorting, convert to a comparable format without timezone conversion
+      // Extract YYYY-MM-DD portion and convert to a number for comparison
+      if (typeof dateObj === 'string') {
+        const dateMatch = dateObj.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (dateMatch) {
+          const [, year, month, day] = dateMatch;
+          return parseInt(`${year}${month}${day}`, 10);
+        }
+        // Year-only string
+        if (/^\d{4}$/.test(dateObj)) {
+          return parseInt(`${dateObj}0101`, 10);
+        }
+      }
+      // Year-only number
+      if (typeof dateObj === 'number' && dateObj >= 1000 && dateObj <= 9999) {
+        return parseInt(`${dateObj}0101`, 10);
+      }
+      // Fallback: use timestamp for sorting
+      return new Date(dateObj).getTime();
+    };
+
     return allEntries.sort((a, b) => {
       // Primary sort: position (lower first); null/undefined treated as default 999
       const posA = a.data.position ?? 999;
@@ -193,7 +215,14 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
         return posA - posB;
       }
       // Secondary sort: date (newer first)
-      return new Date(b.data.date) - new Date(a.data.date);
+      // For inactive staff, use endDate if available
+      const dateA = (a.data.entryType === 'staff' && a.data.active === false && a.data.endDate)
+        ? parseDate(a.data.endDate)
+        : parseDate(a.data.date);
+      const dateB = (b.data.entryType === 'staff' && b.data.active === false && b.data.endDate)
+        ? parseDate(b.data.endDate)
+        : parseDate(b.data.date);
+      return dateB - dateA;
     });
   });
 
@@ -352,7 +381,55 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   });
 
   // Date formatting for index (MMDD YYYY format)
+  // Parse dates directly from frontmatter to avoid timezone issues
   eleventyConfig.addFilter("formatDate", (dateObj, format) => {
+    // Handle ISO date strings (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss.sssZ) directly
+    if (typeof dateObj === 'string') {
+      // Extract just the date portion (YYYY-MM-DD)
+      const dateMatch = dateObj.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (dateMatch) {
+        const [, year, month, day] = dateMatch;
+        if (format === "YYYY") {
+          return year;
+        }
+        if (format === "MMDD") {
+          return `${month}${day}`;
+        }
+      }
+      // Handle year-only strings (e.g., "2025")
+      if (/^\d{4}$/.test(dateObj)) {
+        if (format === "YYYY") {
+          return dateObj;
+        }
+        if (format === "MMDD") {
+          return "0101";
+        }
+      }
+    }
+
+    // Handle year-only numbers (e.g., 2025, 2023)
+    if (typeof dateObj === 'number' && dateObj >= 1000 && dateObj <= 9999) {
+      if (format === "YYYY") {
+        return dateObj.toString();
+      }
+      if (format === "MMDD") {
+        return "0101";
+      }
+    }
+
+    // Handle JavaScript Date objects - use UTC methods to avoid timezone shifts
+    if (dateObj instanceof Date) {
+      if (format === "MMDD") {
+        const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getUTCDate()).padStart(2, '0');
+        return `${month}${day}`;
+      }
+      if (format === "YYYY") {
+        return dateObj.getUTCFullYear().toString();
+      }
+    }
+
+    // Fallback for other date formats (legacy support)
     const date = new Date(dateObj);
     if (format === "MMDD") {
       const month = String(date.getMonth() + 1).padStart(2, '0');

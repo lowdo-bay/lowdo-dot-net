@@ -1377,6 +1377,18 @@ body::after {
 	line-height: 1.4;
 }
 
+.index-row__subtitle-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-1);
+	align-items: baseline;
+}
+
+.index-row__date-range {
+	font-size: var(--font-size-small);
+	color: var(--color-accent-2);
+}
+
 /* Staff entry: fixed small portrait image */
 [data-entry-type="staff"] .index-col--image {
 	display: flex;
@@ -1396,6 +1408,11 @@ body::after {
 .index-row-staff-wrapper {
 	cursor: pointer;
 	position: relative;
+}
+
+/* Inactive staff: no expand/collapse interaction */
+[data-entry-type="staff"][data-active="false"] {
+	cursor: default;
 }
 
 /* Suppress ::before and ::after on the inner .index-row — wrapper owns them */
