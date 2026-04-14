@@ -970,10 +970,8 @@ body {
 }
 
 /* Type selector in panel */
-.ep-type-display {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.ep-type-dropdown .admin-dropdown__drawer {
+  min-width: 100%;
 }
 
 /* Body preview */

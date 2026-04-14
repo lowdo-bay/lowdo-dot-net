@@ -167,9 +167,14 @@ eleventyExcludeFromCollections: true
           </div>
           <div class="field-group">
             <label>Type</label>
-            <div class="ep-type-display">
-              <span id="ep-type-value" class="cat-tag type-tag"></span>
-              <button id="ep-type-change" class="btn btn--small">Change</button>
+            <div class="admin-dropdown ep-type-dropdown" id="ep-type-dropdown">
+              <button class="admin-dropdown__button" aria-expanded="false" type="button">
+                <span class="admin-dropdown__label" id="ep-type-label">—</span>
+                <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                  <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                </svg>
+              </button>
+              <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-type-drawer"></div>
             </div>
           </div>
           <div class="field-group">

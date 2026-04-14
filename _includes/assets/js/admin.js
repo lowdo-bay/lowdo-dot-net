@@ -120,8 +120,9 @@
   var epBody = document.getElementById('ep-body');
   var epSlug = document.getElementById('ep-slug');
   var epDraft = document.getElementById('ep-draft');
-  var epTypeValue = document.getElementById('ep-type-value');
-  var epTypeChange = document.getElementById('ep-type-change');
+  var epTypeDropdown = document.getElementById('ep-type-dropdown');
+  var epTypeLabel = document.getElementById('ep-type-label');
+  var epTypeDrawer = document.getElementById('ep-type-drawer');
   var epCategoriesTags = document.getElementById('ep-categories-tags');
   var epCategoryInput = document.getElementById('ep-category-input');
   var epCategorySuggestions = document.getElementById('ep-category-suggestions');
@@ -844,7 +845,8 @@
       entry.entryType = typeName;
       // Sync panel if open
       if (!editPanel.hidden) {
-        epTypeValue.textContent = typeName.toUpperCase();
+        epTypeLabel.textContent = typeName.toUpperCase();
+        renderEpTypeDrawer(entry);
         var proj = isProject(typeName);
         document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
         document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
@@ -894,11 +896,70 @@
     input.focus();
   }
 
-  // ---- Type change button in panel ----
-  epTypeChange.addEventListener('click', function(e) {
-    e.stopPropagation();
-    if (activeEditPath) showTypeDropdown(epTypeChange, activeEditPath);
-  });
+  // ---- Type dropdown in edit panel ----
+  function renderEpTypeDrawer(entry) {
+    epTypeDrawer.innerHTML = '';
+    knownTypes.forEach(function(typeName) {
+      var item = document.createElement('button');
+      item.className = 'admin-dropdown__item' + (typeName === entry.entryType ? ' is-selected' : '');
+      item.type = 'button';
+      item.textContent = typeName.toUpperCase();
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        epTypeDropdown.classList.remove('is-open');
+        epTypeDropdown.querySelector('.admin-dropdown__button').setAttribute('aria-expanded', 'false');
+        epTypeDrawer.setAttribute('aria-hidden', 'true');
+        applyTypeFromPanel(typeName, entry);
+      });
+      epTypeDrawer.appendChild(item);
+    });
+  }
+
+  function applyTypeFromPanel(typeName, entry) {
+    typeName = typeName.toLowerCase().trim();
+    if (!typeName || typeName === entry.entryType) return;
+    if (knownTypes.indexOf(typeName) === -1) knownTypes.push(typeName);
+    if (entry._isNew) {
+      var newFolder = typeFolder(typeName);
+      var slug = entry.slug;
+      var newPath = 'entries/' + newFolder + '/' + slug + '/' + slug + '.md';
+      selectedPaths.delete(entry.filePath);
+      if (activeEditPath === entry.filePath) activeEditPath = newPath;
+      entry.filePath = newPath;
+    }
+    entry.entryType = typeName;
+    epTypeLabel.textContent = typeName.toUpperCase();
+    renderEpTypeDrawer(entry);
+    var proj = isProject(typeName);
+    document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
+    document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+    updateChanges();
+    renderTable();
+  }
+
+  (function() {
+    var btn = epTypeDropdown.querySelector('.admin-dropdown__button');
+    function openEpDropdown() {
+      epTypeDropdown.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      epTypeDrawer.setAttribute('aria-hidden', 'false');
+    }
+    function closeEpDropdown() {
+      epTypeDropdown.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      epTypeDrawer.setAttribute('aria-hidden', 'true');
+    }
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      epTypeDropdown.classList.contains('is-open') ? closeEpDropdown() : openEpDropdown();
+    });
+    document.addEventListener('click', function(e) {
+      if (!epTypeDropdown.contains(e.target)) closeEpDropdown();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeEpDropdown();
+    });
+  })();
 
   // ---- Edit panel ----
   function openEditPanel(filePath) {
@@ -912,7 +973,8 @@
     epSlug.value = entry.slug || '';
     epSlug.readOnly = !entry._isNew;
     epDraft.checked = !!entry.draft;
-    epTypeValue.textContent = (entry.entryType || '').toUpperCase();
+    epTypeLabel.textContent = (entry.entryType || '—').toUpperCase();
+    renderEpTypeDrawer(entry);
     epTitle.value = entry.title || '';
     epSubtitle.value = entry.subtitle || '';
     epDescription.value = entry.description || '';
