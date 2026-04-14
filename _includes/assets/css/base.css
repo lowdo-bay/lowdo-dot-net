@@ -28,7 +28,7 @@
 /* Body */
 
 html {
-	overflow-x: clip;
+	overflow-x: hidden;
 }
 
 body {
