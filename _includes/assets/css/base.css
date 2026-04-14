@@ -953,9 +953,9 @@ header.p--content::before {
 header.p--content::after {
 	content: '';
 	position: absolute;
-	left: -20%;
-	right: 0%;
-	width: 200%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100vw;
 	bottom: 0;
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
 	z-index: 998;
