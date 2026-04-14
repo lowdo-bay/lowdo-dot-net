@@ -305,7 +305,7 @@ permalink: /about/index.html
 
         <div class="col-2 staff-row__meta">
           {% if person.data.subtitle %}<span class="staff-row__role">{{ person.data.subtitle }}</span>{% endif %}
-          {% if person.data.date %}<span class="staff-row__year">{% if person.data.endDate %}{{ person.data.date | formatDate("YYYY") }}–{{ person.data.endDate }}{% else %}{{ person.data.date | formatDate("YYYY") }}{% endif %}</span>{% endif %}
+          {% if person.data.date %}<span class="staff-row__year">{% if person.data.endDate %}{{ person.data.date | formatDate("YYYY") }}–{{ person.data.endDate | formatDate("YYYY") }}{% else %}{{ person.data.date | formatDate("YYYY") }}{% endif %}</span>{% endif %}
         </div>
 
         <div class="col-3-4--padded staff-row__description markdown">
