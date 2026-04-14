@@ -47,3 +47,23 @@
   # optional, deploy the lighthouse report to a path under your site
   [plugins.inputs.audits]
     output_path = "reports/lighthouse/index.html"
+
+[[redirects]]
+  from = "/work"
+  to = "/all"
+  status = 301
+ 
+[[redirects]]
+  from = "/news"
+  to = "/all"
+  status = 301
+ 
+[[redirects]]
+  from = "/residential"
+  to = "/all"
+  status = 301
+ 
+[[redirects]]
+  from = "/commercial"
+  to = "/all"
+  status = 301
