@@ -67,3 +67,8 @@
   from = "/work/commercial"
   to = "/all"
   status = 301
+
+  [[redirects]]
+  from = "/contact"
+  to = "/"
+  status = 301
