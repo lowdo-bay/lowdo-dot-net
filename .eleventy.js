@@ -203,6 +203,13 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
       if (typeof dateObj === 'number' && dateObj >= 1000 && dateObj <= 9999) {
         return parseInt(`${dateObj}0101`, 10);
       }
+      // Date object — extract UTC components to avoid timezone shift
+      if (dateObj instanceof Date) {
+        const year = dateObj.getUTCFullYear();
+        const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getUTCDate()).padStart(2, '0');
+        return parseInt(`${year}${month}${day}`, 10);
+      }
       // Fallback: use timestamp for sorting
       return new Date(dateObj).getTime();
     };
