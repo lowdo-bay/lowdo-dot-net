@@ -27,10 +27,6 @@
 
 /* Body */
 
-html {
-	overflow-x: hidden;
-}
-
 body {
 	font-family: var(--font);
 	font-size: calc(var(--font-size-base) * var(--font-scale) / 100);
@@ -935,7 +931,7 @@ header.p--content {
 	position: sticky;
 	top: 0;
 	z-index: 999;
-	width: 100vw;
+	width: 100%;
 	left: 0;
 	right: 0;
 	margin-left: auto;
@@ -957,9 +953,9 @@ header.p--content::before {
 header.p--content::after {
 	content: '';
 	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 100vw;
+	left: 0;
+	right: 0;
+	width: 100%;
 	bottom: 0;
 	border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
 	z-index: 998;
