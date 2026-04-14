@@ -35,7 +35,7 @@
 					{% if settings.metadata.footer_legal %}
 						<nav class="footer__nav" aria-label="Legal">
 							{% for item in settings.metadata.footer_legal %}
-								<a href="{{ item.url | url }}" class="footer__nav-link">{{ item.label }}</a>
+								<span class="footer__nav-link" style="color: var(--color-accent-primary) !important;">{{ item.label }}</span>
 							{% endfor %}
 						</nav>
 					{% endif %}

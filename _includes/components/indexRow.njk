@@ -24,7 +24,11 @@
       <div class="index-row__subtitle-wrapper">
         {% if entry.data.subtitle %}<span class="index-row__subtitle">{{ entry.data.subtitle }}</span>{% endif %}
         {% if entry.data.entryType == 'staff' and entry.data.active == false and entry.data.date %}
-          <span class="index-row__date-range">{{ entry.data.date | formatDate("YYYY") }}–{{ entry.data.endDate | formatDate("YYYY") }}</span>
+          {% if entry.data.endDate %}
+            <span class="index-row__date-range">{{ entry.data.date | formatDate("YYYY") }}–{{ entry.data.endDate | formatDate("YYYY") }}</span>
+          {% else %}
+            <span class="index-row__date-range">{{ entry.data.date | formatDate("YYYY") }}</span>
+          {% endif %}
         {% endif %}
       </div>
     {% endif %}

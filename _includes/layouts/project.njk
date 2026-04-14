@@ -909,6 +909,12 @@ section: project
     object-fit: contain;
   }
 
+  /* Header image thumb — clickable, opens modal */
+  .header-image-thumb {
+    cursor: pointer;
+    display: block;
+  }
+
   /* White background for PNG images with transparent backgrounds */
   .photo-thumb[data-ispng="true"],
   .drawing-thumb[data-ispng="true"] {
@@ -1090,13 +1096,18 @@ section: project
             "outputQualityWebp": settings.images.webp.quality,
             "outputQualityAvif": settings.images.avif.quality
           } %}
-          {% if headerImage.src | endsWith('.gif') %}
-            <picture>
-              <img src="/{{ headerImage.src }}" alt="{{ title }}" loading="eager" decoding="async" class="header-image">
-            </picture>
-          {% else %}
-            {% generateImage params %}
-          {% endif %}
+          <div class="photo-thumb header-image-thumb"
+            data-caption="{{ headerImage.caption or title }}"
+            data-fullsrc="{% if not (headerImage.src | endsWith('.gif')) %}{% getImageSrc { src: headerImage.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}"
+            data-ispng="{{ 'true' if headerImage.src | endsWith('.png') else '' }}">
+            {% if headerImage.src | endsWith('.gif') %}
+              <picture>
+                <img src="/{{ headerImage.src }}" alt="{{ title }}" loading="eager" decoding="async" class="header-image">
+              </picture>
+            {% else %}
+              {% generateImage params %}
+            {% endif %}
+          </div>
         </div>
       {% endif %}
 

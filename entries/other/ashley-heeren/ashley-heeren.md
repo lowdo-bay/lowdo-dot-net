@@ -8,6 +8,5 @@ categories: []
 link: ''
 type: staff
 active: false
+description: "Master of Architecture, Harvard University."
 ---
-
-Master of Architecture, Harvard University.

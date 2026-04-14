@@ -7,6 +7,5 @@ categories: []
 link: ''
 type: staff
 active: false
+description: "Master of Architecture, University of Virginia."
 ---
-
-Master of Architecture, University of Virginia.
