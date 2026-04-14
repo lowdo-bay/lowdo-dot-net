@@ -59,11 +59,11 @@
   status = 301
  
 [[redirects]]
-  from = "/residential"
+  from = "/work/residential"
   to = "/all"
   status = 301
  
 [[redirects]]
-  from = "/commercial"
+  from = "/work/commercial"
   to = "/all"
   status = 301
