@@ -505,6 +505,22 @@ permalink: "/index.html"
       flex: none;
       width: 100%;
     }
+
+    .awards-table-row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .awards-table-row > :nth-child(3) {
+      display: none;
+    }
+
+    .awards-col-year-inline {
+      display: inline;
+      color: var(--color-text-secondary, currentColor);
+      opacity: 0.6;
+      margin-left: 0.25em;
+      font-size: 0.9em;
+    }
   }
 
   .awards-col-header {
@@ -517,6 +533,12 @@ permalink: "/index.html"
   .awards-col-cell {
     font-size: var(--font-size-base);
     padding: var(--space-2);
+  }
+
+  @media (min-width: 840px) {
+    .awards-col-year-inline {
+      display: none;
+    }
   }
 
   /* Featured Projects section */
@@ -988,7 +1010,10 @@ permalink: "/index.html"
       {% for entry in collections.entries %}
         {% if entry.data.showInAwardsTable === true and entry.data.draft !== true %}
           <div class="awards-table-row">
-            <div class="awards-col-cell">{{ entry.data.title }}</div>
+            <div class="awards-col-cell">
+              {{ entry.data.title }}
+              <span class="awards-col-year-inline">{{ entry.data.date | dateFullYear }}</span>
+            </div>
             <div class="awards-col-cell">{{ entry.data.subtitle }}</div>
             <div class="awards-col-cell">{{ entry.data.date | dateFullYear }}</div>
           </div>
