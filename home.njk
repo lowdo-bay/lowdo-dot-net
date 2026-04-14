@@ -4,6 +4,11 @@ section: home
 permalink: "/index.html"
 ---
 <style>
+  .img-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
   /* Reuse project-header styles for homepage header */
   .project-header {
     border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
@@ -745,6 +750,7 @@ permalink: "/index.html"
 
       {# Left: Header Image #}
       <div class="grid__item--span-2-left">
+        <a href="/project/120710_dakota-mountain/" class="img-link" style="display:block;width:100%;height:100%;">
         {% set outputFormats = [] %}
         {% for format, i in settings.images %}
           {% if i.enabled === true %}
@@ -768,6 +774,7 @@ permalink: "/index.html"
           "outputQualityAvif": settings.images.avif.quality
         } %}
         {% generateImage params %}
+        </a>
       </div>
 
       {# Right: Description and Logo — 2-col sub-grid #}
@@ -802,6 +809,7 @@ permalink: "/index.html"
 
       {# Architects Image (Row 1) #}
       <div class="expertise-image row-1">
+        <a href="/all/" class="img-link" style="display:block;width:100%;height:100%;">
         {% set outputFormats = [] %}
         {% for format, i in settings.images %}
           {% if i.enabled === true %}
@@ -824,6 +832,7 @@ permalink: "/index.html"
           "outputQualityAvif": settings.images.avif.quality
         } %}
         {% generateImage params %}
+        </a>
       </div>
 
       {# Architects Lead Text (Row 2) #}
@@ -846,6 +855,7 @@ permalink: "/index.html"
 
       {# Builders Image (Row 1) #}
       <div class="expertise-image row-1">
+        <a href="/all/" class="img-link" style="display:block;width:100%;height:100%;">
         {% set outputFormats = [] %}
         {% for format, i in settings.images %}
           {% if i.enabled === true %}
@@ -868,6 +878,7 @@ permalink: "/index.html"
           "outputQualityAvif": settings.images.avif.quality
         } %}
         {% generateImage params %}
+        </a>
       </div>
 
       {# Builders Lead Text (Row 2) #}
@@ -889,6 +900,7 @@ permalink: "/index.html"
 
       {# Systems-Designers Image (Row 1) #}
       <div class="expertise-image row-1">
+        <a href="/all/" class="img-link" style="display:block;width:100%;height:100%;">
         {% set outputFormats = [] %}
         {% for format, i in settings.images %}
           {% if i.enabled === true %}
@@ -911,6 +923,7 @@ permalink: "/index.html"
           "outputQualityAvif": settings.images.avif.quality
         } %}
         {% generateImage params %}
+        </a>
       </div>
 
       {# Systems-Thinkers Lead Text (Row 2) #}
@@ -941,7 +954,9 @@ permalink: "/index.html"
 
       {# Cols 3–4: Diagram #}
       <div class="tech-portfolio-diagram col-3-4">
-        <img src="/assets/images/Stellation Design.jpg" alt="Stellation Design diagram" class="tech-portfolio-diagram-img">
+        <a href="/about/" class="img-link" style="display:block;width:100%;">
+          <img src="/assets/images/Stellation Design.jpg" alt="Stellation Design diagram" class="tech-portfolio-diagram-img">
+        </a>
       </div>
 
     </div>
@@ -1054,7 +1069,9 @@ permalink: "/index.html"
 
       {# Col 1: Image 3:4 ratio #}
       <div class="col-1 contact-image-col">
-        <img src="/assets/images/get-in-touch.jpg" alt="Get in touch with LowDO" loading="lazy">
+        <a href="/about/" class="img-link" style="display:block;">
+          <img src="/assets/images/get-in-touch.jpg" alt="Get in touch with LowDO" loading="lazy">
+        </a>
       </div>
 
       {# Col 2: Heading #}
