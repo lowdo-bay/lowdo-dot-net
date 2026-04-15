@@ -940,12 +940,8 @@ body {
 
 /* Edit panel sections */
 .ep-section {
-  border-top: 1px dashed var(--admin-border);
   margin: 0 -1rem;
   padding: 0 0 2rem;
-}
-.ep-section:first-child {
-  border-top: none;
 }
 .ep-section__label {
   font-size: 10px;
