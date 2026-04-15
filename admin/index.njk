@@ -150,8 +150,8 @@ eleventyExcludeFromCollections: true
       </table>
     </div>
 
-    {# Edit panel (side drawer) #}
-    <div id="edit-panel" class="edit-panel" hidden>
+    {# Edit panel (modal) #}
+    <div id="edit-panel" class="edit-panel" role="dialog" aria-modal="true" aria-labelledby="edit-panel-title" hidden>
       <div class="edit-panel__header">
         <h2 id="edit-panel-title">Edit Entry</h2>
         <button id="edit-panel-close" class="btn btn--secondary">&times;</button>
@@ -161,10 +161,6 @@ eleventyExcludeFromCollections: true
         {# Section: Identity #}
         <div class="ep-section">
           <div class="ep-section__label">Identity</div>
-          <div class="field-group">
-            <label>Slug</label>
-            <input type="text" id="ep-slug" readonly>
-          </div>
           <div class="field-group">
             <label>Type</label>
             <div class="admin-dropdown ep-type-dropdown" id="ep-type-dropdown">
@@ -178,9 +174,58 @@ eleventyExcludeFromCollections: true
             </div>
           </div>
           <div class="field-group">
+            <label>Slug</label>
+            <input type="text" id="ep-slug" placeholder="20260101_project-name">
+          </div>
+          <div class="field-group">
             <label class="field-label--inline">
               <input type="checkbox" id="ep-draft"> Draft
             </label>
+          </div>
+        </div>
+
+        {# Section: Metadata #}
+        <div class="ep-section">
+          <div class="ep-section__label">Metadata</div>
+          <div class="field-group">
+            <label>Categories</label>
+            <div id="ep-categories-tags" class="tag-list"></div>
+            <div class="tag-input-wrap">
+              <input type="text" id="ep-category-input" placeholder="Add category..." autocomplete="off">
+              <ul id="ep-category-suggestions" class="tag-suggestions" hidden></ul>
+            </div>
+          </div>
+          <div class="field-group non-project-only">
+            <label>Link (external)</label>
+            <input type="url" id="ep-link" placeholder="https://...">
+          </div>
+          <div class="ep-section project-only" style="padding:0;border:none;">
+            <div class="ep-section__label" style="margin-top:0.5rem;">Collaborators</div>
+            <div id="ep-collaborators-list" class="structured-list"></div>
+            <button id="ep-add-collaborator" class="btn btn--small">+ Add Collaborator</button>
+          </div>
+          <div class="field-group">
+            <label>Position (sort order)</label>
+            <input type="number" id="ep-position" placeholder="999">
+          </div>
+          <div class="field-group">
+            <label>Date</label>
+            <input type="date" id="ep-date">
+          </div>
+          <div class="field-group project-only">
+            <label>Year</label>
+            <input type="text" id="ep-year" placeholder="2024 or 2022 - Present">
+          </div>
+          <div class="field-group project-only">
+            <label>Location</label>
+            <input type="text" id="ep-location" placeholder="Austin, TX">
+          </div>
+          <div class="field-group project-only">
+            <label>Status</label>
+            <div class="tag-input-wrap">
+              <input type="text" id="ep-status" placeholder="Built / In Progress / Unbuilt" autocomplete="off">
+              <ul id="ep-status-suggestions" class="tag-suggestions" hidden></ul>
+            </div>
           </div>
         </div>
 
@@ -199,72 +244,7 @@ eleventyExcludeFromCollections: true
             <label>Description</label>
             <textarea id="ep-description" rows="2"></textarea>
           </div>
-          <div class="field-group">
-            <label>Date</label>
-            <input type="date" id="ep-date">
-          </div>
-        </div>
-
-        {# Section: Metadata #}
-        <div class="ep-section">
-          <div class="ep-section__label">Metadata</div>
-          <div class="field-group">
-            <label>Categories</label>
-            <div id="ep-categories-tags" class="tag-list"></div>
-            <div class="tag-input-wrap">
-              <input type="text" id="ep-category-input" placeholder="Add category..." autocomplete="off">
-              <ul id="ep-category-suggestions" class="tag-suggestions" hidden></ul>
-            </div>
-          </div>
-          <div class="field-group">
-            <label>Link (external URL)</label>
-            <input type="url" id="ep-link" placeholder="https://...">
-          </div>
-          <div class="field-group">
-            <label>Position (sort order)</label>
-            <input type="number" id="ep-position" placeholder="999">
-          </div>
-          <div class="field-group project-only">
-            <label>Year</label>
-            <input type="text" id="ep-year" placeholder="2024 or 2020 - Present">
-          </div>
-          <div class="field-group project-only">
-            <label>Location</label>
-            <input type="text" id="ep-location">
-          </div>
-          <div class="field-group project-only">
-            <label>Status</label>
-            <input type="text" id="ep-status" placeholder="Built / In Progress / Unbuilt">
-          </div>
-        </div>
-
-        {# Section: Homepage (project-only) #}
-        <div class="ep-section project-only">
-          <div class="ep-section__label">Homepage</div>
-          <div class="field-group">
-            <label class="field-label--inline">
-              <input type="checkbox" id="ep-featured"> Featured on homepage
-            </label>
-          </div>
-          <div class="field-group" id="ep-featured-position-group" hidden>
-            <label>Featured Position</label>
-            <input type="number" id="ep-featured-position" min="1" placeholder="1">
-          </div>
-        </div>
-
-        {# Section: Homepage (non-project-only) #}
-        <div class="ep-section non-project-only">
-          <div class="ep-section__label">Homepage</div>
-          <div class="field-group">
-            <label class="field-label--inline">
-              <input type="checkbox" id="ep-show-in-awards-table"> Show in Awards table on homepage
-            </label>
-          </div>
-        </div>
-
-        {# Section: Body #}
-        <div class="ep-section">
-          <div class="ep-section__label ep-section__label--row">
+          <div class="ep-section__label ep-section__label--row" style="margin-top:0.5rem;">
             Body (Markdown)
             <button id="ep-preview-toggle" class="btn btn--small">Preview</button>
           </div>
@@ -274,20 +254,38 @@ eleventyExcludeFromCollections: true
           <div id="ep-body-preview" class="ep-body-preview" hidden></div>
         </div>
 
-        {# Section: Collaborators (project-only) #}
-        <div class="ep-section project-only">
-          <div class="ep-section__label">Collaborators</div>
-          <div id="ep-collaborators-list" class="structured-list"></div>
-          <button id="ep-add-collaborator" class="btn btn--small">+ Add Collaborator</button>
-        </div>
-
-        {# Section: Related Projects (non-project-only) #}
-        <div class="ep-section non-project-only">
-          <div class="ep-section__label">Related Projects</div>
-          <div id="ep-related-projects-list" class="tag-list"></div>
-          <div class="tag-input-wrap">
-            <input type="text" id="ep-related-project-input" placeholder="Type project slug...">
-            <ul id="ep-related-project-suggestions" class="tag-suggestions" hidden></ul>
+        {# Section: Relations #}
+        <div class="ep-section">
+          <div class="ep-section__label">Relations</div>
+          <div class="field-group project-only">
+            <label class="field-label--inline">
+              <input type="checkbox" id="ep-featured"> Featured on homepage
+            </label>
+          </div>
+          <div class="field-group project-only" id="ep-featured-position-group" hidden>
+            <label>Featured position</label>
+            <input type="number" id="ep-featured-position" min="1" placeholder="1">
+          </div>
+          <div class="field-group non-project-only">
+            <label class="field-label--inline">
+              <input type="checkbox" id="ep-show-in-awards-table"> Awards &amp; Recognition section
+            </label>
+          </div>
+          <div class="field-group project-only">
+            <label>Related entries</label>
+            <div id="ep-related-entries-list" class="tag-list"></div>
+            <div class="tag-input-wrap">
+              <input type="text" id="ep-related-entries-input" placeholder="Search entries by title or slug..." autocomplete="off">
+              <ul id="ep-related-entries-suggestions" class="tag-suggestions" hidden></ul>
+            </div>
+          </div>
+          <div class="field-group non-project-only">
+            <label>Related projects</label>
+            <div id="ep-related-projects-list" class="tag-list"></div>
+            <div class="tag-input-wrap">
+              <input type="text" id="ep-related-project-input" placeholder="Search projects by slug...">
+              <ul id="ep-related-project-suggestions" class="tag-suggestions" hidden></ul>
+            </div>
           </div>
         </div>
 
@@ -450,6 +448,13 @@ eleventyExcludeFromCollections: true
       {%- for entry in collections.allEntries %}
       {%- if entry.data.entryType == "project" %}
       {{ entry.fileSlug | dump | safe }},
+      {%- endif %}
+      {%- endfor %}
+    ];
+    window.__NON_PROJECT_ENTRIES__ = [
+      {%- for entry in collections.allEntries %}
+      {%- if entry.data.entryType != "project" %}
+      { slug: {{ entry.fileSlug | dump | safe }}, title: {{ (entry.data.title or entry.fileSlug) | dump | safe }} },
       {%- endif %}
       {%- endfor %}
     ];

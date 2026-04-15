@@ -101,6 +101,7 @@ function applyChangesToFile(fileContent, change) {
   if (change.showInAwardsTable !== undefined) d.showInAwardsTable = change.showInAwardsTable;
   if (change.collaborators !== undefined)     d.collaborators = change.collaborators;
   if (change.relatedProjects !== undefined)   d.relatedProjects = change.relatedProjects;
+  if (change.relatedEntries !== undefined)    d.relatedEntries = change.relatedEntries;
 
   // Body text replaces markdown content (below frontmatter)
   const bodyContent = change.body !== undefined ? (change.body || '') : parsed.content;
@@ -132,6 +133,7 @@ function buildNewEntryContent(change) {
   if (change.showInAwardsTable) d.showInAwardsTable = change.showInAwardsTable;
   if (change.collaborators && change.collaborators.length) d.collaborators = change.collaborators;
   if (change.relatedProjects && change.relatedProjects.length) d.relatedProjects = change.relatedProjects;
+  if (change.relatedEntries && change.relatedEntries.length) d.relatedEntries = change.relatedEntries;
 
   return matter.stringify(change.body || '', d);
 }

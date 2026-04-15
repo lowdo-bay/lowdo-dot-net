@@ -7,7 +7,38 @@
   var entryTypes = window.__ENTRY_TYPES__ || [];
   var canonicalCategories = (window.__CATEGORIES__ || []).slice();
   var projectSlugs = (window.__PROJECT_SLUGS__ || []).slice();
+  var nonProjectEntries = (window.__NON_PROJECT_ENTRIES__ || []).slice();
   var token = '';
+
+  // Derive dynamic lookup data from all entries
+  var knownCollaboratorNames = [];
+  var collaboratorRoleMap = {}; // { name: [roles] }
+  var knownStatuses = [];
+  (function() {
+    entries.forEach(function(e) {
+      // Collect collaborator names and roles
+      (e.collaborators || []).forEach(function(c) {
+        var name = (c.name || '').trim();
+        var role = (c.role || '').trim();
+        if (name && knownCollaboratorNames.indexOf(name) === -1) {
+          knownCollaboratorNames.push(name);
+        }
+        if (name) {
+          if (!collaboratorRoleMap[name]) collaboratorRoleMap[name] = [];
+          if (role && collaboratorRoleMap[name].indexOf(role) === -1) {
+            collaboratorRoleMap[name].push(role);
+          }
+        }
+      });
+      // Collect statuses
+      var status = (e.status || '').trim();
+      if (status && knownStatuses.indexOf(status) === -1) {
+        knownStatuses.push(status);
+      }
+    });
+    knownCollaboratorNames.sort();
+    knownStatuses.sort();
+  })();
   var changes = {};
   var sortField = 'date';
   var sortDir = 'desc';
@@ -43,6 +74,7 @@
       showInAwardsTable: e.showInAwardsTable,
       collaborators: JSON.stringify(e.collaborators || []),
       relatedProjects: JSON.stringify(e.relatedProjects || []),
+      relatedEntries: JSON.stringify(e.relatedEntries || []),
       body: e.body
     };
   }
@@ -117,6 +149,10 @@
   var epRelatedProjectsList = document.getElementById('ep-related-projects-list');
   var epRelatedProjectInput = document.getElementById('ep-related-project-input');
   var epRelatedProjectSuggestions = document.getElementById('ep-related-project-suggestions');
+  var epRelatedEntriesList = document.getElementById('ep-related-entries-list');
+  var epRelatedEntriesInput = document.getElementById('ep-related-entries-input');
+  var epRelatedEntriesSuggestions = document.getElementById('ep-related-entries-suggestions');
+  var epStatusSuggestions = document.getElementById('ep-status-suggestions');
   var epBody = document.getElementById('ep-body');
   var epSlug = document.getElementById('ep-slug');
   var epDraft = document.getElementById('ep-draft');
@@ -529,6 +565,7 @@
       change.showInAwardsTable = e.showInAwardsTable;
       change.collaborators = e.collaborators;
       change.relatedProjects = e.relatedProjects;
+      change.relatedEntries = e.relatedEntries;
       change.body = e.body;
 
       changes[e.filePath] = change;
@@ -972,6 +1009,7 @@
     // Populate fields
     epSlug.value = entry.slug || '';
     epSlug.readOnly = !entry._isNew;
+    epSlug.placeholder = entry._isNew ? '20260101_project-name' : '';
     epDraft.checked = !!entry.draft;
     epTypeLabel.textContent = (entry.entryType || '—').toUpperCase();
     renderEpTypeDrawer(entry);
@@ -987,6 +1025,7 @@
     epYear.value = entry.year || '';
     epLocation.value = entry.location || '';
     epStatus.value = entry.status || '';
+    epStatusSuggestions.hidden = true;
     epFeatured.checked = !!entry.featured;
     epFeaturedPositionGroup.hidden = !entry.featured;
     epFeaturedPosition.value = entry.featuredPosition != null ? entry.featuredPosition : '';
@@ -1008,6 +1047,11 @@
 
     // Related projects
     renderRelatedProjectTags(entry.relatedProjects || []);
+
+    // Related entries (project → non-project)
+    renderRelatedEntriesTags(entry.relatedEntries || []);
+    epRelatedEntriesInput.value = '';
+    epRelatedEntriesSuggestions.hidden = true;
 
     editPanel.hidden = false;
     editPanelBackdrop.hidden = false;
@@ -1049,6 +1093,7 @@
     entry.featured = epFeatured.checked;
     entry.featuredPosition = epFeatured.checked && epFeaturedPosition.value !== '' ? Number(epFeaturedPosition.value) : null;
     entry.showInAwardsTable = epShowInAwardsTable.checked;
+    entry.relatedEntries = getPanelRelatedEntries();
     entry.body = epBody.value;
 
     // Update slug for new entries
@@ -1073,15 +1118,141 @@
   });
 
   // ---- Collaborators editor ----
+  function syncCollaboratorsFromDOM() {
+    if (!activeEditPath) return;
+    var entry = findEntry(activeEditPath);
+    if (!entry) return;
+    var rows = epCollaboratorsList.querySelectorAll('.structured-row');
+    entry.collaborators = [];
+    rows.forEach(function(row) {
+      entry.collaborators.push({
+        name: row.querySelector('.collab-name').value.trim(),
+        role: row.querySelector('.collab-role').value.trim()
+      });
+    });
+  }
+
   function renderCollaboratorsList(collaborators) {
     epCollaboratorsList.innerHTML = '';
     (collaborators || []).forEach(function(collab, idx) {
       var row = document.createElement('div');
       row.className = 'structured-row';
-      row.innerHTML =
-        '<input type="text" class="collab-name" placeholder="Name" value="' + escHtml(collab.name || '') + '">' +
-        '<input type="text" class="collab-role" placeholder="Role" value="' + escHtml(collab.role || '') + '">' +
-        '<button class="btn btn--small btn--danger collab-remove" data-idx="' + idx + '">&times;</button>';
+
+      var nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.className = 'collab-name';
+      nameInput.placeholder = 'Name';
+      nameInput.value = collab.name || '';
+      nameInput.autocomplete = 'off';
+
+      var nameSugg = document.createElement('ul');
+      nameSugg.className = 'tag-suggestions collab-name-suggestions';
+      nameSugg.hidden = true;
+
+      var roleInput = document.createElement('input');
+      roleInput.type = 'text';
+      roleInput.className = 'collab-role';
+      roleInput.placeholder = 'Role';
+      roleInput.value = collab.role || '';
+      roleInput.autocomplete = 'off';
+
+      var roleSugg = document.createElement('ul');
+      roleSugg.className = 'tag-suggestions collab-role-suggestions';
+      roleSugg.hidden = true;
+
+      var removeBtn = document.createElement('button');
+      removeBtn.className = 'btn btn--small btn--danger collab-remove';
+      removeBtn.dataset.idx = idx;
+      removeBtn.textContent = '\u00d7';
+
+      // Name input suggestions
+      nameInput.addEventListener('input', function() {
+        var query = this.value.trim().toLowerCase();
+        nameSugg.innerHTML = '';
+        if (!query) { nameSugg.hidden = true; return; }
+        var matches = knownCollaboratorNames.filter(function(n) {
+          return n.toLowerCase().indexOf(query) !== -1;
+        }).slice(0, 8);
+        if (matches.length === 0) { nameSugg.hidden = true; return; }
+        matches.forEach(function(n) {
+          var li = document.createElement('li');
+          li.textContent = n;
+          li.dataset.value = n;
+          nameSugg.appendChild(li);
+        });
+        nameSugg.hidden = false;
+      });
+      nameSugg.addEventListener('click', function(e) {
+        var li = e.target.closest('li');
+        if (!li) return;
+        nameInput.value = li.dataset.value;
+        nameSugg.hidden = true;
+        syncCollaboratorsFromDOM();
+        // Pre-fill role suggestions for this name
+        roleInput.focus();
+      });
+      nameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') nameSugg.hidden = true;
+      });
+      nameInput.addEventListener('blur', function() {
+        setTimeout(function() { nameSugg.hidden = true; }, 150);
+      });
+
+      // Role input suggestions (filtered by current name if known)
+      roleInput.addEventListener('input', function() {
+        var query = this.value.trim().toLowerCase();
+        var currentName = nameInput.value.trim();
+        var pool = (collaboratorRoleMap[currentName] && collaboratorRoleMap[currentName].length)
+          ? collaboratorRoleMap[currentName]
+          : Object.keys(collaboratorRoleMap).reduce(function(acc, k) {
+              collaboratorRoleMap[k].forEach(function(r) { if (acc.indexOf(r) === -1) acc.push(r); });
+              return acc;
+            }, []);
+        roleSugg.innerHTML = '';
+        if (!query) { roleSugg.hidden = true; return; }
+        var matches = pool.filter(function(r) {
+          return r.toLowerCase().indexOf(query) !== -1;
+        }).slice(0, 8);
+        if (matches.length === 0) { roleSugg.hidden = true; return; }
+        matches.forEach(function(r) {
+          var li = document.createElement('li');
+          li.textContent = r;
+          li.dataset.value = r;
+          roleSugg.appendChild(li);
+        });
+        roleSugg.hidden = false;
+      });
+      roleSugg.addEventListener('click', function(e) {
+        var li = e.target.closest('li');
+        if (!li) return;
+        roleInput.value = li.dataset.value;
+        roleSugg.hidden = true;
+        syncCollaboratorsFromDOM();
+      });
+      roleInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') roleSugg.hidden = true;
+      });
+      roleInput.addEventListener('blur', function() {
+        setTimeout(function() { roleSugg.hidden = true; }, 150);
+      });
+
+      // Sync on plain text input
+      nameInput.addEventListener('input', syncCollaboratorsFromDOM);
+      roleInput.addEventListener('input', syncCollaboratorsFromDOM);
+
+      var nameWrap = document.createElement('div');
+      nameWrap.className = 'tag-input-wrap';
+      nameWrap.appendChild(nameInput);
+      nameWrap.appendChild(nameSugg);
+
+      var roleWrap = document.createElement('div');
+      roleWrap.className = 'tag-input-wrap';
+      roleWrap.appendChild(roleInput);
+      roleWrap.appendChild(roleSugg);
+
+      row.appendChild(nameWrap);
+      row.appendChild(roleWrap);
+      row.appendChild(removeBtn);
       epCollaboratorsList.appendChild(row);
     });
   }
@@ -1093,21 +1264,6 @@
     if (!entry.collaborators) entry.collaborators = [];
     entry.collaborators.push({ name: '', role: '' });
     renderCollaboratorsList(entry.collaborators);
-  });
-
-  epCollaboratorsList.addEventListener('input', function() {
-    if (!activeEditPath) return;
-    var entry = findEntry(activeEditPath);
-    if (!entry) return;
-    // Sync all name/role fields back to entry
-    var rows = epCollaboratorsList.querySelectorAll('.structured-row');
-    entry.collaborators = [];
-    rows.forEach(function(row) {
-      entry.collaborators.push({
-        name: row.querySelector('.collab-name').value.trim(),
-        role: row.querySelector('.collab-role').value.trim()
-      });
-    });
   });
 
   epCollaboratorsList.addEventListener('click', function(e) {
@@ -1190,6 +1346,38 @@
     if (e.key === 'Escape') epCategorySuggestions.hidden = true;
   });
 
+  // ---- Status combobox ----
+  epStatus.addEventListener('input', function() {
+    var query = this.value.trim().toLowerCase();
+    if (!query) { epStatusSuggestions.hidden = true; return; }
+    var matches = knownStatuses.filter(function(s) {
+      return s.toLowerCase().indexOf(query) !== -1;
+    }).slice(0, 8);
+    if (matches.length === 0) { epStatusSuggestions.hidden = true; return; }
+    epStatusSuggestions.innerHTML = matches.map(function(s) {
+      return '<li data-value="' + escHtml(s) + '">' + escHtml(s) + '</li>';
+    }).join('');
+    epStatusSuggestions.hidden = false;
+  });
+  epStatusSuggestions.addEventListener('click', function(e) {
+    var li = e.target.closest('li');
+    if (!li) return;
+    epStatus.value = li.dataset.value;
+    epStatusSuggestions.hidden = true;
+    // Extend known statuses if new value
+    var val = li.dataset.value;
+    if (knownStatuses.indexOf(val) === -1) {
+      knownStatuses.push(val);
+      knownStatuses.sort();
+    }
+  });
+  epStatus.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') epStatusSuggestions.hidden = true;
+  });
+  epStatus.addEventListener('blur', function() {
+    setTimeout(function() { epStatusSuggestions.hidden = true; }, 150);
+  });
+
   // ---- Related projects editor ----
   function renderRelatedProjectTags(relatedProjects) {
     epRelatedProjectsList.innerHTML = '';
@@ -1256,6 +1444,85 @@
     renderRelatedProjectTags(entry.relatedProjects);
     epRelatedProjectInput.value = '';
     epRelatedProjectSuggestions.hidden = true;
+  }
+
+  // ---- Related entries editor (project → non-project) ----
+  function renderRelatedEntriesTags(relatedEntries) {
+    epRelatedEntriesList.innerHTML = '';
+    (relatedEntries || []).forEach(function(slug) {
+      var entry = nonProjectEntries.filter(function(e) { return e.slug === slug; })[0];
+      var label = entry ? (entry.title + ' [' + slug + ']') : slug;
+      var tag = document.createElement('span');
+      tag.className = 'cat-tag';
+      tag.innerHTML = escHtml(label) + '<span class="cat-tag__remove" data-slug="' + escHtml(slug) + '">&times;</span>';
+      epRelatedEntriesList.appendChild(tag);
+    });
+  }
+
+  function getPanelRelatedEntries() {
+    var slugs = [];
+    epRelatedEntriesList.querySelectorAll('.cat-tag__remove').forEach(function(el) {
+      slugs.push(el.dataset.slug);
+    });
+    return slugs;
+  }
+
+  epRelatedEntriesList.addEventListener('click', function(e) {
+    if (e.target.classList.contains('cat-tag__remove')) {
+      if (!activeEditPath) return;
+      var entry = findEntry(activeEditPath);
+      if (!entry) return;
+      var slug = e.target.dataset.slug;
+      entry.relatedEntries = (entry.relatedEntries || []).filter(function(s) { return s !== slug; });
+      renderRelatedEntriesTags(entry.relatedEntries);
+    }
+  });
+
+  epRelatedEntriesInput.addEventListener('input', function() {
+    var query = this.value.trim().toLowerCase();
+    if (!query) { epRelatedEntriesSuggestions.hidden = true; return; }
+
+    var entry = activeEditPath ? findEntry(activeEditPath) : null;
+    var current = entry ? (entry.relatedEntries || []) : [];
+
+    var matches = nonProjectEntries.filter(function(e) {
+      return current.indexOf(e.slug) === -1 &&
+        (e.slug.toLowerCase().indexOf(query) !== -1 || e.title.toLowerCase().indexOf(query) !== -1);
+    }).slice(0, 8);
+
+    if (matches.length === 0) { epRelatedEntriesSuggestions.hidden = true; return; }
+
+    epRelatedEntriesSuggestions.innerHTML = matches.map(function(e) {
+      return '<li data-slug="' + escHtml(e.slug) + '">' + escHtml(e.title) + ' <span style="opacity:0.5">' + escHtml(e.slug) + '</span></li>';
+    }).join('');
+    epRelatedEntriesSuggestions.hidden = false;
+  });
+
+  epRelatedEntriesInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var val = this.value.trim();
+      if (val) addRelatedEntry(val);
+    }
+    if (e.key === 'Escape') epRelatedEntriesSuggestions.hidden = true;
+  });
+
+  epRelatedEntriesSuggestions.addEventListener('click', function(e) {
+    var li = e.target.closest('li');
+    if (!li) return;
+    addRelatedEntry(li.dataset.slug);
+  });
+
+  function addRelatedEntry(slug) {
+    if (!activeEditPath) return;
+    var entry = findEntry(activeEditPath);
+    if (!entry) return;
+    if (!entry.relatedEntries) entry.relatedEntries = [];
+    if (entry.relatedEntries.indexOf(slug) !== -1) return;
+    entry.relatedEntries.push(slug);
+    renderRelatedEntriesTags(entry.relatedEntries);
+    epRelatedEntriesInput.value = '';
+    epRelatedEntriesSuggestions.hidden = true;
   }
 
   // ---- Markdown preview ----
@@ -1753,6 +2020,7 @@
       e.showInAwardsTable = orig.showInAwardsTable;
       e.collaborators = JSON.parse(orig.collaborators);
       e.relatedProjects = JSON.parse(orig.relatedProjects);
+      e.relatedEntries = JSON.parse(orig.relatedEntries || '[]');
       e.body = orig.body;
     });
     canonicalCategories = (window.__CATEGORIES__ || []).slice();
@@ -1766,6 +2034,36 @@
 
   // ---- Save ----
   saveBtn.addEventListener('click', function() {
+    // Two-way sync: relatedEntries on projects → relatedProjects on non-project entries
+    entries.forEach(function(projectEntry) {
+      if (!isProject(projectEntry.entryType)) return;
+      var orig = originals[projectEntry.filePath];
+      var origRelated = orig ? JSON.parse(orig.relatedEntries || '[]') : [];
+      var newRelated = projectEntry.relatedEntries || [];
+
+      // Slugs added to relatedEntries
+      newRelated.forEach(function(slug) {
+        if (origRelated.indexOf(slug) !== -1) return; // unchanged
+        var target = findEntry('entries/other/' + slug + '/' + slug + '.md') ||
+          entries.filter(function(e) { return e.slug === slug && !isProject(e.entryType); })[0];
+        if (!target) return;
+        if (!target.relatedProjects) target.relatedProjects = [];
+        if (target.relatedProjects.indexOf(projectEntry.slug) === -1) {
+          target.relatedProjects.push(projectEntry.slug);
+          updateChanges();
+        }
+      });
+
+      // Slugs removed from relatedEntries
+      origRelated.forEach(function(slug) {
+        if (newRelated.indexOf(slug) !== -1) return; // still present
+        var target = entries.filter(function(e) { return e.slug === slug && !isProject(e.entryType); })[0];
+        if (!target) return;
+        target.relatedProjects = (target.relatedProjects || []).filter(function(s) { return s !== projectEntry.slug; });
+        updateChanges();
+      });
+    });
+
     var changeList = Object.keys(changes).map(function(path) { return changes[path]; });
     if (changeList.length === 0) return;
 

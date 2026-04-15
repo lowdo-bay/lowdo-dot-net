@@ -731,7 +731,6 @@ body {
 .modal-content--table {
   min-width: 520px;
   max-width: 700px;
-  height: 80vh;
   max-height: 700px;
   padding: 0;
   overflow: hidden;
@@ -779,7 +778,7 @@ body {
 .manage-tab:hover { color: var(--admin-text); }
 .manage-tab.is-active { color: var(--admin-primary); border-bottom-color: var(--admin-primary); font-weight: 600; }
 
-.manage-panel { max-height: 320px; overflow-y: auto; }
+.manage-panel { overflow-y: auto; }
 
 /* Table columns */
 .manage-table { table-layout: fixed; }
@@ -896,12 +895,15 @@ body {
 /* Edit panel */
 .edit-panel {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 420px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(640px, calc(100vw - 2rem));
+  max-height: calc(100vh - 4rem);
   background: var(--admin-surface);
-  border-left: 1px solid var(--admin-border);
+  border: 1px solid var(--admin-border);
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
   z-index: 250;
   display: flex;
   flex-direction: column;
@@ -1099,7 +1101,7 @@ body {
 .edit-panel-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.15);
+  background: rgba(0,0,0,0.35);
   z-index: 249;
 }
 .edit-panel-backdrop[hidden] { display: none; }
