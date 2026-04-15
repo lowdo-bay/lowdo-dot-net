@@ -979,8 +979,6 @@ body {
 .ep-row__label {
   padding: 0.5rem 0.75rem 0.5rem 1rem;
   border-top: 1px dashed var(--admin-border);
-  font-size: 11px;
-  color: var(--admin-text-muted);
   align-self: start;
   display: flex;
   align-items: center;
