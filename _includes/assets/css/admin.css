@@ -941,6 +941,7 @@ body {
 /* Edit panel sections */
 .ep-section {
   border-top: 1px dashed var(--admin-border);
+  border-bottom: 1px dashed var(--admin-border);
   margin: 0 -1rem;
   padding: 0 0 2rem;
 }
