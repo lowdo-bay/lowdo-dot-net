@@ -983,6 +983,7 @@ body {
   display: flex;
   align-items: center;
 }
+.ep-row__label[hidden] { display: none; }
 .ep-row__control {
   padding: 0.45rem 1rem 0.45rem 0.75rem;
   border-top: 1px dashed var(--admin-border);
@@ -991,6 +992,7 @@ body {
   flex-direction: column;
   gap: 0.3rem;
 }
+.ep-row__control[hidden] { display: none; }
 .ep-body-header {
   display: flex;
   justify-content: flex-end;
