@@ -941,7 +941,6 @@ body {
 /* Edit panel sections */
 .ep-section {
   border-top: 1px dashed var(--admin-border);
-  border-bottom: 1px dashed var(--admin-border);
   margin: 0 -1rem;
   padding: 0 0 2rem;
 }
@@ -963,6 +962,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 3fr;
   position: relative;
+  border-bottom: 1px dashed var(--admin-border);
 }
 .ep-grid::before {
   content: '';
