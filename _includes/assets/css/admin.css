@@ -961,12 +961,27 @@ body {
 .ep-grid {
   display: grid;
   grid-template-columns: 1fr 3fr;
-  border-left: none;
+  position: relative;
+}
+.ep-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 25%;
+  width: 1px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--admin-border) 0,
+    var(--admin-border) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  pointer-events: none;
 }
 .ep-row__label {
   padding: 0.5rem 0.75rem 0.5rem 1rem;
   border-top: 1px dashed var(--admin-border);
-  border-right: 1px dashed var(--admin-border);
   font-size: 11px;
   color: var(--admin-text-muted);
   align-self: start;
@@ -992,7 +1007,8 @@ body {
 
 @media (max-width: 420px) {
   .ep-grid { grid-template-columns: 1fr; }
-  .ep-row__label { border-right: none; padding-bottom: 0.2rem; }
+  .ep-grid::before { display: none; }
+  .ep-row__label { padding-bottom: 0.2rem; }
   .ep-row__control { border-top: none; padding-top: 0; }
 }
 
