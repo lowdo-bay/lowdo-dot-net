@@ -1026,7 +1026,6 @@
     epStatus.value = entry.status || '';
     epStatusSuggestions.hidden = true;
     epFeatured.checked = !!entry.featured;
-    document.querySelectorAll('.ep-featured-position-row').forEach(function(el) { el.hidden = !entry.featured; });
     epFeaturedPosition.value = entry.featuredPosition != null ? entry.featuredPosition : '';
     epShowInAwardsTable.checked = !!entry.showInAwardsTable;
     epBody.value = entry.body || '';

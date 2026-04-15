@@ -940,11 +940,12 @@ body {
 
 /* Edit panel sections */
 .ep-section {
-  margin: 0 0 1.5rem 0;
+  border-top: 1px dashed var(--admin-border);
+  margin: 0 -1rem;
   padding: 0;
 }
 .ep-section:first-child {
-  margin-top: 0;
+  border-top: none;
 }
 .ep-section__label {
   font-size: 10px;
@@ -952,19 +953,19 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--admin-primary);
-  padding: 0 0 0.5rem 0;
+  padding: 0.6rem 1rem 0.3rem;
   display: block;
-  margin-bottom: 0.3rem;
 }
 
-/* Edit panel grid layout */
+/* Edit panel 2-column grid */
 .ep-grid {
   display: grid;
   grid-template-columns: 1fr 3fr;
+  border-left: none;
 }
-
 .ep-row__label {
-  padding: 0.5rem 0.75rem 0.5rem 0;
+  padding: 0.5rem 0.75rem 0.5rem 1rem;
+  border-top: 1px dashed var(--admin-border);
   border-right: 1px dashed var(--admin-border);
   font-size: 11px;
   color: var(--admin-text-muted);
@@ -972,32 +973,27 @@ body {
   display: flex;
   align-items: center;
 }
-
 .ep-row__control {
-  padding: 0.5rem 0 0.5rem 0.75rem;
+  padding: 0.45rem 1rem 0.45rem 0.75rem;
+  border-top: 1px dashed var(--admin-border);
   align-self: start;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
 }
-
+.ep-row__label:first-child,
+.ep-row__control:nth-child(2) {
+  border-top: none;
+}
 .ep-body-header {
   display: flex;
   justify-content: flex-end;
 }
 
 @media (max-width: 420px) {
-  .ep-grid {
-    grid-template-columns: 1fr;
-  }
-  .ep-row__label {
-    border-right: none;
-    padding-right: 0;
-    margin-bottom: 0.2rem;
-  }
-  .ep-row__control {
-    padding-left: 0;
-  }
+  .ep-grid { grid-template-columns: 1fr; }
+  .ep-row__label { border-right: none; padding-bottom: 0.2rem; }
+  .ep-row__control { border-top: none; padding-top: 0; }
 }
 
 /* Slug field (read-only for existing entries) */
@@ -1076,11 +1072,11 @@ body {
 .field-group input[type="date"],
 .field-group input[type="number"],
 .field-group textarea,
-.ep-row__control input[type="text"],
-.ep-row__control input[type="url"],
-.ep-row__control input[type="date"],
-.ep-row__control input[type="number"],
-.ep-row__control textarea {
+.ep-row__control > input[type="text"],
+.ep-row__control > input[type="url"],
+.ep-row__control > input[type="date"],
+.ep-row__control > input[type="number"],
+.ep-row__control > textarea {
   padding: 0.4rem 0.5rem;
   border: 1px solid var(--admin-border);
   font-size: 12px;
