@@ -141,7 +141,6 @@
   var epLocation = document.getElementById('ep-location');
   var epStatus = document.getElementById('ep-status');
   var epFeatured = document.getElementById('ep-featured');
-  var epFeaturedPositionGroup = document.getElementById('ep-featured-position-group');
   var epFeaturedPosition = document.getElementById('ep-featured-position');
   var epShowInAwardsTable = document.getElementById('ep-show-in-awards-table');
   var epCollaboratorsList = document.getElementById('ep-collaborators-list');
@@ -1027,7 +1026,7 @@
     epStatus.value = entry.status || '';
     epStatusSuggestions.hidden = true;
     epFeatured.checked = !!entry.featured;
-    epFeaturedPositionGroup.hidden = !entry.featured;
+    document.querySelectorAll('.ep-featured-position-row').forEach(function(el) { el.hidden = !entry.featured; });
     epFeaturedPosition.value = entry.featuredPosition != null ? entry.featuredPosition : '';
     epShowInAwardsTable.checked = !!entry.showInAwardsTable;
     epBody.value = entry.body || '';
@@ -1040,7 +1039,7 @@
     document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
     document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
     // Featured position always starts hidden, shown by featured toggle
-    epFeaturedPositionGroup.hidden = !entry.featured;
+    document.querySelectorAll('.ep-featured-position-row').forEach(function(el) { el.hidden = !entry.featured; });
 
     // Collaborators
     renderCollaboratorsList(entry.collaborators || []);
@@ -1070,7 +1069,7 @@
 
   // Featured toggle shows/hides position input
   epFeatured.addEventListener('change', function() {
-    epFeaturedPositionGroup.hidden = !this.checked;
+    document.querySelectorAll('.ep-featured-position-row').forEach(function(el) { el.hidden = !this.checked; }.bind(this));
   });
 
   // Apply button
