@@ -940,12 +940,11 @@ body {
 
 /* Edit panel sections */
 .ep-section {
-  border-top: 1px dashed var(--admin-border);
-  margin: 0 -1rem;
+  margin: 0 0 1.5rem 0;
   padding: 0;
 }
 .ep-section:first-child {
-  border-top: none;
+  margin-top: 0;
 }
 .ep-section__label {
   font-size: 10px;
@@ -953,8 +952,9 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--admin-primary);
-  padding: 0.5rem 1rem;
+  padding: 0 0 0.5rem 0;
   display: block;
+  margin-bottom: 0.3rem;
 }
 
 /* Edit panel grid layout */
@@ -964,8 +964,7 @@ body {
 }
 
 .ep-row__label {
-  padding: 0.55rem 0.75rem 0.55rem 1rem;
-  border-top: 1px dashed var(--admin-border);
+  padding: 0.5rem 0.75rem 0.5rem 0;
   border-right: 1px dashed var(--admin-border);
   font-size: 11px;
   color: var(--admin-text-muted);
@@ -975,17 +974,11 @@ body {
 }
 
 .ep-row__control {
-  padding: 0.45rem 1rem 0.45rem 0.75rem;
-  border-top: 1px dashed var(--admin-border);
+  padding: 0.5rem 0 0.5rem 0.75rem;
   align-self: start;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-}
-
-.ep-row__label:first-child,
-.ep-row__control:nth-child(2) {
-  border-top: none;
 }
 
 .ep-body-header {
@@ -999,11 +992,11 @@ body {
   }
   .ep-row__label {
     border-right: none;
-    padding-bottom: 0.2rem;
+    padding-right: 0;
+    margin-bottom: 0.2rem;
   }
   .ep-row__control {
-    border-top: none;
-    padding-top: 0;
+    padding-left: 0;
   }
 }
 
@@ -1082,7 +1075,12 @@ body {
 .field-group input[type="url"],
 .field-group input[type="date"],
 .field-group input[type="number"],
-.field-group textarea {
+.field-group textarea,
+.ep-row__control input[type="text"],
+.ep-row__control input[type="url"],
+.ep-row__control input[type="date"],
+.ep-row__control input[type="number"],
+.ep-row__control textarea {
   padding: 0.4rem 0.5rem;
   border: 1px solid var(--admin-border);
   font-size: 12px;
@@ -1090,8 +1088,11 @@ body {
   width: 100%;
 }
 .field-group input:focus,
-.field-group textarea:focus { outline: 2px solid var(--admin-primary); outline-offset: -1px; }
-.field-group textarea { resize: vertical; }
+.field-group textarea:focus,
+.ep-row__control input:focus,
+.ep-row__control textarea:focus { outline: 2px solid var(--admin-primary); outline-offset: -1px; }
+.field-group textarea,
+.ep-row__control textarea { resize: vertical; }
 
 /* Structured list (collaborators) */
 .structured-list { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.25rem; }
