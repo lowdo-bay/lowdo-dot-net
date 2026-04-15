@@ -996,10 +996,6 @@ body {
   flex-direction: column;
   gap: 0.3rem;
 }
-.ep-row__label:first-child,
-.ep-row__control:nth-child(2) {
-  border-top: none;
-}
 .ep-body-header {
   display: flex;
   justify-content: flex-end;
