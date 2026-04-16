@@ -200,9 +200,19 @@ eleventyExcludeFromCollections: true
             <span class="ep-row__label">Categories</span>
             <div class="ep-row__control">
               <div id="ep-categories-tags" class="tag-list"></div>
-              <div class="tag-input-wrap">
-                <input type="text" id="ep-category-input" placeholder="Add category..." autocomplete="off">
-                <ul id="ep-category-suggestions" class="tag-suggestions" hidden></ul>
+              <div class="admin-dropdown ep-category-dropdown" id="ep-category-dropdown">
+                <button class="admin-dropdown__button" aria-expanded="false" type="button" id="ep-category-dropdown-btn">
+                  <span class="admin-dropdown__label">Add Category</span>
+                  <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                    <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </button>
+                <div class="admin-dropdown__drawer ep-category-drawer" aria-hidden="true" id="ep-category-drawer">
+                  <div class="ep-category-search-wrap">
+                    <input type="text" id="ep-category-input" placeholder="Filter or create..." autocomplete="off">
+                  </div>
+                  <div id="ep-category-suggestions" class="tag-list ep-category-tag-list"></div>
+                </div>
               </div>
             </div>
             <span class="ep-row__label non-project-only">Link</span>

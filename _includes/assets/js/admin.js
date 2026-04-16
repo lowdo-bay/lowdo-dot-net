@@ -162,6 +162,9 @@
   var epTypeLabel = document.getElementById('ep-type-label');
   var epTypeDrawer = document.getElementById('ep-type-drawer');
   var epCategoriesTags = document.getElementById('ep-categories-tags');
+  var epCategoryDropdown = document.getElementById('ep-category-dropdown');
+  var epCategoryDropdownBtn = document.getElementById('ep-category-dropdown-btn');
+  var epCategoryDrawer = document.getElementById('ep-category-drawer');
   var epCategoryInput = document.getElementById('ep-category-input');
   var epCategorySuggestions = document.getElementById('ep-category-suggestions');
   var epPreviewToggle = document.getElementById('ep-preview-toggle');
@@ -1067,8 +1070,8 @@
     epDescription.value = entry.description || '';
     epDate.value = toDateInputValue(entry.date);
     renderPanelCategoryTags(entry.categories || []);
+    closeEpCategoryDropdown();
     epCategoryInput.value = '';
-    epCategorySuggestions.hidden = true;
     epLink.value = entry.link || '';
     epPosition.value = entry.position != null ? entry.position : '';
     epYear.value = entry.year || '';
@@ -1413,6 +1416,76 @@
   });
 
   // ---- Panel category editor ----
+  function openEpCategoryDropdown() {
+    epCategoryDropdown.classList.add('is-open');
+    epCategoryDropdownBtn.setAttribute('aria-expanded', 'true');
+    epCategoryDrawer.setAttribute('aria-hidden', 'false');
+    epCategoryInput.value = '';
+    renderCategoryDrawerTags('');
+    epCategoryInput.focus();
+  }
+
+  function closeEpCategoryDropdown() {
+    epCategoryDropdown.classList.remove('is-open');
+    epCategoryDropdownBtn.setAttribute('aria-expanded', 'false');
+    epCategoryDrawer.setAttribute('aria-hidden', 'true');
+  }
+
+  epCategoryDropdownBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    epCategoryDropdown.classList.contains('is-open') ? closeEpCategoryDropdown() : openEpCategoryDropdown();
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!epCategoryDropdown.contains(e.target)) closeEpCategoryDropdown();
+  });
+
+  function renderCategoryDrawerTags(query) {
+    var upper = query.toUpperCase();
+    var current = getPanelCategories();
+    epCategorySuggestions.innerHTML = '';
+
+    var matches = canonicalCategories.filter(function(c) {
+      return current.indexOf(c) === -1 && (!upper || c.indexOf(upper) !== -1);
+    });
+
+    matches.forEach(function(cat) {
+      var tag = document.createElement('span');
+      tag.className = 'cat-tag cat-tag--pick';
+      tag.textContent = cat;
+      tag.dataset.value = cat;
+      epCategorySuggestions.appendChild(tag);
+    });
+
+    // Show "create" option if typed value doesn't match any existing category
+    if (upper && canonicalCategories.indexOf(upper) === -1) {
+      var newTag = document.createElement('span');
+      newTag.className = 'cat-tag cat-tag--pick cat-tag--new';
+      newTag.textContent = '+ ' + upper;
+      newTag.dataset.value = upper;
+      epCategorySuggestions.appendChild(newTag);
+    }
+  }
+
+  epCategorySuggestions.addEventListener('click', function(e) {
+    var tag = e.target.closest('.cat-tag--pick');
+    if (!tag) return;
+    addPanelCategory(tag.dataset.value);
+  });
+
+  epCategoryInput.addEventListener('input', function() {
+    renderCategoryDrawerTags(this.value.trim());
+  });
+
+  epCategoryInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var val = this.value.trim();
+      if (val) { addPanelCategory(val); }
+    }
+    if (e.key === 'Escape') closeEpCategoryDropdown();
+  });
+
   function renderPanelCategoryTags(categories) {
     epCategoriesTags.innerHTML = '';
     (categories || []).forEach(function(cat) {
@@ -1434,24 +1507,11 @@
   epCategoriesTags.addEventListener('click', function(e) {
     if (e.target.classList.contains('cat-tag__remove')) {
       e.target.closest('.cat-tag').remove();
+      // Refresh drawer if open so removed tag becomes available again
+      if (epCategoryDropdown.classList.contains('is-open')) {
+        renderCategoryDrawerTags(epCategoryInput.value.trim());
+      }
     }
-  });
-
-  epCategoryInput.addEventListener('input', function() {
-    var query = this.value.trim().toUpperCase();
-    if (!query) { epCategorySuggestions.hidden = true; return; }
-    var current = getPanelCategories();
-    var matches = canonicalCategories.filter(function(c) {
-      return current.indexOf(c) === -1 && c.indexOf(query) !== -1;
-    });
-    var html = matches.map(function(c) {
-      return '<li data-value="' + escHtml(c) + '">' + escHtml(c) + '</li>';
-    }).join('');
-    if (canonicalCategories.indexOf(query) === -1) {
-      html += '<li class="is-new" data-value="' + escHtml(query) + '">' + escHtml(query) + '</li>';
-    }
-    epCategorySuggestions.innerHTML = html;
-    epCategorySuggestions.hidden = html === '';
   });
 
   function addPanelCategory(val) {
@@ -1464,22 +1524,9 @@
       canonicalCategories.sort();
     }
     epCategoryInput.value = '';
-    epCategorySuggestions.hidden = true;
+    // Refresh drawer tags to remove just-added category
+    renderCategoryDrawerTags('');
   }
-
-  epCategorySuggestions.addEventListener('click', function(e) {
-    var li = e.target.closest('li');
-    if (!li) return;
-    addPanelCategory(li.dataset.value);
-  });
-
-  epCategoryInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addPanelCategory(this.value.trim());
-    }
-    if (e.key === 'Escape') epCategorySuggestions.hidden = true;
-  });
 
   // ---- Status combobox ----
   epStatus.addEventListener('input', function() {
