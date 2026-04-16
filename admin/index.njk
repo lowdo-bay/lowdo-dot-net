@@ -184,6 +184,12 @@ eleventyExcludeFromCollections: true
                 <input type="checkbox" id="ep-draft"> Draft
               </label>
             </div>
+            <span class="ep-row__label staff-only">Active</span>
+            <div class="ep-row__control staff-only">
+              <label class="field-label--inline">
+                <input type="checkbox" id="ep-active"> Active
+              </label>
+            </div>
           </div>
         </div>
 
@@ -445,6 +451,7 @@ eleventyExcludeFromCollections: true
         featured: {{ (entry.data.featured or false) | dump | safe }},
         featuredPosition: {{ (entry.data.featuredPosition or null) | dump | safe }},
         showInAwardsTable: {{ (entry.data.showInAwardsTable or false) | dump | safe }},
+        active: {{ (entry.data.active if entry.data.active is defined else true) | dump | safe }},
         collaborators: {{ (entry.data.collaborators or []) | dump | safe }},
         relatedProjects: {{ (entry.data.relatedProjects or []) | dump | safe }},
         body: {{ (entry.rawInput | markdownBody or "") | dump | safe }},

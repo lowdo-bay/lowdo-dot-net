@@ -72,6 +72,7 @@
       featured: e.featured,
       featuredPosition: e.featuredPosition,
       showInAwardsTable: e.showInAwardsTable,
+      active: e.active,
       collaborators: JSON.stringify(e.collaborators || []),
       relatedProjects: JSON.stringify(e.relatedProjects || []),
       relatedEntries: JSON.stringify(e.relatedEntries || []),
@@ -155,6 +156,7 @@
   var epBody = document.getElementById('ep-body');
   var epSlug = document.getElementById('ep-slug');
   var epDraft = document.getElementById('ep-draft');
+  var epActive = document.getElementById('ep-active');
   var epTypeDropdown = document.getElementById('ep-type-dropdown');
   var epTypeLabel = document.getElementById('ep-type-label');
   var epTypeDrawer = document.getElementById('ep-type-drawer');
@@ -503,6 +505,18 @@
     return entryType === 'project';
   }
 
+  function isStaff(entryType) {
+    return entryType === 'staff';
+  }
+
+  function applyTypeVisibility(entryType) {
+    var proj = isProject(entryType);
+    var staff = isStaff(entryType);
+    document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
+    document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+    document.querySelectorAll('.staff-only').forEach(function(el) { el.hidden = !staff; });
+  }
+
   function toDateInputValue(dateVal) {
     if (!dateVal) return '';
     var d = new Date(dateVal);
@@ -562,6 +576,7 @@
       change.featured = e.featured;
       change.featuredPosition = e.featuredPosition;
       change.showInAwardsTable = e.showInAwardsTable;
+      change.active = e.active;
       change.collaborators = e.collaborators;
       change.relatedProjects = e.relatedProjects;
       change.relatedEntries = e.relatedEntries;
@@ -771,6 +786,7 @@
       featured: false,
       featuredPosition: null,
       showInAwardsTable: false,
+      active: true,
       collaborators: [],
       relatedProjects: [],
       body: '',
@@ -883,9 +899,7 @@
       if (!editPanel.hidden) {
         epTypeLabel.textContent = typeName.toUpperCase();
         renderEpTypeDrawer(entry);
-        var proj = isProject(typeName);
-        document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
-        document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+        applyTypeVisibility(typeName);
       }
       updateChanges();
       renderTable();
@@ -966,9 +980,7 @@
     entry.entryType = typeName;
     epTypeLabel.textContent = typeName.toUpperCase();
     renderEpTypeDrawer(entry);
-    var proj = isProject(typeName);
-    document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
-    document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+    applyTypeVisibility(typeName);
     updateChanges();
     renderTable();
   }
@@ -1026,7 +1038,8 @@
       collaborators: JSON.parse(JSON.stringify(entry.collaborators || [])),
       relatedProjects: (entry.relatedProjects || []).slice(),
       relatedEntries: (entry.relatedEntries || []).slice(),
-      body: entry.body
+      body: entry.body,
+      active: entry.active
     };
     editPanelTitle.textContent = entry._isNew ? 'New Entry' : 'Edit: ' + (entry.title || entry.slug);
 
@@ -1058,10 +1071,9 @@
     epBody.hidden = false;
     epPreviewToggle.textContent = 'Preview';
 
-    // Show/hide project-only and non-project fields
-    var proj = isProject(entry.entryType);
-    document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
-    document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+    // Show/hide type-conditional fields
+    applyTypeVisibility(entry.entryType);
+    epActive.checked = entry.active !== false; // default true if unset
     // Featured position always starts hidden, shown by featured toggle
     document.querySelectorAll('.ep-featured-position-row').forEach(function(el) { el.hidden = !entry.featured; });
 
@@ -1113,6 +1125,7 @@
           entry.featured = editPanelSnapshot.featured;
           entry.featuredPosition = editPanelSnapshot.featuredPosition;
           entry.showInAwardsTable = editPanelSnapshot.showInAwardsTable;
+          entry.active = editPanelSnapshot.active;
           entry.collaborators = JSON.parse(JSON.stringify(editPanelSnapshot.collaborators));
           entry.relatedProjects = editPanelSnapshot.relatedProjects.slice();
           entry.relatedEntries = editPanelSnapshot.relatedEntries.slice();
@@ -1154,6 +1167,7 @@
     entry.featured = epFeatured.checked;
     entry.featuredPosition = epFeatured.checked && epFeaturedPosition.value !== '' ? Number(epFeaturedPosition.value) : null;
     entry.showInAwardsTable = epShowInAwardsTable.checked;
+    entry.active = isStaff(entry.entryType) ? epActive.checked : entry.active;
     entry.relatedEntries = getPanelRelatedEntries();
     entry.body = epBody.value;
 
@@ -1195,7 +1209,8 @@
       collaborators: JSON.parse(JSON.stringify(entry.collaborators || [])),
       relatedProjects: (entry.relatedProjects || []).slice(),
       relatedEntries: (entry.relatedEntries || []).slice(),
-      body: entry.body
+      body: entry.body,
+      active: entry.active
     };
 
     updateChanges();
@@ -2103,6 +2118,7 @@
       e.featured = orig.featured;
       e.featuredPosition = orig.featuredPosition;
       e.showInAwardsTable = orig.showInAwardsTable;
+      e.active = orig.active;
       e.collaborators = JSON.parse(orig.collaborators);
       e.relatedProjects = JSON.parse(orig.relatedProjects);
       e.relatedEntries = JSON.parse(orig.relatedEntries || '[]');
