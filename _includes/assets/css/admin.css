@@ -1065,33 +1065,29 @@ body {
 .modal-content--link { min-width: 280px; max-width: 340px; }
 
 /* Save confirmation modal */
-.modal-content--save-confirm { min-width: 560px; max-width: 780px; max-height: 70vh; }
+.modal-content--save-confirm { min-width: 620px; max-width: 860px; max-height: 70vh; }
 .save-confirm-table { table-layout: fixed; }
-.sct-col-entry  { width: 35%; }
-.sct-col-action { width: 80px; text-align: center; }
-.sct-col-fields { width: auto; }
+.sct-col-entry  { width: 22%; }
+.sct-col-action { width: 72px; }
+.sct-col-field  { width: 15%; color: var(--admin-text-muted); }
+.sct-col-old    { width: auto; color: var(--admin-text-muted); font-style: italic; }
+.sct-col-new    { width: auto; }
+/* Group rows per entry with a solid border above the first row */
+.sct-entry-first td { border-top: 1px solid var(--admin-border); }
+.save-confirm-table tbody tr:first-child.sct-entry-first td { border-top: none; }
+/* Entry + action cells span multiple rows — vertically align to top */
+.sct-col-entry, .sct-col-action { vertical-align: top; padding-top: 0.5rem; }
+/* Action label — plain text, not a pill */
 .sct-action {
-  display: inline-block;
   font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 1px 5px;
-  border: 1px solid var(--admin-border);
   color: var(--admin-text-muted);
 }
-.sct-action--create { color: var(--admin-primary); border-color: var(--admin-primary); }
-.sct-action--delete { color: var(--admin-danger); border-color: var(--admin-danger); }
-.sct-action--rename { color: var(--admin-text); border-color: var(--admin-border); }
-.sct-field {
-  display: inline-block;
-  font-size: 10px;
-  background: var(--admin-tag-bg);
-  padding: 1px 5px;
-  margin: 1px 2px 1px 0;
-}
-.sct-field em { font-style: italic; }
-.sct-field--none { background: none; color: var(--admin-text-muted); }
+.sct-action--create { color: var(--admin-primary); }
+.sct-action--delete { color: var(--admin-danger); }
+.sct-action--rename { color: var(--admin-text); }
 .link-modal-label {
   display: flex;
   flex-direction: column;

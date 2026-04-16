@@ -2422,16 +2422,61 @@
   var saveConfirmBtn = document.getElementById('save-confirm-btn');
   var saveConfirmCancel = document.getElementById('save-confirm-cancel');
 
-  // Human-readable labels for diffable fields
-  var FIELD_LABELS = {
-    title: 'Title', subtitle: 'Subtitle', description: 'Description',
-    date: 'Date', year: 'Year', link: 'Link', position: 'Position',
-    draft: 'Draft', categories: 'Categories', location: 'Location',
-    status: 'Status', featured: 'Featured', featuredPosition: 'Feat. position',
-    showInAwardsTable: 'Awards table', active: 'Active',
-    collaborators: 'Collaborators', relatedProjects: 'Related projects',
-    relatedEntries: 'Related entries', body: 'Body', entryType: 'Type', slug: 'Slug'
-  };
+  // Human-readable labels for diffable fields (in display order)
+  var DIFF_FIELDS = [
+    { key: 'entryType',        label: 'Type' },
+    { key: 'slug',             label: 'Slug' },
+    { key: 'title',            label: 'Title' },
+    { key: 'subtitle',         label: 'Subtitle' },
+    { key: 'description',      label: 'Description' },
+    { key: 'date',             label: 'Date' },
+    { key: 'year',             label: 'Year' },
+    { key: 'draft',            label: 'Draft' },
+    { key: 'active',           label: 'Active' },
+    { key: 'link',             label: 'Link' },
+    { key: 'location',         label: 'Location' },
+    { key: 'status',           label: 'Status' },
+    { key: 'position',         label: 'Position' },
+    { key: 'featured',         label: 'Featured' },
+    { key: 'featuredPosition', label: 'Feat. position' },
+    { key: 'showInAwardsTable',label: 'Awards table' },
+    { key: 'categories',       label: 'Categories' },
+    { key: 'collaborators',    label: 'Collaborators' },
+    { key: 'relatedProjects',  label: 'Related projects' },
+    { key: 'relatedEntries',   label: 'Related entries' },
+    { key: 'body',             label: 'Body' }
+  ];
+
+  // Normalise a snapshot value to a stable comparable string and a readable display string
+  function normField(key, val) {
+    // snapshot() stores categories as array, collaborators/related* as JSON strings
+    if (key === 'categories') {
+      var arr = Array.isArray(val) ? val : (val || []);
+      return { cmp: JSON.stringify(arr.slice().sort()), display: arr.length ? arr.join(', ') : '—' };
+    }
+    if (key === 'collaborators' || key === 'relatedProjects' || key === 'relatedEntries') {
+      var parsed = typeof val === 'string' ? JSON.parse(val || '[]') : (val || []);
+      if (key === 'collaborators') {
+        var names = parsed.map(function(c) { return c.name || JSON.stringify(c); });
+        return { cmp: JSON.stringify(parsed), display: names.length ? names.join(', ') : '—' };
+      }
+      return { cmp: JSON.stringify(parsed), display: parsed.length ? parsed.join(', ') : '—' };
+    }
+    if (key === 'draft' || key === 'featured' || key === 'showInAwardsTable' || key === 'active') {
+      var b = val === true || val === 'true';
+      return { cmp: String(b), display: b ? 'Yes' : 'No' };
+    }
+    if (key === 'body') {
+      var s = (val || '').trim();
+      return { cmp: s, display: s.length > 80 ? s.slice(0, 80) + '…' : (s || '—') };
+    }
+    var str = val !== null && val !== undefined ? String(val) : '';
+    return { cmp: str, display: str || '—' };
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
 
   function buildSaveConfirmRows() {
     var html = '';
@@ -2440,55 +2485,58 @@
     changeList.forEach(function(c) {
       var action = c.action || 'edit';
       var actionLabel = { create: 'New', rename: 'Rename', delete: 'Delete', edit: 'Edit', updateCategories: 'Edit' }[action] || action;
-      var actionClass = { create: 'sct-action--create', rename: 'sct-action--rename', delete: 'sct-action--delete', edit: '', updateCategories: '' }[action] || '';
+      var actionClass = { create: 'sct-action--create', rename: 'sct-action--rename', delete: 'sct-action--delete' }[action] || '';
 
-      var entryName, fieldsHtml;
+      var entry = entries.filter(function(e) { return e.filePath === c.filePath; })[0];
+      var entryName = entry ? (entry.title || entry.slug || c.filePath) : c.filePath;
+
+      // Build list of { label, oldVal, newVal } rows
+      var fieldRows = [];
 
       if (action === 'updateCategories') {
         entryName = 'Category labels';
-        fieldsHtml = '<span class="sct-field">canonical list updated</span>';
+        fieldRows.push({ label: 'Categories', oldVal: '—', newVal: 'canonical list updated' });
       } else if (action === 'delete') {
-        var del = entries.filter(function(e) { return e.filePath === c.filePath; })[0];
-        entryName = del ? (del.title || del.slug || c.filePath) : c.filePath;
-        fieldsHtml = '—';
+        fieldRows.push({ label: '—', oldVal: 'Entry will be deleted', newVal: '—' });
+      } else if (action === 'create') {
+        var cur = snapshot(entry);
+        DIFF_FIELDS.forEach(function(f) {
+          var n = normField(f.key, cur[f.key]);
+          if (n.cmp !== '' && n.cmp !== 'false' && n.cmp !== '[]' && n.cmp !== 'null') {
+            fieldRows.push({ label: f.label, oldVal: '—', newVal: esc(n.display) });
+          }
+        });
       } else {
-        var entry = entries.filter(function(e) { return e.filePath === c.filePath; })[0];
-        entryName = entry ? (entry.title || entry.slug || c.filePath) : c.filePath;
+        // edit or rename
+        var origKey = (entry && entry._renameFrom) || c.filePath;
+        var orig = originals[origKey];
+        var cur2 = snapshot(entry);
 
-        if (action === 'create') {
-          fieldsHtml = '<span class="sct-field">new entry</span>';
-        } else {
-          var origKey = (entry && entry._renameFrom) || c.filePath;
-          var orig = originals[origKey];
-          var changedFields = [];
-
-          if (action === 'rename') {
-            changedFields.push('Slug: <em>' + (orig ? orig.slug : '?') + '</em> → <em>' + (entry ? entry.slug : c.newSlug) + '</em>');
+        DIFF_FIELDS.forEach(function(f) {
+          var o = normField(f.key, orig ? orig[f.key] : undefined);
+          var n = normField(f.key, cur2[f.key]);
+          if (o.cmp !== n.cmp) {
+            fieldRows.push({ label: f.label, oldVal: esc(o.display), newVal: esc(n.display) });
           }
+        });
 
-          if (orig && entry) {
-            var cur = snapshot(entry);
-            Object.keys(FIELD_LABELS).forEach(function(f) {
-              if (f === 'slug') return; // handled above for rename
-              var ov = JSON.stringify(orig[f] !== undefined ? orig[f] : null);
-              var nv = JSON.stringify(cur[f] !== undefined ? cur[f] : null);
-              if (ov !== nv) {
-                changedFields.push(FIELD_LABELS[f]);
-              }
-            });
-          }
-
-          fieldsHtml = changedFields.length
-            ? changedFields.map(function(f) { return '<span class="sct-field">' + f + '</span>'; }).join('')
-            : '<span class="sct-field sct-field--none">—</span>';
+        if (fieldRows.length === 0) {
+          fieldRows.push({ label: '—', oldVal: '—', newVal: '—' });
         }
       }
 
-      html += '<tr>';
-      html += '<td class="sct-col-entry">' + entryName + '</td>';
-      html += '<td class="sct-col-action"><span class="sct-action ' + actionClass + '">' + actionLabel + '</span></td>';
-      html += '<td class="sct-col-fields">' + fieldsHtml + '</td>';
-      html += '</tr>';
+      var rowspan = fieldRows.length;
+      fieldRows.forEach(function(fr, i) {
+        html += '<tr class="' + (i === 0 ? 'sct-entry-first' : 'sct-entry-cont') + '">';
+        if (i === 0) {
+          html += '<td class="sct-col-entry" rowspan="' + rowspan + '">' + esc(entryName) + '</td>';
+          html += '<td class="sct-col-action" rowspan="' + rowspan + '"><span class="sct-action ' + actionClass + '">' + actionLabel + '</span></td>';
+        }
+        html += '<td class="sct-col-field">' + fr.label + '</td>';
+        html += '<td class="sct-col-old">' + fr.oldVal + '</td>';
+        html += '<td class="sct-col-new">' + fr.newVal + '</td>';
+        html += '</tr>';
+      });
     });
 
     return html;
