@@ -1077,6 +1077,8 @@ body {
 .save-confirm-table tbody tr:first-child.sct-entry-first td { border-top: none; }
 /* Entry + action cells span multiple rows — vertically align to top */
 .sct-col-entry, .sct-col-action { vertical-align: top; padding-top: 0.5rem; }
+/* Remove the dashed divider on the last row of each entry group */
+.save-confirm-table .sct-entry-last td:last-child::after { display: none; }
 /* Action label — plain text, not a pill */
 .sct-action {
   font-size: 10px;

@@ -522,9 +522,13 @@
 
   function toDateInputValue(dateVal) {
     if (!dateVal) return '';
-    var d = new Date(dateVal);
+    var s = String(dateVal);
+    // If already YYYY-MM-DD, use directly — avoids UTC→local shift when parsing bare dates
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    // Otherwise parse ISO string and extract the date portion in UTC
+    var d = new Date(s);
     if (isNaN(d)) return '';
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0');
   }
 
   function generateSlug(title) {
@@ -1248,6 +1252,7 @@
 
     updateChanges();
     renderTable();
+    closeEditPanel();
   });
 
   // ---- Collaborators editor ----
@@ -2457,10 +2462,16 @@
     if (key === 'collaborators' || key === 'relatedProjects' || key === 'relatedEntries') {
       var parsed = typeof val === 'string' ? JSON.parse(val || '[]') : (val || []);
       if (key === 'collaborators') {
-        var names = parsed.map(function(c) { return c.name || JSON.stringify(c); });
-        return { cmp: JSON.stringify(parsed), display: names.length ? names.join(', ') : '—' };
+        var entries2 = parsed.map(function(c) { return c.role ? (c.name + ' (' + c.role + ')') : c.name; });
+        var sorted2 = entries2.slice().sort();
+        return { cmp: JSON.stringify(sorted2), display: entries2.length ? entries2.join(', ') : '—' };
       }
-      return { cmp: JSON.stringify(parsed), display: parsed.length ? parsed.join(', ') : '—' };
+      var sortedArr = parsed.slice().sort();
+      return { cmp: JSON.stringify(sortedArr), display: sortedArr.length ? sortedArr.join(', ') : '—' };
+    }
+    if (key === 'date') {
+      var d = val ? String(val).slice(0, 10) : '';
+      return { cmp: d, display: d || '—' };
     }
     if (key === 'draft' || key === 'featured' || key === 'showInAwardsTable' || key === 'active') {
       var b = val === true || val === 'true';
@@ -2527,7 +2538,8 @@
 
       var rowspan = fieldRows.length;
       fieldRows.forEach(function(fr, i) {
-        html += '<tr class="' + (i === 0 ? 'sct-entry-first' : 'sct-entry-cont') + '">';
+        var rowClasses = (i === 0 ? 'sct-entry-first' : 'sct-entry-cont') + (i === rowspan - 1 ? ' sct-entry-last' : '');
+        html += '<tr class="' + rowClasses + '">';
         if (i === 0) {
           html += '<td class="sct-col-entry" rowspan="' + rowspan + '">' + esc(entryName) + '</td>';
           html += '<td class="sct-col-action" rowspan="' + rowspan + '"><span class="sct-action ' + actionClass + '">' + actionLabel + '</span></td>';
