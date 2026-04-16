@@ -9,6 +9,6 @@ date: 2023-05-20T00:00:00.000Z
 categories: []
 relatedProjects:
   - 220728_venice-biennale-2023
-type: exhibition
+type: award
 showInAwardsTable: true
 ---
