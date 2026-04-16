@@ -993,9 +993,15 @@ body {
   gap: 0.3rem;
 }
 .ep-row__control[hidden] { display: none; }
-.ep-body-header {
+.ep-body-toolbar {
   display: flex;
-  justify-content: flex-end;
+  gap: 0.25rem;
+  margin-bottom: 0.35rem;
+}
+.ep-fmt-btn {
+  font-style: normal;
+  min-width: 26px;
+  text-align: center;
 }
 
 @media (max-width: 420px) {
@@ -1018,25 +1024,56 @@ body {
   min-width: 100%;
 }
 
-/* Body preview */
-.ep-body-preview {
+/* Rich body editor */
+.ep-body-editor {
   border: 1px solid var(--admin-border);
   padding: 0.75rem;
   font-size: 12px;
   line-height: 1.6;
-  min-height: 80px;
+  min-height: 120px;
+  max-height: 320px;
   overflow-y: auto;
-  max-height: 300px;
-  background: var(--admin-bg);
+  background: var(--admin-surface);
+  outline: none;
+  cursor: text;
 }
-.ep-body-preview h1, .ep-body-preview h2, .ep-body-preview h3 {
+.ep-body-editor:focus {
+  border-color: var(--admin-primary);
+}
+.ep-body-editor[data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: var(--admin-text-muted);
+  pointer-events: none;
+}
+.ep-body-editor p { margin: 0 0 0.4rem; }
+.ep-body-editor p:last-child { margin-bottom: 0; }
+.ep-body-editor h1, .ep-body-editor h2 {
   font-size: 13px;
   font-weight: 600;
-  margin-bottom: 0.4rem;
+  margin: 0.5rem 0 0.3rem;
 }
-.ep-body-preview p { margin-bottom: 0.4rem; }
-.ep-body-preview ul, .ep-body-preview ol { padding-left: 1.2rem; margin-bottom: 0.4rem; }
-.ep-body-preview code { font-family: var(--admin-mono); font-size: 11px; background: var(--admin-tag-bg); padding: 0 3px; }
+.ep-body-editor ul { padding-left: 1.2rem; margin: 0 0 0.4rem; }
+.ep-body-editor li { margin-bottom: 0.1rem; }
+.ep-body-editor a { color: var(--admin-primary); text-decoration: underline; }
+/* Active state for toolbar buttons */
+.ep-fmt-btn.is-active {
+  background: var(--admin-tag-bg);
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+}
+/* Link modal */
+.modal-content--link { min-width: 280px; max-width: 340px; }
+.link-modal-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--admin-text-muted);
+  gap: 0.2rem;
+  margin-bottom: 0.6rem;
+}
+.link-modal-label input { margin-bottom: 0; }
 
 /* Category picker dropdown in edit panel */
 .ep-category-dropdown .admin-dropdown__drawer {

@@ -167,8 +167,6 @@
   var epCategoryDrawer = document.getElementById('ep-category-drawer');
   var epCategoryInput = document.getElementById('ep-category-input');
   var epCategorySuggestions = document.getElementById('ep-category-suggestions');
-  var epPreviewToggle = document.getElementById('ep-preview-toggle');
-  var epBodyPreview = document.getElementById('ep-body-preview');
 
   // ---- Auth ----
   function showLogin() {
@@ -1081,10 +1079,7 @@
     epFeatured.checked = !!entry.featured;
     epFeaturedPosition.value = entry.featuredPosition != null ? entry.featuredPosition : '';
     epShowInAwardsTable.checked = !!entry.showInAwardsTable;
-    epBody.value = entry.body || '';
-    epBodyPreview.hidden = true;
-    epBody.hidden = false;
-    epPreviewToggle.textContent = 'Preview';
+    setBodyHtml(entry.body || '');
 
     // Show/hide type-conditional fields
     applyTypeVisibility(entry.entryType);
@@ -1187,7 +1182,7 @@
     entry.showInAwardsTable = epShowInAwardsTable.checked;
     entry.active = isStaff(entry.entryType) ? epActive.checked : entry.active;
     entry.relatedEntries = getPanelRelatedEntries();
-    entry.body = epBody.value;
+    entry.body = getBodyMarkdown();
 
     // Update slug (new or existing entries)
     var manualSlug = epSlug.value.trim();
@@ -1437,7 +1432,10 @@
   });
 
   document.addEventListener('click', function(e) {
-    if (!epCategoryDropdown.contains(e.target)) closeEpCategoryDropdown();
+    // Use composedPath so detached nodes (removed by DOM re-render during click) still resolve correctly
+    var path = e.composedPath ? e.composedPath() : [];
+    var insideDropdown = path.indexOf(epCategoryDropdown) !== -1 || epCategoryDropdown.contains(e.target);
+    if (!insideDropdown) closeEpCategoryDropdown();
   });
 
   function renderCategoryDrawerTags(query) {
@@ -1707,24 +1705,24 @@
     epRelatedEntriesSuggestions.hidden = true;
   }
 
-  // ---- Markdown preview ----
-  function simpleMarkdown(text) {
+  // ---- Rich body editor (contenteditable, stores as markdown) ----
+
+  // Convert markdown string → HTML for the editor
+  function markdownToHtml(text) {
     if (!text) return '';
     var lines = text.split('\n');
     var html = '';
     var inList = false;
-    lines.forEach(function(rawLine) {
-      var line = rawLine
+    lines.forEach(function(raw) {
+      // Inline: escape HTML first, then apply inline markdown
+      var line = raw
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        .replace(/`(.+?)`/g, '<code>$1</code>');
-      if (/^### /.test(line)) {
-        if (inList) { html += '</ul>'; inList = false; }
-        html += '<h3>' + line.slice(4) + '</h3>';
-      } else if (/^## /.test(line)) {
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      if (/^## /.test(line)) {
         if (inList) { html += '</ul>'; inList = false; }
         html += '<h2>' + line.slice(3) + '</h2>';
       } else if (/^# /.test(line)) {
@@ -1735,6 +1733,8 @@
         html += '<li>' + line.slice(2) + '</li>';
       } else if (line.trim() === '') {
         if (inList) { html += '</ul>'; inList = false; }
+        // empty line → paragraph break (br keeps spacing in contenteditable)
+        html += '<p><br></p>';
       } else {
         if (inList) { html += '</ul>'; inList = false; }
         html += '<p>' + line + '</p>';
@@ -1744,13 +1744,209 @@
     return html;
   }
 
-  var previewMode = false;
-  epPreviewToggle.addEventListener('click', function() {
-    previewMode = !previewMode;
-    epBody.hidden = previewMode;
-    epBodyPreview.hidden = !previewMode;
-    this.textContent = previewMode ? 'Edit' : 'Preview';
-    if (previewMode) epBodyPreview.innerHTML = simpleMarkdown(epBody.value);
+  // Convert the contenteditable DOM back to markdown string for storage
+  function htmlToMarkdown(el) {
+    function nodeToMd(node) {
+      if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+      var tag = node.tagName ? node.tagName.toLowerCase() : '';
+      var inner = Array.from(node.childNodes).map(nodeToMd).join('');
+      if (tag === 'strong' || tag === 'b') return '**' + inner + '**';
+      if (tag === 'em' || tag === 'i') return '*' + inner + '*';
+      if (tag === 'a') return '[' + inner + '](' + (node.getAttribute('href') || '') + ')';
+      if (tag === 'br') return '';
+      if (tag === 'h1') return '# ' + inner;
+      if (tag === 'h2') return '## ' + inner;
+      if (tag === 'li') return '- ' + inner;
+      if (tag === 'ul' || tag === 'ol') {
+        return Array.from(node.children).map(function(li) { return '- ' + Array.from(li.childNodes).map(nodeToMd).join(''); }).join('\n');
+      }
+      if (tag === 'p') {
+        if (inner === '' || inner === '\n') return '';
+        return inner;
+      }
+      if (tag === 'div') return inner;
+      return inner;
+    }
+    var lines = [];
+    var node = el.firstChild;
+    while (node) {
+      var tag = node.tagName ? node.tagName.toLowerCase() : '';
+      if (tag === 'ul' || tag === 'ol') {
+        Array.from(node.children).forEach(function(li) {
+          lines.push('- ' + Array.from(li.childNodes).map(nodeToMd).join(''));
+        });
+      } else {
+        var md = nodeToMd(node).replace(/\n$/, '');
+        lines.push(md);
+      }
+      node = node.nextSibling;
+    }
+    return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  function getBodyMarkdown() {
+    return htmlToMarkdown(epBody);
+  }
+
+  function setBodyHtml(markdown) {
+    epBody.innerHTML = markdownToHtml(markdown) || '<p><br></p>';
+  }
+
+  // Update active state of toolbar buttons based on cursor position
+  function updateToolbarState() {
+    var boldActive = document.queryCommandState('bold');
+    var italicActive = document.queryCommandState('italic');
+    var sel = window.getSelection();
+    var h2Active = false;
+    var ulActive = false;
+    if (sel && sel.anchorNode) {
+      var block = sel.anchorNode;
+      while (block && block !== epBody) {
+        if (block.nodeType === Node.ELEMENT_NODE) {
+          var t = block.tagName.toLowerCase();
+          if (t === 'h2' || t === 'h1') h2Active = true;
+          if (t === 'ul' || t === 'li') ulActive = true;
+        }
+        block = block.parentNode;
+      }
+    }
+    document.querySelectorAll('.ep-fmt-btn').forEach(function(btn) {
+      var fmt = btn.dataset.fmt;
+      btn.classList.toggle('is-active',
+        (fmt === 'bold' && boldActive) ||
+        (fmt === 'italic' && italicActive) ||
+        (fmt === 'h2' && h2Active) ||
+        (fmt === 'ul' && ulActive)
+      );
+    });
+  }
+
+  epBody.addEventListener('keyup', updateToolbarState);
+  epBody.addEventListener('mouseup', updateToolbarState);
+  epBody.addEventListener('focus', updateToolbarState);
+
+  // ---- Link mini-modal ----
+  var linkModal = document.getElementById('link-modal');
+  var linkModalText = document.getElementById('link-modal-text');
+  var linkModalUrl = document.getElementById('link-modal-url');
+  var linkModalConfirm = document.getElementById('link-modal-confirm');
+  var linkModalCancel = document.getElementById('link-modal-cancel');
+  var savedRange = null;
+
+  function openLinkModal() {
+    // savedRange was already captured in mousedown before focus shifted
+    var selectedText = savedRange ? savedRange.toString() : '';
+    // Pre-fill if the range sits inside an existing <a>
+    var anchorEl = null;
+    if (savedRange) {
+      var node = savedRange.commonAncestorContainer;
+      while (node && node !== epBody) {
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'A') {
+          anchorEl = node;
+          break;
+        }
+        node = node.parentNode;
+      }
+    }
+    if (anchorEl) {
+      linkModalText.value = anchorEl.textContent;
+      linkModalUrl.value = anchorEl.getAttribute('href') || '';
+    } else {
+      linkModalText.value = selectedText;
+      linkModalUrl.value = '';
+    }
+    linkModal.hidden = false;
+    (linkModalUrl.value ? linkModalUrl : (linkModalText.value ? linkModalUrl : linkModalText)).focus();
+  }
+
+  function closeLinkModal() {
+    linkModal.hidden = true;
+    savedRange = null;
+    epBody.focus();
+  }
+
+  linkModalConfirm.addEventListener('click', function() {
+    var text = linkModalText.value.trim() || linkModalUrl.value.trim();
+    var url = linkModalUrl.value.trim();
+    if (!url) { linkModalUrl.focus(); return; }
+
+    epBody.focus();
+
+    // Check if savedRange sits inside an existing <a> to update it in place
+    var anchorEl = null;
+    if (savedRange) {
+      var node = savedRange.commonAncestorContainer;
+      while (node && node !== epBody) {
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'A') {
+          anchorEl = node;
+          break;
+        }
+        node = node.parentNode;
+      }
+    }
+
+    if (anchorEl && epBody.contains(anchorEl)) {
+      anchorEl.textContent = text;
+      anchorEl.href = url;
+    } else {
+      var a = document.createElement('a');
+      a.href = url;
+      a.textContent = text;
+      if (savedRange) {
+        savedRange.deleteContents();
+        savedRange.insertNode(a);
+        var sel = window.getSelection();
+        var range = document.createRange();
+        range.setStartAfter(a);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } else {
+        // No saved range — insert at end of editor
+        epBody.appendChild(a);
+      }
+    }
+    closeLinkModal();
+  });
+
+  linkModalCancel.addEventListener('click', closeLinkModal);
+  linkModal.addEventListener('click', function(e) { if (e.target === linkModal) closeLinkModal(); });
+  linkModalUrl.addEventListener('keydown', function(e) { if (e.key === 'Enter') linkModalConfirm.click(); });
+
+  // ---- Formatting toolbar ----
+  document.querySelectorAll('.ep-fmt-btn').forEach(function(btn) {
+    btn.addEventListener('mousedown', function(e) {
+      // Prevent the editor from losing focus so selection is preserved
+      e.preventDefault();
+      // For the link button, capture selection now before the modal opens
+      if (this.dataset.fmt === 'link') {
+        var sel = window.getSelection();
+        savedRange = (sel && sel.rangeCount && epBody.contains(sel.anchorNode))
+          ? sel.getRangeAt(0).cloneRange()
+          : null;
+      }
+    });
+    btn.addEventListener('click', function() {
+      var fmt = this.dataset.fmt;
+      if (fmt === 'link') {
+        openLinkModal();
+        return;
+      }
+      epBody.focus();
+      var sel = window.getSelection();
+      if (fmt === 'bold') {
+        document.execCommand('bold', false, null);
+      } else if (fmt === 'italic') {
+        document.execCommand('italic', false, null);
+      } else if (fmt === 'h2') {
+        // Toggle heading: if already in h2, switch to paragraph
+        var inH2 = document.queryCommandValue('formatBlock') === 'h2';
+        document.execCommand('formatBlock', false, inH2 ? 'p' : 'h2');
+      } else if (fmt === 'ul') {
+        document.execCommand('insertUnorderedList', false, null);
+      }
+      updateToolbarState();
+    });
   });
 
   // ---- Manage labels modal (rename categories + types) ----

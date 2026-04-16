@@ -268,11 +268,14 @@ eleventyExcludeFromCollections: true
             </div>
             <span class="ep-row__label">Body</span>
             <div class="ep-row__control">
-              <div class="ep-body-header">
-                <button id="ep-preview-toggle" class="btn btn--small">Preview</button>
+              <div class="ep-body-toolbar">
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="bold" title="Bold"><strong>B</strong></button>
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="italic" title="Italic"><em>I</em></button>
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="h2" title="Heading">H2</button>
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="ul" title="Bullet list">&#8226; List</button>
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="link" title="Link">&#9741; Link</button>
               </div>
-              <textarea id="ep-body" rows="10" placeholder="Write markdown here..."></textarea>
-              <div id="ep-body-preview" class="ep-body-preview" hidden></div>
+              <div id="ep-body" class="ep-body-editor" contenteditable="true" data-placeholder="Write body text here..."></div>
             </div>
           </div>
         </div>
@@ -427,6 +430,23 @@ eleventyExcludeFromCollections: true
         <div class="modal-actions">
           <button id="delete-modal-confirm" class="btn btn--primary btn--danger-solid">Delete</button>
           <button id="delete-modal-cancel" class="btn btn--secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    {# Link insertion mini-modal #}
+    <div id="link-modal" class="modal" hidden>
+      <div class="modal-content modal-content--link">
+        <h3>Insert Link</h3>
+        <label class="link-modal-label">Text
+          <input type="text" id="link-modal-text" placeholder="Link text">
+        </label>
+        <label class="link-modal-label">URL
+          <input type="url" id="link-modal-url" placeholder="https://...">
+        </label>
+        <div class="modal-actions">
+          <button id="link-modal-confirm" class="btn btn--primary">Insert</button>
+          <button id="link-modal-cancel" class="btn btn--secondary">Cancel</button>
         </div>
       </div>
     </div>
