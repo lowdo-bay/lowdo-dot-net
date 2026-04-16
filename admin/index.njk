@@ -150,8 +150,8 @@ eleventyExcludeFromCollections: true
       </table>
     </div>
 
-    {# Edit panel (side drawer) #}
-    <div id="edit-panel" class="edit-panel" hidden>
+    {# Edit panel (modal) #}
+    <div id="edit-panel" class="edit-panel" role="dialog" aria-modal="true" aria-labelledby="edit-panel-title" hidden>
       <div class="edit-panel__header">
         <h2 id="edit-panel-title">Edit Entry</h2>
         <button id="edit-panel-close" class="btn btn--secondary">&times;</button>
@@ -160,129 +160,162 @@ eleventyExcludeFromCollections: true
 
         {# Section: Identity #}
         <div class="ep-section">
-          <div class="ep-section__label">Identity</div>
-          <div class="field-group">
-            <label>Slug</label>
-            <input type="text" id="ep-slug" readonly>
-          </div>
-          <div class="field-group">
-            <label>Type</label>
-            <div class="ep-type-display">
-              <span id="ep-type-value" class="cat-tag type-tag"></span>
-              <button id="ep-type-change" class="btn btn--small">Change</button>
+          <span class="ep-section__label">Identity</span>
+          <div class="ep-grid">
+            <span class="ep-row__label">Type</span>
+            <div class="ep-row__control">
+              <div class="admin-dropdown ep-type-dropdown" id="ep-type-dropdown">
+                <button class="admin-dropdown__button" aria-expanded="false" type="button">
+                  <span class="admin-dropdown__label" id="ep-type-label">—</span>
+                  <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                    <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </button>
+                <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-type-drawer"></div>
+              </div>
             </div>
-          </div>
-          <div class="field-group">
-            <label class="field-label--inline">
-              <input type="checkbox" id="ep-draft"> Draft
-            </label>
-          </div>
-        </div>
-
-        {# Section: Content #}
-        <div class="ep-section">
-          <div class="ep-section__label">Content</div>
-          <div class="field-group">
-            <label>Title</label>
-            <input type="text" id="ep-title">
-          </div>
-          <div class="field-group">
-            <label>Subtitle</label>
-            <input type="text" id="ep-subtitle">
-          </div>
-          <div class="field-group">
-            <label>Description</label>
-            <textarea id="ep-description" rows="2"></textarea>
-          </div>
-          <div class="field-group">
-            <label>Date</label>
-            <input type="date" id="ep-date">
+            <span class="ep-row__label">Slug</span>
+            <div class="ep-row__control">
+              <input type="text" id="ep-slug" placeholder="20260101_project-name">
+            </div>
+            <span class="ep-row__label">Draft</span>
+            <div class="ep-row__control">
+              <label class="field-label--inline">
+                <input type="checkbox" id="ep-draft"> Draft
+              </label>
+            </div>
+            <span class="ep-row__label staff-only">Active</span>
+            <div class="ep-row__control staff-only">
+              <label class="field-label--inline">
+                <input type="checkbox" id="ep-active"> Active
+              </label>
+            </div>
           </div>
         </div>
 
         {# Section: Metadata #}
         <div class="ep-section">
-          <div class="ep-section__label">Metadata</div>
-          <div class="field-group">
-            <label>Categories</label>
-            <div id="ep-categories-tags" class="tag-list"></div>
-            <div class="tag-input-wrap">
-              <input type="text" id="ep-category-input" placeholder="Add category..." autocomplete="off">
-              <ul id="ep-category-suggestions" class="tag-suggestions" hidden></ul>
+          <span class="ep-section__label">Metadata</span>
+          <div class="ep-grid">
+            <span class="ep-row__label">Categories</span>
+            <div class="ep-row__control">
+              <div id="ep-categories-tags" class="tag-list"></div>
+              <div class="admin-dropdown ep-category-dropdown" id="ep-category-dropdown">
+                <button class="admin-dropdown__button" aria-expanded="false" type="button" id="ep-category-dropdown-btn">
+                  <span class="admin-dropdown__label">Add Category</span>
+                  <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                    <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </button>
+                <div class="admin-dropdown__drawer ep-category-drawer" aria-hidden="true" id="ep-category-drawer">
+                  <div class="ep-category-search-wrap">
+                    <input type="text" id="ep-category-input" placeholder="Filter or create..." autocomplete="off">
+                  </div>
+                  <div id="ep-category-suggestions" class="tag-list ep-category-tag-list"></div>
+                </div>
+              </div>
+            </div>
+            <span class="ep-row__label non-project-only">Link</span>
+            <div class="ep-row__control non-project-only">
+              <input type="url" id="ep-link" placeholder="https://...">
+            </div>
+            <span class="ep-row__label project-only">Collaborators</span>
+            <div class="ep-row__control project-only">
+              <div id="ep-collaborators-list" class="structured-list"></div>
+              <button id="ep-add-collaborator" class="btn btn--small">+ Add Collaborator</button>
+            </div>
+            <span class="ep-row__label">Position</span>
+            <div class="ep-row__control">
+              <input type="number" id="ep-position" placeholder="999">
+            </div>
+            <span class="ep-row__label">Date</span>
+            <div class="ep-row__control">
+              <input type="date" id="ep-date">
+            </div>
+            <span class="ep-row__label project-only">Year</span>
+            <div class="ep-row__control project-only">
+              <input type="text" id="ep-year" placeholder="2024 or 2022–Present">
+            </div>
+            <span class="ep-row__label project-only">Location</span>
+            <div class="ep-row__control project-only">
+              <input type="text" id="ep-location" placeholder="Austin, TX">
+            </div>
+            <span class="ep-row__label project-only">Status</span>
+            <div class="ep-row__control project-only">
+              <div class="tag-input-wrap">
+                <input type="text" id="ep-status" placeholder="Built / In Progress / Unbuilt" autocomplete="off">
+                <ul id="ep-status-suggestions" class="tag-suggestions" hidden></ul>
+              </div>
             </div>
           </div>
-          <div class="field-group">
-            <label>Link (external URL)</label>
-            <input type="url" id="ep-link" placeholder="https://...">
-          </div>
-          <div class="field-group">
-            <label>Position (sort order)</label>
-            <input type="number" id="ep-position" placeholder="999">
-          </div>
-          <div class="field-group project-only">
-            <label>Year</label>
-            <input type="text" id="ep-year" placeholder="2024 or 2020 - Present">
-          </div>
-          <div class="field-group project-only">
-            <label>Location</label>
-            <input type="text" id="ep-location">
-          </div>
-          <div class="field-group project-only">
-            <label>Status</label>
-            <input type="text" id="ep-status" placeholder="Built / In Progress / Unbuilt">
-          </div>
         </div>
 
-        {# Section: Homepage (project-only) #}
-        <div class="ep-section project-only">
-          <div class="ep-section__label">Homepage</div>
-          <div class="field-group">
-            <label class="field-label--inline">
-              <input type="checkbox" id="ep-featured"> Featured on homepage
-            </label>
-          </div>
-          <div class="field-group" id="ep-featured-position-group" hidden>
-            <label>Featured Position</label>
-            <input type="number" id="ep-featured-position" min="1" placeholder="1">
-          </div>
-        </div>
-
-        {# Section: Homepage (non-project-only) #}
-        <div class="ep-section non-project-only">
-          <div class="ep-section__label">Homepage</div>
-          <div class="field-group">
-            <label class="field-label--inline">
-              <input type="checkbox" id="ep-show-in-awards-table"> Show in Awards table on homepage
-            </label>
-          </div>
-        </div>
-
-        {# Section: Body #}
+        {# Section: Content #}
         <div class="ep-section">
-          <div class="ep-section__label ep-section__label--row">
-            Body (Markdown)
-            <button id="ep-preview-toggle" class="btn btn--small">Preview</button>
+          <span class="ep-section__label">Content</span>
+          <div class="ep-grid">
+            <span class="ep-row__label">Title</span>
+            <div class="ep-row__control">
+              <input type="text" id="ep-title">
+            </div>
+            <span class="ep-row__label non-project-only">Subtitle</span>
+            <div class="ep-row__control non-project-only">
+              <input type="text" id="ep-subtitle">
+            </div>
+            <span class="ep-row__label">Description</span>
+            <div class="ep-row__control">
+              <textarea id="ep-description" rows="2"></textarea>
+            </div>
+            <span class="ep-row__label">Body</span>
+            <div class="ep-row__control">
+              <div class="ep-body-toolbar">
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="bold" title="Bold"><strong>B</strong></button>
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="italic" title="Italic"><em>I</em></button>
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="h2" title="Heading">H2</button>
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="ul" title="Bullet list">&#8226; List</button>
+                <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="link" title="Link">&#9741; Link</button>
+              </div>
+              <div id="ep-body" class="ep-body-editor" contenteditable="true" data-placeholder="Write body text here..."></div>
+            </div>
           </div>
-          <div class="field-group">
-            <textarea id="ep-body" rows="10" placeholder="Write markdown here..."></textarea>
-          </div>
-          <div id="ep-body-preview" class="ep-body-preview" hidden></div>
         </div>
 
-        {# Section: Collaborators (project-only) #}
-        <div class="ep-section project-only">
-          <div class="ep-section__label">Collaborators</div>
-          <div id="ep-collaborators-list" class="structured-list"></div>
-          <button id="ep-add-collaborator" class="btn btn--small">+ Add Collaborator</button>
-        </div>
-
-        {# Section: Related Projects (non-project-only) #}
-        <div class="ep-section non-project-only">
-          <div class="ep-section__label">Related Projects</div>
-          <div id="ep-related-projects-list" class="tag-list"></div>
-          <div class="tag-input-wrap">
-            <input type="text" id="ep-related-project-input" placeholder="Type project slug...">
-            <ul id="ep-related-project-suggestions" class="tag-suggestions" hidden></ul>
+        {# Section: Relations #}
+        <div class="ep-section">
+          <span class="ep-section__label">Relations</span>
+          <div class="ep-grid">
+            <span class="ep-row__label project-only">Featured</span>
+            <div class="ep-row__control project-only">
+              <label class="field-label--inline">
+                <input type="checkbox" id="ep-featured"> Featured on homepage
+              </label>
+            </div>
+            <span class="ep-row__label project-only ep-featured-position-row" hidden>Featured position</span>
+            <div class="ep-row__control project-only ep-featured-position-row" hidden>
+              <input type="number" id="ep-featured-position" min="1" placeholder="1">
+            </div>
+            <span class="ep-row__label non-project-only">Awards</span>
+            <div class="ep-row__control non-project-only">
+              <label class="field-label--inline">
+                <input type="checkbox" id="ep-show-in-awards-table"> Awards &amp; Recognition section
+              </label>
+            </div>
+            <span class="ep-row__label project-only">Related entries</span>
+            <div class="ep-row__control project-only">
+              <div id="ep-related-entries-list" class="tag-list"></div>
+              <div class="tag-input-wrap">
+                <input type="text" id="ep-related-entries-input" placeholder="Search entries by title or slug..." autocomplete="off">
+                <ul id="ep-related-entries-suggestions" class="tag-suggestions" hidden></ul>
+              </div>
+            </div>
+            <span class="ep-row__label non-project-only">Related projects</span>
+            <div class="ep-row__control non-project-only">
+              <div id="ep-related-projects-list" class="tag-list"></div>
+              <div class="tag-input-wrap">
+                <input type="text" id="ep-related-project-input" placeholder="Search projects by slug...">
+                <ul id="ep-related-project-suggestions" class="tag-suggestions" hidden></ul>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -377,6 +410,35 @@ eleventyExcludeFromCollections: true
       </div>
     </div>
 
+    {# Save confirmation modal #}
+    <div id="save-confirm-modal" class="modal" hidden>
+      <div class="modal-content modal-content--table modal-content--save-confirm">
+        <div class="manage-header">
+          <h3>Confirm Changes</h3>
+        </div>
+        <div class="manage-panel">
+          <table class="admin-table manage-table save-confirm-table">
+            <thead>
+              <tr>
+                <th class="sct-col-entry">Entry</th>
+                <th class="sct-col-action">Action</th>
+                <th class="sct-col-field">Field</th>
+                <th class="sct-col-old">Before</th>
+                <th class="sct-col-new">After</th>
+              </tr>
+            </thead>
+            <tbody id="save-confirm-tbody"></tbody>
+          </table>
+        </div>
+        <div class="manage-footer">
+          <div class="manage-footer__actions">
+            <button id="save-confirm-btn" class="btn btn--primary">Save Changes</button>
+            <button id="save-confirm-cancel" class="btn btn--secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     {# Clear changes confirmation modal #}
     <div id="clear-modal" class="modal" hidden>
       <div class="modal-content">
@@ -397,6 +459,23 @@ eleventyExcludeFromCollections: true
         <div class="modal-actions">
           <button id="delete-modal-confirm" class="btn btn--primary btn--danger-solid">Delete</button>
           <button id="delete-modal-cancel" class="btn btn--secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    {# Link insertion mini-modal #}
+    <div id="link-modal" class="modal" hidden>
+      <div class="modal-content modal-content--link">
+        <h3>Insert Link</h3>
+        <label class="link-modal-label">Text
+          <input type="text" id="link-modal-text" placeholder="Link text">
+        </label>
+        <label class="link-modal-label">URL
+          <input type="url" id="link-modal-url" placeholder="https://...">
+        </label>
+        <div class="modal-actions">
+          <button id="link-modal-confirm" class="btn btn--primary">Insert</button>
+          <button id="link-modal-cancel" class="btn btn--secondary">Cancel</button>
         </div>
       </div>
     </div>
@@ -431,6 +510,7 @@ eleventyExcludeFromCollections: true
         featured: {{ (entry.data.featured or false) | dump | safe }},
         featuredPosition: {{ (entry.data.featuredPosition or null) | dump | safe }},
         showInAwardsTable: {{ (entry.data.showInAwardsTable or false) | dump | safe }},
+        active: {{ (entry.data.active if entry.data.active is defined else true) | dump | safe }},
         collaborators: {{ (entry.data.collaborators or []) | dump | safe }},
         relatedProjects: {{ (entry.data.relatedProjects or []) | dump | safe }},
         body: {{ (entry.rawInput | markdownBody or "") | dump | safe }},
@@ -445,6 +525,13 @@ eleventyExcludeFromCollections: true
       {%- for entry in collections.allEntries %}
       {%- if entry.data.entryType == "project" %}
       {{ entry.fileSlug | dump | safe }},
+      {%- endif %}
+      {%- endfor %}
+    ];
+    window.__NON_PROJECT_ENTRIES__ = [
+      {%- for entry in collections.allEntries %}
+      {%- if entry.data.entryType != "project" %}
+      { slug: {{ entry.fileSlug | dump | safe }}, title: {{ (entry.data.title or entry.fileSlug) | dump | safe }} },
       {%- endif %}
       {%- endfor %}
     ];

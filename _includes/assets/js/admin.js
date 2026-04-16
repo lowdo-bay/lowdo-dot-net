@@ -7,7 +7,38 @@
   var entryTypes = window.__ENTRY_TYPES__ || [];
   var canonicalCategories = (window.__CATEGORIES__ || []).slice();
   var projectSlugs = (window.__PROJECT_SLUGS__ || []).slice();
+  var nonProjectEntries = (window.__NON_PROJECT_ENTRIES__ || []).slice();
   var token = '';
+
+  // Derive dynamic lookup data from all entries
+  var knownCollaboratorNames = [];
+  var collaboratorRoleMap = {}; // { name: [roles] }
+  var knownStatuses = [];
+  (function() {
+    entries.forEach(function(e) {
+      // Collect collaborator names and roles
+      (e.collaborators || []).forEach(function(c) {
+        var name = (c.name || '').trim();
+        var role = (c.role || '').trim();
+        if (name && knownCollaboratorNames.indexOf(name) === -1) {
+          knownCollaboratorNames.push(name);
+        }
+        if (name) {
+          if (!collaboratorRoleMap[name]) collaboratorRoleMap[name] = [];
+          if (role && collaboratorRoleMap[name].indexOf(role) === -1) {
+            collaboratorRoleMap[name].push(role);
+          }
+        }
+      });
+      // Collect statuses
+      var status = (e.status || '').trim();
+      if (status && knownStatuses.indexOf(status) === -1) {
+        knownStatuses.push(status);
+      }
+    });
+    knownCollaboratorNames.sort();
+    knownStatuses.sort();
+  })();
   var changes = {};
   var sortField = 'date';
   var sortDir = 'desc';
@@ -26,6 +57,7 @@
 
   function snapshot(e) {
     return {
+      slug: e.slug,
       categories: (e.categories || []).slice(),
       entryType: e.entryType,
       draft: e.draft,
@@ -41,8 +73,10 @@
       featured: e.featured,
       featuredPosition: e.featuredPosition,
       showInAwardsTable: e.showInAwardsTable,
+      active: e.active,
       collaborators: JSON.stringify(e.collaborators || []),
       relatedProjects: JSON.stringify(e.relatedProjects || []),
+      relatedEntries: JSON.stringify(e.relatedEntries || []),
       body: e.body
     };
   }
@@ -109,7 +143,6 @@
   var epLocation = document.getElementById('ep-location');
   var epStatus = document.getElementById('ep-status');
   var epFeatured = document.getElementById('ep-featured');
-  var epFeaturedPositionGroup = document.getElementById('ep-featured-position-group');
   var epFeaturedPosition = document.getElementById('ep-featured-position');
   var epShowInAwardsTable = document.getElementById('ep-show-in-awards-table');
   var epCollaboratorsList = document.getElementById('ep-collaborators-list');
@@ -117,16 +150,23 @@
   var epRelatedProjectsList = document.getElementById('ep-related-projects-list');
   var epRelatedProjectInput = document.getElementById('ep-related-project-input');
   var epRelatedProjectSuggestions = document.getElementById('ep-related-project-suggestions');
+  var epRelatedEntriesList = document.getElementById('ep-related-entries-list');
+  var epRelatedEntriesInput = document.getElementById('ep-related-entries-input');
+  var epRelatedEntriesSuggestions = document.getElementById('ep-related-entries-suggestions');
+  var epStatusSuggestions = document.getElementById('ep-status-suggestions');
   var epBody = document.getElementById('ep-body');
   var epSlug = document.getElementById('ep-slug');
   var epDraft = document.getElementById('ep-draft');
-  var epTypeValue = document.getElementById('ep-type-value');
-  var epTypeChange = document.getElementById('ep-type-change');
+  var epActive = document.getElementById('ep-active');
+  var epTypeDropdown = document.getElementById('ep-type-dropdown');
+  var epTypeLabel = document.getElementById('ep-type-label');
+  var epTypeDrawer = document.getElementById('ep-type-drawer');
   var epCategoriesTags = document.getElementById('ep-categories-tags');
+  var epCategoryDropdown = document.getElementById('ep-category-dropdown');
+  var epCategoryDropdownBtn = document.getElementById('ep-category-dropdown-btn');
+  var epCategoryDrawer = document.getElementById('ep-category-drawer');
   var epCategoryInput = document.getElementById('ep-category-input');
   var epCategorySuggestions = document.getElementById('ep-category-suggestions');
-  var epPreviewToggle = document.getElementById('ep-preview-toggle');
-  var epBodyPreview = document.getElementById('ep-body-preview');
 
   // ---- Auth ----
   function showLogin() {
@@ -457,7 +497,8 @@
   }
 
   function isModified(entry) {
-    var orig = originals[entry.filePath];
+    var origKey = entry._renameFrom || entry.filePath;
+    var orig = originals[origKey];
     if (!orig) return entry._isNew === true; // new entries are always modified
     var s = snapshot(entry);
     return JSON.stringify(s) !== JSON.stringify(orig);
@@ -467,11 +508,27 @@
     return entryType === 'project';
   }
 
+  function isStaff(entryType) {
+    return entryType === 'staff';
+  }
+
+  function applyTypeVisibility(entryType) {
+    var proj = isProject(entryType);
+    var staff = isStaff(entryType);
+    document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
+    document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+    document.querySelectorAll('.staff-only').forEach(function(el) { el.hidden = !staff; });
+  }
+
   function toDateInputValue(dateVal) {
     if (!dateVal) return '';
-    var d = new Date(dateVal);
+    var s = String(dateVal);
+    // If already YYYY-MM-DD, use directly — avoids UTC→local shift when parsing bare dates
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    // Otherwise parse ISO string and extract the date portion in UTC
+    var d = new Date(s);
     if (isNaN(d)) return '';
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0');
   }
 
   function generateSlug(title) {
@@ -495,13 +552,22 @@
     entries.forEach(function(e) {
       if (!isModified(e)) return;
 
-      var orig = originals[e.filePath];
+      var origKey = e._renameFrom || e.filePath;
+      var orig = originals[origKey];
       var change = { filePath: e.filePath };
 
       if (e._isNew) {
         change.action = 'create';
         change.entryType = e.entryType;
         change.slug = e.slug;
+      } else if (e._renameFrom) {
+        change.action = 'rename';
+        change.oldFilePath = e._renameFrom;
+        change.newSlug = e.slug;
+        // Also flag type change so server can handle cross-folder rename
+        if (orig && e.entryType !== orig.entryType) {
+          change.newEntryType = e.entryType;
+        }
       } else if (e._delete) {
         change.action = 'delete';
         changes[e.filePath] = change;
@@ -526,8 +592,10 @@
       change.featured = e.featured;
       change.featuredPosition = e.featuredPosition;
       change.showInAwardsTable = e.showInAwardsTable;
+      change.active = e.active;
       change.collaborators = e.collaborators;
       change.relatedProjects = e.relatedProjects;
+      change.relatedEntries = e.relatedEntries;
       change.body = e.body;
 
       changes[e.filePath] = change;
@@ -734,6 +802,7 @@
       featured: false,
       featuredPosition: null,
       showInAwardsTable: false,
+      active: true,
       collaborators: [],
       relatedProjects: [],
       body: '',
@@ -844,10 +913,9 @@
       entry.entryType = typeName;
       // Sync panel if open
       if (!editPanel.hidden) {
-        epTypeValue.textContent = typeName.toUpperCase();
-        var proj = isProject(typeName);
-        document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
-        document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+        epTypeLabel.textContent = typeName.toUpperCase();
+        renderEpTypeDrawer(entry);
+        applyTypeVisibility(typeName);
       }
       updateChanges();
       renderTable();
@@ -894,58 +962,145 @@
     input.focus();
   }
 
-  // ---- Type change button in panel ----
-  epTypeChange.addEventListener('click', function(e) {
-    e.stopPropagation();
-    if (activeEditPath) showTypeDropdown(epTypeChange, activeEditPath);
-  });
+  // ---- Type dropdown in edit panel ----
+  function renderEpTypeDrawer(entry) {
+    epTypeDrawer.innerHTML = '';
+    knownTypes.forEach(function(typeName) {
+      var item = document.createElement('button');
+      item.className = 'admin-dropdown__item' + (typeName === entry.entryType ? ' is-selected' : '');
+      item.type = 'button';
+      item.textContent = typeName.toUpperCase();
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        epTypeDropdown.classList.remove('is-open');
+        epTypeDropdown.querySelector('.admin-dropdown__button').setAttribute('aria-expanded', 'false');
+        epTypeDrawer.setAttribute('aria-hidden', 'true');
+        applyTypeFromPanel(typeName, entry);
+      });
+      epTypeDrawer.appendChild(item);
+    });
+  }
+
+  function applyTypeFromPanel(typeName, entry) {
+    typeName = typeName.toLowerCase().trim();
+    if (!typeName || typeName === entry.entryType) return;
+    if (knownTypes.indexOf(typeName) === -1) knownTypes.push(typeName);
+    if (entry._isNew) {
+      var newFolder = typeFolder(typeName);
+      var slug = entry.slug;
+      var newPath = 'entries/' + newFolder + '/' + slug + '/' + slug + '.md';
+      selectedPaths.delete(entry.filePath);
+      if (activeEditPath === entry.filePath) activeEditPath = newPath;
+      entry.filePath = newPath;
+    }
+    entry.entryType = typeName;
+    epTypeLabel.textContent = typeName.toUpperCase();
+    renderEpTypeDrawer(entry);
+    applyTypeVisibility(typeName);
+    updateChanges();
+    renderTable();
+  }
+
+  (function() {
+    var btn = epTypeDropdown.querySelector('.admin-dropdown__button');
+    function openEpDropdown() {
+      epTypeDropdown.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      epTypeDrawer.setAttribute('aria-hidden', 'false');
+    }
+    function closeEpDropdown() {
+      epTypeDropdown.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      epTypeDrawer.setAttribute('aria-hidden', 'true');
+    }
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      epTypeDropdown.classList.contains('is-open') ? closeEpDropdown() : openEpDropdown();
+    });
+    document.addEventListener('click', function(e) {
+      if (!epTypeDropdown.contains(e.target)) closeEpDropdown();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeEpDropdown();
+    });
+  })();
 
   // ---- Edit panel ----
+  var editPanelSnapshot = null; // snapshot of entry state when panel was opened
+
   function openEditPanel(filePath) {
     var entry = findEntry(filePath);
     if (!entry) return;
 
     activeEditPath = filePath;
+    // Capture a deep snapshot of the entry so Cancel can restore it
+    editPanelSnapshot = {
+      filePath: entry.filePath,
+      slug: entry.slug,
+      draft: entry.draft,
+      categories: (entry.categories || []).slice(),
+      entryType: entry.entryType,
+      title: entry.title,
+      subtitle: entry.subtitle,
+      description: entry.description,
+      date: entry.date,
+      link: entry.link,
+      position: entry.position,
+      year: entry.year,
+      location: entry.location,
+      status: entry.status,
+      featured: entry.featured,
+      featuredPosition: entry.featuredPosition,
+      showInAwardsTable: entry.showInAwardsTable,
+      collaborators: JSON.parse(JSON.stringify(entry.collaborators || [])),
+      relatedProjects: (entry.relatedProjects || []).slice(),
+      relatedEntries: (entry.relatedEntries || []).slice(),
+      body: entry.body,
+      active: entry.active
+    };
     editPanelTitle.textContent = entry._isNew ? 'New Entry' : 'Edit: ' + (entry.title || entry.slug);
 
     // Populate fields
     epSlug.value = entry.slug || '';
-    epSlug.readOnly = !entry._isNew;
+    epSlug.readOnly = false;
+    epSlug.placeholder = '20260101_entry-name';
     epDraft.checked = !!entry.draft;
-    epTypeValue.textContent = (entry.entryType || '').toUpperCase();
+    epTypeLabel.textContent = (entry.entryType || '—').toUpperCase();
+    renderEpTypeDrawer(entry);
     epTitle.value = entry.title || '';
     epSubtitle.value = entry.subtitle || '';
     epDescription.value = entry.description || '';
     epDate.value = toDateInputValue(entry.date);
     renderPanelCategoryTags(entry.categories || []);
+    closeEpCategoryDropdown();
     epCategoryInput.value = '';
-    epCategorySuggestions.hidden = true;
     epLink.value = entry.link || '';
     epPosition.value = entry.position != null ? entry.position : '';
     epYear.value = entry.year || '';
     epLocation.value = entry.location || '';
     epStatus.value = entry.status || '';
+    epStatusSuggestions.hidden = true;
     epFeatured.checked = !!entry.featured;
-    epFeaturedPositionGroup.hidden = !entry.featured;
     epFeaturedPosition.value = entry.featuredPosition != null ? entry.featuredPosition : '';
     epShowInAwardsTable.checked = !!entry.showInAwardsTable;
-    epBody.value = entry.body || '';
-    epBodyPreview.hidden = true;
-    epBody.hidden = false;
-    epPreviewToggle.textContent = 'Preview';
+    setBodyHtml(entry.body || '');
 
-    // Show/hide project-only and non-project fields
-    var proj = isProject(entry.entryType);
-    document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
-    document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
+    // Show/hide type-conditional fields
+    applyTypeVisibility(entry.entryType);
+    epActive.checked = entry.active !== false; // default true if unset
     // Featured position always starts hidden, shown by featured toggle
-    epFeaturedPositionGroup.hidden = !entry.featured;
+    document.querySelectorAll('.ep-featured-position-row').forEach(function(el) { el.hidden = !entry.featured; });
 
     // Collaborators
     renderCollaboratorsList(entry.collaborators || []);
 
     // Related projects
     renderRelatedProjectTags(entry.relatedProjects || []);
+
+    // Related entries (project → non-project)
+    renderRelatedEntriesTags(entry.relatedEntries || []);
+    epRelatedEntriesInput.value = '';
+    epRelatedEntriesSuggestions.hidden = true;
 
     editPanel.hidden = false;
     editPanelBackdrop.hidden = false;
@@ -956,15 +1111,57 @@
     editPanel.hidden = true;
     editPanelBackdrop.hidden = true;
     activeEditPath = null;
+    editPanelSnapshot = null;
   }
 
-  editPanelClose.addEventListener('click', closeEditPanel);
-  editPanelCloseFooter.addEventListener('click', closeEditPanel);
-  editPanelBackdrop.addEventListener('click', closeEditPanel);
+  function cancelEditPanel() {
+    // Restore entry to the state it had when the panel was opened
+    if (editPanelSnapshot && activeEditPath) {
+      var entry = findEntry(activeEditPath);
+      if (entry) {
+        if (entry._isNew && !originals[entry.filePath]) {
+          // Brand-new entry that was never applied/saved — remove it entirely
+          entries = entries.filter(function(e) { return e.filePath !== activeEditPath; });
+          selectedPaths.delete(activeEditPath);
+        } else {
+          entry.filePath = editPanelSnapshot.filePath;
+          entry.slug = editPanelSnapshot.slug;
+          activeEditPath = editPanelSnapshot.filePath;
+          entry.draft = editPanelSnapshot.draft;
+          entry.categories = editPanelSnapshot.categories.slice();
+          entry.entryType = editPanelSnapshot.entryType;
+          entry.title = editPanelSnapshot.title;
+          entry.subtitle = editPanelSnapshot.subtitle;
+          entry.description = editPanelSnapshot.description;
+          entry.date = editPanelSnapshot.date;
+          entry.link = editPanelSnapshot.link;
+          entry.position = editPanelSnapshot.position;
+          entry.year = editPanelSnapshot.year;
+          entry.location = editPanelSnapshot.location;
+          entry.status = editPanelSnapshot.status;
+          entry.featured = editPanelSnapshot.featured;
+          entry.featuredPosition = editPanelSnapshot.featuredPosition;
+          entry.showInAwardsTable = editPanelSnapshot.showInAwardsTable;
+          entry.active = editPanelSnapshot.active;
+          entry.collaborators = JSON.parse(JSON.stringify(editPanelSnapshot.collaborators));
+          entry.relatedProjects = editPanelSnapshot.relatedProjects.slice();
+          entry.relatedEntries = editPanelSnapshot.relatedEntries.slice();
+          entry.body = editPanelSnapshot.body;
+        }
+        updateChanges();
+        renderTable();
+      }
+    }
+    closeEditPanel();
+  }
+
+  editPanelClose.addEventListener('click', cancelEditPanel);
+  editPanelCloseFooter.addEventListener('click', cancelEditPanel);
+  editPanelBackdrop.addEventListener('click', cancelEditPanel);
 
   // Featured toggle shows/hides position input
   epFeatured.addEventListener('change', function() {
-    epFeaturedPositionGroup.hidden = !this.checked;
+    document.querySelectorAll('.ep-featured-position-row').forEach(function(el) { el.hidden = !this.checked; }.bind(this));
   });
 
   // Apply button
@@ -987,12 +1184,15 @@
     entry.featured = epFeatured.checked;
     entry.featuredPosition = epFeatured.checked && epFeaturedPosition.value !== '' ? Number(epFeaturedPosition.value) : null;
     entry.showInAwardsTable = epShowInAwardsTable.checked;
-    entry.body = epBody.value;
+    entry.active = isStaff(entry.entryType) ? epActive.checked : entry.active;
+    entry.relatedEntries = getPanelRelatedEntries();
+    entry.body = getBodyMarkdown();
 
-    // Update slug for new entries
+    // Update slug (new or existing entries)
+    var manualSlug = epSlug.value.trim();
+    var oldPath = entry.filePath;
+    var oldSlug = entry.slug;
     if (entry._isNew) {
-      var oldPath = entry.filePath;
-      var manualSlug = epSlug.value.trim();
       var newSlug = manualSlug || generateSlug(entry.title || 'new-entry');
       entry.slug = newSlug;
       var folder = typeFolder(entry.entryType);
@@ -1001,25 +1201,196 @@
       activeEditPath = newPath;
       selectedPaths.delete(oldPath);
       epSlug.value = newSlug;
+    } else if (manualSlug && manualSlug !== oldSlug) {
+      // Existing entry slug change — flag for rename on save
+      // Preserve the very first _renameFrom so we always rename from the original path
+      var originalPath = entry._renameFrom || oldPath;
+      var folder = typeFolder(entry.entryType);
+      var newPath = 'entries/' + folder + '/' + manualSlug + '/' + manualSlug + '.md';
+      entry.slug = manualSlug;
+      entry.filePath = newPath;
+      // If the slug was reverted to the original, clear the rename flag
+      var origSlug = originals[originalPath] ? originals[originalPath].slug : null;
+      if (manualSlug === origSlug) {
+        delete entry._renameFrom;
+      } else {
+        entry._renameFrom = originalPath;
+      }
+      activeEditPath = newPath;
+      selectedPaths.delete(oldPath);
+      epSlug.value = manualSlug;
     }
 
     // Update panel title
     editPanelTitle.textContent = entry._isNew ? 'New Entry' : 'Edit: ' + (entry.title || entry.slug);
 
+    // Update snapshot so Cancel reverts to this applied state
+    editPanelSnapshot = {
+      filePath: entry.filePath,
+      slug: entry.slug,
+      draft: entry.draft,
+      categories: (entry.categories || []).slice(),
+      entryType: entry.entryType,
+      title: entry.title,
+      subtitle: entry.subtitle,
+      description: entry.description,
+      date: entry.date,
+      link: entry.link,
+      position: entry.position,
+      year: entry.year,
+      location: entry.location,
+      status: entry.status,
+      featured: entry.featured,
+      featuredPosition: entry.featuredPosition,
+      showInAwardsTable: entry.showInAwardsTable,
+      collaborators: JSON.parse(JSON.stringify(entry.collaborators || [])),
+      relatedProjects: (entry.relatedProjects || []).slice(),
+      relatedEntries: (entry.relatedEntries || []).slice(),
+      body: entry.body,
+      active: entry.active
+    };
+
     updateChanges();
     renderTable();
+    closeEditPanel();
   });
 
   // ---- Collaborators editor ----
+  function syncCollaboratorsFromDOM() {
+    if (!activeEditPath) return;
+    var entry = findEntry(activeEditPath);
+    if (!entry) return;
+    var rows = epCollaboratorsList.querySelectorAll('.structured-row');
+    entry.collaborators = [];
+    rows.forEach(function(row) {
+      entry.collaborators.push({
+        name: row.querySelector('.collab-name').value.trim(),
+        role: row.querySelector('.collab-role').value.trim()
+      });
+    });
+  }
+
   function renderCollaboratorsList(collaborators) {
     epCollaboratorsList.innerHTML = '';
     (collaborators || []).forEach(function(collab, idx) {
       var row = document.createElement('div');
       row.className = 'structured-row';
-      row.innerHTML =
-        '<input type="text" class="collab-name" placeholder="Name" value="' + escHtml(collab.name || '') + '">' +
-        '<input type="text" class="collab-role" placeholder="Role" value="' + escHtml(collab.role || '') + '">' +
-        '<button class="btn btn--small btn--danger collab-remove" data-idx="' + idx + '">&times;</button>';
+
+      var nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.className = 'collab-name';
+      nameInput.placeholder = 'Name';
+      nameInput.value = collab.name || '';
+      nameInput.autocomplete = 'off';
+
+      var nameSugg = document.createElement('ul');
+      nameSugg.className = 'tag-suggestions collab-name-suggestions';
+      nameSugg.hidden = true;
+
+      var roleInput = document.createElement('input');
+      roleInput.type = 'text';
+      roleInput.className = 'collab-role';
+      roleInput.placeholder = 'Role';
+      roleInput.value = collab.role || '';
+      roleInput.autocomplete = 'off';
+
+      var roleSugg = document.createElement('ul');
+      roleSugg.className = 'tag-suggestions collab-role-suggestions';
+      roleSugg.hidden = true;
+
+      var removeBtn = document.createElement('button');
+      removeBtn.className = 'btn btn--small btn--danger collab-remove';
+      removeBtn.dataset.idx = idx;
+      removeBtn.textContent = '\u00d7';
+
+      // Name input suggestions
+      nameInput.addEventListener('input', function() {
+        var query = this.value.trim().toLowerCase();
+        nameSugg.innerHTML = '';
+        if (!query) { nameSugg.hidden = true; return; }
+        var matches = knownCollaboratorNames.filter(function(n) {
+          return n.toLowerCase().indexOf(query) !== -1;
+        }).slice(0, 8);
+        if (matches.length === 0) { nameSugg.hidden = true; return; }
+        matches.forEach(function(n) {
+          var li = document.createElement('li');
+          li.textContent = n;
+          li.dataset.value = n;
+          nameSugg.appendChild(li);
+        });
+        nameSugg.hidden = false;
+      });
+      nameSugg.addEventListener('click', function(e) {
+        var li = e.target.closest('li');
+        if (!li) return;
+        nameInput.value = li.dataset.value;
+        nameSugg.hidden = true;
+        syncCollaboratorsFromDOM();
+        // Pre-fill role suggestions for this name
+        roleInput.focus();
+      });
+      nameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') nameSugg.hidden = true;
+      });
+      nameInput.addEventListener('blur', function() {
+        setTimeout(function() { nameSugg.hidden = true; }, 150);
+      });
+
+      // Role input suggestions (filtered by current name if known)
+      roleInput.addEventListener('input', function() {
+        var query = this.value.trim().toLowerCase();
+        var currentName = nameInput.value.trim();
+        var pool = (collaboratorRoleMap[currentName] && collaboratorRoleMap[currentName].length)
+          ? collaboratorRoleMap[currentName]
+          : Object.keys(collaboratorRoleMap).reduce(function(acc, k) {
+              collaboratorRoleMap[k].forEach(function(r) { if (acc.indexOf(r) === -1) acc.push(r); });
+              return acc;
+            }, []);
+        roleSugg.innerHTML = '';
+        if (!query) { roleSugg.hidden = true; return; }
+        var matches = pool.filter(function(r) {
+          return r.toLowerCase().indexOf(query) !== -1;
+        }).slice(0, 8);
+        if (matches.length === 0) { roleSugg.hidden = true; return; }
+        matches.forEach(function(r) {
+          var li = document.createElement('li');
+          li.textContent = r;
+          li.dataset.value = r;
+          roleSugg.appendChild(li);
+        });
+        roleSugg.hidden = false;
+      });
+      roleSugg.addEventListener('click', function(e) {
+        var li = e.target.closest('li');
+        if (!li) return;
+        roleInput.value = li.dataset.value;
+        roleSugg.hidden = true;
+        syncCollaboratorsFromDOM();
+      });
+      roleInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') roleSugg.hidden = true;
+      });
+      roleInput.addEventListener('blur', function() {
+        setTimeout(function() { roleSugg.hidden = true; }, 150);
+      });
+
+      // Sync on plain text input
+      nameInput.addEventListener('input', syncCollaboratorsFromDOM);
+      roleInput.addEventListener('input', syncCollaboratorsFromDOM);
+
+      var nameWrap = document.createElement('div');
+      nameWrap.className = 'tag-input-wrap';
+      nameWrap.appendChild(nameInput);
+      nameWrap.appendChild(nameSugg);
+
+      var roleWrap = document.createElement('div');
+      roleWrap.className = 'tag-input-wrap';
+      roleWrap.appendChild(roleInput);
+      roleWrap.appendChild(roleSugg);
+
+      row.appendChild(nameWrap);
+      row.appendChild(roleWrap);
+      row.appendChild(removeBtn);
       epCollaboratorsList.appendChild(row);
     });
   }
@@ -1031,21 +1402,6 @@
     if (!entry.collaborators) entry.collaborators = [];
     entry.collaborators.push({ name: '', role: '' });
     renderCollaboratorsList(entry.collaborators);
-  });
-
-  epCollaboratorsList.addEventListener('input', function() {
-    if (!activeEditPath) return;
-    var entry = findEntry(activeEditPath);
-    if (!entry) return;
-    // Sync all name/role fields back to entry
-    var rows = epCollaboratorsList.querySelectorAll('.structured-row');
-    entry.collaborators = [];
-    rows.forEach(function(row) {
-      entry.collaborators.push({
-        name: row.querySelector('.collab-name').value.trim(),
-        role: row.querySelector('.collab-role').value.trim()
-      });
-    });
   });
 
   epCollaboratorsList.addEventListener('click', function(e) {
@@ -1060,6 +1416,79 @@
   });
 
   // ---- Panel category editor ----
+  function openEpCategoryDropdown() {
+    epCategoryDropdown.classList.add('is-open');
+    epCategoryDropdownBtn.setAttribute('aria-expanded', 'true');
+    epCategoryDrawer.setAttribute('aria-hidden', 'false');
+    epCategoryInput.value = '';
+    renderCategoryDrawerTags('');
+    epCategoryInput.focus();
+  }
+
+  function closeEpCategoryDropdown() {
+    epCategoryDropdown.classList.remove('is-open');
+    epCategoryDropdownBtn.setAttribute('aria-expanded', 'false');
+    epCategoryDrawer.setAttribute('aria-hidden', 'true');
+  }
+
+  epCategoryDropdownBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    epCategoryDropdown.classList.contains('is-open') ? closeEpCategoryDropdown() : openEpCategoryDropdown();
+  });
+
+  document.addEventListener('click', function(e) {
+    // Use composedPath so detached nodes (removed by DOM re-render during click) still resolve correctly
+    var path = e.composedPath ? e.composedPath() : [];
+    var insideDropdown = path.indexOf(epCategoryDropdown) !== -1 || epCategoryDropdown.contains(e.target);
+    if (!insideDropdown) closeEpCategoryDropdown();
+  });
+
+  function renderCategoryDrawerTags(query) {
+    var upper = query.toUpperCase();
+    var current = getPanelCategories();
+    epCategorySuggestions.innerHTML = '';
+
+    var matches = canonicalCategories.filter(function(c) {
+      return current.indexOf(c) === -1 && (!upper || c.indexOf(upper) !== -1);
+    });
+
+    matches.forEach(function(cat) {
+      var tag = document.createElement('span');
+      tag.className = 'cat-tag cat-tag--pick';
+      tag.textContent = cat;
+      tag.dataset.value = cat;
+      epCategorySuggestions.appendChild(tag);
+    });
+
+    // Show "create" option if typed value doesn't match any existing category
+    if (upper && canonicalCategories.indexOf(upper) === -1) {
+      var newTag = document.createElement('span');
+      newTag.className = 'cat-tag cat-tag--pick cat-tag--new';
+      newTag.textContent = '+ ' + upper;
+      newTag.dataset.value = upper;
+      epCategorySuggestions.appendChild(newTag);
+    }
+  }
+
+  epCategorySuggestions.addEventListener('click', function(e) {
+    var tag = e.target.closest('.cat-tag--pick');
+    if (!tag) return;
+    addPanelCategory(tag.dataset.value);
+  });
+
+  epCategoryInput.addEventListener('input', function() {
+    renderCategoryDrawerTags(this.value.trim());
+  });
+
+  epCategoryInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var val = this.value.trim();
+      if (val) { addPanelCategory(val); }
+    }
+    if (e.key === 'Escape') closeEpCategoryDropdown();
+  });
+
   function renderPanelCategoryTags(categories) {
     epCategoriesTags.innerHTML = '';
     (categories || []).forEach(function(cat) {
@@ -1081,24 +1510,11 @@
   epCategoriesTags.addEventListener('click', function(e) {
     if (e.target.classList.contains('cat-tag__remove')) {
       e.target.closest('.cat-tag').remove();
+      // Refresh drawer if open so removed tag becomes available again
+      if (epCategoryDropdown.classList.contains('is-open')) {
+        renderCategoryDrawerTags(epCategoryInput.value.trim());
+      }
     }
-  });
-
-  epCategoryInput.addEventListener('input', function() {
-    var query = this.value.trim().toUpperCase();
-    if (!query) { epCategorySuggestions.hidden = true; return; }
-    var current = getPanelCategories();
-    var matches = canonicalCategories.filter(function(c) {
-      return current.indexOf(c) === -1 && c.indexOf(query) !== -1;
-    });
-    var html = matches.map(function(c) {
-      return '<li data-value="' + escHtml(c) + '">' + escHtml(c) + '</li>';
-    }).join('');
-    if (canonicalCategories.indexOf(query) === -1) {
-      html += '<li class="is-new" data-value="' + escHtml(query) + '">' + escHtml(query) + '</li>';
-    }
-    epCategorySuggestions.innerHTML = html;
-    epCategorySuggestions.hidden = html === '';
   });
 
   function addPanelCategory(val) {
@@ -1111,21 +1527,40 @@
       canonicalCategories.sort();
     }
     epCategoryInput.value = '';
-    epCategorySuggestions.hidden = true;
+    // Refresh drawer tags to remove just-added category
+    renderCategoryDrawerTags('');
   }
 
-  epCategorySuggestions.addEventListener('click', function(e) {
+  // ---- Status combobox ----
+  epStatus.addEventListener('input', function() {
+    var query = this.value.trim().toLowerCase();
+    if (!query) { epStatusSuggestions.hidden = true; return; }
+    var matches = knownStatuses.filter(function(s) {
+      return s.toLowerCase().indexOf(query) !== -1;
+    }).slice(0, 8);
+    if (matches.length === 0) { epStatusSuggestions.hidden = true; return; }
+    epStatusSuggestions.innerHTML = matches.map(function(s) {
+      return '<li data-value="' + escHtml(s) + '">' + escHtml(s) + '</li>';
+    }).join('');
+    epStatusSuggestions.hidden = false;
+  });
+  epStatusSuggestions.addEventListener('click', function(e) {
     var li = e.target.closest('li');
     if (!li) return;
-    addPanelCategory(li.dataset.value);
-  });
-
-  epCategoryInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addPanelCategory(this.value.trim());
+    epStatus.value = li.dataset.value;
+    epStatusSuggestions.hidden = true;
+    // Extend known statuses if new value
+    var val = li.dataset.value;
+    if (knownStatuses.indexOf(val) === -1) {
+      knownStatuses.push(val);
+      knownStatuses.sort();
     }
-    if (e.key === 'Escape') epCategorySuggestions.hidden = true;
+  });
+  epStatus.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') epStatusSuggestions.hidden = true;
+  });
+  epStatus.addEventListener('blur', function() {
+    setTimeout(function() { epStatusSuggestions.hidden = true; }, 150);
   });
 
   // ---- Related projects editor ----
@@ -1196,24 +1631,103 @@
     epRelatedProjectSuggestions.hidden = true;
   }
 
-  // ---- Markdown preview ----
-  function simpleMarkdown(text) {
+  // ---- Related entries editor (project → non-project) ----
+  function renderRelatedEntriesTags(relatedEntries) {
+    epRelatedEntriesList.innerHTML = '';
+    (relatedEntries || []).forEach(function(slug) {
+      var entry = nonProjectEntries.filter(function(e) { return e.slug === slug; })[0];
+      var label = entry ? (entry.title + ' [' + slug + ']') : slug;
+      var tag = document.createElement('span');
+      tag.className = 'cat-tag';
+      tag.innerHTML = escHtml(label) + '<span class="cat-tag__remove" data-slug="' + escHtml(slug) + '">&times;</span>';
+      epRelatedEntriesList.appendChild(tag);
+    });
+  }
+
+  function getPanelRelatedEntries() {
+    var slugs = [];
+    epRelatedEntriesList.querySelectorAll('.cat-tag__remove').forEach(function(el) {
+      slugs.push(el.dataset.slug);
+    });
+    return slugs;
+  }
+
+  epRelatedEntriesList.addEventListener('click', function(e) {
+    if (e.target.classList.contains('cat-tag__remove')) {
+      if (!activeEditPath) return;
+      var entry = findEntry(activeEditPath);
+      if (!entry) return;
+      var slug = e.target.dataset.slug;
+      entry.relatedEntries = (entry.relatedEntries || []).filter(function(s) { return s !== slug; });
+      renderRelatedEntriesTags(entry.relatedEntries);
+    }
+  });
+
+  epRelatedEntriesInput.addEventListener('input', function() {
+    var query = this.value.trim().toLowerCase();
+    if (!query) { epRelatedEntriesSuggestions.hidden = true; return; }
+
+    var entry = activeEditPath ? findEntry(activeEditPath) : null;
+    var current = entry ? (entry.relatedEntries || []) : [];
+
+    var matches = nonProjectEntries.filter(function(e) {
+      return current.indexOf(e.slug) === -1 &&
+        (e.slug.toLowerCase().indexOf(query) !== -1 || e.title.toLowerCase().indexOf(query) !== -1);
+    }).slice(0, 8);
+
+    if (matches.length === 0) { epRelatedEntriesSuggestions.hidden = true; return; }
+
+    epRelatedEntriesSuggestions.innerHTML = matches.map(function(e) {
+      return '<li data-slug="' + escHtml(e.slug) + '">' + escHtml(e.title) + ' <span style="opacity:0.5">' + escHtml(e.slug) + '</span></li>';
+    }).join('');
+    epRelatedEntriesSuggestions.hidden = false;
+  });
+
+  epRelatedEntriesInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var val = this.value.trim();
+      if (val) addRelatedEntry(val);
+    }
+    if (e.key === 'Escape') epRelatedEntriesSuggestions.hidden = true;
+  });
+
+  epRelatedEntriesSuggestions.addEventListener('click', function(e) {
+    var li = e.target.closest('li');
+    if (!li) return;
+    addRelatedEntry(li.dataset.slug);
+  });
+
+  function addRelatedEntry(slug) {
+    if (!activeEditPath) return;
+    var entry = findEntry(activeEditPath);
+    if (!entry) return;
+    if (!entry.relatedEntries) entry.relatedEntries = [];
+    if (entry.relatedEntries.indexOf(slug) !== -1) return;
+    entry.relatedEntries.push(slug);
+    renderRelatedEntriesTags(entry.relatedEntries);
+    epRelatedEntriesInput.value = '';
+    epRelatedEntriesSuggestions.hidden = true;
+  }
+
+  // ---- Rich body editor (contenteditable, stores as markdown) ----
+
+  // Convert markdown string → HTML for the editor
+  function markdownToHtml(text) {
     if (!text) return '';
     var lines = text.split('\n');
     var html = '';
     var inList = false;
-    lines.forEach(function(rawLine) {
-      var line = rawLine
+    lines.forEach(function(raw) {
+      // Inline: escape HTML first, then apply inline markdown
+      var line = raw
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        .replace(/`(.+?)`/g, '<code>$1</code>');
-      if (/^### /.test(line)) {
-        if (inList) { html += '</ul>'; inList = false; }
-        html += '<h3>' + line.slice(4) + '</h3>';
-      } else if (/^## /.test(line)) {
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      if (/^## /.test(line)) {
         if (inList) { html += '</ul>'; inList = false; }
         html += '<h2>' + line.slice(3) + '</h2>';
       } else if (/^# /.test(line)) {
@@ -1224,6 +1738,8 @@
         html += '<li>' + line.slice(2) + '</li>';
       } else if (line.trim() === '') {
         if (inList) { html += '</ul>'; inList = false; }
+        // empty line → paragraph break (br keeps spacing in contenteditable)
+        html += '<p><br></p>';
       } else {
         if (inList) { html += '</ul>'; inList = false; }
         html += '<p>' + line + '</p>';
@@ -1233,13 +1749,209 @@
     return html;
   }
 
-  var previewMode = false;
-  epPreviewToggle.addEventListener('click', function() {
-    previewMode = !previewMode;
-    epBody.hidden = previewMode;
-    epBodyPreview.hidden = !previewMode;
-    this.textContent = previewMode ? 'Edit' : 'Preview';
-    if (previewMode) epBodyPreview.innerHTML = simpleMarkdown(epBody.value);
+  // Convert the contenteditable DOM back to markdown string for storage
+  function htmlToMarkdown(el) {
+    function nodeToMd(node) {
+      if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+      var tag = node.tagName ? node.tagName.toLowerCase() : '';
+      var inner = Array.from(node.childNodes).map(nodeToMd).join('');
+      if (tag === 'strong' || tag === 'b') return '**' + inner + '**';
+      if (tag === 'em' || tag === 'i') return '*' + inner + '*';
+      if (tag === 'a') return '[' + inner + '](' + (node.getAttribute('href') || '') + ')';
+      if (tag === 'br') return '';
+      if (tag === 'h1') return '# ' + inner;
+      if (tag === 'h2') return '## ' + inner;
+      if (tag === 'li') return '- ' + inner;
+      if (tag === 'ul' || tag === 'ol') {
+        return Array.from(node.children).map(function(li) { return '- ' + Array.from(li.childNodes).map(nodeToMd).join(''); }).join('\n');
+      }
+      if (tag === 'p') {
+        if (inner === '' || inner === '\n') return '';
+        return inner;
+      }
+      if (tag === 'div') return inner;
+      return inner;
+    }
+    var lines = [];
+    var node = el.firstChild;
+    while (node) {
+      var tag = node.tagName ? node.tagName.toLowerCase() : '';
+      if (tag === 'ul' || tag === 'ol') {
+        Array.from(node.children).forEach(function(li) {
+          lines.push('- ' + Array.from(li.childNodes).map(nodeToMd).join(''));
+        });
+      } else {
+        var md = nodeToMd(node).replace(/\n$/, '');
+        lines.push(md);
+      }
+      node = node.nextSibling;
+    }
+    return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  function getBodyMarkdown() {
+    return htmlToMarkdown(epBody);
+  }
+
+  function setBodyHtml(markdown) {
+    epBody.innerHTML = markdownToHtml(markdown) || '<p><br></p>';
+  }
+
+  // Update active state of toolbar buttons based on cursor position
+  function updateToolbarState() {
+    var boldActive = document.queryCommandState('bold');
+    var italicActive = document.queryCommandState('italic');
+    var sel = window.getSelection();
+    var h2Active = false;
+    var ulActive = false;
+    if (sel && sel.anchorNode) {
+      var block = sel.anchorNode;
+      while (block && block !== epBody) {
+        if (block.nodeType === Node.ELEMENT_NODE) {
+          var t = block.tagName.toLowerCase();
+          if (t === 'h2' || t === 'h1') h2Active = true;
+          if (t === 'ul' || t === 'li') ulActive = true;
+        }
+        block = block.parentNode;
+      }
+    }
+    document.querySelectorAll('.ep-fmt-btn').forEach(function(btn) {
+      var fmt = btn.dataset.fmt;
+      btn.classList.toggle('is-active',
+        (fmt === 'bold' && boldActive) ||
+        (fmt === 'italic' && italicActive) ||
+        (fmt === 'h2' && h2Active) ||
+        (fmt === 'ul' && ulActive)
+      );
+    });
+  }
+
+  epBody.addEventListener('keyup', updateToolbarState);
+  epBody.addEventListener('mouseup', updateToolbarState);
+  epBody.addEventListener('focus', updateToolbarState);
+
+  // ---- Link mini-modal ----
+  var linkModal = document.getElementById('link-modal');
+  var linkModalText = document.getElementById('link-modal-text');
+  var linkModalUrl = document.getElementById('link-modal-url');
+  var linkModalConfirm = document.getElementById('link-modal-confirm');
+  var linkModalCancel = document.getElementById('link-modal-cancel');
+  var savedRange = null;
+
+  function openLinkModal() {
+    // savedRange was already captured in mousedown before focus shifted
+    var selectedText = savedRange ? savedRange.toString() : '';
+    // Pre-fill if the range sits inside an existing <a>
+    var anchorEl = null;
+    if (savedRange) {
+      var node = savedRange.commonAncestorContainer;
+      while (node && node !== epBody) {
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'A') {
+          anchorEl = node;
+          break;
+        }
+        node = node.parentNode;
+      }
+    }
+    if (anchorEl) {
+      linkModalText.value = anchorEl.textContent;
+      linkModalUrl.value = anchorEl.getAttribute('href') || '';
+    } else {
+      linkModalText.value = selectedText;
+      linkModalUrl.value = '';
+    }
+    linkModal.hidden = false;
+    (linkModalUrl.value ? linkModalUrl : (linkModalText.value ? linkModalUrl : linkModalText)).focus();
+  }
+
+  function closeLinkModal() {
+    linkModal.hidden = true;
+    savedRange = null;
+    epBody.focus();
+  }
+
+  linkModalConfirm.addEventListener('click', function() {
+    var text = linkModalText.value.trim() || linkModalUrl.value.trim();
+    var url = linkModalUrl.value.trim();
+    if (!url) { linkModalUrl.focus(); return; }
+
+    epBody.focus();
+
+    // Check if savedRange sits inside an existing <a> to update it in place
+    var anchorEl = null;
+    if (savedRange) {
+      var node = savedRange.commonAncestorContainer;
+      while (node && node !== epBody) {
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'A') {
+          anchorEl = node;
+          break;
+        }
+        node = node.parentNode;
+      }
+    }
+
+    if (anchorEl && epBody.contains(anchorEl)) {
+      anchorEl.textContent = text;
+      anchorEl.href = url;
+    } else {
+      var a = document.createElement('a');
+      a.href = url;
+      a.textContent = text;
+      if (savedRange) {
+        savedRange.deleteContents();
+        savedRange.insertNode(a);
+        var sel = window.getSelection();
+        var range = document.createRange();
+        range.setStartAfter(a);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } else {
+        // No saved range — insert at end of editor
+        epBody.appendChild(a);
+      }
+    }
+    closeLinkModal();
+  });
+
+  linkModalCancel.addEventListener('click', closeLinkModal);
+  linkModal.addEventListener('click', function(e) { if (e.target === linkModal) closeLinkModal(); });
+  linkModalUrl.addEventListener('keydown', function(e) { if (e.key === 'Enter') linkModalConfirm.click(); });
+
+  // ---- Formatting toolbar ----
+  document.querySelectorAll('.ep-fmt-btn').forEach(function(btn) {
+    btn.addEventListener('mousedown', function(e) {
+      // Prevent the editor from losing focus so selection is preserved
+      e.preventDefault();
+      // For the link button, capture selection now before the modal opens
+      if (this.dataset.fmt === 'link') {
+        var sel = window.getSelection();
+        savedRange = (sel && sel.rangeCount && epBody.contains(sel.anchorNode))
+          ? sel.getRangeAt(0).cloneRange()
+          : null;
+      }
+    });
+    btn.addEventListener('click', function() {
+      var fmt = this.dataset.fmt;
+      if (fmt === 'link') {
+        openLinkModal();
+        return;
+      }
+      epBody.focus();
+      var sel = window.getSelection();
+      if (fmt === 'bold') {
+        document.execCommand('bold', false, null);
+      } else if (fmt === 'italic') {
+        document.execCommand('italic', false, null);
+      } else if (fmt === 'h2') {
+        // Toggle heading: if already in h2, switch to paragraph
+        var inH2 = document.queryCommandValue('formatBlock') === 'h2';
+        document.execCommand('formatBlock', false, inH2 ? 'p' : 'h2');
+      } else if (fmt === 'ul') {
+        document.execCommand('insertUnorderedList', false, null);
+      }
+      updateToolbarState();
+    });
   });
 
   // ---- Manage labels modal (rename categories + types) ----
@@ -1671,9 +2383,14 @@
     // Revert entries to originals, remove new/deleted entries
     entries = entries.filter(function(e) { return !e._isNew; });
     entries.forEach(function(e) {
+      // For renamed entries, restore original filePath and slug before looking up originals
+      var originalFilePath = e._renameFrom || e.filePath;
       delete e._delete;
-      var orig = originals[e.filePath];
+      delete e._renameFrom;
+      var orig = originals[originalFilePath];
       if (!orig) return;
+      e.filePath = originalFilePath;
+      e.slug = orig.slug;
       e.categories = orig.categories.slice();
       e.entryType = orig.entryType;
       e.draft = orig.draft;
@@ -1689,8 +2406,10 @@
       e.featured = orig.featured;
       e.featuredPosition = orig.featuredPosition;
       e.showInAwardsTable = orig.showInAwardsTable;
+      e.active = orig.active;
       e.collaborators = JSON.parse(orig.collaborators);
       e.relatedProjects = JSON.parse(orig.relatedProjects);
+      e.relatedEntries = JSON.parse(orig.relatedEntries || '[]');
       e.body = orig.body;
     });
     canonicalCategories = (window.__CATEGORIES__ || []).slice();
@@ -1702,11 +2421,174 @@
     renderTable();
   });
 
-  // ---- Save ----
-  saveBtn.addEventListener('click', function() {
+  // ---- Save confirmation modal ----
+  var saveConfirmModal = document.getElementById('save-confirm-modal');
+  var saveConfirmTbody = document.getElementById('save-confirm-tbody');
+  var saveConfirmBtn = document.getElementById('save-confirm-btn');
+  var saveConfirmCancel = document.getElementById('save-confirm-cancel');
+
+  // Human-readable labels for diffable fields (in display order)
+  var DIFF_FIELDS = [
+    { key: 'entryType',        label: 'Type' },
+    { key: 'slug',             label: 'Slug' },
+    { key: 'title',            label: 'Title' },
+    { key: 'subtitle',         label: 'Subtitle' },
+    { key: 'description',      label: 'Description' },
+    { key: 'date',             label: 'Date' },
+    { key: 'year',             label: 'Year' },
+    { key: 'draft',            label: 'Draft' },
+    { key: 'active',           label: 'Active' },
+    { key: 'link',             label: 'Link' },
+    { key: 'location',         label: 'Location' },
+    { key: 'status',           label: 'Status' },
+    { key: 'position',         label: 'Position' },
+    { key: 'featured',         label: 'Featured' },
+    { key: 'featuredPosition', label: 'Feat. position' },
+    { key: 'showInAwardsTable',label: 'Awards table' },
+    { key: 'categories',       label: 'Categories' },
+    { key: 'collaborators',    label: 'Collaborators' },
+    { key: 'relatedProjects',  label: 'Related projects' },
+    { key: 'relatedEntries',   label: 'Related entries' },
+    { key: 'body',             label: 'Body' }
+  ];
+
+  // Normalise a snapshot value to a stable comparable string and a readable display string
+  function normField(key, val) {
+    // snapshot() stores categories as array, collaborators/related* as JSON strings
+    if (key === 'categories') {
+      var arr = Array.isArray(val) ? val : (val || []);
+      return { cmp: JSON.stringify(arr.slice().sort()), display: arr.length ? arr.join(', ') : '—' };
+    }
+    if (key === 'collaborators' || key === 'relatedProjects' || key === 'relatedEntries') {
+      var parsed = typeof val === 'string' ? JSON.parse(val || '[]') : (val || []);
+      if (key === 'collaborators') {
+        var entries2 = parsed.map(function(c) { return c.role ? (c.name + ' (' + c.role + ')') : c.name; });
+        var sorted2 = entries2.slice().sort();
+        return { cmp: JSON.stringify(sorted2), display: entries2.length ? entries2.join(', ') : '—' };
+      }
+      var sortedArr = parsed.slice().sort();
+      return { cmp: JSON.stringify(sortedArr), display: sortedArr.length ? sortedArr.join(', ') : '—' };
+    }
+    if (key === 'date') {
+      var d = val ? String(val).slice(0, 10) : '';
+      return { cmp: d, display: d || '—' };
+    }
+    if (key === 'draft' || key === 'featured' || key === 'showInAwardsTable' || key === 'active') {
+      var b = val === true || val === 'true';
+      return { cmp: String(b), display: b ? 'Yes' : 'No' };
+    }
+    if (key === 'body') {
+      var s = (val || '').trim();
+      return { cmp: s, display: s.length > 80 ? s.slice(0, 80) + '…' : (s || '—') };
+    }
+    var str = val !== null && val !== undefined ? String(val) : '';
+    return { cmp: str, display: str || '—' };
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function buildSaveConfirmRows() {
+    var html = '';
+    var changeList = Object.keys(changes).map(function(k) { return changes[k]; });
+
+    changeList.forEach(function(c) {
+      var action = c.action || 'edit';
+      var actionLabel = { create: 'New', rename: 'Rename', delete: 'Delete', edit: 'Edit', updateCategories: 'Edit' }[action] || action;
+      var actionClass = { create: 'sct-action--create', rename: 'sct-action--rename', delete: 'sct-action--delete' }[action] || '';
+
+      var entry = entries.filter(function(e) { return e.filePath === c.filePath; })[0];
+      var entryName = entry ? (entry.title || entry.slug || c.filePath) : c.filePath;
+
+      // Build list of { label, oldVal, newVal } rows
+      var fieldRows = [];
+
+      if (action === 'updateCategories') {
+        entryName = 'Category labels';
+        fieldRows.push({ label: 'Categories', oldVal: '—', newVal: 'canonical list updated' });
+      } else if (action === 'delete') {
+        fieldRows.push({ label: '—', oldVal: 'Entry will be deleted', newVal: '—' });
+      } else if (action === 'create') {
+        var cur = snapshot(entry);
+        DIFF_FIELDS.forEach(function(f) {
+          var n = normField(f.key, cur[f.key]);
+          if (n.cmp !== '' && n.cmp !== 'false' && n.cmp !== '[]' && n.cmp !== 'null') {
+            fieldRows.push({ label: f.label, oldVal: '—', newVal: esc(n.display) });
+          }
+        });
+      } else {
+        // edit or rename
+        var origKey = (entry && entry._renameFrom) || c.filePath;
+        var orig = originals[origKey];
+        var cur2 = snapshot(entry);
+
+        DIFF_FIELDS.forEach(function(f) {
+          var o = normField(f.key, orig ? orig[f.key] : undefined);
+          var n = normField(f.key, cur2[f.key]);
+          if (o.cmp !== n.cmp) {
+            fieldRows.push({ label: f.label, oldVal: esc(o.display), newVal: esc(n.display) });
+          }
+        });
+
+        if (fieldRows.length === 0) {
+          fieldRows.push({ label: '—', oldVal: '—', newVal: '—' });
+        }
+      }
+
+      var rowspan = fieldRows.length;
+      fieldRows.forEach(function(fr, i) {
+        var rowClasses = (i === 0 ? 'sct-entry-first' : 'sct-entry-cont') + (i === rowspan - 1 ? ' sct-entry-last' : '');
+        html += '<tr class="' + rowClasses + '">';
+        if (i === 0) {
+          html += '<td class="sct-col-entry" rowspan="' + rowspan + '">' + esc(entryName) + '</td>';
+          html += '<td class="sct-col-action" rowspan="' + rowspan + '"><span class="sct-action ' + actionClass + '">' + actionLabel + '</span></td>';
+        }
+        html += '<td class="sct-col-field">' + fr.label + '</td>';
+        html += '<td class="sct-col-old">' + fr.oldVal + '</td>';
+        html += '<td class="sct-col-new">' + fr.newVal + '</td>';
+        html += '</tr>';
+      });
+    });
+
+    return html;
+  }
+
+  function syncRelatedEntries() {
+    // Two-way sync: relatedEntries on projects → relatedProjects on non-project entries
+    entries.forEach(function(projectEntry) {
+      if (!isProject(projectEntry.entryType)) return;
+      var orig = originals[projectEntry.filePath];
+      var origRelated = orig ? JSON.parse(orig.relatedEntries || '[]') : [];
+      var newRelated = projectEntry.relatedEntries || [];
+
+      newRelated.forEach(function(slug) {
+        if (origRelated.indexOf(slug) !== -1) return;
+        var target = findEntry('entries/other/' + slug + '/' + slug + '.md') ||
+          entries.filter(function(e) { return e.slug === slug && !isProject(e.entryType); })[0];
+        if (!target) return;
+        if (!target.relatedProjects) target.relatedProjects = [];
+        if (target.relatedProjects.indexOf(projectEntry.slug) === -1) {
+          target.relatedProjects.push(projectEntry.slug);
+          updateChanges();
+        }
+      });
+
+      origRelated.forEach(function(slug) {
+        if (newRelated.indexOf(slug) !== -1) return;
+        var target = entries.filter(function(e) { return e.slug === slug && !isProject(e.entryType); })[0];
+        if (!target) return;
+        target.relatedProjects = (target.relatedProjects || []).filter(function(s) { return s !== projectEntry.slug; });
+        updateChanges();
+      });
+    });
+  }
+
+  function doSave() {
     var changeList = Object.keys(changes).map(function(path) { return changes[path]; });
     if (changeList.length === 0) return;
 
+    saveConfirmModal.hidden = true;
     saveOverlay.hidden = false;
     saveStatus.textContent = 'Saving ' + changeList.length + ' change(s)...';
 
@@ -1735,15 +2617,12 @@
 
       saveStatus.textContent = 'Saved! ' + (result.data.message || '');
 
-      // Remove deleted entries from state
       entries = entries.filter(function(e) { return !e._delete; });
-
-      // Mark new entries as no longer new
       entries.forEach(function(e) {
         if (e._isNew) delete e._isNew;
+        if (e._renameFrom) delete e._renameFrom;
       });
 
-      // Update originals to current state
       originals = {};
       entries.forEach(function(e) {
         originals[e.filePath] = snapshot(e);
@@ -1762,6 +2641,19 @@
       saveStatus.textContent = 'Network error: ' + err.message;
       setTimeout(function() { saveOverlay.hidden = true; }, 3000);
     });
+  }
+
+  // ---- Save ----
+  saveBtn.addEventListener('click', function() {
+    syncRelatedEntries();
+    var changeList = Object.keys(changes).map(function(path) { return changes[path]; });
+    if (changeList.length === 0) return;
+    saveConfirmTbody.innerHTML = buildSaveConfirmRows();
+    saveConfirmModal.hidden = false;
   });
+
+  saveConfirmBtn.addEventListener('click', doSave);
+  saveConfirmCancel.addEventListener('click', function() { saveConfirmModal.hidden = true; });
+  saveConfirmModal.addEventListener('click', function(e) { if (e.target === saveConfirmModal) saveConfirmModal.hidden = true; });
 
 })();
