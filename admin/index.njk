@@ -410,6 +410,33 @@ eleventyExcludeFromCollections: true
       </div>
     </div>
 
+    {# Save confirmation modal #}
+    <div id="save-confirm-modal" class="modal" hidden>
+      <div class="modal-content modal-content--table modal-content--save-confirm">
+        <div class="manage-header">
+          <h3>Confirm Changes</h3>
+        </div>
+        <div class="manage-panel">
+          <table class="admin-table manage-table save-confirm-table">
+            <thead>
+              <tr>
+                <th class="sct-col-entry">Entry</th>
+                <th class="sct-col-action">Action</th>
+                <th class="sct-col-fields">Fields Changed</th>
+              </tr>
+            </thead>
+            <tbody id="save-confirm-tbody"></tbody>
+          </table>
+        </div>
+        <div class="manage-footer">
+          <div class="manage-footer__actions">
+            <button id="save-confirm-btn" class="btn btn--primary">Save Changes</button>
+            <button id="save-confirm-cancel" class="btn btn--secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     {# Clear changes confirmation modal #}
     <div id="clear-modal" class="modal" hidden>
       <div class="modal-content">

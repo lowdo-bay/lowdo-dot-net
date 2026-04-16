@@ -2416,8 +2416,85 @@
     renderTable();
   });
 
-  // ---- Save ----
-  saveBtn.addEventListener('click', function() {
+  // ---- Save confirmation modal ----
+  var saveConfirmModal = document.getElementById('save-confirm-modal');
+  var saveConfirmTbody = document.getElementById('save-confirm-tbody');
+  var saveConfirmBtn = document.getElementById('save-confirm-btn');
+  var saveConfirmCancel = document.getElementById('save-confirm-cancel');
+
+  // Human-readable labels for diffable fields
+  var FIELD_LABELS = {
+    title: 'Title', subtitle: 'Subtitle', description: 'Description',
+    date: 'Date', year: 'Year', link: 'Link', position: 'Position',
+    draft: 'Draft', categories: 'Categories', location: 'Location',
+    status: 'Status', featured: 'Featured', featuredPosition: 'Feat. position',
+    showInAwardsTable: 'Awards table', active: 'Active',
+    collaborators: 'Collaborators', relatedProjects: 'Related projects',
+    relatedEntries: 'Related entries', body: 'Body', entryType: 'Type', slug: 'Slug'
+  };
+
+  function buildSaveConfirmRows() {
+    var html = '';
+    var changeList = Object.keys(changes).map(function(k) { return changes[k]; });
+
+    changeList.forEach(function(c) {
+      var action = c.action || 'edit';
+      var actionLabel = { create: 'New', rename: 'Rename', delete: 'Delete', edit: 'Edit', updateCategories: 'Edit' }[action] || action;
+      var actionClass = { create: 'sct-action--create', rename: 'sct-action--rename', delete: 'sct-action--delete', edit: '', updateCategories: '' }[action] || '';
+
+      var entryName, fieldsHtml;
+
+      if (action === 'updateCategories') {
+        entryName = 'Category labels';
+        fieldsHtml = '<span class="sct-field">canonical list updated</span>';
+      } else if (action === 'delete') {
+        var del = entries.filter(function(e) { return e.filePath === c.filePath; })[0];
+        entryName = del ? (del.title || del.slug || c.filePath) : c.filePath;
+        fieldsHtml = '—';
+      } else {
+        var entry = entries.filter(function(e) { return e.filePath === c.filePath; })[0];
+        entryName = entry ? (entry.title || entry.slug || c.filePath) : c.filePath;
+
+        if (action === 'create') {
+          fieldsHtml = '<span class="sct-field">new entry</span>';
+        } else {
+          var origKey = (entry && entry._renameFrom) || c.filePath;
+          var orig = originals[origKey];
+          var changedFields = [];
+
+          if (action === 'rename') {
+            changedFields.push('Slug: <em>' + (orig ? orig.slug : '?') + '</em> → <em>' + (entry ? entry.slug : c.newSlug) + '</em>');
+          }
+
+          if (orig && entry) {
+            var cur = snapshot(entry);
+            Object.keys(FIELD_LABELS).forEach(function(f) {
+              if (f === 'slug') return; // handled above for rename
+              var ov = JSON.stringify(orig[f] !== undefined ? orig[f] : null);
+              var nv = JSON.stringify(cur[f] !== undefined ? cur[f] : null);
+              if (ov !== nv) {
+                changedFields.push(FIELD_LABELS[f]);
+              }
+            });
+          }
+
+          fieldsHtml = changedFields.length
+            ? changedFields.map(function(f) { return '<span class="sct-field">' + f + '</span>'; }).join('')
+            : '<span class="sct-field sct-field--none">—</span>';
+        }
+      }
+
+      html += '<tr>';
+      html += '<td class="sct-col-entry">' + entryName + '</td>';
+      html += '<td class="sct-col-action"><span class="sct-action ' + actionClass + '">' + actionLabel + '</span></td>';
+      html += '<td class="sct-col-fields">' + fieldsHtml + '</td>';
+      html += '</tr>';
+    });
+
+    return html;
+  }
+
+  function syncRelatedEntries() {
     // Two-way sync: relatedEntries on projects → relatedProjects on non-project entries
     entries.forEach(function(projectEntry) {
       if (!isProject(projectEntry.entryType)) return;
@@ -2425,9 +2502,8 @@
       var origRelated = orig ? JSON.parse(orig.relatedEntries || '[]') : [];
       var newRelated = projectEntry.relatedEntries || [];
 
-      // Slugs added to relatedEntries
       newRelated.forEach(function(slug) {
-        if (origRelated.indexOf(slug) !== -1) return; // unchanged
+        if (origRelated.indexOf(slug) !== -1) return;
         var target = findEntry('entries/other/' + slug + '/' + slug + '.md') ||
           entries.filter(function(e) { return e.slug === slug && !isProject(e.entryType); })[0];
         if (!target) return;
@@ -2438,19 +2514,21 @@
         }
       });
 
-      // Slugs removed from relatedEntries
       origRelated.forEach(function(slug) {
-        if (newRelated.indexOf(slug) !== -1) return; // still present
+        if (newRelated.indexOf(slug) !== -1) return;
         var target = entries.filter(function(e) { return e.slug === slug && !isProject(e.entryType); })[0];
         if (!target) return;
         target.relatedProjects = (target.relatedProjects || []).filter(function(s) { return s !== projectEntry.slug; });
         updateChanges();
       });
     });
+  }
 
+  function doSave() {
     var changeList = Object.keys(changes).map(function(path) { return changes[path]; });
     if (changeList.length === 0) return;
 
+    saveConfirmModal.hidden = true;
     saveOverlay.hidden = false;
     saveStatus.textContent = 'Saving ' + changeList.length + ' change(s)...';
 
@@ -2479,16 +2557,12 @@
 
       saveStatus.textContent = 'Saved! ' + (result.data.message || '');
 
-      // Remove deleted entries from state
       entries = entries.filter(function(e) { return !e._delete; });
-
-      // Mark new entries as no longer new; clear rename flag
       entries.forEach(function(e) {
         if (e._isNew) delete e._isNew;
         if (e._renameFrom) delete e._renameFrom;
       });
 
-      // Update originals to current state
       originals = {};
       entries.forEach(function(e) {
         originals[e.filePath] = snapshot(e);
@@ -2507,6 +2581,19 @@
       saveStatus.textContent = 'Network error: ' + err.message;
       setTimeout(function() { saveOverlay.hidden = true; }, 3000);
     });
+  }
+
+  // ---- Save ----
+  saveBtn.addEventListener('click', function() {
+    syncRelatedEntries();
+    var changeList = Object.keys(changes).map(function(path) { return changes[path]; });
+    if (changeList.length === 0) return;
+    saveConfirmTbody.innerHTML = buildSaveConfirmRows();
+    saveConfirmModal.hidden = false;
   });
+
+  saveConfirmBtn.addEventListener('click', doSave);
+  saveConfirmCancel.addEventListener('click', function() { saveConfirmModal.hidden = true; });
+  saveConfirmModal.addEventListener('click', function(e) { if (e.target === saveConfirmModal) saveConfirmModal.hidden = true; });
 
 })();
