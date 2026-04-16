@@ -57,6 +57,7 @@
 
   function snapshot(e) {
     return {
+      slug: e.slug,
       categories: (e.categories || []).slice(),
       entryType: e.entryType,
       draft: e.draft,
@@ -495,7 +496,8 @@
   }
 
   function isModified(entry) {
-    var orig = originals[entry.filePath];
+    var origKey = entry._renameFrom || entry.filePath;
+    var orig = originals[origKey];
     if (!orig) return entry._isNew === true; // new entries are always modified
     var s = snapshot(entry);
     return JSON.stringify(s) !== JSON.stringify(orig);
@@ -545,13 +547,22 @@
     entries.forEach(function(e) {
       if (!isModified(e)) return;
 
-      var orig = originals[e.filePath];
+      var origKey = e._renameFrom || e.filePath;
+      var orig = originals[origKey];
       var change = { filePath: e.filePath };
 
       if (e._isNew) {
         change.action = 'create';
         change.entryType = e.entryType;
         change.slug = e.slug;
+      } else if (e._renameFrom) {
+        change.action = 'rename';
+        change.oldFilePath = e._renameFrom;
+        change.newSlug = e.slug;
+        // Also flag type change so server can handle cross-folder rename
+        if (orig && e.entryType !== orig.entryType) {
+          change.newEntryType = e.entryType;
+        }
       } else if (e._delete) {
         change.action = 'delete';
         changes[e.filePath] = change;
@@ -1020,6 +1031,7 @@
     // Capture a deep snapshot of the entry so Cancel can restore it
     editPanelSnapshot = {
       filePath: entry.filePath,
+      slug: entry.slug,
       draft: entry.draft,
       categories: (entry.categories || []).slice(),
       entryType: entry.entryType,
@@ -1045,8 +1057,8 @@
 
     // Populate fields
     epSlug.value = entry.slug || '';
-    epSlug.readOnly = !entry._isNew;
-    epSlug.placeholder = entry._isNew ? '20260101_project-name' : '';
+    epSlug.readOnly = false;
+    epSlug.placeholder = '20260101_entry-name';
     epDraft.checked = !!entry.draft;
     epTypeLabel.textContent = (entry.entryType || '—').toUpperCase();
     renderEpTypeDrawer(entry);
@@ -1110,6 +1122,9 @@
           entries = entries.filter(function(e) { return e.filePath !== activeEditPath; });
           selectedPaths.delete(activeEditPath);
         } else {
+          entry.filePath = editPanelSnapshot.filePath;
+          entry.slug = editPanelSnapshot.slug;
+          activeEditPath = editPanelSnapshot.filePath;
           entry.draft = editPanelSnapshot.draft;
           entry.categories = editPanelSnapshot.categories.slice();
           entry.entryType = editPanelSnapshot.entryType;
@@ -1171,10 +1186,11 @@
     entry.relatedEntries = getPanelRelatedEntries();
     entry.body = epBody.value;
 
-    // Update slug for new entries
+    // Update slug (new or existing entries)
+    var manualSlug = epSlug.value.trim();
+    var oldPath = entry.filePath;
+    var oldSlug = entry.slug;
     if (entry._isNew) {
-      var oldPath = entry.filePath;
-      var manualSlug = epSlug.value.trim();
       var newSlug = manualSlug || generateSlug(entry.title || 'new-entry');
       entry.slug = newSlug;
       var folder = typeFolder(entry.entryType);
@@ -1183,6 +1199,24 @@
       activeEditPath = newPath;
       selectedPaths.delete(oldPath);
       epSlug.value = newSlug;
+    } else if (manualSlug && manualSlug !== oldSlug) {
+      // Existing entry slug change — flag for rename on save
+      // Preserve the very first _renameFrom so we always rename from the original path
+      var originalPath = entry._renameFrom || oldPath;
+      var folder = typeFolder(entry.entryType);
+      var newPath = 'entries/' + folder + '/' + manualSlug + '/' + manualSlug + '.md';
+      entry.slug = manualSlug;
+      entry.filePath = newPath;
+      // If the slug was reverted to the original, clear the rename flag
+      var origSlug = originals[originalPath] ? originals[originalPath].slug : null;
+      if (manualSlug === origSlug) {
+        delete entry._renameFrom;
+      } else {
+        entry._renameFrom = originalPath;
+      }
+      activeEditPath = newPath;
+      selectedPaths.delete(oldPath);
+      epSlug.value = manualSlug;
     }
 
     // Update panel title
@@ -1191,6 +1225,7 @@
     // Update snapshot so Cancel reverts to this applied state
     editPanelSnapshot = {
       filePath: entry.filePath,
+      slug: entry.slug,
       draft: entry.draft,
       categories: (entry.categories || []).slice(),
       entryType: entry.entryType,
@@ -2100,9 +2135,14 @@
     // Revert entries to originals, remove new/deleted entries
     entries = entries.filter(function(e) { return !e._isNew; });
     entries.forEach(function(e) {
+      // For renamed entries, restore original filePath and slug before looking up originals
+      var originalFilePath = e._renameFrom || e.filePath;
       delete e._delete;
-      var orig = originals[e.filePath];
+      delete e._renameFrom;
+      var orig = originals[originalFilePath];
       if (!orig) return;
+      e.filePath = originalFilePath;
+      e.slug = orig.slug;
       e.categories = orig.categories.slice();
       e.entryType = orig.entryType;
       e.draft = orig.draft;
@@ -2199,9 +2239,10 @@
       // Remove deleted entries from state
       entries = entries.filter(function(e) { return !e._delete; });
 
-      // Mark new entries as no longer new
+      // Mark new entries as no longer new; clear rename flag
       entries.forEach(function(e) {
         if (e._isNew) delete e._isNew;
+        if (e._renameFrom) delete e._renameFrom;
       });
 
       // Update originals to current state

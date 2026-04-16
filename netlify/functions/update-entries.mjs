@@ -102,6 +102,7 @@ function applyChangesToFile(fileContent, change) {
   if (change.collaborators !== undefined)     d.collaborators = change.collaborators;
   if (change.relatedProjects !== undefined)   d.relatedProjects = change.relatedProjects;
   if (change.relatedEntries !== undefined)    d.relatedEntries = change.relatedEntries;
+  if (change.active !== undefined)            d.active = change.active;
 
   // Body text replaces markdown content (below frontmatter)
   const bodyContent = change.body !== undefined ? (change.body || '') : parsed.content;
@@ -208,6 +209,42 @@ export async function handler(event) {
         const blobSha = await createBlob(content);
         treeItems.push({ path: newFilePath, mode: '100644', type: 'blob', sha: blobSha });
         summaryParts.push(`Create ${slug}`);
+        continue;
+      }
+
+      // ---- Rename entry (slug change — moves folder and file names) ----
+      if (action === 'rename') {
+        const oldFilePath = change.oldFilePath; // e.g. entries/projects/old-slug/old-slug.md
+        const pathParts = oldFilePath.split('/');
+        const entriesIdx = pathParts.indexOf('entries');
+        const oldTypeFolder = pathParts[entriesIdx + 1]; // projects or other
+        // Use new type folder if the type also changed
+        const newTypeFolder = change.newEntryType ? typeToFolder(change.newEntryType) : oldTypeFolder;
+        const oldSlug = pathParts[entriesIdx + 2];
+        const newSlug = change.newSlug;
+        const oldDirPath = `entries/${oldTypeFolder}/${oldSlug}`;
+        const newDirPath = `entries/${newTypeFolder}/${newSlug}`;
+
+        const dirFiles = await getDirContents(oldDirPath);
+        for (const file of dirFiles) {
+          if (file.type !== 'file') continue;
+          // Rename the .md file; other files (images) keep their name under the new folder
+          const newFileName = file.name === `${oldSlug}.md` ? `${newSlug}.md` : file.name;
+          const newFilePath = `${newDirPath}/${newFileName}`;
+          const oldFilePath2 = file.path;
+
+          if (file.name.endsWith('.md')) {
+            const { content } = await getFileContent(oldFilePath2);
+            const updatedContent = applyChangesToFile(content, change);
+            const blobSha = await createBlob(updatedContent);
+            treeItems.push({ path: newFilePath, mode: '100644', type: 'blob', sha: blobSha });
+          } else {
+            treeItems.push({ path: newFilePath, mode: '100644', type: 'blob', sha: file.sha });
+          }
+          // Delete old path
+          treeItems.push({ path: oldFilePath2, mode: '100644', type: 'blob', sha: null });
+        }
+        summaryParts.push(`Rename ${oldSlug} → ${newSlug}`);
         continue;
       }
 
