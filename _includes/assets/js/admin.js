@@ -998,11 +998,36 @@
   })();
 
   // ---- Edit panel ----
+  var editPanelSnapshot = null; // snapshot of entry state when panel was opened
+
   function openEditPanel(filePath) {
     var entry = findEntry(filePath);
     if (!entry) return;
 
     activeEditPath = filePath;
+    // Capture a deep snapshot of the entry so Cancel can restore it
+    editPanelSnapshot = {
+      filePath: entry.filePath,
+      draft: entry.draft,
+      categories: (entry.categories || []).slice(),
+      entryType: entry.entryType,
+      title: entry.title,
+      subtitle: entry.subtitle,
+      description: entry.description,
+      date: entry.date,
+      link: entry.link,
+      position: entry.position,
+      year: entry.year,
+      location: entry.location,
+      status: entry.status,
+      featured: entry.featured,
+      featuredPosition: entry.featuredPosition,
+      showInAwardsTable: entry.showInAwardsTable,
+      collaborators: JSON.parse(JSON.stringify(entry.collaborators || [])),
+      relatedProjects: (entry.relatedProjects || []).slice(),
+      relatedEntries: (entry.relatedEntries || []).slice(),
+      body: entry.body
+    };
     editPanelTitle.textContent = entry._isNew ? 'New Entry' : 'Edit: ' + (entry.title || entry.slug);
 
     // Populate fields
@@ -1060,11 +1085,49 @@
     editPanel.hidden = true;
     editPanelBackdrop.hidden = true;
     activeEditPath = null;
+    editPanelSnapshot = null;
   }
 
-  editPanelClose.addEventListener('click', closeEditPanel);
-  editPanelCloseFooter.addEventListener('click', closeEditPanel);
-  editPanelBackdrop.addEventListener('click', closeEditPanel);
+  function cancelEditPanel() {
+    // Restore entry to the state it had when the panel was opened
+    if (editPanelSnapshot && activeEditPath) {
+      var entry = findEntry(activeEditPath);
+      if (entry) {
+        if (entry._isNew && !originals[entry.filePath]) {
+          // Brand-new entry that was never applied/saved — remove it entirely
+          entries = entries.filter(function(e) { return e.filePath !== activeEditPath; });
+          selectedPaths.delete(activeEditPath);
+        } else {
+          entry.draft = editPanelSnapshot.draft;
+          entry.categories = editPanelSnapshot.categories.slice();
+          entry.entryType = editPanelSnapshot.entryType;
+          entry.title = editPanelSnapshot.title;
+          entry.subtitle = editPanelSnapshot.subtitle;
+          entry.description = editPanelSnapshot.description;
+          entry.date = editPanelSnapshot.date;
+          entry.link = editPanelSnapshot.link;
+          entry.position = editPanelSnapshot.position;
+          entry.year = editPanelSnapshot.year;
+          entry.location = editPanelSnapshot.location;
+          entry.status = editPanelSnapshot.status;
+          entry.featured = editPanelSnapshot.featured;
+          entry.featuredPosition = editPanelSnapshot.featuredPosition;
+          entry.showInAwardsTable = editPanelSnapshot.showInAwardsTable;
+          entry.collaborators = JSON.parse(JSON.stringify(editPanelSnapshot.collaborators));
+          entry.relatedProjects = editPanelSnapshot.relatedProjects.slice();
+          entry.relatedEntries = editPanelSnapshot.relatedEntries.slice();
+          entry.body = editPanelSnapshot.body;
+        }
+        updateChanges();
+        renderTable();
+      }
+    }
+    closeEditPanel();
+  }
+
+  editPanelClose.addEventListener('click', cancelEditPanel);
+  editPanelCloseFooter.addEventListener('click', cancelEditPanel);
+  editPanelBackdrop.addEventListener('click', cancelEditPanel);
 
   // Featured toggle shows/hides position input
   epFeatured.addEventListener('change', function() {
@@ -1110,6 +1173,30 @@
 
     // Update panel title
     editPanelTitle.textContent = entry._isNew ? 'New Entry' : 'Edit: ' + (entry.title || entry.slug);
+
+    // Update snapshot so Cancel reverts to this applied state
+    editPanelSnapshot = {
+      filePath: entry.filePath,
+      draft: entry.draft,
+      categories: (entry.categories || []).slice(),
+      entryType: entry.entryType,
+      title: entry.title,
+      subtitle: entry.subtitle,
+      description: entry.description,
+      date: entry.date,
+      link: entry.link,
+      position: entry.position,
+      year: entry.year,
+      location: entry.location,
+      status: entry.status,
+      featured: entry.featured,
+      featuredPosition: entry.featuredPosition,
+      showInAwardsTable: entry.showInAwardsTable,
+      collaborators: JSON.parse(JSON.stringify(entry.collaborators || [])),
+      relatedProjects: (entry.relatedProjects || []).slice(),
+      relatedEntries: (entry.relatedEntries || []).slice(),
+      body: entry.body
+    };
 
     updateChanges();
     renderTable();
