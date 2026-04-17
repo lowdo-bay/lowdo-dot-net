@@ -4,7 +4,7 @@ featured: true
 featuredPosition: 8
 title: Greenhouse
 description: Naturhus-inspired residence and music studio
-date: 2029-11-30T00:00:00.000Z
+date: 2028-11-30T00:00:00.000Z
 year: '2028'
 categories:
   - HOUSING
