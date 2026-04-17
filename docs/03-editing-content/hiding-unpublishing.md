@@ -1,42 +1,40 @@
 # Hiding/Unpublishing Content
 
-How to remove content from the site without deleting it.
+You can hide an entry from the public site without deleting it, so you can restore it later.
 
 ---
 
-## Using draft: true
+## How to Hide an Entry
 
-Set `draft: true` in frontmatter to hide an entry:
+In the admin panel, click the **dot** in the Draft column of the entry's row:
 
-```yaml
----
-draft: true
-title: "My Project"
----
-```
+- **Red dot** = draft (hidden from public)
+- **Grey dot** = published (visible on public site)
 
-The entry won't appear in the index or have a public page.
+Click the dot to toggle between states. Then click **Save Changes** to apply.
+
+The entry remains visible in the admin table at all times — only the public site is affected.
 
 ---
 
 ## When to Use
 
-- Work in progress
-- Outdated content
-- Seasonal content
-- Testing before publishing
+- Work in progress not ready to publish
+- Outdated content you might want to restore later
+- Seasonal content (events, exhibitions)
+- Testing changes before going live
 
 ---
 
-## To Unhide
+## Permanently Removing an Entry
 
-Set back to `draft: false` and push.
+To delete an entry entirely:
 
----
+1. Click **Del** on the row in the admin panel
+2. Confirm in the dialog
+3. Click **Save Changes**
 
-## Alternative: Delete
-
-To permanently remove, delete the entire folder and commit.
+⚠️ Deletion cannot be undone after saving. The entry folder and all its files (including images) are permanently removed from GitHub.
 
 ---
 
@@ -44,4 +42,3 @@ To permanently remove, delete the entire folder and commit.
 
 - [Editing Existing Entries](editing-existing-entries.md)
 - [Organizing Entries](organizing-entries.md)
-

@@ -1,97 +1,35 @@
 # LowDO Website Documentation
 
-Welcome to the LowDO website. This guide will help you get oriented and start editing content.
+Welcome to the LowDO website. All content is managed through the **Admin Panel** at `/admin/` — no coding, GitHub, or local setup required.
 
 ---
 
-## What Can You Do Without Knowing How to Code?
+## Quick Start
 
-✅ **Add new content** — Design projects, news, awards, press features, lectures, exhibitions, staff updates
-✅ **Edit existing content** — Update descriptions, dates, categories, metadata, hide content
-✅ **Customize the site** — Change colors, themes, site title, contact information
-✅ **Publish changes** — Save and deploy to the live site (no manual builds)
-
-❌ **What you CAN'T do easily** — Change layout/structure, add new features, modify code (ask an AI assistant for these)
-
----
-
-## What You'll Need
-
-- Web browser (Chrome, Firefox, Safari, etc.)
-- GitHub account with access to the lowdo-dot-net repository
-- This documentation
-
-**Most people can edit everything using just their web browser!**
-
----
-
-## How the Site Works
-
-LowDO is a **static site**, meaning content lives in text files (not a database like WordPress). When you add or edit files, the system automatically discovers them, generates pages, and updates the index.
-
-### The Workflow
-
-```
-You create/edit files on GitHub
-        ↓
-Netlify detects changes
-        ↓
-Eleventy build system runs (3-5 min)
-        ↓
-Site rebuilds with your content
-        ↓
-Changes go live at lowdo.netlify.app
-```
-
-### Content Types
-
-**Projects** — Get their own detail pages with image galleries
-- Folder: `entries/projects/{project-name}/`
-- URL: `/project/{project-name}/`
-
-**Updates** — Appear in the index at `/all/`, no individual pages
-- News, awards, features, lectures, exhibitions, staff
-- Folder: `entries/other/{entry-name}/`
-
-### What's Automatic
-
-- File discovery — add a file and it appears on the site
-- Image discovery — drop images in a folder and they're added to the gallery
-- Index updates — comprehensive index automatically shows new entries
-- Image optimization — images are automatically resized and compressed
-
-### Files You Edit
-
-- `entries/` — All content (projects, news, awards, etc.)
-- `_data/settings.yaml` — Site colors, title, contact info
-
-**Don't touch:** `_includes/` (templates and code) or `_site/` (auto-generated output).
+1. Go to [lowdo.netlify.app/admin](https://lowdo.netlify.app/admin/)
+2. Enter the admin password (contact Bay if you need it)
+3. Use the table to add, edit, and publish entries
+4. Click **Save Changes** — the site rebuilds automatically in 3–5 minutes
 
 ---
 
 ## Adding Content
 
-- [How to Add a Project](02-adding-content/adding-a-project.md) — Complete guide with file naming conventions
-- [How to Add News, Awards, & More](02-adding-content/adding-news-awards.md) — Festivals, lectures, exhibitions, and staff updates
+- [How to Add a Project](02-adding-content/adding-a-project.md) — Design projects with galleries and detail pages
+- [How to Add News, Awards, & More](02-adding-content/adding-news-awards.md) — Announcements, press, lectures, exhibitions, staff updates
 - [Image Guide](02-adding-content/image-guide.md) — Best practices for image naming and uploading
 - [Frontmatter Reference](02-adding-content/frontmatter-reference.md) — Complete field guide
 
 ## Editing & Customizing
 
-- [Editing Existing Entries](03-editing-content/editing-existing-entries.md) — Update, hide, or reorganize content
-- [Customizing the Site](04-customizing-the-site/changing-colors.md) — Change colors, title, contact info
-- [GitHub Web Editor](05-tools-and-workflow/github-web-editor.md) — Edit files in your browser (no installation)
-
-## Tools & Workflow
-
-- [Git for Beginners](05-tools-and-workflow/git-for-beginners.md) — Version control basics
-- [Making Commits](05-tools-and-workflow/making-commits.md) — How to save and publish changes
-- [Local Development](05-tools-and-workflow/code-editor-setup.md) — VS Code setup and preview
-- [Using AI Assistants](05-tools-and-workflow/using-ai-assistants.md) — How to get help from Claude, ChatGPT, etc.
+- [Editing Existing Entries](03-editing-content/editing-existing-entries.md) — Update, hide, or delete content
+- [Hiding/Unpublishing Content](03-editing-content/hiding-unpublishing.md) — Make entries invisible without deleting them
+- [Organizing Entries](03-editing-content/organizing-entries.md) — Sort order and categories
+- [Customizing the Site](04-customizing-the-site/changing-colors.md) — Colors, title, contact info
 
 ## Admin Panel
 
-- [Using the Admin Panel](08-admin/using-the-admin.md) — Manage entries, edit fields, rename categories/types, and publish changes
+- [Using the Admin Panel](08-admin/using-the-admin.md) — Full reference for all admin features
 
 ## Help & Reference
 

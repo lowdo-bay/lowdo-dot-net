@@ -1,66 +1,53 @@
 # Organizing Entries
 
-Managing categories, dates, and sort order.
+How to control sort order and categories.
 
 ---
 
 ## Sort Order
 
-Entries are sorted by:
+Entries in the index are sorted by:
 
-1. `position` field (if set, lower = first)
+1. `position` field (if set — lower number = appears first)
 2. `date` field (newest first)
 
----
-
-## Using position
-
-Override date sorting:
-
-```yaml
-position: 1  # Appears first
-```
+To pin an entry to the top, open it in the admin panel and set the **Position** field to `1`. To remove pinning, clear the field.
 
 ---
 
 ## Categories
 
-Use existing categories when possible. Common categories include:
+Categories are the tags used to filter entries in the index. Use existing categories when possible to keep filters organized.
 
-```yaml
-categories:
-  - HOUSING        # Residential projects
-  - COMMERCIAL     # Commercial/hospitality
-  - COMMUNITY      # Civic projects (schools, hospitals, public)
-  - SUSTAINABLE    # Sustainability-focused
-  - AFRICA         # Work on African continent
-  - BAMBOT         # Bamboo robotic construction
-  - INSTALLATION   # Temporary structures, exhibitions
-  - AMP            # Agbogbloshie Makerspace Platform
-```
+Common categories:
 
-See [Category Guidelines](../07-reference/category-guidelines.md) for the complete list.
+- `HOUSING` — Residential projects
+- `COMMERCIAL` — Commercial / hospitality
+- `COMMUNITY` — Civic projects (schools, hospitals, public spaces)
+- `SUSTAINABLE` — Sustainability-focused work
+- `INSTALLATION` — Temporary structures, exhibitions
+- `AWARD`, `PRESS`, `LECTURE` — For non-project entries
 
-### Renaming or Reorganizing Categories
+See [Category Guidelines](../07-reference/category-guidelines.md) for the full list.
 
-The easiest way to rename or consolidate categories is through the **admin panel**:
+### Adding or Removing Categories
 
-1. Go to `/admin/` and log in
-2. Click **Manage Labels** in the toolbar
-3. Under the **Categories** tab, click **Rename** next to any category
-4. Type the new name and press Enter or click Save
-5. All entries with that category are updated automatically
-6. Click **Save Changes** to commit everything to GitHub
+In the admin table, click **+** or **×** directly on the category tags in any row — no need to open the edit panel.
 
-See [Using the Admin Panel](../08-admin/using-the-admin.md) for full details.
+### Renaming Categories Across All Entries
+
+1. Go to `/admin/` and click **Manage Labels** in the toolbar
+2. Select the **Categories** tab
+3. Click **Rename** next to the category you want to change
+4. Type the new name and press Enter
+5. All entries are updated automatically in memory
+6. Click **Save Changes** to commit
 
 ---
 
 ## Dates
 
-Format: YYYY-MM-DD
-
-Changes sort order and display.
+The `date` field controls sort order when no `position` is set. Edit it in the side panel for any entry. Format: `YYYY-MM-DD`.
 
 ---
 
@@ -68,4 +55,3 @@ Changes sort order and display.
 
 - [Category Guidelines](../07-reference/category-guidelines.md)
 - [Editing Existing Entries](editing-existing-entries.md)
-
