@@ -1,73 +1,60 @@
 # Editing Existing Entries
 
-How to modify published content.
+All content edits are done through the Admin Panel at `/admin/`.
 
 ---
 
-## Step 1: Find the File
+## How to Edit an Entry
 
-Navigate to the entry folder:
+1. Go to `/admin/` and log in
+2. Find the entry in the table — use the search box or type filters to narrow it down
+3. Click **Edit** on the row
+4. Make your changes in the side panel
+5. Click **Apply Changes**
+6. Click **Save Changes** (top right) to commit everything to GitHub
 
-```
-entries/projects/casa-marianella/casa-marianella.md
-```
-
-Or:
-
-```
-entries/news/studio-expansion/studio-expansion.md
-```
-
----
-
-## Step 2: Open and Edit
-
-Open the .md file in your editor and make changes:
-
-- Edit frontmatter (title, date, categories)
-- Edit content below the frontmatter
-- Add/remove/replace images
-
----
-
-## Step 3: Save and Publish
-
-1. Save the file
-2. Commit: `git add . && git commit -m "Update entry"`
-3. Push: `git push`
+The site rebuilds automatically in 3–5 minutes.
 
 ---
 
 ## What You Can Edit
 
-**Frontmatter:**
-- title, subtitle, description
-- date (changes sort order)
-- categories (changes filters)
-- draft status (hide/show)
+**In the side panel:**
+- Title, subtitle, description
+- Date (affects sort order)
+- Link (external URL)
+- Categories (also editable inline in the table row)
+- Type (also editable inline)
+- Draft status (also togglable via the dot in the table row)
+- Body text (project description, written in markdown)
+- Collaborators (projects only)
+- Related projects (non-projects only)
 
-**Content:**
-- Project descriptions
-- Markdown text
-- Headings and formatting
-
-**Images:**
-- Replace images (keep same filename)
-- Add new gallery images
-- Remove images (delete files)
+**Not editable in the admin panel:**
+- The entry slug (URL path) — contact Bay or ask an AI assistant if you need to rename an entry
+- Images — upload/replace images directly on [GitHub](https://github.com/lowdo-bay/lowdo-dot-net) in the entry's folder
 
 ---
 
-## Tips
+## Editing Categories Inline
 
-- Test locally if possible
-- Make one change at a time
-- Write clear commit messages
+You don't need to open the edit panel to change categories:
+
+- Click **×** on a tag in the table row to remove it
+- Click **+** to add a category (opens a searchable dropdown)
+- Type a new name to create one that doesn't exist yet
+
+---
+
+## Saving
+
+All changes are held in memory until you click **Save Changes**. The counter in the top-right shows how many entries have pending changes. Changes are committed to GitHub in a single operation — you can edit multiple entries before saving.
+
+⚠️ If you leave the tab or the session expires (24 hours), unsaved changes are lost.
 
 ---
 
 ## Next Steps
 
-- [Hiding/Unpublishing](hiding-unpublishing.md)
-- [Organizing Entries](organizing-entries.md)
-
+- [Hiding/Unpublishing Content](hiding-unpublishing.md) — Make an entry invisible without deleting it
+- [Organizing Entries](organizing-entries.md) — Sort order and categories
