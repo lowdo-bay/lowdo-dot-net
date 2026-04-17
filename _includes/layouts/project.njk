@@ -1082,7 +1082,7 @@ section: project
           {% endfor %}
           {% set params = {
             "src": headerImage.src,
-            "alt": title,
+            "alt": imageAlt or (title + (", " + location if location else "") + " — Low Design Office"),
             "classes": "header-image",
             "loadingType": "eager",
             "viewportSizes": "50vw",
@@ -1102,7 +1102,7 @@ section: project
             data-ispng="{{ 'true' if headerImage.src | endsWith('.png') else '' }}">
             {% if headerImage.src | endsWith('.gif') %}
               <picture>
-                <img src="/{{ headerImage.src }}" alt="{{ title }}" loading="eager" decoding="async" class="header-image">
+                <img src="/{{ headerImage.src }}" alt="{{ imageAlt or (title + (', ' + location if location else '') + ' — Low Design Office') }}" loading="eager" decoding="async" class="header-image">
               </picture>
             {% else %}
               {% generateImage params %}
@@ -1230,7 +1230,7 @@ section: project
 
         {% set params = {
           "src": image.src,
-          "alt": image.caption or title,
+          "alt": image.caption or (title + " — Low Design Office"),
           "loadingType": "lazy",
           "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 540px) 45vw, 85vw",
           "outputWidths": [
@@ -1248,7 +1248,7 @@ section: project
           <div class="photo-thumb" data-caption="{{ image.caption or '' }}" data-fullsrc="{% if not (image.src | endsWith('.gif')) %}{% getImageSrc { src: image.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}" data-ispng="{{ 'true' if image.src | endsWith('.png') else '' }}">
             {% if image.src | endsWith('.gif') %}
               <picture>
-                <img src="/{{ image.src }}" alt="{{ image.caption or title }}" loading="lazy" decoding="async" class="hover-fade">
+                <img src="/{{ image.src }}" alt="{{ image.caption or (title + ' — Low Design Office') }}" loading="lazy" decoding="async" class="hover-fade">
               </picture>
             {% else %}
               {% generateImage params %}
@@ -1289,7 +1289,7 @@ section: project
         {% endfor %}
         {% set params = {
           "src": drawing.src,
-          "alt": drawing.caption or (title + " drawing"),
+          "alt": drawing.caption or (title + " drawing — Low Design Office"),
           "loadingType": "lazy",
           "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 540px) 45vw, 85vw",
           "outputWidths": [
@@ -1306,7 +1306,7 @@ section: project
           <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}" data-fullsrc="{% if not (drawing.src | endsWith('.gif')) %}{% getImageSrc { src: drawing.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}" data-ispng="{{ 'true' if drawing.src | endsWith('.png') else '' }}">
             {% if drawing.src | endsWith('.gif') %}
               <picture>
-                <img src="/{{ drawing.src }}" alt="{{ drawing.caption or (title + ' drawing') }}" loading="lazy" decoding="async" class="hover-fade">
+                <img src="/{{ drawing.src }}" alt="{{ drawing.caption or (title + ' drawing — Low Design Office') }}" loading="lazy" decoding="async" class="hover-fade">
               </picture>
             {% else %}
               {% generateImage params %}

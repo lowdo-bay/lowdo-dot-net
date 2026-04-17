@@ -1,0 +1,30 @@
+---
+permalink: /image-sitemap.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  {%- for project in collections.projects %}
+    {%- if not project.data.draft %}
+      {%- set d = project.data %}
+      <url>
+        <loc>{{ settings.metadata.site_url }}{{ project.url }}</loc>
+        {%- if d.headerImage %}
+          <image:image>
+            <image:loc>{{ settings.metadata.site_url }}/{{ d.headerImage.src }}</image:loc>
+            <image:title>{{ d.title }} by Low Design Office{% if d.location %}, {{ d.location }}{% endif %}</image:title>
+            <image:caption>{{ d.title }} — {{ d.description or "" }} Low Design Office{% if d.location %}, {{ d.location }}{% endif %}</image:caption>
+          </image:image>
+        {%- endif %}
+        {%- for image in d.images %}
+          <image:image>
+            <image:loc>{{ settings.metadata.site_url }}/{{ image.src }}</image:loc>
+            <image:title>{{ d.title }}{% if image.caption %} — {{ image.caption }}{% endif %} by Low Design Office</image:title>
+            <image:caption>{{ d.title }}{% if image.caption %} — {{ image.caption }}{% endif %}. Architecture by Low Design Office{% if d.location %}, {{ d.location }}{% endif %}.</image:caption>
+          </image:image>
+        {%- endfor %}
+      </url>
+    {%- endif %}
+  {%- endfor %}
+</urlset>

@@ -34,16 +34,31 @@
 
 {# Project detail pages: CreativeWork schema #}
 {% elif section == "project" %}
+  {% set imageUrl = (siteUrl + "/" + headerImage.src) if headerImage and headerImage.src else null %}
   {% set creativeWorkSchema = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     "name": title,
     "description": (description | striptags) if description else null,
     "datePublished": year | string if year else null,
-    "image": (siteUrl + "/" + headerImage.src) if headerImage and headerImage.src else null,
+    "locationCreated": {
+      "@type": "Place",
+      "name": location
+    } if location else null,
+    "image": {
+      "@type": "ImageObject",
+      "url": imageUrl,
+      "caption": (title + (", " + location if location else "") + " — Low Design Office"),
+      "author": {
+        "@type": "Organization",
+        "name": "Low Design Office",
+        "url": siteUrl
+      }
+    } if imageUrl else null,
     "creator": {
       "@type": "Organization",
-      "name": siteName
+      "name": siteName,
+      "url": siteUrl
     },
     "url": siteUrl + page.url
   } %}
