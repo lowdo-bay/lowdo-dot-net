@@ -125,6 +125,11 @@
   var deleteModalCancel = document.getElementById('delete-modal-cancel');
   var saveOverlay = document.getElementById('save-overlay');
   var saveStatus = document.getElementById('save-status');
+  var docsBtn = document.getElementById('docs-btn');
+  var docsModal = document.getElementById('docs-modal');
+  var docsModalClose = document.getElementById('docs-modal-close');
+  var docsNav = document.getElementById('docs-nav');
+  var docsBody = document.getElementById('docs-body');
 
   // Edit panel
   var editPanel = document.getElementById('edit-panel');
@@ -2642,6 +2647,148 @@
       setTimeout(function() { saveOverlay.hidden = true; }, 3000);
     });
   }
+
+  // ---- Docs modal ----
+  var docsTree = null;
+  var docsActiveFile = null;
+  var markedLoaded = false;
+
+  function loadMarked(cb) {
+    if (markedLoaded) { cb(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
+    s.onload = function() { markedLoaded = true; cb(); };
+    document.head.appendChild(s);
+  }
+
+  function labelFromFolder(folderName) {
+    // "01-understanding-the-site" → "Understanding The Site"
+    return folderName.replace(/^\d+-/, '').replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+  }
+
+  function labelFromFile(filePath) {
+    var name = filePath.split('/').pop().replace(/\.md$/, '');
+    return name.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+  }
+
+  function buildDocsNav(files) {
+    var folders = {};
+    var rootFiles = [];
+
+    files.forEach(function(f) {
+      var parts = f.path.split('/'); // ['docs', 'folder', 'file.md'] or ['docs', 'file.md']
+      if (parts.length === 2) {
+        rootFiles.push(f);
+      } else {
+        var folder = parts[1];
+        if (!folders[folder]) folders[folder] = [];
+        folders[folder].push(f);
+      }
+    });
+
+    var html = '';
+
+    // Root-level files first
+    rootFiles.forEach(function(f) {
+      html += '<button class="docs-nav__root-file" data-path="' + f.path + '">' + labelFromFile(f.path) + '</button>';
+    });
+
+    // Folders
+    Object.keys(folders).sort().forEach(function(folder) {
+      html += '<div class="docs-nav__folder is-open">';
+      html += '<div class="docs-nav__folder-label"><span class="docs-nav__folder-chevron">&#9658;</span>' + labelFromFolder(folder) + '</div>';
+      html += '<ul class="docs-nav__files">';
+      folders[folder].forEach(function(f) {
+        html += '<li><button class="docs-nav__file" data-path="' + f.path + '">' + labelFromFile(f.path) + '</button></li>';
+      });
+      html += '</ul></div>';
+    });
+
+    docsNav.innerHTML = html;
+
+    docsNav.querySelectorAll('.docs-nav__folder-label').forEach(function(label) {
+      label.addEventListener('click', function() {
+        var folder = label.parentElement;
+        folder.classList.toggle('is-open');
+      });
+    });
+
+    docsNav.querySelectorAll('[data-path]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        loadDocsFile(btn.dataset.path);
+      });
+    });
+  }
+
+  function loadDocsFile(filePath) {
+    if (docsActiveFile === filePath) return;
+    docsActiveFile = filePath;
+
+    docsNav.querySelectorAll('[data-path]').forEach(function(btn) {
+      btn.classList.toggle('is-active', btn.dataset.path === filePath);
+    });
+
+    docsBody.innerHTML = '<div class="docs-body__loading">Loading...</div>';
+
+    fetch('/.netlify/functions/read-docs?action=file&path=' + encodeURIComponent(filePath) + '&token=' + encodeURIComponent(token))
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) { docsBody.innerHTML = '<p style="color:red">' + data.error + '</p>'; return; }
+        loadMarked(function() {
+          docsBody.innerHTML = window.marked.parse(data.content);
+          // Intercept .md links — navigate within the modal instead of the browser
+          docsBody.querySelectorAll('a[href]').forEach(function(a) {
+            var href = a.getAttribute('href');
+            if (!href || href.startsWith('http') || href.startsWith('#')) return;
+            if (!href.endsWith('.md')) return;
+            a.addEventListener('click', function(e) {
+              e.preventDefault();
+              // Resolve relative to current doc's directory
+              var base = filePath.split('/').slice(0, -1).join('/');
+              var resolved = base + '/' + href.replace(/^\.\//, '');
+              // Normalise any ../ segments
+              var parts = resolved.split('/');
+              var stack = [];
+              parts.forEach(function(p) {
+                if (p === '..') stack.pop();
+                else if (p && p !== '.') stack.push(p);
+              });
+              loadDocsFile(stack.join('/'));
+            });
+          });
+        });
+      })
+      .catch(function(err) {
+        docsBody.innerHTML = '<p style="color:red">Failed to load: ' + err.message + '</p>';
+      });
+  }
+
+  function openDocsModal() {
+    docsModal.hidden = false;
+
+    if (docsTree) return; // already loaded
+
+    docsNav.innerHTML = '<div class="docs-nav__loading">Loading...</div>';
+    docsBody.innerHTML = '<div class="docs-body__placeholder">Select a document from the sidebar.</div>';
+
+    fetch('/.netlify/functions/read-docs?action=tree&token=' + encodeURIComponent(token))
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) { docsNav.innerHTML = '<div class="docs-nav__loading" style="color:red">' + data.error + '</div>'; return; }
+        docsTree = data.files;
+        buildDocsNav(docsTree);
+        // Auto-open the first root file or first file
+        var first = docsTree.find(function(f) { return f.path.split('/').length === 2; }) || docsTree[0];
+        if (first) loadDocsFile(first.path);
+      })
+      .catch(function(err) {
+        docsNav.innerHTML = '<div class="docs-nav__loading" style="color:red">Failed to load: ' + err.message + '</div>';
+      });
+  }
+
+  docsBtn.addEventListener('click', openDocsModal);
+  docsModalClose.addEventListener('click', function() { docsModal.hidden = true; });
+  docsModal.addEventListener('click', function(e) { if (e.target === docsModal) docsModal.hidden = true; });
 
   // ---- Save ----
   saveBtn.addEventListener('click', function() {

@@ -76,6 +76,7 @@ eleventyExcludeFromCollections: true
         <span id="change-count" class="change-count" hidden>0 changes</span>
         <button id="clear-btn" class="btn btn--secondary" disabled hidden>Clear Changes</button>
         <button id="save-btn" class="btn btn--primary" disabled>Save Changes</button>
+        <button id="docs-btn" class="btn btn--secondary">Docs</button>
         <button id="logout-btn" class="btn btn--secondary">Logout</button>
       </div>
     </header>
@@ -476,6 +477,24 @@ eleventyExcludeFromCollections: true
         <div class="modal-actions">
           <button id="link-modal-confirm" class="btn btn--primary">Insert</button>
           <button id="link-modal-cancel" class="btn btn--secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    {# Docs modal #}
+    <div id="docs-modal" class="modal" hidden>
+      <div class="modal-content modal-content--table modal-content--docs">
+        <div class="modal-content__header">
+          <h3>Documentation</h3>
+          <button id="docs-modal-close" class="btn btn--secondary">&times;</button>
+        </div>
+        <div class="docs-layout">
+          <nav class="docs-nav" id="docs-nav">
+            <div class="docs-nav__loading">Loading...</div>
+          </nav>
+          <div class="docs-body" id="docs-body">
+            <div class="docs-body__placeholder">Select a document from the sidebar.</div>
+          </div>
         </div>
       </div>
     </div>

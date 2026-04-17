@@ -1,6 +1,71 @@
 # LowDO Website Documentation
 
-**[Getting Started →](getting-started.md)** — New to editing? Start here.
+Welcome to the LowDO website. This guide will help you get oriented and start editing content.
+
+---
+
+## What Can You Do Without Knowing How to Code?
+
+✅ **Add new content** — Design projects, news, awards, press features, lectures, exhibitions, staff updates
+✅ **Edit existing content** — Update descriptions, dates, categories, metadata, hide content
+✅ **Customize the site** — Change colors, themes, site title, contact information
+✅ **Publish changes** — Save and deploy to the live site (no manual builds)
+
+❌ **What you CAN'T do easily** — Change layout/structure, add new features, modify code (ask an AI assistant for these)
+
+---
+
+## What You'll Need
+
+- Web browser (Chrome, Firefox, Safari, etc.)
+- GitHub account with access to the lowdo-dot-net repository
+- This documentation
+
+**Most people can edit everything using just their web browser!**
+
+---
+
+## How the Site Works
+
+LowDO is a **static site**, meaning content lives in text files (not a database like WordPress). When you add or edit files, the system automatically discovers them, generates pages, and updates the index.
+
+### The Workflow
+
+```
+You create/edit files on GitHub
+        ↓
+Netlify detects changes
+        ↓
+Eleventy build system runs (3-5 min)
+        ↓
+Site rebuilds with your content
+        ↓
+Changes go live at lowdo.netlify.app
+```
+
+### Content Types
+
+**Projects** — Get their own detail pages with image galleries
+- Folder: `entries/projects/{project-name}/`
+- URL: `/project/{project-name}/`
+
+**Updates** — Appear in the index at `/all/`, no individual pages
+- News, awards, features, lectures, exhibitions, staff
+- Folder: `entries/other/{entry-name}/`
+
+### What's Automatic
+
+- File discovery — add a file and it appears on the site
+- Image discovery — drop images in a folder and they're added to the gallery
+- Index updates — comprehensive index automatically shows new entries
+- Image optimization — images are automatically resized and compressed
+
+### Files You Edit
+
+- `entries/` — All content (projects, news, awards, etc.)
+- `_data/settings.yaml` — Site colors, title, contact info
+
+**Don't touch:** `_includes/` (templates and code) or `_site/` (auto-generated output).
 
 ---
 
@@ -22,6 +87,7 @@
 - [Git for Beginners](05-tools-and-workflow/git-for-beginners.md) — Version control basics
 - [Making Commits](05-tools-and-workflow/making-commits.md) — How to save and publish changes
 - [Local Development](05-tools-and-workflow/code-editor-setup.md) — VS Code setup and preview
+- [Using AI Assistants](05-tools-and-workflow/using-ai-assistants.md) — How to get help from Claude, ChatGPT, etc.
 
 ## Admin Panel
 
