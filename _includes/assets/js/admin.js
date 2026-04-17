@@ -40,6 +40,8 @@
     knownStatuses.sort();
   })();
   var changes = {};
+  var fileOps = {}; // { [filePath]: { header, gallery[], drawings[], toolkit[] } }
+  var fileListCache = {}; // { [filePath]: rawFiles[] } — avoids re-fetching on each open
   var sortField = 'date';
   var sortDir = 'desc';
   var searchQuery = '';
@@ -172,6 +174,21 @@
   var epCategoryDrawer = document.getElementById('ep-category-drawer');
   var epCategoryInput = document.getElementById('ep-category-input');
   var epCategorySuggestions = document.getElementById('ep-category-suggestions');
+  var epFilesPanel = document.getElementById('ep-files-panel');
+  var epFilesLoading = document.getElementById('ep-files-loading');
+  var epFilesHeaderName = document.getElementById('ep-files-header-name');
+  var epFilesHeaderUpload = document.getElementById('ep-files-header-upload');
+  var epFilesHeaderDelete = document.getElementById('ep-files-header-delete');
+  var epFilesHeaderInput = document.getElementById('ep-files-header-input');
+  var epFilesGalleryList = document.getElementById('ep-files-gallery-list');
+  var epFilesGalleryAdd = document.getElementById('ep-files-gallery-add');
+  var epFilesGalleryInput = document.getElementById('ep-files-gallery-input');
+  var epFilesDrawingsList = document.getElementById('ep-files-drawings-list');
+  var epFilesDrawingsAdd = document.getElementById('ep-files-drawings-add');
+  var epFilesDrawingsInput = document.getElementById('ep-files-drawings-input');
+  var epFilesToolkitList = document.getElementById('ep-files-toolkit-list');
+  var epFilesToolkitAdd = document.getElementById('ep-files-toolkit-add');
+  var epFilesToolkitInput = document.getElementById('ep-files-toolkit-input');
 
   // ---- Auth ----
   function showLogin() {
@@ -1030,6 +1047,421 @@
     });
   })();
 
+  // ---- File management helpers ----
+
+  function getExtension(name) {
+    var m = (name || '').match(/\.([^.]+)$/);
+    return m ? m[1].toLowerCase() : '';
+  }
+
+  function isImageExt(ext) {
+    return ext === 'jpg' || ext === 'jpeg' || ext === 'png' || ext === 'gif' || ext === 'webp';
+  }
+
+  function getPreviewSrc(item) {
+    if (!item || item.status === 'delete') return null;
+    var ext = getExtension(item.origPath || item.path || '');
+    if (!isImageExt(ext)) return null;
+    if (item.status === 'upload' && item.base64 && item.mimeType) {
+      return 'data:' + item.mimeType + ';base64,' + item.base64;
+    }
+    if (item.path) {
+      return 'https://raw.githubusercontent.com/lowdo-bay/lowdo-dot-net/main/' + item.path;
+    }
+    return null;
+  }
+
+  function entryDirFromFilePath(filePath) {
+    var parts = filePath.split('/');
+    return parts.slice(0, parts.length - 1).join('/');
+  }
+
+  function parseEntryFiles(rawFiles) {
+    var result = { header: null, gallery: [], drawings: [], toolkit: [] };
+    (rawFiles || []).forEach(function(f) {
+      var name = f.name;
+      if (/^header\.(jpg|jpeg|png|gif|webp)$/i.test(name)) {
+        result.header = { status: 'existing', sha: f.sha, path: f.path, displayName: name };
+      } else if (/^\d{2}_/.test(name)) {
+        var m = name.match(/^(\d{2})_(.+)$/);
+        var displayName = m ? m[2].replace(/\.[^.]+$/, '') : name;
+        result.gallery.push({ status: 'existing', sha: f.sha, path: f.path, origPath: f.path, displayName: displayName, prefix: m ? m[1] : '00' });
+      } else if (/^drawing-/.test(name)) {
+        var base = name.replace(/^drawing-/, '').replace(/\.[^.]+$/, '');
+        result.drawings.push({ status: 'existing', sha: f.sha, path: f.path, origPath: f.path, displayName: base });
+      } else if (/^toolkit-/.test(name)) {
+        var base = name.replace(/^toolkit-/, '').replace(/\.[^.]+$/, '');
+        result.toolkit.push({ status: 'existing', sha: f.sha, path: f.path, origPath: f.path, displayName: base });
+      }
+    });
+    result.gallery.sort(function(a, b) { return a.prefix < b.prefix ? -1 : 1; });
+    return result;
+  }
+
+  function renderFilesHeader(ops) {
+    var existing = document.querySelector('.ep-files-header-thumb');
+    if (existing) existing.parentNode.removeChild(existing);
+
+    if (ops && ops.header && ops.header.status !== 'delete') {
+      var h = ops.header;
+      var src = getPreviewSrc(h);
+      var el;
+      if (src) {
+        el = document.createElement('img');
+        el.src = src;
+        el.className = 'ep-files-thumb ep-files-header-thumb';
+        el.alt = '';
+      } else {
+        var ext = getExtension(h.origPath || h.path || '').toUpperCase() || 'FILE';
+        el = document.createElement('div');
+        el.className = 'ep-files-thumb-placeholder ep-files-header-thumb';
+        el.textContent = ext;
+      }
+      var row = epFilesHeaderName.parentNode;
+      row.insertBefore(el, row.firstChild);
+      epFilesHeaderName.textContent = h.displayName || 'header';
+      epFilesHeaderName.classList.add('has-file');
+      epFilesHeaderDelete.hidden = false;
+    } else {
+      epFilesHeaderName.textContent = 'None';
+      epFilesHeaderName.classList.remove('has-file');
+      epFilesHeaderDelete.hidden = true;
+    }
+  }
+
+  function renderFilesList(listEl, items) {
+    listEl.innerHTML = '';
+    (items || []).forEach(function(item, idx) {
+      if (item.status === 'delete') return;
+      var row = document.createElement('div');
+      row.className = 'ep-files-row' + (item.status === 'upload' ? ' is-pending-upload' : '');
+      row.draggable = true;
+      row.dataset.idx = String(idx);
+
+      var handle = document.createElement('span');
+      handle.className = 'ep-files-drag-handle';
+      handle.textContent = '\u2630';
+
+      var nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.value = item.displayName || '';
+      nameInput.placeholder = 'Display name';
+
+      var ext = getExtension(item.origPath || item.path || '');
+      var badge = document.createElement('span');
+      badge.className = 'ep-files-type-badge';
+      badge.textContent = ext ? '.' + ext : '';
+
+      var tipEl = document.createElement('div');
+      tipEl.className = 'ep-files-preview-tip';
+      var previewSrc = getPreviewSrc(item);
+      if (previewSrc) {
+        var tipImg = document.createElement('img');
+        tipImg.src = previewSrc;
+        tipImg.alt = '';
+        tipEl.appendChild(tipImg);
+      } else {
+        var tipLabel = document.createElement('div');
+        tipLabel.className = 'ep-files-tip-label';
+        tipLabel.textContent = (ext ? ext.toUpperCase() : 'FILE') + ' \u2014 no preview';
+        tipEl.appendChild(tipLabel);
+      }
+
+      var delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'btn btn--small btn--danger';
+      delBtn.textContent = '\u00d7';
+      delBtn.dataset.idx = String(idx);
+
+      row.appendChild(tipEl);
+      row.appendChild(handle);
+      row.appendChild(nameInput);
+      row.appendChild(badge);
+      row.appendChild(delBtn);
+      listEl.appendChild(row);
+
+      row.addEventListener('dragstart', function(e) {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', String(idx));
+        row.classList.add('is-dragging');
+      });
+      row.addEventListener('dragend', function() {
+        row.classList.remove('is-dragging');
+        listEl.querySelectorAll('.drag-over').forEach(function(el) { el.classList.remove('drag-over'); });
+      });
+      row.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        listEl.querySelectorAll('.drag-over').forEach(function(el) { el.classList.remove('drag-over'); });
+        row.classList.add('drag-over');
+      });
+      row.addEventListener('drop', function(e) {
+        e.preventDefault();
+        row.classList.remove('drag-over');
+        var fromIdx = parseInt(e.dataTransfer.getData('text/plain'), 10);
+        var toIdx = idx;
+        if (fromIdx === toIdx) return;
+        syncFileNamesFromRows(listEl, items);
+        var moved = items.splice(fromIdx, 1)[0];
+        items.splice(toIdx, 0, moved);
+        renderFilesList(listEl, items);
+      });
+    });
+  }
+
+  function syncFileNamesFromRows(listEl, items) {
+    var rows = listEl.querySelectorAll('.ep-files-row');
+    var visibleIdx = 0;
+    (items || []).forEach(function(item) {
+      if (item.status === 'delete') return;
+      var row = rows[visibleIdx];
+      if (row) {
+        var input = row.querySelector('input[type="text"]');
+        if (input) item.displayName = input.value.trim() || item.displayName;
+      }
+      visibleIdx++;
+    });
+  }
+
+  function renderFilesPanel(filePath) {
+    var ops = fileOps[filePath];
+    if (!ops) return;
+    renderFilesHeader(ops);
+    renderFilesList(epFilesGalleryList, ops.gallery);
+    renderFilesList(epFilesDrawingsList, ops.drawings);
+    renderFilesList(epFilesToolkitList, ops.toolkit);
+  }
+
+  function loadEntryFiles(filePath) {
+    var entry = findEntry(filePath);
+    if (entry && entry._isNew) {
+      if (!fileOps[filePath]) fileOps[filePath] = { header: null, gallery: [], drawings: [], toolkit: [] };
+      epFilesLoading.hidden = true;
+      renderFilesPanel(filePath);
+      return;
+    }
+    if (fileListCache[filePath]) {
+      if (!fileOps[filePath]) fileOps[filePath] = parseEntryFiles(fileListCache[filePath]);
+      epFilesLoading.hidden = true;
+      renderFilesPanel(filePath);
+      return;
+    }
+    epFilesLoading.hidden = false;
+    epFilesLoading.textContent = 'Loading files...';
+    var dirPath = entryDirFromFilePath(filePath);
+    var url = '/.netlify/functions/update-entries?action=listFiles&dirPath=' +
+      encodeURIComponent(dirPath) + '&token=' + encodeURIComponent(token);
+    fetch(url)
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) {
+          epFilesLoading.textContent = 'Error: ' + data.error;
+          return;
+        }
+        fileListCache[filePath] = data.files || [];
+        if (!fileOps[filePath]) fileOps[filePath] = parseEntryFiles(fileListCache[filePath]);
+        epFilesLoading.hidden = true;
+        renderFilesPanel(filePath);
+      })
+      .catch(function(err) {
+        epFilesLoading.textContent = 'Failed to load files: ' + err.message;
+      });
+  }
+
+  function readFileAsBase64(file, cb) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var dataUrl = e.target.result;
+      var base64 = dataUrl.split(',')[1];
+      cb(base64, file.type);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function ensureFileOps(filePath) {
+    if (!fileOps[filePath]) fileOps[filePath] = { header: null, gallery: [], drawings: [], toolkit: [] };
+  }
+
+  // ---- File panel event handlers ----
+
+  epFilesHeaderUpload.addEventListener('click', function() {
+    epFilesHeaderInput.value = '';
+    epFilesHeaderInput.click();
+  });
+
+  epFilesHeaderInput.addEventListener('change', function() {
+    if (!this.files || !this.files[0] || !activeEditPath) return;
+    var file = this.files[0];
+    readFileAsBase64(file, function(base64, mimeType) {
+      var ext = getExtension(file.name);
+      var dirPath = entryDirFromFilePath(activeEditPath);
+      ensureFileOps(activeEditPath);
+      fileOps[activeEditPath].header = {
+        status: 'upload',
+        base64: base64,
+        mimeType: mimeType,
+        path: dirPath + '/header.' + ext,
+        displayName: 'header.' + ext
+      };
+      renderFilesHeader(fileOps[activeEditPath]);
+    });
+  });
+
+  epFilesHeaderDelete.addEventListener('click', function() {
+    if (!activeEditPath) return;
+    ensureFileOps(activeEditPath);
+    var h = fileOps[activeEditPath].header;
+    if (!h) return;
+    if (h.status === 'upload') {
+      var cached = fileListCache[activeEditPath];
+      fileOps[activeEditPath].header = cached ? parseEntryFiles(cached).header : null;
+    } else {
+      fileOps[activeEditPath].header = { status: 'delete', path: h.path, sha: h.sha };
+    }
+    renderFilesHeader(fileOps[activeEditPath]);
+  });
+
+  epFilesGalleryAdd.addEventListener('click', function() {
+    epFilesGalleryInput.value = '';
+    epFilesGalleryInput.click();
+  });
+
+  epFilesGalleryInput.addEventListener('change', function() {
+    if (!this.files || !this.files[0] || !activeEditPath) return;
+    var file = this.files[0];
+    readFileAsBase64(file, function(base64, mimeType) {
+      var ext = getExtension(file.name);
+      var defaultName = file.name.replace(/\.[^.]+$/, '');
+      ensureFileOps(activeEditPath);
+      fileOps[activeEditPath].gallery.push({
+        status: 'upload', base64: base64, mimeType: mimeType,
+        displayName: defaultName, path: '', origPath: null,
+        _ext: ext
+      });
+      renderFilesList(epFilesGalleryList, fileOps[activeEditPath].gallery);
+    });
+  });
+
+  epFilesDrawingsAdd.addEventListener('click', function() {
+    epFilesDrawingsInput.value = '';
+    epFilesDrawingsInput.click();
+  });
+
+  epFilesDrawingsInput.addEventListener('change', function() {
+    if (!this.files || !this.files[0] || !activeEditPath) return;
+    var file = this.files[0];
+    readFileAsBase64(file, function(base64, mimeType) {
+      var ext = getExtension(file.name);
+      var defaultName = file.name.replace(/\.[^.]+$/, '');
+      ensureFileOps(activeEditPath);
+      fileOps[activeEditPath].drawings.push({
+        status: 'upload', base64: base64, mimeType: mimeType,
+        displayName: defaultName, path: '', origPath: null,
+        _ext: ext
+      });
+      renderFilesList(epFilesDrawingsList, fileOps[activeEditPath].drawings);
+    });
+  });
+
+  epFilesToolkitAdd.addEventListener('click', function() {
+    epFilesToolkitInput.value = '';
+    epFilesToolkitInput.click();
+  });
+
+  epFilesToolkitInput.addEventListener('change', function() {
+    if (!this.files || !this.files[0] || !activeEditPath) return;
+    var file = this.files[0];
+    readFileAsBase64(file, function(base64, mimeType) {
+      var ext = getExtension(file.name);
+      var defaultName = file.name.replace(/\.[^.]+$/, '');
+      ensureFileOps(activeEditPath);
+      fileOps[activeEditPath].toolkit.push({
+        status: 'upload', base64: base64, mimeType: mimeType,
+        displayName: defaultName, path: '', origPath: null,
+        _ext: ext
+      });
+      renderFilesList(epFilesToolkitList, fileOps[activeEditPath].toolkit);
+    });
+  });
+
+  function wireFilesListEvents(listEl, getItems) {
+    listEl.addEventListener('click', function(e) {
+      var delBtn = e.target.closest('.ep-files-row .btn--danger');
+      if (!delBtn || !activeEditPath) return;
+      var items = getItems();
+      var idx = parseInt(delBtn.dataset.idx, 10);
+      if (isNaN(idx) || idx < 0 || idx >= items.length) return;
+      syncFileNamesFromRows(listEl, items);
+      var item = items[idx];
+      if (item.status === 'upload') {
+        items.splice(idx, 1);
+      } else {
+        item.status = 'delete';
+      }
+      renderFilesList(listEl, items);
+    });
+  }
+
+  wireFilesListEvents(epFilesGalleryList, function() { return fileOps[activeEditPath] ? fileOps[activeEditPath].gallery : []; });
+  wireFilesListEvents(epFilesDrawingsList, function() { return fileOps[activeEditPath] ? fileOps[activeEditPath].drawings : []; });
+  wireFilesListEvents(epFilesToolkitList, function() { return fileOps[activeEditPath] ? fileOps[activeEditPath].toolkit : []; });
+
+  function buildFileOpsList(filePath, ops) {
+    var dirPath = entryDirFromFilePath(filePath);
+    var result = [];
+
+    if (ops.header) {
+      if (ops.header.status === 'upload') {
+        result.push({ action: 'upload', path: ops.header.path, base64: ops.header.base64, mimeType: ops.header.mimeType });
+      } else if (ops.header.status === 'delete') {
+        result.push({ action: 'delete', path: ops.header.path });
+      }
+    }
+
+    function processNumberedList(items) {
+      var survivors = items.filter(function(item) { return item.status !== 'delete'; });
+      items.forEach(function(item) {
+        if (item.status === 'delete' && item.origPath) {
+          result.push({ action: 'delete', path: item.origPath });
+        }
+      });
+      survivors.forEach(function(item, i) {
+        var numStr = String(i).padStart(2, '0');
+        var ext = item._ext || getExtension(item.origPath || item.path || '');
+        var newPath = dirPath + '/' + numStr + '_' + (item.displayName || 'image') + '.' + ext;
+        if (item.status === 'upload') {
+          result.push({ action: 'upload', path: newPath, base64: item.base64, mimeType: item.mimeType });
+        } else if (item.status === 'existing' && item.origPath && item.origPath !== newPath) {
+          result.push({ action: 'rename', oldPath: item.origPath, newPath: newPath, sha: item.sha });
+        }
+      });
+    }
+
+    function processPrefixedList(items, prefix) {
+      items.forEach(function(item) {
+        if (item.status === 'delete' && item.origPath) {
+          result.push({ action: 'delete', path: item.origPath });
+        }
+      });
+      var survivors = items.filter(function(item) { return item.status !== 'delete'; });
+      survivors.forEach(function(item) {
+        var ext = item._ext || getExtension(item.origPath || item.path || '');
+        var newPath = dirPath + '/' + prefix + (item.displayName || 'file') + '.' + ext;
+        if (item.status === 'upload') {
+          result.push({ action: 'upload', path: newPath, base64: item.base64, mimeType: item.mimeType });
+        } else if (item.status === 'existing' && item.origPath && item.origPath !== newPath) {
+          result.push({ action: 'rename', oldPath: item.origPath, newPath: newPath, sha: item.sha });
+        }
+      });
+    }
+
+    processNumberedList(ops.gallery);
+    processPrefixedList(ops.drawings, 'drawing-');
+    processPrefixedList(ops.toolkit, 'toolkit-');
+
+    return result;
+  }
+
   // ---- Edit panel ----
   var editPanelSnapshot = null; // snapshot of entry state when panel was opened
 
@@ -1061,7 +1493,8 @@
       relatedProjects: (entry.relatedProjects || []).slice(),
       relatedEntries: (entry.relatedEntries || []).slice(),
       body: entry.body,
-      active: entry.active
+      active: entry.active,
+      fileOpsCopy: fileOps[filePath] ? JSON.parse(JSON.stringify(fileOps[filePath])) : null
     };
     editPanelTitle.textContent = entry._isNew ? 'New Entry' : 'Edit: ' + (entry.title || entry.slug);
 
@@ -1110,6 +1543,13 @@
     editPanel.hidden = false;
     editPanelBackdrop.hidden = false;
     epTitle.focus();
+
+    // Load files for project entries
+    if (isProject(entry.entryType)) {
+      loadEntryFiles(filePath);
+    } else {
+      epFilesLoading.hidden = true;
+    }
   }
 
   function closeEditPanel() {
@@ -1155,6 +1595,12 @@
         }
         updateChanges();
         renderTable();
+      }
+      // Restore file ops to state at panel open
+      if (editPanelSnapshot.fileOpsCopy !== null) {
+        fileOps[activeEditPath] = editPanelSnapshot.fileOpsCopy;
+      } else {
+        delete fileOps[activeEditPath];
       }
     }
     closeEditPanel();
@@ -1252,8 +1698,16 @@
       relatedProjects: (entry.relatedProjects || []).slice(),
       relatedEntries: (entry.relatedEntries || []).slice(),
       body: entry.body,
-      active: entry.active
+      active: entry.active,
+      fileOpsCopy: fileOps[activeEditPath] ? JSON.parse(JSON.stringify(fileOps[activeEditPath])) : null
     };
+
+    // Sync file display names from DOM before closing
+    if (fileOps[activeEditPath]) {
+      syncFileNamesFromRows(epFilesGalleryList, fileOps[activeEditPath].gallery);
+      syncFileNamesFromRows(epFilesDrawingsList, fileOps[activeEditPath].drawings);
+      syncFileNamesFromRows(epFilesToolkitList, fileOps[activeEditPath].toolkit);
+    }
 
     updateChanges();
     renderTable();
@@ -2421,6 +2875,8 @@
     canonicalCategoriesChanged = false;
     knownTypes = initialKnownTypes.slice();
     changes = {};
+    fileOps = {};
+    fileListCache = {};
     closeEditPanel();
     updateChanges();
     renderTable();
@@ -2590,7 +3046,23 @@
   }
 
   function doSave() {
-    var changeList = Object.keys(changes).map(function(path) { return changes[path]; });
+    var changeList = Object.keys(changes).map(function(path) {
+      var change = changes[path];
+      var ops = fileOps[path];
+      if (ops) {
+        var opsList = buildFileOpsList(path, ops);
+        if (opsList.length > 0) change.fileOps = opsList;
+      }
+      return change;
+    });
+    // Include entries that have file ops but no frontmatter changes
+    Object.keys(fileOps).forEach(function(path) {
+      if (changes[path]) return;
+      var opsList = buildFileOpsList(path, fileOps[path]);
+      if (opsList.length > 0) {
+        changeList.push({ filePath: path, action: 'fileOpsOnly', fileOps: opsList });
+      }
+    });
     if (changeList.length === 0) return;
 
     saveConfirmModal.hidden = true;
@@ -2635,6 +3107,8 @@
 
       canonicalCategoriesChanged = false;
       changes = {};
+      fileOps = {};
+      fileListCache = {};
       updateChanges();
 
       setTimeout(function() {

@@ -278,6 +278,47 @@ eleventyExcludeFromCollections: true
               </div>
               <div id="ep-body" class="ep-body-editor" contenteditable="true" data-placeholder="Write body text here..."></div>
             </div>
+
+            {# Files subsection — project-only #}
+            <span class="ep-row__label project-only">Files</span>
+            <div class="ep-row__control project-only" id="ep-files-panel">
+              <div id="ep-files-loading" class="ep-files-loading">Loading files...</div>
+
+              {# Header image #}
+              <div class="ep-files-group">
+                <div class="ep-files-group__title">Header Image</div>
+                <div class="ep-files-header-row">
+                  <span class="ep-files-filename" id="ep-files-header-name">None</span>
+                  <button type="button" class="btn btn--small" id="ep-files-header-upload">Upload</button>
+                  <button type="button" class="btn btn--small btn--danger" id="ep-files-header-delete" hidden>Delete</button>
+                </div>
+                <input type="file" id="ep-files-header-input" accept="image/*" hidden>
+              </div>
+
+              {# Gallery images #}
+              <div class="ep-files-group">
+                <div class="ep-files-group__title">Gallery Images</div>
+                <div class="ep-files-list" id="ep-files-gallery-list"></div>
+                <button type="button" class="btn btn--small" id="ep-files-gallery-add">+ Add Image</button>
+                <input type="file" id="ep-files-gallery-input" accept="image/*" hidden>
+              </div>
+
+              {# Drawings #}
+              <div class="ep-files-group">
+                <div class="ep-files-group__title">Drawings</div>
+                <div class="ep-files-list" id="ep-files-drawings-list"></div>
+                <button type="button" class="btn btn--small" id="ep-files-drawings-add">+ Add Drawing</button>
+                <input type="file" id="ep-files-drawings-input" accept="image/*,.pdf,.dwg,.dxf" hidden>
+              </div>
+
+              {# Toolkit files #}
+              <div class="ep-files-group">
+                <div class="ep-files-group__title">Toolkit Files</div>
+                <div class="ep-files-list" id="ep-files-toolkit-list"></div>
+                <button type="button" class="btn btn--small" id="ep-files-toolkit-add">+ Add File</button>
+                <input type="file" id="ep-files-toolkit-input" accept=".pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx" hidden>
+              </div>
+            </div>
           </div>
         </div>
 
