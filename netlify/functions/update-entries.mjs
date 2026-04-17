@@ -44,11 +44,11 @@ async function getDirContents(dirPath) {
   return Array.isArray(data) ? data : [];
 }
 
-async function createBlob(content) {
+async function createBlob(content, encoding) {
   const blob = await githubApi('/git/blobs', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ content, encoding: 'utf-8' })
+    body: JSON.stringify({ content, encoding: encoding || 'utf-8' })
   });
   return blob.sha;
 }
@@ -145,13 +145,36 @@ function typeToFolder(entryType) {
 }
 
 export async function handler(event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method not allowed' };
-  }
-
   const secret = process.env.ADMIN_TOKEN_SECRET;
   if (!secret) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Server not configured' }) };
+  }
+
+  // Handle GET — list entry folder files for the admin file manager
+  if (event.httpMethod === 'GET') {
+    const params = event.queryStringParameters || {};
+    if (!params.token || !verifyToken(params.token, secret)) {
+      return { statusCode: 401, body: JSON.stringify({ error: 'Unauthorized' }) };
+    }
+    if (params.action === 'listFiles' && params.dirPath) {
+      try {
+        const files = await getDirContents(params.dirPath);
+        return {
+          statusCode: 200,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            files: files.map(f => ({ name: f.name, path: f.path, sha: f.sha, size: f.size }))
+          })
+        };
+      } catch (err) {
+        return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ files: [] }) };
+      }
+    }
+    return { statusCode: 400, body: JSON.stringify({ error: 'Unknown action' }) };
+  }
+
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method not allowed' };
   }
 
   const { token, changes } = JSON.parse(event.body || '{}');
@@ -173,6 +196,29 @@ export async function handler(event) {
 
     for (const change of changes) {
       const { filePath, action } = change;
+
+      // ---- File operations (upload / rename / delete individual files) ----
+      // Processed first so they always run regardless of which action follows.
+      if (change.fileOps && change.fileOps.length) {
+        for (const op of change.fileOps) {
+          if (op.action === 'upload') {
+            const blobSha = await createBlob(op.base64, 'base64');
+            treeItems.push({ path: op.path, mode: '100644', type: 'blob', sha: blobSha });
+          } else if (op.action === 'delete') {
+            treeItems.push({ path: op.path, mode: '100644', type: 'blob', sha: null });
+          } else if (op.action === 'rename') {
+            treeItems.push({ path: op.newPath, mode: '100644', type: 'blob', sha: op.sha });
+            treeItems.push({ path: op.oldPath, mode: '100644', type: 'blob', sha: null });
+          }
+        }
+      }
+
+      // ---- File-ops-only (no frontmatter change needed) ----
+      if (action === 'fileOpsOnly') {
+        const entryName = filePath.split('/').slice(-2, -1)[0];
+        summaryParts.push(`Update files: ${entryName}`);
+        continue;
+      }
 
       // ---- Update canonical categories list ----
       if (action === 'updateCategories') {
