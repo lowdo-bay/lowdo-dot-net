@@ -2415,6 +2415,26 @@
 
   // ---- Manage labels modal (rename categories + types) ----
 
+  function createCategory(name) {
+    var normalized = name.trim().toUpperCase();
+    if (!normalized) return 'Enter a name.';
+    if (canonicalCategories.indexOf(normalized) !== -1) return 'Already exists.';
+    canonicalCategories.push(normalized);
+    canonicalCategoriesChanged = true;
+    updateChanges();
+    return null;
+  }
+
+  function createType(name) {
+    var normalized = name.trim().toLowerCase();
+    if (!normalized) return 'Enter a name.';
+    if (normalized === 'project') return 'Reserved name.';
+    if (knownTypes.indexOf(normalized) !== -1) return 'Already exists.';
+    knownTypes.push(normalized);
+    updateChanges();
+    return null;
+  }
+
   function renameCategory(oldName, newName) {
     newName = newName.trim().toUpperCase();
     if (!newName || newName === oldName) return;
@@ -2503,7 +2523,7 @@
     renderTable();
   }
 
-  function renderManageList(tbody, items, onRename, onDelete, isCategories, onSelectionChange) {
+  function renderManageList(tbody, items, onRename, onDelete, isCategories, onSelectionChange, onCreate) {
     tbody.innerHTML = '';
     items.forEach(function(name) {
       // Count entries using this label
@@ -2616,6 +2636,58 @@
       tr.appendChild(tdActions);
       tbody.appendChild(tr);
     });
+
+    // Creation row
+    if (onCreate) {
+      var createRow = document.createElement('tr');
+      createRow.className = 'manage-create-row';
+
+      var createTdEmpty = document.createElement('td');
+      createRow.appendChild(createTdEmpty);
+
+      var createTdInput = document.createElement('td');
+      createTdInput.className = 'manage-col-label';
+      var createInput = document.createElement('input');
+      createInput.type = 'text';
+      createInput.className = 'manage-list-input manage-create-input';
+      createInput.placeholder = isCategories ? 'New category\u2026' : 'New type\u2026';
+      createTdInput.appendChild(createInput);
+      createRow.appendChild(createTdInput);
+
+      var createTdCount = document.createElement('td');
+      createRow.appendChild(createTdCount);
+
+      var createTdActions = document.createElement('td');
+      createTdActions.className = 'manage-col-actions';
+      var createBtn = document.createElement('button');
+      createBtn.className = 'btn btn--small btn--secondary';
+      createBtn.textContent = '+ Create';
+      var createError = document.createElement('span');
+      createError.className = 'manage-create-error';
+      createTdActions.appendChild(createBtn);
+      createTdActions.appendChild(createError);
+      createRow.appendChild(createTdActions);
+
+      tbody.appendChild(createRow);
+
+      function doCreate() {
+        var err = onCreate(createInput.value);
+        if (err) {
+          createError.textContent = err;
+          createInput.addEventListener('input', function clear() {
+            createError.textContent = '';
+            createInput.removeEventListener('input', clear);
+          });
+          return;
+        }
+        createInput.value = '';
+      }
+
+      createBtn.addEventListener('click', doCreate);
+      createInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') doCreate();
+      });
+    }
   }
 
   function getSelectedManageNames(tbody) {
@@ -2637,25 +2709,39 @@
   }
 
   function openManageModal() {
+    function renderCategories() {
+      renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn, onCategoryCreate);
+      updateCombineBtn();
+    }
+    function renderTypes() {
+      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn, onTypeCreate);
+      updateCombineBtn();
+    }
     function onCategoryRename(oldName, newName) {
       renameCategory(oldName, newName.toUpperCase());
-      renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
-      updateCombineBtn();
+      renderCategories();
     }
     function onCategoryDelete(name) {
       deleteCategory(name);
-      renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
-      updateCombineBtn();
+      renderCategories();
+    }
+    function onCategoryCreate(name) {
+      var err = createCategory(name);
+      if (!err) renderCategories();
+      return err;
     }
     function onTypeRename(oldName, newName) {
       renameType(oldName, newName.toLowerCase());
-      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
-      updateCombineBtn();
+      renderTypes();
     }
     function onTypeDelete(name) {
       deleteType(name);
-      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
-      updateCombineBtn();
+      renderTypes();
+    }
+    function onTypeCreate(name) {
+      var err = createType(name);
+      if (!err) renderTypes();
+      return err;
     }
 
     function combineSelected() {
@@ -2683,7 +2769,7 @@
           seen[c] = true;
           return true;
         });
-        renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
+        renderCategories();
       } else {
         var seenT = {};
         knownTypes = knownTypes.filter(function(t) {
@@ -2691,15 +2777,14 @@
           seenT[t] = true;
           return true;
         });
-        renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+        renderTypes();
       }
-      updateCombineBtn();
     }
 
     manageCombineBtn.onclick = combineSelected;
 
-    renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
-    renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+    renderCategories();
+    renderTypes();
     manageCombineBtn.hidden = true;
     manageModal.hidden = false;
   }

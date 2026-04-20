@@ -816,6 +816,15 @@ body {
   outline: none;
 }
 
+.manage-create-input { text-transform: none; }
+.manage-create-row td { border-top: 1px dashed var(--admin-border); }
+.manage-create-error {
+  font-size: 10px;
+  color: var(--admin-danger, #c0392b);
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
 .manage-footer {
   display: flex;
   align-items: center;
