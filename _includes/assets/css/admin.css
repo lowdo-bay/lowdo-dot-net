@@ -778,7 +778,7 @@ body {
 .manage-tab:hover { color: var(--admin-text); }
 .manage-tab.is-active { color: var(--admin-primary); border-bottom-color: var(--admin-primary); font-weight: 600; }
 
-.manage-panel { overflow-y: auto; }
+.manage-panel { overflow-y: auto; flex: 0 1 auto; min-height: 0; }
 
 /* Table columns */
 .manage-table { table-layout: fixed; }
