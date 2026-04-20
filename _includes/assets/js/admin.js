@@ -2523,7 +2523,7 @@
     renderTable();
   }
 
-  function renderManageList(tbody, items, onRename, onDelete, isCategories, onSelectionChange, onCreate) {
+  function renderManageList(tbody, items, onRename, onDelete, isCategories, onSelectionChange) {
     tbody.innerHTML = '';
     items.forEach(function(name) {
       // Count entries using this label
@@ -2637,57 +2637,6 @@
       tbody.appendChild(tr);
     });
 
-    // Creation row
-    if (onCreate) {
-      var createRow = document.createElement('tr');
-      createRow.className = 'manage-create-row';
-
-      var createTdEmpty = document.createElement('td');
-      createRow.appendChild(createTdEmpty);
-
-      var createTdInput = document.createElement('td');
-      createTdInput.className = 'manage-col-label';
-      var createInput = document.createElement('input');
-      createInput.type = 'text';
-      createInput.className = 'manage-list-input manage-create-input';
-      createInput.placeholder = isCategories ? 'New category\u2026' : 'New type\u2026';
-      createTdInput.appendChild(createInput);
-      createRow.appendChild(createTdInput);
-
-      var createTdCount = document.createElement('td');
-      createRow.appendChild(createTdCount);
-
-      var createTdActions = document.createElement('td');
-      createTdActions.className = 'manage-col-actions';
-      var createBtn = document.createElement('button');
-      createBtn.className = 'btn btn--small btn--secondary';
-      createBtn.textContent = '+ Create';
-      var createError = document.createElement('span');
-      createError.className = 'manage-create-error';
-      createTdActions.appendChild(createBtn);
-      createTdActions.appendChild(createError);
-      createRow.appendChild(createTdActions);
-
-      tbody.appendChild(createRow);
-
-      function doCreate() {
-        var err = onCreate(createInput.value);
-        if (err) {
-          createError.textContent = err;
-          createInput.addEventListener('input', function clear() {
-            createError.textContent = '';
-            createInput.removeEventListener('input', clear);
-          });
-          return;
-        }
-        createInput.value = '';
-      }
-
-      createBtn.addEventListener('click', doCreate);
-      createInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') doCreate();
-      });
-    }
   }
 
   function getSelectedManageNames(tbody) {
@@ -2709,12 +2658,16 @@
   }
 
   function openManageModal() {
+    var manageCreateInput = document.getElementById('manage-create-input');
+    var manageCreateBtn = document.getElementById('manage-create-btn');
+    var manageCreateError = document.getElementById('manage-create-error');
+
     function renderCategories() {
-      renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn, onCategoryCreate);
+      renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
       updateCombineBtn();
     }
     function renderTypes() {
-      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn, onTypeCreate);
+      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
       updateCombineBtn();
     }
     function onCategoryRename(oldName, newName) {
@@ -2725,11 +2678,6 @@
       deleteCategory(name);
       renderCategories();
     }
-    function onCategoryCreate(name) {
-      var err = createCategory(name);
-      if (!err) renderCategories();
-      return err;
-    }
     function onTypeRename(oldName, newName) {
       renameType(oldName, newName.toLowerCase());
       renderTypes();
@@ -2738,11 +2686,24 @@
       deleteType(name);
       renderTypes();
     }
-    function onTypeCreate(name) {
-      var err = createType(name);
-      if (!err) renderTypes();
-      return err;
+
+    function doCreate() {
+      var activeIsCategories = !manageCategoriesPanel.hidden;
+      var err = activeIsCategories ? createCategory(manageCreateInput.value) : createType(manageCreateInput.value);
+      if (err) {
+        manageCreateError.textContent = err;
+        manageCreateInput.addEventListener('input', function clear() {
+          manageCreateError.textContent = '';
+          manageCreateInput.removeEventListener('input', clear);
+        });
+        return;
+      }
+      manageCreateInput.value = '';
+      if (activeIsCategories) renderCategories(); else renderTypes();
     }
+
+    manageCreateBtn.onclick = doCreate;
+    manageCreateInput.onkeydown = function(e) { if (e.key === 'Enter') doCreate(); };
 
     function combineSelected() {
       var activeIsCategories = !manageCategoriesPanel.hidden;
@@ -2786,6 +2747,9 @@
     renderCategories();
     renderTypes();
     manageCombineBtn.hidden = true;
+    manageCreateInput.value = '';
+    manageCreateError.textContent = '';
+    manageCreateInput.placeholder = 'New type\u2026';
     manageModal.hidden = false;
   }
 
@@ -2801,6 +2765,8 @@
     });
     manageCategoriesPanel.hidden = tab !== 'categories';
     manageTypesPanel.hidden = tab !== 'types';
+    var createInput = document.getElementById('manage-create-input');
+    if (createInput) createInput.placeholder = tab === 'categories' ? 'New category\u2026' : 'New type\u2026';
     updateCombineBtn();
   });
 

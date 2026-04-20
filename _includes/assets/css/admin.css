@@ -816,12 +816,17 @@ body {
   outline: none;
 }
 
-.manage-create-input { text-transform: none; }
-.manage-create-row td { border-top: 1px dashed var(--admin-border); }
+.manage-create-input { text-transform: none; flex: 1; min-width: 0; }
+.manage-footer__create {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1;
+  margin: 0 1rem;
+}
 .manage-create-error {
   font-size: 10px;
   color: var(--admin-danger, #c0392b);
-  margin-left: 4px;
   white-space: nowrap;
 }
 

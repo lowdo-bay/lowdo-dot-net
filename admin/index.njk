@@ -444,6 +444,11 @@ eleventyExcludeFromCollections: true
         </div>
         <div class="manage-footer">
           <p class="manage-hint">Renames and deletes apply when you save changes.</p>
+          <div class="manage-footer__create">
+            <input type="text" id="manage-create-input" class="manage-list-input manage-create-input" placeholder="New type…" />
+            <button id="manage-create-btn" class="btn btn--small btn--secondary">+ Create</button>
+            <span id="manage-create-error" class="manage-create-error"></span>
+          </div>
           <div class="manage-footer__actions">
             <button id="manage-combine-btn" class="btn btn--secondary" hidden>Combine 0 Labels</button>
             <button id="manage-modal-close" class="btn btn--secondary">Done</button>
