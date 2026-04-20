@@ -1435,6 +1435,13 @@ body {
 
 .ep-files-list { display: flex; flex-direction: column; gap: 0.25rem; }
 
+#ep-files-gallery-add,
+#ep-files-drawings-add,
+#ep-files-toolkit-add,
+#ep-files-header-upload {
+  width: fit-content;
+}
+
 .ep-files-row { display: flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0; }
 .ep-files-row.is-dragging { opacity: 0.4; }
 .ep-files-row.drag-over { border-top: 2px solid var(--admin-primary); }
@@ -1516,15 +1523,17 @@ body {
   position: relative;
 }
 
-/* Superscript dot indicator */
+/* Tiny circle indicator */
 [data-tooltip]::after {
-  content: '·';
-  display: inline;
-  font-size: 0.6rem;
-  color: var(--admin-text-muted);
-  margin-left: 0.15rem;
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--admin-text-muted);
+  margin-left: 0.25rem;
   vertical-align: super;
-  transition: color 0.15s;
+  transition: background-color 0.15s;
 }
 
 [data-tooltip]:hover::after,
