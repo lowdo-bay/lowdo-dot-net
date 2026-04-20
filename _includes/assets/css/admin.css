@@ -1510,19 +1510,16 @@ body {
 }
 
 /* Tooltips */
-.tooltip-icon {
-  display: inline-flex;
-  margin-left: 0.2rem;
-  font-size: 0.7rem;
-  font-weight: 400;
-  color: var(--admin-text-muted);
+/* Elements with tooltips get dashed underline */
+[data-tooltip] {
+  border-bottom: 1px dashed var(--admin-text-muted);
   cursor: help;
-  transition: color 0.15s;
+  transition: border-color 0.15s;
 }
 
-.tooltip-icon:hover,
-.tooltip-icon:focus {
-  color: var(--admin-primary);
+[data-tooltip]:hover,
+[data-tooltip]:focus {
+  border-bottom-color: var(--admin-primary);
   outline: none;
 }
 

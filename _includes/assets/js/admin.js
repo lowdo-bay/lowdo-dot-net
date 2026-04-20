@@ -3277,16 +3277,15 @@
   saveConfirmCancel.addEventListener('click', function() { saveConfirmModal.hidden = true; });
   saveConfirmModal.addEventListener('click', function(e) { if (e.target === saveConfirmModal) saveConfirmModal.hidden = true; });
 
-  // ---- Tooltips via Floating UI ----
+  // ---- Tooltips ----
   function initTooltips() {
-    var tooltipIcons = document.querySelectorAll('.tooltip-icon');
-    tooltipIcons.forEach(function(icon) {
+    var tooltipElements = document.querySelectorAll('[data-tooltip]');
+    tooltipElements.forEach(function(el) {
       var tooltipBox = null;
-      var currentPlacement = 'bottom';
 
       function createTooltip() {
         if (tooltipBox) return;
-        var text = icon.getAttribute('data-tooltip');
+        var text = el.getAttribute('data-tooltip');
         if (!text) return;
         tooltipBox = document.createElement('div');
         tooltipBox.className = 'tooltip-box';
@@ -3298,15 +3297,15 @@
 
       function positionTooltip() {
         if (!tooltipBox) return;
-        var iconRect = icon.getBoundingClientRect();
+        var elRect = el.getBoundingClientRect();
         var tooltipRect = tooltipBox.getBoundingClientRect();
         var viewport = { width: window.innerWidth, height: window.innerHeight };
 
         var placements = [
-          { name: 'top', top: iconRect.top - tooltipRect.height - 8, left: iconRect.left + iconRect.width / 2 - tooltipRect.width / 2 },
-          { name: 'bottom', top: iconRect.bottom + 8, left: iconRect.left + iconRect.width / 2 - tooltipRect.width / 2 },
-          { name: 'right', top: iconRect.top + iconRect.height / 2 - tooltipRect.height / 2, left: iconRect.right + 8 },
-          { name: 'left', top: iconRect.top + iconRect.height / 2 - tooltipRect.height / 2, left: iconRect.left - tooltipRect.width - 8 }
+          { name: 'top', top: elRect.top - tooltipRect.height - 8, left: elRect.left + elRect.width / 2 - tooltipRect.width / 2 },
+          { name: 'bottom', top: elRect.bottom + 8, left: elRect.left + elRect.width / 2 - tooltipRect.width / 2 },
+          { name: 'right', top: elRect.top + elRect.height / 2 - tooltipRect.height / 2, left: elRect.right + 8 },
+          { name: 'left', top: elRect.top + elRect.height / 2 - tooltipRect.height / 2, left: elRect.left - tooltipRect.width - 8 }
         ];
 
         var best = placements[0];
@@ -3319,7 +3318,6 @@
             break;
           }
         }
-        currentPlacement = best.name;
         tooltipBox.style.position = 'fixed';
         tooltipBox.style.top = Math.max(0, Math.min(best.top, viewport.height - tooltipRect.height)) + 'px';
         tooltipBox.style.left = Math.max(0, Math.min(best.left, viewport.width - tooltipRect.width)) + 'px';
@@ -3334,10 +3332,10 @@
         if (tooltipBox) tooltipBox.style.display = 'none';
       }
 
-      icon.addEventListener('mouseenter', showTooltip);
-      icon.addEventListener('mouseleave', hideTooltip);
-      icon.addEventListener('focus', showTooltip);
-      icon.addEventListener('blur', hideTooltip);
+      el.addEventListener('mouseenter', showTooltip);
+      el.addEventListener('mouseleave', hideTooltip);
+      el.addEventListener('focus', showTooltip);
+      el.addEventListener('blur', hideTooltip);
     });
   }
 
