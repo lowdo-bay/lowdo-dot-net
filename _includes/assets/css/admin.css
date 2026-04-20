@@ -1512,25 +1512,17 @@ body {
 /* Tooltips */
 .tooltip-icon {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-left: 0.3rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--admin-primary);
-  border: 1px solid var(--admin-primary);
-  border-radius: 50%;
+  margin-left: 0.2rem;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--admin-text-muted);
   cursor: help;
-  background: transparent;
-  transition: background-color 0.15s, color 0.15s;
+  transition: color 0.15s;
 }
 
 .tooltip-icon:hover,
 .tooltip-icon:focus {
-  background: var(--admin-primary);
-  color: var(--admin-bg);
+  color: var(--admin-primary);
   outline: none;
 }
 
