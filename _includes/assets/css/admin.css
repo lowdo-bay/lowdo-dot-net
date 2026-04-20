@@ -489,10 +489,10 @@ body {
 }
 
 /* Full-height vertical column dividers — anchored to th, extend full page height */
-.admin-table thead th:not(:last-child) {
+.admin-table:not(.manage-table) thead th:not(:last-child) {
   overflow: visible;
 }
-.admin-table thead th:not(:last-child)::before {
+.admin-table:not(.manage-table) thead th:not(:last-child)::before {
   content: '';
   position: absolute;
   top: 0;
