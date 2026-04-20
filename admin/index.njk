@@ -11,6 +11,7 @@ eleventyExcludeFromCollections: true
   <title>LowDO Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300..700&display=swap">
+  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.5"></script>
   <style>
     {% include "assets/css/admin.css" %}
   </style>
@@ -139,11 +140,11 @@ eleventyExcludeFromCollections: true
         <thead>
           <tr>
             <th class="col-select"><input type="checkbox" id="select-all"></th>
-            <th class="col-draft">Draft</th>
+            <th class="col-draft">Draft <span class="tooltip-icon" data-tooltip="Toggle draft status inline. Checked = hidden from public site.">?</span></th>
             <th class="col-title sortable" data-sort="title">Title</th>
-            <th class="col-type sortable" data-sort="entryType">Type</th>
-            <th class="col-categories">Categories</th>
-            <th class="col-date sortable" data-sort="date">Date</th>
+            <th class="col-type sortable" data-sort="entryType">Type <span class="tooltip-icon" data-tooltip="Entry type — determines if the entry gets a detail page and which fields are available to edit.">?</span></th>
+            <th class="col-categories">Categories <span class="tooltip-icon" data-tooltip="Filter tags shown in the index at /index/.">?</span></th>
+            <th class="col-date sortable" data-sort="date">Date <span class="tooltip-icon" data-tooltip="Publication or event date shown in the index.">?</span></th>
             <th class="col-actions"></th>
           </tr>
         </thead>
@@ -163,7 +164,7 @@ eleventyExcludeFromCollections: true
         <div class="ep-section">
           <span class="ep-section__label">Identity</span>
           <div class="ep-grid">
-            <span class="ep-row__label">Type</span>
+            <span class="ep-row__label">Type <span class="tooltip-icon" data-tooltip="Determines the entry's category. 'project' gets a detail page at /project/{slug}/; all others are index-only.">?</span></span>
             <div class="ep-row__control">
               <div class="admin-dropdown ep-type-dropdown" id="ep-type-dropdown">
                 <button class="admin-dropdown__button" aria-expanded="false" type="button">
@@ -175,17 +176,17 @@ eleventyExcludeFromCollections: true
                 <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-type-drawer"></div>
               </div>
             </div>
-            <span class="ep-row__label">Slug</span>
+            <span class="ep-row__label">Slug <span class="tooltip-icon" data-tooltip="The URL-safe ID used in the page URL: /project/{slug}/. Changing this renames the file on GitHub.">?</span></span>
             <div class="ep-row__control">
               <input type="text" id="ep-slug" placeholder="20260101_project-name">
             </div>
-            <span class="ep-row__label">Draft</span>
+            <span class="ep-row__label">Draft <span class="tooltip-icon" data-tooltip="When checked, the entry is hidden from the public site. Uncheck to publish.">?</span></span>
             <div class="ep-row__control">
               <label class="field-label--inline">
                 <input type="checkbox" id="ep-draft"> Draft
               </label>
             </div>
-            <span class="ep-row__label staff-only">Active</span>
+            <span class="ep-row__label staff-only">Active <span class="tooltip-icon" data-tooltip="When checked, this staff member appears in the team table on the About page at /about/.">?</span></span>
             <div class="ep-row__control staff-only">
               <label class="field-label--inline">
                 <input type="checkbox" id="ep-active"> Active
@@ -198,7 +199,7 @@ eleventyExcludeFromCollections: true
         <div class="ep-section">
           <span class="ep-section__label">Metadata</span>
           <div class="ep-grid">
-            <span class="ep-row__label">Categories</span>
+            <span class="ep-row__label">Categories <span class="tooltip-icon" data-tooltip="Appear as filter tags in the index at /index/. Shown in Column 3 of the entries table.">?</span></span>
             <div class="ep-row__control">
               <div id="ep-categories-tags" class="tag-list"></div>
               <div class="admin-dropdown ep-category-dropdown" id="ep-category-dropdown">
@@ -216,32 +217,32 @@ eleventyExcludeFromCollections: true
                 </div>
               </div>
             </div>
-            <span class="ep-row__label non-project-only">Link</span>
+            <span class="ep-row__label non-project-only">Link <span class="tooltip-icon" data-tooltip="An external URL shown as a clickable link in the index. Not used for project entries.">?</span></span>
             <div class="ep-row__control non-project-only">
               <input type="url" id="ep-link" placeholder="https://...">
             </div>
-            <span class="ep-row__label project-only">Collaborators</span>
+            <span class="ep-row__label project-only">Collaborators <span class="tooltip-icon" data-tooltip="Each collaborator's name and role appears in the project detail page header, below the image.">?</span></span>
             <div class="ep-row__control project-only">
               <div id="ep-collaborators-list" class="structured-list"></div>
               <button id="ep-add-collaborator" class="btn btn--small">+ Add Collaborator</button>
             </div>
-            <span class="ep-row__label">Position</span>
+            <span class="ep-row__label">Position <span class="tooltip-icon" data-tooltip="Controls sort order in listings — lower numbers appear first.">?</span></span>
             <div class="ep-row__control">
               <input type="number" id="ep-position" placeholder="999">
             </div>
-            <span class="ep-row__label">Date</span>
+            <span class="ep-row__label">Date <span class="tooltip-icon" data-tooltip="Shown as the entry date in the index and on the detail page.">?</span></span>
             <div class="ep-row__control">
               <input type="date" id="ep-date">
             </div>
-            <span class="ep-row__label project-only">Year</span>
+            <span class="ep-row__label project-only">Year <span class="tooltip-icon" data-tooltip="Displayed in the project header on the detail page (e.g. '2022–Present').">?</span></span>
             <div class="ep-row__control project-only">
               <input type="text" id="ep-year" placeholder="2024 or 2022–Present">
             </div>
-            <span class="ep-row__label project-only">Location</span>
+            <span class="ep-row__label project-only">Location <span class="tooltip-icon" data-tooltip="Shown in the project header metadata on the detail page.">?</span></span>
             <div class="ep-row__control project-only">
               <input type="text" id="ep-location" placeholder="Austin, TX">
             </div>
-            <span class="ep-row__label project-only">Status</span>
+            <span class="ep-row__label project-only">Status <span class="tooltip-icon" data-tooltip="Shown in the project header metadata on the detail page (e.g. 'Built', 'In Progress').">?</span></span>
             <div class="ep-row__control project-only">
               <div class="tag-input-wrap">
                 <input type="text" id="ep-status" placeholder="Built / In Progress / Unbuilt" autocomplete="off">
@@ -255,19 +256,19 @@ eleventyExcludeFromCollections: true
         <div class="ep-section">
           <span class="ep-section__label">Content</span>
           <div class="ep-grid">
-            <span class="ep-row__label">Title</span>
+            <span class="ep-row__label">Title <span class="tooltip-icon" data-tooltip="The main heading shown in the index table, the project detail page header, and the browser tab title.">?</span></span>
             <div class="ep-row__control">
               <input type="text" id="ep-title">
             </div>
-            <span class="ep-row__label non-project-only">Subtitle</span>
+            <span class="ep-row__label non-project-only">Subtitle <span class="tooltip-icon" data-tooltip="Appears below the title in the index (Column 2) and on non-project detail cards.">?</span></span>
             <div class="ep-row__control non-project-only">
               <input type="text" id="ep-subtitle">
             </div>
-            <span class="ep-row__label">Description</span>
+            <span class="ep-row__label">Description <span class="tooltip-icon" data-tooltip="A short summary shown in search previews and social share cards (og:description).">?</span></span>
             <div class="ep-row__control">
               <textarea id="ep-description" rows="2"></textarea>
             </div>
-            <span class="ep-row__label">Body</span>
+            <span class="ep-row__label">Body <span class="tooltip-icon" data-tooltip="The full content of the entry, shown on the detail page below the header image.">?</span></span>
             <div class="ep-row__control">
               <div class="ep-body-toolbar">
                 <button type="button" class="btn btn--small ep-fmt-btn" data-fmt="bold" title="Bold"><strong>B</strong></button>
@@ -286,7 +287,7 @@ eleventyExcludeFromCollections: true
 
               {# Header image #}
               <div class="ep-files-group">
-                <div class="ep-files-group__title">Header Image</div>
+                <div class="ep-files-group__title">Header Image <span class="tooltip-icon" data-tooltip="Shown as the large image in the project detail page header, and as the thumbnail in the index. Accepts JPEG, PNG, WebP, AVIF.">?</span></div>
                 <div class="ep-files-header-row">
                   <span class="ep-files-filename" id="ep-files-header-name">None</span>
                   <button type="button" class="btn btn--small" id="ep-files-header-upload">Upload</button>
@@ -297,7 +298,7 @@ eleventyExcludeFromCollections: true
 
               {# Gallery images #}
               <div class="ep-files-group">
-                <div class="ep-files-group__title">Gallery Images</div>
+                <div class="ep-files-group__title">Gallery Images <span class="tooltip-icon" data-tooltip="Appear in the image gallery on the project detail page, below the body text. Accepts JPEG, PNG, WebP, AVIF.">?</span></div>
                 <div class="ep-files-list" id="ep-files-gallery-list"></div>
                 <button type="button" class="btn btn--small" id="ep-files-gallery-add">+ Add Image</button>
                 <input type="file" id="ep-files-gallery-input" accept="image/*" hidden>
@@ -305,7 +306,7 @@ eleventyExcludeFromCollections: true
 
               {# Drawings #}
               <div class="ep-files-group">
-                <div class="ep-files-group__title">Drawings</div>
+                <div class="ep-files-group__title">Drawings <span class="tooltip-icon" data-tooltip="Technical drawings displayed in a separate section on the project detail page. Accepts JPEG, PNG, WebP, AVIF, PDF, DWG, DXF.">?</span></div>
                 <div class="ep-files-list" id="ep-files-drawings-list"></div>
                 <button type="button" class="btn btn--small" id="ep-files-drawings-add">+ Add Drawing</button>
                 <input type="file" id="ep-files-drawings-input" accept="image/*,.pdf,.dwg,.dxf" hidden>
@@ -313,7 +314,7 @@ eleventyExcludeFromCollections: true
 
               {# Toolkit files #}
               <div class="ep-files-group">
-                <div class="ep-files-group__title">Toolkit Files</div>
+                <div class="ep-files-group__title">Toolkit Files <span class="tooltip-icon" data-tooltip="Downloadable files listed in the Toolkit section on the project detail page. Accepts PDF, DWG, DXF, DOC, DOCX, XLS, XLSX.">?</span></div>
                 <div class="ep-files-list" id="ep-files-toolkit-list"></div>
                 <button type="button" class="btn btn--small" id="ep-files-toolkit-add">+ Add File</button>
                 <input type="file" id="ep-files-toolkit-input" accept=".pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx" hidden>
@@ -326,23 +327,23 @@ eleventyExcludeFromCollections: true
         <div class="ep-section">
           <span class="ep-section__label">Relations</span>
           <div class="ep-grid">
-            <span class="ep-row__label project-only">Featured</span>
+            <span class="ep-row__label project-only">Featured <span class="tooltip-icon" data-tooltip="When checked, the project appears in the Featured Projects section on the homepage.">?</span></span>
             <div class="ep-row__control project-only">
               <label class="field-label--inline">
                 <input type="checkbox" id="ep-featured"> Featured on homepage
               </label>
             </div>
-            <span class="ep-row__label project-only ep-featured-position-row" hidden>Featured position</span>
+            <span class="ep-row__label project-only ep-featured-position-row" hidden>Featured position <span class="tooltip-icon" data-tooltip="Sort order within the Featured Projects section on the homepage — lower numbers appear first.">?</span></span>
             <div class="ep-row__control project-only ep-featured-position-row" hidden>
               <input type="number" id="ep-featured-position" min="1" placeholder="1">
             </div>
-            <span class="ep-row__label non-project-only">Awards</span>
+            <span class="ep-row__label non-project-only">Awards <span class="tooltip-icon" data-tooltip="When checked, this entry appears in the Awards &amp; Recognition section on the homepage.">?</span></span>
             <div class="ep-row__control non-project-only">
               <label class="field-label--inline">
                 <input type="checkbox" id="ep-show-in-awards-table"> Awards &amp; Recognition section
               </label>
             </div>
-            <span class="ep-row__label project-only">Related entries</span>
+            <span class="ep-row__label project-only">Related entries <span class="tooltip-icon" data-tooltip="Links this project to non-project entries (awards, news, etc.) shown in the Awards &amp; Recognition section on the detail page, below the Collaborators table.">?</span></span>
             <div class="ep-row__control project-only">
               <div id="ep-related-entries-list" class="tag-list"></div>
               <div class="tag-input-wrap">
@@ -350,7 +351,7 @@ eleventyExcludeFromCollections: true
                 <ul id="ep-related-entries-suggestions" class="tag-suggestions" hidden></ul>
               </div>
             </div>
-            <span class="ep-row__label non-project-only">Related projects</span>
+            <span class="ep-row__label non-project-only">Related projects <span class="tooltip-icon" data-tooltip="Links this non-project entry to specific projects shown in the Awards &amp; Recognition section on the detail page, below the Collaborators table.">?</span></span>
             <div class="ep-row__control non-project-only">
               <div id="ep-related-projects-list" class="tag-list"></div>
               <div class="tag-input-wrap">
@@ -375,8 +376,8 @@ eleventyExcludeFromCollections: true
         <div class="manage-header">
           <h3>Bulk Actions</h3>
           <div class="manage-tabs">
-            <button id="bulk-tab-add" class="manage-tab is-active" type="button">+ Add Category</button>
-            <button id="bulk-tab-remove" class="manage-tab" type="button">− Remove Category</button>
+            <button id="bulk-tab-add" class="manage-tab is-active" type="button">+ Add Category <span class="tooltip-icon" data-tooltip="Adds the selected category to all checked entries at once.">?</span></button>
+            <button id="bulk-tab-remove" class="manage-tab" type="button">− Remove Category <span class="tooltip-icon" data-tooltip="Removes the selected category from all checked entries at once.">?</span></button>
           </div>
         </div>
         <div class="bulk-body">
@@ -412,8 +413,8 @@ eleventyExcludeFromCollections: true
         <div class="manage-header">
           <h3>Manage Labels</h3>
           <div class="manage-tabs">
-            <button class="manage-tab is-active" data-tab="types">Types</button>
-            <button class="manage-tab" data-tab="categories">Categories</button>
+            <button class="manage-tab is-active" data-tab="types">Types <span class="tooltip-icon" data-tooltip="Types control which fields appear in the Edit Panel and whether an entry gets its own URL.">?</span></button>
+            <button class="manage-tab" data-tab="categories">Categories <span class="tooltip-icon" data-tooltip="Renaming a category updates all entries that use it across the entire site.">?</span></button>
           </div>
         </div>
         <div id="manage-categories-panel" class="manage-panel" hidden>
@@ -445,7 +446,7 @@ eleventyExcludeFromCollections: true
         <div class="manage-footer">
           <p class="manage-hint">Renames and deletes apply when you save changes.</p>
           <div class="manage-footer__actions">
-            <button id="manage-combine-btn" class="btn btn--secondary" hidden>Combine 0 Labels</button>
+            <button id="manage-combine-btn" class="btn btn--secondary" hidden>Combine 0 Labels <span class="tooltip-icon" data-tooltip="Merges selected labels into one, updating every entry that used any of the selected labels.">?</span></button>
             <button id="manage-modal-close" class="btn btn--secondary">Done</button>
           </div>
         </div>
@@ -465,8 +466,8 @@ eleventyExcludeFromCollections: true
                 <th class="sct-col-entry">Entry</th>
                 <th class="sct-col-action">Action</th>
                 <th class="sct-col-field">Field</th>
-                <th class="sct-col-old">Before</th>
-                <th class="sct-col-new">After</th>
+                <th class="sct-col-old">Before <span class="tooltip-icon" data-tooltip="The current live value on the deployed site.">?</span></th>
+                <th class="sct-col-new">After <span class="tooltip-icon" data-tooltip="The new value that will be written to GitHub and trigger a redeploy.">?</span></th>
               </tr>
             </thead>
             <tbody id="save-confirm-tbody"></tbody>
@@ -496,7 +497,7 @@ eleventyExcludeFromCollections: true
     {# Delete confirmation modal #}
     <div id="delete-modal" class="modal" hidden>
       <div class="modal-content">
-        <h3>Delete Entry</h3>
+        <h3>Delete Entry <span class="tooltip-icon" data-tooltip="Deleting permanently removes the entry file from GitHub. This cannot be undone without reverting in git.">?</span></h3>
         <p id="delete-modal-msg"></p>
         <div class="modal-actions">
           <button id="delete-modal-confirm" class="btn btn--primary btn--danger-solid">Delete</button>

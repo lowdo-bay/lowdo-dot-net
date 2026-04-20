@@ -1508,3 +1508,52 @@ body {
   background: var(--admin-surface); border: 1px solid var(--admin-border);
   border-top: none;
 }
+
+/* Tooltips */
+.tooltip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--admin-primary);
+  border: 1px solid var(--admin-primary);
+  border-radius: 50%;
+  cursor: help;
+  background: transparent;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.tooltip-icon:hover,
+.tooltip-icon:focus {
+  background: var(--admin-primary);
+  color: var(--admin-bg);
+  outline: none;
+}
+
+.tooltip-box {
+  position: absolute;
+  z-index: 10000;
+  max-width: 250px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--admin-text);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 20, 137, 0.15);
+  pointer-events: none;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
