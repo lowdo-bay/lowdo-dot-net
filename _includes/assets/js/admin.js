@@ -203,6 +203,14 @@
     adminScreen.hidden = false;
     if (!adminInitialized) {
       adminInitialized = true;
+      // Lock body scroll whenever any modal is open
+      var modalObserver = new MutationObserver(function() {
+        var anyOpen = !!document.querySelector('.modal:not([hidden])');
+        document.body.classList.toggle('modal-open', anyOpen);
+      });
+      document.querySelectorAll('.modal').forEach(function(m) {
+        modalObserver.observe(m, { attributes: true, attributeFilter: ['hidden'] });
+      });
       buildTypeFilters();
       buildCategoryFilters();
       // Set initial sort indicator

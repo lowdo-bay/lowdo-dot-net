@@ -636,12 +636,13 @@ body {
 .category-dropdown li.is-new { font-style: italic; color: var(--admin-primary); }
 .category-dropdown li.is-new::before { content: '+ Create '; font-style: normal; }
 
+body.modal-open { overflow: hidden; }
+
 /* Modal */
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.3);
-  overscroll-behavior: contain;
   display: none;
   align-items: center;
   justify-content: center;
