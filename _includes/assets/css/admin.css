@@ -1440,6 +1440,7 @@ body {
 #ep-files-toolkit-add,
 #ep-files-header-upload {
   width: fit-content;
+  margin-left: calc(14px + 0.3rem);
 }
 
 .ep-files-row { display: flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0; }
