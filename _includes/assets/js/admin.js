@@ -203,6 +203,14 @@
     adminScreen.hidden = false;
     if (!adminInitialized) {
       adminInitialized = true;
+      // Lock body scroll whenever any modal is open
+      var modalObserver = new MutationObserver(function() {
+        var anyOpen = !!document.querySelector('.modal:not([hidden])');
+        document.body.classList.toggle('modal-open', anyOpen);
+      });
+      document.querySelectorAll('.modal').forEach(function(m) {
+        modalObserver.observe(m, { attributes: true, attributeFilter: ['hidden'] });
+      });
       buildTypeFilters();
       buildCategoryFilters();
       // Set initial sort indicator
@@ -2415,6 +2423,26 @@
 
   // ---- Manage labels modal (rename categories + types) ----
 
+  function createCategory(name) {
+    var normalized = name.trim().toUpperCase();
+    if (!normalized) return 'Enter a name.';
+    if (canonicalCategories.indexOf(normalized) !== -1) return 'Already exists.';
+    canonicalCategories.push(normalized);
+    canonicalCategoriesChanged = true;
+    updateChanges();
+    return null;
+  }
+
+  function createType(name) {
+    var normalized = name.trim().toLowerCase();
+    if (!normalized) return 'Enter a name.';
+    if (normalized === 'project') return 'Reserved name.';
+    if (knownTypes.indexOf(normalized) !== -1) return 'Already exists.';
+    knownTypes.push(normalized);
+    updateChanges();
+    return null;
+  }
+
   function renameCategory(oldName, newName) {
     newName = newName.trim().toUpperCase();
     if (!newName || newName === oldName) return;
@@ -2616,6 +2644,7 @@
       tr.appendChild(tdActions);
       tbody.appendChild(tr);
     });
+
   }
 
   function getSelectedManageNames(tbody) {
@@ -2637,26 +2666,52 @@
   }
 
   function openManageModal() {
-    function onCategoryRename(oldName, newName) {
-      renameCategory(oldName, newName.toUpperCase());
+    var manageCreateInput = document.getElementById('manage-create-input');
+    var manageCreateBtn = document.getElementById('manage-create-btn');
+    var manageCreateError = document.getElementById('manage-create-error');
+
+    function renderCategories() {
       renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
       updateCombineBtn();
+    }
+    function renderTypes() {
+      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+      updateCombineBtn();
+    }
+    function onCategoryRename(oldName, newName) {
+      renameCategory(oldName, newName.toUpperCase());
+      renderCategories();
     }
     function onCategoryDelete(name) {
       deleteCategory(name);
-      renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
-      updateCombineBtn();
+      renderCategories();
     }
     function onTypeRename(oldName, newName) {
       renameType(oldName, newName.toLowerCase());
-      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
-      updateCombineBtn();
+      renderTypes();
     }
     function onTypeDelete(name) {
       deleteType(name);
-      renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
-      updateCombineBtn();
+      renderTypes();
     }
+
+    function doCreate() {
+      var activeIsCategories = !manageCategoriesPanel.hidden;
+      var err = activeIsCategories ? createCategory(manageCreateInput.value) : createType(manageCreateInput.value);
+      if (err) {
+        manageCreateError.textContent = err;
+        manageCreateInput.addEventListener('input', function clear() {
+          manageCreateError.textContent = '';
+          manageCreateInput.removeEventListener('input', clear);
+        });
+        return;
+      }
+      manageCreateInput.value = '';
+      if (activeIsCategories) renderCategories(); else renderTypes();
+    }
+
+    manageCreateBtn.onclick = doCreate;
+    manageCreateInput.onkeydown = function(e) { if (e.key === 'Enter') doCreate(); };
 
     function combineSelected() {
       var activeIsCategories = !manageCategoriesPanel.hidden;
@@ -2683,7 +2738,7 @@
           seen[c] = true;
           return true;
         });
-        renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
+        renderCategories();
       } else {
         var seenT = {};
         knownTypes = knownTypes.filter(function(t) {
@@ -2691,16 +2746,18 @@
           seenT[t] = true;
           return true;
         });
-        renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+        renderTypes();
       }
-      updateCombineBtn();
     }
 
     manageCombineBtn.onclick = combineSelected;
 
-    renderManageList(manageCategoriesList, canonicalCategories.slice(), onCategoryRename, onCategoryDelete, true, updateCombineBtn);
-    renderManageList(manageTypesList, knownTypes.slice(), onTypeRename, onTypeDelete, false, updateCombineBtn);
+    renderCategories();
+    renderTypes();
     manageCombineBtn.hidden = true;
+    manageCreateInput.value = '';
+    manageCreateError.textContent = '';
+    manageCreateInput.placeholder = 'New type\u2026';
     manageModal.hidden = false;
   }
 
@@ -2716,6 +2773,8 @@
     });
     manageCategoriesPanel.hidden = tab !== 'categories';
     manageTypesPanel.hidden = tab !== 'types';
+    var createInput = document.getElementById('manage-create-input');
+    if (createInput) createInput.placeholder = tab === 'categories' ? 'New category\u2026' : 'New type\u2026';
     updateCombineBtn();
   });
 
