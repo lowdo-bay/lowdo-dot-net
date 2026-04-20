@@ -1451,6 +1451,14 @@ body.modal-open { overflow: hidden; }
 
 .ep-files-list { display: flex; flex-direction: column; gap: 0.25rem; }
 
+#ep-files-gallery-add,
+#ep-files-drawings-add,
+#ep-files-toolkit-add,
+#ep-files-header-upload {
+  width: fit-content;
+  margin-left: calc(14px + 0.3rem);
+}
+
 .ep-files-row { display: flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0; }
 .ep-files-row.is-dragging { opacity: 0.4; }
 .ep-files-row.drag-over { border-top: 2px solid var(--admin-primary); }
@@ -1523,4 +1531,53 @@ body.modal-open { overflow: hidden; }
   padding: 0.3rem 0.4rem;
   background: var(--admin-surface); border: 1px solid var(--admin-border);
   border-top: none;
+}
+
+/* Tooltips */
+/* Elements with tooltips */
+[data-tooltip] {
+  cursor: help;
+  position: relative;
+}
+
+/* Tiny circle indicator */
+[data-tooltip]::after {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--admin-text-muted);
+  margin-left: 0.25rem;
+  vertical-align: super;
+  transition: background-color 0.15s;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus::after {
+  color: var(--admin-primary);
+}
+
+.tooltip-box {
+  position: absolute;
+  z-index: 10000;
+  max-width: 250px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--admin-text);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 20, 137, 0.15);
+  pointer-events: none;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
 }

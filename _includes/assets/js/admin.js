@@ -3336,4 +3336,73 @@
   saveConfirmCancel.addEventListener('click', function() { saveConfirmModal.hidden = true; });
   saveConfirmModal.addEventListener('click', function(e) { if (e.target === saveConfirmModal) saveConfirmModal.hidden = true; });
 
+  // ---- Tooltips ----
+  function initTooltips() {
+    var tooltipElements = document.querySelectorAll('[data-tooltip]');
+    tooltipElements.forEach(function(el) {
+      var tooltipBox = null;
+
+      function createTooltip() {
+        if (tooltipBox) return;
+        var text = el.getAttribute('data-tooltip');
+        if (!text) return;
+        tooltipBox = document.createElement('div');
+        tooltipBox.className = 'tooltip-box';
+        tooltipBox.setAttribute('role', 'tooltip');
+        tooltipBox.textContent = text;
+        document.body.appendChild(tooltipBox);
+        positionTooltip();
+      }
+
+      function positionTooltip() {
+        if (!tooltipBox) return;
+        var elRect = el.getBoundingClientRect();
+        var tooltipRect = tooltipBox.getBoundingClientRect();
+        var viewport = { width: window.innerWidth, height: window.innerHeight };
+
+        var placements = [
+          { name: 'top', top: elRect.top - tooltipRect.height - 8, left: elRect.left + elRect.width / 2 - tooltipRect.width / 2 },
+          { name: 'bottom', top: elRect.bottom + 8, left: elRect.left + elRect.width / 2 - tooltipRect.width / 2 },
+          { name: 'right', top: elRect.top + elRect.height / 2 - tooltipRect.height / 2, left: elRect.right + 8 },
+          { name: 'left', top: elRect.top + elRect.height / 2 - tooltipRect.height / 2, left: elRect.left - tooltipRect.width - 8 }
+        ];
+
+        var best = placements[0];
+        for (var i = 0; i < placements.length; i++) {
+          var p = placements[i];
+          var fitsH = p.left >= 0 && p.left + tooltipRect.width <= viewport.width;
+          var fitsV = p.top >= 0 && p.top + tooltipRect.height <= viewport.height;
+          if (fitsH && fitsV) {
+            best = p;
+            break;
+          }
+        }
+        tooltipBox.style.position = 'fixed';
+        tooltipBox.style.top = Math.max(0, Math.min(best.top, viewport.height - tooltipRect.height)) + 'px';
+        tooltipBox.style.left = Math.max(0, Math.min(best.left, viewport.width - tooltipRect.width)) + 'px';
+      }
+
+      function showTooltip() {
+        createTooltip();
+        if (tooltipBox) tooltipBox.style.display = 'block';
+      }
+
+      function hideTooltip() {
+        if (tooltipBox) tooltipBox.style.display = 'none';
+      }
+
+      el.addEventListener('mouseenter', showTooltip);
+      el.addEventListener('mouseleave', hideTooltip);
+      el.addEventListener('focus', showTooltip);
+      el.addEventListener('blur', hideTooltip);
+    });
+  }
+
+  // Wait for DOM to be fully interactive before initializing tooltips
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTooltips);
+  } else {
+    initTooltips();
+  }
+
 })();
