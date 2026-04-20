@@ -65,6 +65,9 @@
 
   {# Mobile meta row: description (projects) or description (non-projects) #}
   <div class="index-row__meta">
+    {% if entry.data.entryType == 'staff' and entry.data.active == false %}
+      <span class="index-row__meta-former">FORMER STAFF</span>
+    {% endif %}
     {% if entry.data.entryType == 'project' and entry.data.description %}
       <span class="index-row__meta-text">{{ entry.data.description }}</span>
     {% elif entry.data.entryType != 'project' and entry.data.description %}

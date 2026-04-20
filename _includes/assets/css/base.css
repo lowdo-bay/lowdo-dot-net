@@ -1817,6 +1817,12 @@ body::after {
 		color: var(--color-accent-3);
 	}
 
+	.index-row__meta-former {
+		display: block;
+		font-size: var(--font-size-small);
+		color: var(--color-accent-3);
+	}
+
 	.index-col--image:empty {
 		display: none;
 		grid-area: unset;
