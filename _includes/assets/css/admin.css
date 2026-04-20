@@ -816,7 +816,7 @@ body {
   outline: none;
 }
 
-.manage-create-input { text-transform: none; flex: 1; min-width: 0; }
+.manage-create-input { text-transform: none; flex: 1; min-width: 0; padding: 0.4rem 0.75rem; font-size: 12px; }
 .manage-footer__create {
   display: flex;
   align-items: center;
