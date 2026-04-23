@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 type: project
 title: 'Ghana Pavilion: Venice Biennale Art 2022'
 date: 2022-04-17T00:00:00.000Z
