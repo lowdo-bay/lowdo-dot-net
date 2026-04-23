@@ -10,5 +10,13 @@ categories:
 year: '2022'
 location: Venice Biennale
 status: Built
+description: Design and Installation of Ghana Pavilion framework
+position: 0
+featured: false
+showInAwardsTable: false
+collaborators: []
+relatedProjects: []
+relatedEntries: []
+active: true
 ---
-
+From the curator, Nana Oforiatta Ayim
