@@ -14,7 +14,15 @@ description: Design and Installation of Ghana Pavilion framework
 position: 0
 featured: false
 showInAwardsTable: false
-collaborators: []
+collaborators:
+  - name: Nana Oforiatta Ayim
+    role: Curator
+  - name: Afroscope
+    role: Artist
+  - name: Na Chainkua Reindorf
+    role: Artists
+  - name: Diego Arauja
+    role: Artist
 relatedProjects: []
 relatedEntries: []
 active: true
