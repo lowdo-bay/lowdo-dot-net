@@ -16,6 +16,16 @@ status: Ongoing
 collaborators:
   - name: Panurban
     role: Collaborator
+  - name: Rockefeller Foundation
+    role: Partner
+  - name: Seoul Biennale for Architecture and Urbanism
+    role: Partner
+  - name: Dak'art Contemporary African Art Biennale, Ker Thiossane
+    role: Partner
+  - name: ZKM Center for Arts and Media
+    role: Partner
+  - name: Agbogbloshie Scrap Dealers Association
+    role: Collaborator
   - name: Julien Lanoo
     role: Photography
 type: project
