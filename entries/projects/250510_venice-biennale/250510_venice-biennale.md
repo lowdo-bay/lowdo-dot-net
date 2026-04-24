@@ -11,6 +11,15 @@ categories:
 location: 'Venice, Italy'
 status: Exhibition
 type: project
+collaborators:
+  - name: Sylvia Lavin
+    role: Coordinator
+  - name: Yasmine Abbas
+    role: Collaborator
+  - name: Immersive Experiences Lab
+    role: Collaborator
+  - name: Pennsylvania State University
+    role: Collaborator
 ---
 
 **Architecture Amid the Elements**
