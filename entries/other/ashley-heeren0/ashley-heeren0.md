@@ -1,8 +1,13 @@
 ---
-draft: true
-type: staff
-title: New Entry
-date: 2026-04-24T00:00:00.000Z
+draft: false
+title: Ashley Heeren
+subtitle: Principal
+date: 2009-09-09
+endDate: 2011
 categories: []
+link: ''
+type: staff
+active: false
+description: "Master of Architecture, Harvard University."
 ---
 
