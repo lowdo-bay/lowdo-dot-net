@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 type: project
 title: test project - bugfixes
 date: 2000-01-01T00:00:00.000Z
