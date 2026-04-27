@@ -1220,6 +1220,7 @@
         var moved = items.splice(fromIdx, 1)[0];
         items.splice(toIdx, 0, moved);
         renderFilesList(listEl, items);
+        updateChanges();
       });
     });
   }
