@@ -643,6 +643,10 @@
     }
 
     var count = Object.keys(changes).length;
+    Object.keys(fileOps).forEach(function(path) {
+      if (changes[path]) return;
+      if (buildFileOpsList(path, fileOps[path]).length > 0) count++;
+    });
     changeCountEl.hidden = count === 0;
     changeCountEl.textContent = count + ' change' + (count === 1 ? '' : 's');
     saveBtn.disabled = count === 0;
@@ -3074,6 +3078,21 @@
       });
     });
 
+    Object.keys(fileOps).forEach(function(path) {
+      if (changes[path]) return;
+      var opsList = buildFileOpsList(path, fileOps[path]);
+      if (opsList.length === 0) return;
+      var entry = entries.filter(function(e) { return e.filePath === path; })[0];
+      var entryName = entry ? (entry.title || entry.slug || path) : path;
+      html += '<tr class="sct-entry-first sct-entry-last">';
+      html += '<td class="sct-col-entry">' + esc(entryName) + '</td>';
+      html += '<td class="sct-col-action"><span class="sct-action">Edit</span></td>';
+      html += '<td class="sct-col-field">Files</td>';
+      html += '<td class="sct-col-old">—</td>';
+      html += '<td class="sct-col-new">' + opsList.length + ' file operation(s)</td>';
+      html += '</tr>';
+    });
+
     return html;
   }
 
@@ -3329,8 +3348,11 @@
   // ---- Save ----
   saveBtn.addEventListener('click', function() {
     syncRelatedEntries();
+    var hasPendingFileOps = Object.keys(fileOps).some(function(path) {
+      return buildFileOpsList(path, fileOps[path]).length > 0;
+    });
     var changeList = Object.keys(changes).map(function(path) { return changes[path]; });
-    if (changeList.length === 0) return;
+    if (changeList.length === 0 && !hasPendingFileOps) return;
     saveConfirmTbody.innerHTML = buildSaveConfirmRows();
     saveConfirmModal.hidden = false;
   });
