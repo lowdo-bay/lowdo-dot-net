@@ -1348,6 +1348,7 @@
       var ext = getExtension(file.name);
       var defaultName = file.name.replace(/\.[^.]+$/, '');
       ensureFileOps(activeEditPath);
+      syncFileNamesFromRows(epFilesGalleryList, fileOps[activeEditPath].gallery);
       fileOps[activeEditPath].gallery.push({
         status: 'upload', base64: base64, mimeType: mimeType,
         displayName: defaultName, path: '', origPath: null,
@@ -1369,6 +1370,7 @@
       var ext = getExtension(file.name);
       var defaultName = file.name.replace(/\.[^.]+$/, '');
       ensureFileOps(activeEditPath);
+      syncFileNamesFromRows(epFilesDrawingsList, fileOps[activeEditPath].drawings);
       fileOps[activeEditPath].drawings.push({
         status: 'upload', base64: base64, mimeType: mimeType,
         displayName: defaultName, path: '', origPath: null,
@@ -1390,6 +1392,7 @@
       var ext = getExtension(file.name);
       var defaultName = file.name.replace(/\.[^.]+$/, '');
       ensureFileOps(activeEditPath);
+      syncFileNamesFromRows(epFilesToolkitList, fileOps[activeEditPath].toolkit);
       fileOps[activeEditPath].toolkit.push({
         status: 'upload', base64: base64, mimeType: mimeType,
         displayName: defaultName, path: '', origPath: null,
