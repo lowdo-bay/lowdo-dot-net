@@ -579,7 +579,7 @@ eleventyExcludeFromCollections: true
         active: {{ (entry.data.active if entry.data.active is defined else true) | dump | safe }},
         collaborators: {{ (entry.data.collaborators or []) | dump | safe }},
         relatedProjects: {{ (entry.data.relatedProjects or []) | dump | safe }},
-        body: {{ (entry.rawInput | markdownBody or "") | dump | safe }},
+        body: {{ (entry.rawInput or "") | trim | dump | safe }},
         filePath: {{ entry.inputPath | replace("./", "") | dump | safe }}
       },
       {%- endfor %}

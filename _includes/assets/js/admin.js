@@ -626,7 +626,10 @@
       change.collaborators = e.collaborators;
       change.relatedProjects = e.relatedProjects;
       change.relatedEntries = e.relatedEntries;
-      change.body = e.body;
+      var orig = originals[e.filePath];
+      if (!orig || e.body !== orig.body) {
+        change.body = e.body;
+      }
 
       changes[e.filePath] = change;
     });

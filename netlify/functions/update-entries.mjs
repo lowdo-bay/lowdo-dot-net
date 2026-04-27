@@ -104,8 +104,11 @@ function applyChangesToFile(fileContent, change) {
   if (change.relatedEntries !== undefined)    d.relatedEntries = change.relatedEntries;
   if (change.active !== undefined)            d.active = change.active;
 
-  // Body text replaces markdown content (below frontmatter)
-  const bodyContent = change.body !== undefined ? (change.body || '') : parsed.content;
+  // Body text replaces markdown content (below frontmatter).
+  // Only replace when the caller explicitly provides a non-empty body; otherwise preserve existing content.
+  const bodyContent = (change.body !== undefined && change.body !== null && change.body !== '')
+    ? change.body
+    : parsed.content;
 
   // Remove null/undefined fields to keep files clean
   Object.keys(d).forEach(key => { if (d[key] === null || d[key] === undefined) delete d[key]; });
