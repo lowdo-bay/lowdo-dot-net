@@ -10,5 +10,12 @@ categories:
 year: '2000'
 location: 'Austin, TX'
 status: Unbuilt
+position: 999
+featured: false
+showInAwardsTable: false
+collaborators: []
+relatedProjects: []
+relatedEntries: []
+active: true
 ---
 test test test test test test test test test. test test test test test test test test test. test test test test test test test test test.
