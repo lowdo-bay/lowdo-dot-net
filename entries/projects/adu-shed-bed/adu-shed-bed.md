@@ -1,34 +1,36 @@
 ---
 draft: false
 type: project
-title: Switchback
-description: A real switchback stair to a private upstairs bedroom and bath. Live/work room downstairs, deck off the back.
+title: Shed + Bed
+description: A shed roof with a fully separated upstairs bedroom.
 date: 2026-01-02T00:00:00.000Z
-year: 2026
+year: '2026'
 location: Open source
 status: Available
 categories:
   - HOUSING
   - ADU
 adu_library: true
-
 adu:
   tier: Standard
-  bedrooms: 1
-  loft: true
-  stair: switchback
-  sqft: 540
+  bedrooms: 2
+  stair: ladder
+  sqft: 671
   budget_low: 92000
   budget_high: 135000
-  orientation: any
-  footprint: 16×20 ft
+  orientation: north-south
+  footprint: 21x33 ft
   height: two-story
   features:
-    - stair
-    - loft
-    - deck
+    - porch
+position: 999
+featured: false
+showInAwardsTable: false
+collaborators: []
+relatedProjects: []
+relatedEntries: []
+active: true
 ---
-
 The Switchback is the smallest design in the library to include a true second story. A switchback stair — half a flight, a landing, then a second half flight — makes the journey upstairs feel architectural without consuming the whole footprint. The downstairs is a continuous live/work room with a small deck off the back; the upstairs holds a private bedroom, full bath, and reading loft.
 
 ## Who it's for
