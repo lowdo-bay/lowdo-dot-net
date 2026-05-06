@@ -104,6 +104,25 @@ function applyChangesToFile(fileContent, change) {
   if (change.relatedEntries !== undefined)    d.relatedEntries = change.relatedEntries;
   if (change.active !== undefined)            d.active = change.active;
 
+  // ADU library — top-level flag and nested spec block.
+  // When the flag is unchecked, remove BOTH the flag and the nested block from frontmatter
+  // so the file stays clean.
+  if (change.adu_library !== undefined) {
+    if (change.adu_library === true) {
+      d.adu_library = true;
+    } else {
+      delete d.adu_library;
+      delete d.adu;
+    }
+  }
+  if (change.adu !== undefined) {
+    if (change.adu && typeof change.adu === 'object' && Object.keys(change.adu).length > 0) {
+      d.adu = change.adu;
+    } else {
+      delete d.adu;
+    }
+  }
+
   // Body text replaces markdown content (below frontmatter).
   // Only replace when the caller explicitly provides a non-empty body; otherwise preserve existing content.
   const bodyContent = (change.body !== undefined && change.body !== null && change.body !== '')
@@ -138,6 +157,8 @@ function buildNewEntryContent(change) {
   if (change.collaborators && change.collaborators.length) d.collaborators = change.collaborators;
   if (change.relatedProjects && change.relatedProjects.length) d.relatedProjects = change.relatedProjects;
   if (change.relatedEntries && change.relatedEntries.length) d.relatedEntries = change.relatedEntries;
+  if (change.adu_library === true) d.adu_library = true;
+  if (change.adu && typeof change.adu === 'object' && Object.keys(change.adu).length > 0) d.adu = change.adu;
 
   return matter.stringify(change.body || '', d);
 }

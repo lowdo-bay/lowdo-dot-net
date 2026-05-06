@@ -79,6 +79,8 @@
       collaborators: JSON.stringify(e.collaborators || []),
       relatedProjects: JSON.stringify(e.relatedProjects || []),
       relatedEntries: JSON.stringify(e.relatedEntries || []),
+      adu_library: !!e.adu_library,
+      adu: JSON.stringify(e.adu || null),
       body: e.body
     };
   }
@@ -189,6 +191,35 @@
   var epFilesToolkitList = document.getElementById('ep-files-toolkit-list');
   var epFilesToolkitAdd = document.getElementById('ep-files-toolkit-add');
   var epFilesToolkitInput = document.getElementById('ep-files-toolkit-input');
+
+  // ADU library fields
+  var epAduLibrary = document.getElementById('ep-adu-library');
+  var epAduTierDropdown = document.getElementById('ep-adu-tier-dropdown');
+  var epAduTierLabel = document.getElementById('ep-adu-tier-label');
+  var epAduTierDrawer = document.getElementById('ep-adu-tier-drawer');
+  var epAduBedrooms = document.getElementById('ep-adu-bedrooms');
+  var epAduLoft = document.getElementById('ep-adu-loft');
+  var epAduStairDropdown = document.getElementById('ep-adu-stair-dropdown');
+  var epAduStairLabel = document.getElementById('ep-adu-stair-label');
+  var epAduStairDrawer = document.getElementById('ep-adu-stair-drawer');
+  var epAduSqft = document.getElementById('ep-adu-sqft');
+  var epAduBudgetLow = document.getElementById('ep-adu-budget-low');
+  var epAduBudgetHigh = document.getElementById('ep-adu-budget-high');
+  var epAduOrientationDropdown = document.getElementById('ep-adu-orientation-dropdown');
+  var epAduOrientationLabel = document.getElementById('ep-adu-orientation-label');
+  var epAduOrientationDrawer = document.getElementById('ep-adu-orientation-drawer');
+  var epAduFootprint = document.getElementById('ep-adu-footprint');
+  var epAduHeight = document.getElementById('ep-adu-height');
+  var epAduFeaturesTags = document.getElementById('ep-adu-features-tags');
+  var epAduFeaturesDropdown = document.getElementById('ep-adu-features-dropdown');
+  var epAduFeaturesDropdownBtn = document.getElementById('ep-adu-features-dropdown-btn');
+  var epAduFeaturesDrawer = document.getElementById('ep-adu-features-drawer');
+
+  // Local state for the ADU sub-panel while the panel is open
+  var epAduTierValue = '';
+  var epAduStairValue = '';
+  var epAduOrientationValue = '';
+  var epAduFeaturesValue = [];
 
   // ---- Auth ----
   function showLogin() {
@@ -548,6 +579,16 @@
     document.querySelectorAll('.project-only').forEach(function(el) { el.hidden = !proj; });
     document.querySelectorAll('.non-project-only').forEach(function(el) { el.hidden = proj; });
     document.querySelectorAll('.staff-only').forEach(function(el) { el.hidden = !staff; });
+    // Re-evaluate ADU sub-panel visibility (depends on both project + flag)
+    updateAduVisibility();
+  }
+
+  // Show/hide ADU spec sub-fields. They appear only when:
+  //   1. The entry is a project (so .project-only block is visible at all), AND
+  //   2. The "ADU library" checkbox is on
+  function updateAduVisibility() {
+    var show = !!(epAduLibrary && epAduLibrary.checked);
+    document.querySelectorAll('.adu-only').forEach(function(el) { el.hidden = !show; });
   }
 
   function toDateInputValue(dateVal) {
@@ -626,6 +667,8 @@
       change.collaborators = e.collaborators;
       change.relatedProjects = e.relatedProjects;
       change.relatedEntries = e.relatedEntries;
+      change.adu_library = !!e.adu_library;
+      change.adu = e.adu || null;
       var orig = originals[e.filePath];
       if (!orig || e.body !== orig.body) {
         change.body = e.body;
@@ -1511,6 +1554,8 @@
       collaborators: JSON.parse(JSON.stringify(entry.collaborators || [])),
       relatedProjects: (entry.relatedProjects || []).slice(),
       relatedEntries: (entry.relatedEntries || []).slice(),
+      adu_library: !!entry.adu_library,
+      adu: entry.adu ? JSON.parse(JSON.stringify(entry.adu)) : null,
       body: entry.body,
       active: entry.active,
       fileOpsCopy: fileOps[filePath] ? JSON.parse(JSON.stringify(fileOps[filePath])) : null
@@ -1558,6 +1603,9 @@
     renderRelatedEntriesTags(entry.relatedEntries || []);
     epRelatedEntriesInput.value = '';
     epRelatedEntriesSuggestions.hidden = true;
+
+    // ADU library fields (visibility gated by both project type AND the flag)
+    loadAduFieldsFromEntry(entry);
 
     editPanel.hidden = false;
     editPanelBackdrop.hidden = false;
@@ -1610,6 +1658,8 @@
           entry.collaborators = JSON.parse(JSON.stringify(editPanelSnapshot.collaborators));
           entry.relatedProjects = editPanelSnapshot.relatedProjects.slice();
           entry.relatedEntries = editPanelSnapshot.relatedEntries.slice();
+          entry.adu_library = !!editPanelSnapshot.adu_library;
+          entry.adu = editPanelSnapshot.adu ? JSON.parse(JSON.stringify(editPanelSnapshot.adu)) : null;
           entry.body = editPanelSnapshot.body;
         }
         updateChanges();
@@ -1657,6 +1707,20 @@
     entry.active = isStaff(entry.entryType) ? epActive.checked : entry.active;
     entry.relatedEntries = getPanelRelatedEntries();
     entry.body = getBodyMarkdown();
+
+    // ADU library — only persist on projects. If unchecked, clear both flag and spec block.
+    if (isProject(entry.entryType)) {
+      if (epAduLibrary && epAduLibrary.checked) {
+        entry.adu_library = true;
+        entry.adu = collectAduFields();
+      } else {
+        entry.adu_library = false;
+        entry.adu = null;
+      }
+    } else {
+      entry.adu_library = false;
+      entry.adu = null;
+    }
 
     // Update slug (new or existing entries)
     var manualSlug = epSlug.value.trim();
@@ -1716,6 +1780,8 @@
       collaborators: JSON.parse(JSON.stringify(entry.collaborators || [])),
       relatedProjects: (entry.relatedProjects || []).slice(),
       relatedEntries: (entry.relatedEntries || []).slice(),
+      adu_library: !!entry.adu_library,
+      adu: entry.adu ? JSON.parse(JSON.stringify(entry.adu)) : null,
       body: entry.body,
       active: entry.active,
       fileOpsCopy: fileOps[activeEditPath] ? JSON.parse(JSON.stringify(fileOps[activeEditPath])) : null
@@ -2186,6 +2252,177 @@
     renderRelatedEntriesTags(entry.relatedEntries);
     epRelatedEntriesInput.value = '';
     epRelatedEntriesSuggestions.hidden = true;
+  }
+
+  // ---- ADU library editor ----
+
+  // Wire a simple single-value dropdown (Tier / Stair / Orientation).
+  // Each click on a drawer item sets `getValue()`/`setValue()` and updates the label.
+  function bindAduSelectDropdown(dropdownEl, drawerEl, labelEl, setValue, getValue, displayMap) {
+    if (!dropdownEl || !drawerEl || !labelEl) return;
+    var btn = dropdownEl.querySelector('.admin-dropdown__button');
+    function open() {
+      dropdownEl.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      drawerEl.setAttribute('aria-hidden', 'false');
+    }
+    function close() {
+      dropdownEl.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      drawerEl.setAttribute('aria-hidden', 'true');
+    }
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdownEl.classList.contains('is-open') ? close() : open();
+    });
+    drawerEl.querySelectorAll('.admin-dropdown__item').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var v = item.dataset.value || '';
+        setValue(v);
+        labelEl.textContent = v ? (displayMap[v] || v) : '—';
+        drawerEl.querySelectorAll('.admin-dropdown__item').forEach(function(i) { i.classList.remove('is-selected'); });
+        item.classList.add('is-selected');
+        close();
+      });
+    });
+    document.addEventListener('click', function(e) { if (!dropdownEl.contains(e.target)) close(); });
+  }
+
+  function setAduSelectFromValue(drawerEl, labelEl, value, displayMap) {
+    if (!drawerEl || !labelEl) return;
+    drawerEl.querySelectorAll('.admin-dropdown__item').forEach(function(item) {
+      item.classList.toggle('is-selected', (item.dataset.value || '') === (value || ''));
+    });
+    labelEl.textContent = value ? (displayMap[value] || value) : '—';
+  }
+
+  var ADU_TIER_LABELS = { Essential: 'Essential', Standard: 'Standard', Plus: 'Plus' };
+  var ADU_STAIR_LABELS = {
+    ladder: 'Ladder',
+    spiral: 'Spiral stair',
+    straight: 'Straight stair',
+    switchback: 'Switchback stair',
+    none: 'Single-story (none)'
+  };
+  var ADU_ORIENTATION_LABELS = { any: 'Any', 'north-south': 'North–South', 'east-west': 'East–West' };
+
+  bindAduSelectDropdown(
+    epAduTierDropdown, epAduTierDrawer, epAduTierLabel,
+    function(v) { epAduTierValue = v; },
+    function() { return epAduTierValue; },
+    ADU_TIER_LABELS
+  );
+  bindAduSelectDropdown(
+    epAduStairDropdown, epAduStairDrawer, epAduStairLabel,
+    function(v) { epAduStairValue = v; },
+    function() { return epAduStairValue; },
+    ADU_STAIR_LABELS
+  );
+  bindAduSelectDropdown(
+    epAduOrientationDropdown, epAduOrientationDrawer, epAduOrientationLabel,
+    function(v) { epAduOrientationValue = v; },
+    function() { return epAduOrientationValue; },
+    ADU_ORIENTATION_LABELS
+  );
+
+  // Features multi-select tag editor
+  function renderAduFeatureTags() {
+    if (!epAduFeaturesTags) return;
+    epAduFeaturesTags.innerHTML = '';
+    epAduFeaturesValue.forEach(function(feat) {
+      var tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = feat;
+      var rm = document.createElement('button');
+      rm.className = 'tag-remove';
+      rm.type = 'button';
+      rm.setAttribute('aria-label', 'Remove ' + feat);
+      rm.textContent = '×';
+      rm.addEventListener('click', function(e) {
+        e.stopPropagation();
+        epAduFeaturesValue = epAduFeaturesValue.filter(function(f) { return f !== feat; });
+        renderAduFeatureTags();
+      });
+      tag.appendChild(rm);
+      epAduFeaturesTags.appendChild(tag);
+    });
+  }
+
+  if (epAduFeaturesDropdown && epAduFeaturesDrawer && epAduFeaturesDropdownBtn) {
+    function openFeaturesDrawer() {
+      epAduFeaturesDropdown.classList.add('is-open');
+      epAduFeaturesDropdownBtn.setAttribute('aria-expanded', 'true');
+      epAduFeaturesDrawer.setAttribute('aria-hidden', 'false');
+    }
+    function closeFeaturesDrawer() {
+      epAduFeaturesDropdown.classList.remove('is-open');
+      epAduFeaturesDropdownBtn.setAttribute('aria-expanded', 'false');
+      epAduFeaturesDrawer.setAttribute('aria-hidden', 'true');
+    }
+    epAduFeaturesDropdownBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      epAduFeaturesDropdown.classList.contains('is-open') ? closeFeaturesDrawer() : openFeaturesDrawer();
+    });
+    epAduFeaturesDrawer.querySelectorAll('.admin-dropdown__item').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var v = item.dataset.value;
+        if (!v) return;
+        if (epAduFeaturesValue.indexOf(v) === -1) {
+          epAduFeaturesValue.push(v);
+          renderAduFeatureTags();
+        }
+        closeFeaturesDrawer();
+      });
+    });
+    document.addEventListener('click', function(e) {
+      if (!epAduFeaturesDropdown.contains(e.target)) closeFeaturesDrawer();
+    });
+  }
+
+  // ADU library checkbox toggles sub-panel visibility
+  if (epAduLibrary) {
+    epAduLibrary.addEventListener('change', updateAduVisibility);
+  }
+
+  // Build a plain {adu} object from the panel inputs, or return null if all empty
+  function collectAduFields() {
+    var obj = {};
+    if (epAduTierValue) obj.tier = epAduTierValue;
+    if (epAduBedrooms.value !== '')                      obj.bedrooms = Number(epAduBedrooms.value);
+    if (epAduLoft.checked)                               obj.loft = true;
+    if (epAduStairValue) obj.stair = epAduStairValue;
+    if (epAduSqft.value !== '')                          obj.sqft = Number(epAduSqft.value);
+    if (epAduBudgetLow.value !== '')                     obj.budget_low = Number(epAduBudgetLow.value);
+    if (epAduBudgetHigh.value !== '')                    obj.budget_high = Number(epAduBudgetHigh.value);
+    if (epAduOrientationValue) obj.orientation = epAduOrientationValue;
+    if (epAduFootprint.value.trim())                     obj.footprint = epAduFootprint.value.trim();
+    if (epAduHeight.value.trim())                        obj.height = epAduHeight.value.trim();
+    if (epAduFeaturesValue.length)                       obj.features = epAduFeaturesValue.slice();
+    return Object.keys(obj).length ? obj : null;
+  }
+
+  // Populate panel inputs from an entry's adu_library + adu fields
+  function loadAduFieldsFromEntry(entry) {
+    if (epAduLibrary) epAduLibrary.checked = !!entry.adu_library;
+    var adu = entry.adu || {};
+    epAduTierValue = adu.tier || '';
+    epAduStairValue = adu.stair || '';
+    epAduOrientationValue = adu.orientation || '';
+    epAduFeaturesValue = (adu.features || []).slice();
+    setAduSelectFromValue(epAduTierDrawer, epAduTierLabel, epAduTierValue, ADU_TIER_LABELS);
+    setAduSelectFromValue(epAduStairDrawer, epAduStairLabel, epAduStairValue, ADU_STAIR_LABELS);
+    setAduSelectFromValue(epAduOrientationDrawer, epAduOrientationLabel, epAduOrientationValue, ADU_ORIENTATION_LABELS);
+    if (epAduBedrooms)    epAduBedrooms.value = adu.bedrooms != null ? adu.bedrooms : '';
+    if (epAduLoft)        epAduLoft.checked = !!adu.loft;
+    if (epAduSqft)        epAduSqft.value = adu.sqft != null ? adu.sqft : '';
+    if (epAduBudgetLow)   epAduBudgetLow.value = adu.budget_low != null ? adu.budget_low : '';
+    if (epAduBudgetHigh)  epAduBudgetHigh.value = adu.budget_high != null ? adu.budget_high : '';
+    if (epAduFootprint)   epAduFootprint.value = adu.footprint || '';
+    if (epAduHeight)      epAduHeight.value = adu.height || '';
+    renderAduFeatureTags();
+    updateAduVisibility();
   }
 
   // ---- Rich body editor (contenteditable, stores as markdown) ----

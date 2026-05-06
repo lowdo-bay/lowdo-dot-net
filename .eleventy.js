@@ -173,17 +173,36 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   // Merge 11ty data instead of overriding values
   eleventyConfig.setDataDeepMerge(true);
 
-  // The projects collection, sorted by the numerical position value and then by date
+  // The projects collection, sorted by the numerical position value and then by date.
+  // Excludes ADU library entries — those are surfaced separately at /adu-library/.
   eleventyConfig.addCollection("projects", function(collectionApi) {
     return collectionApi.getFilteredByGlob("entries/projects/**/*.md")
       .filter(project => project.data.draft !== true)
+      .filter(project => project.data.adu_library !== true)
       .sort((a, b) => b.data.position - a.data.position);
   });
 
-  // Unified entries collection (all types, sorted by position then date)
+  // ADU library collection — projects that opt in via `adu_library: true`.
+  // Sorted by tier (Essential → Standard → Plus) then by sqft (smallest first).
+  eleventyConfig.addCollection("aduLibrary", function(collectionApi) {
+    const tierOrder = { Essential: 1, Standard: 2, Plus: 3 };
+    return collectionApi.getFilteredByGlob("entries/projects/**/*.md")
+      .filter(project => project.data.draft !== true)
+      .filter(project => project.data.adu_library === true)
+      .sort((a, b) => {
+        const tierA = tierOrder[a.data.adu?.tier] || 99;
+        const tierB = tierOrder[b.data.adu?.tier] || 99;
+        if (tierA !== tierB) return tierA - tierB;
+        return (a.data.adu?.sqft || 0) - (b.data.adu?.sqft || 0);
+      });
+  });
+
+  // Unified entries collection (all types, sorted by position then date).
+  // ADU library entries are filtered out here so they don't appear in /all/.
   eleventyConfig.addCollection("entries", function(collectionApi) {
     const allEntries = collectionApi.getFilteredByGlob("entries/**/*.md")
-      .filter(entry => entry.data.draft !== true);
+      .filter(entry => entry.data.draft !== true)
+      .filter(entry => entry.data.adu_library !== true);
 
     const parseDate = (dateObj) => {
       // For sorting, convert to a comparable format without timezone conversion
@@ -363,6 +382,42 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
     });
     scored.sort((a, b) => b.overlap - a.overlap);
     return scored.slice(0, limit).map(item => item.project);
+  });
+
+  // ADU helpers ────────────────────────────────────────────────────────────
+  // Used by /adu-library/ and the Specifications panel on ADU project pages.
+
+  // Format a single dollar amount as "$XXK" (rounded to nearest thousand)
+  eleventyConfig.addFilter("aduFormatPrice", function(n) {
+    if (typeof n !== "number") return "";
+    return "$" + Math.round(n / 1000) + "K";
+  });
+
+  // Format an ADU object's budget as "$LOW–$HIGH" (e.g. "$65K–$95K")
+  eleventyConfig.addFilter("aduPriceRange", function(adu) {
+    if (!adu || typeof adu.budget_low !== "number" || typeof adu.budget_high !== "number") return "";
+    return "$" + Math.round(adu.budget_low / 1000) + "K–$" + Math.round(adu.budget_high / 1000) + "K";
+  });
+
+  // Bucket key for budget filtering ("under-100k", "100k-150k", etc.)
+  eleventyConfig.addFilter("aduBudgetBucket", function(adu) {
+    if (!adu || typeof adu.budget_low !== "number") return "";
+    const mid = (adu.budget_low + adu.budget_high) / 2;
+    if (mid < 100000) return "under-100k";
+    if (mid < 150000) return "100k-150k";
+    if (mid < 200000) return "150k-200k";
+    return "over-200k";
+  });
+
+  // Human-readable stair label
+  eleventyConfig.addFilter("aduStairLabel", function(stair) {
+    return ({
+      "ladder":     "Ladder",
+      "spiral":     "Spiral stair",
+      "straight":   "Straight stair",
+      "switchback": "Switchback stair",
+      "none":       "Single-story"
+    })[stair] || stair || "";
   });
 
   // Filter to format Google Fonts font name for use in link URLs
