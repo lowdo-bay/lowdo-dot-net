@@ -2,9 +2,11 @@
 draft: false
 type: project
 title: Essential
-description: The smallest envelope in the ADU library. A single open room with a sleeping loft above, accessed by ladder.
+description: >-
+  The smallest envelope in the ADU library. A single open room with a sleeping
+  loft above, accessed by ladder.
 date: 2026-01-01T00:00:00.000Z
-year: 2026
+year: '2026'
 location: Open source
 status: Available
 categories:
@@ -12,27 +14,27 @@ categories:
   - ADU
   - SUSTAINABLE
 collaborators: []
-
-# Marks this as an ADU library entry — excludes from the comprehensive index
-# at /all/ and includes it on /adu-library/.
 adu_library: true
-
-# ADU-specific specifications. Drives the Specifications panel on the
-# project page and the filter chips / row data on /adu-library/.
 adu:
   tier: Essential
   bedrooms: 1
   loft: true
   stair: ladder
-  sqft: 380
+  sqft: 600
   budget_low: 65000
   budget_high: 95000
-  orientation: any
+  orientation: north-south
   footprint: 12×16 ft
   height: single + loft
   features:
     - loft
     - porch
+position: 999
+featured: false
+showInAwardsTable: false
+relatedProjects: []
+relatedEntries: []
+active: true
 ---
 
 The Loft Cabin is the most compact design in the LowDO ADU library. A 192-square-foot footprint stretches into 380 square feet of usable space by lifting the sleeping area into a generous loft above the kitchen and bath. Access is by ladder — a deliberate choice that keeps the design small, simple, and inexpensive to build.
