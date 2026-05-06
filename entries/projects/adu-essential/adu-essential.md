@@ -20,11 +20,11 @@ adu:
   bedrooms: 1
   loft: true
   stair: ladder
-  sqft: 600
-  budget_low: 65000
+  sqft: 592
+  budget_low: 66000
   budget_high: 95000
   orientation: north-south
-  footprint: 12×16 ft
+  footprint: 21×33 ft
   height: single + loft
   features:
     - loft
