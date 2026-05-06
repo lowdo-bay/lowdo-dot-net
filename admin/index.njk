@@ -362,6 +362,135 @@ eleventyExcludeFromCollections: true
           </div>
         </div>
 
+        {# Section: ADU Library — project-only #}
+        <div class="ep-section project-only">
+          <span class="ep-section__label">ADU Library</span>
+          <div class="ep-grid">
+
+            <span class="ep-row__label" data-tooltip="When checked, this project is shown on /adu-library/ and excluded from the comprehensive index at /all/. Only projects can be ADU library entries.">ADU library</span>
+            <div class="ep-row__control">
+              <label class="field-label--inline">
+                <input type="checkbox" id="ep-adu-library"> This is an ADU library entry
+              </label>
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Categorization tier shown on the library page and on the project's Specifications panel.">Tier</span>
+            <div class="ep-row__control adu-only">
+              <div class="admin-dropdown ep-adu-tier-dropdown" id="ep-adu-tier-dropdown">
+                <button class="admin-dropdown__button" aria-expanded="false" type="button">
+                  <span class="admin-dropdown__label" id="ep-adu-tier-label">—</span>
+                  <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                    <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </button>
+                <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-adu-tier-drawer">
+                  <button class="admin-dropdown__item" type="button" data-value="">—</button>
+                  <button class="admin-dropdown__item" type="button" data-value="Essential">Essential</button>
+                  <button class="admin-dropdown__item" type="button" data-value="Standard">Standard</button>
+                  <button class="admin-dropdown__item" type="button" data-value="Plus">Plus</button>
+                </div>
+              </div>
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Number of fully enclosed bedrooms (lofts don't count).">Bedrooms</span>
+            <div class="ep-row__control adu-only">
+              <input type="number" id="ep-adu-bedrooms" min="0" step="1" placeholder="1">
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Whether this design includes an additional sleeping loft above the main floor.">Loft</span>
+            <div class="ep-row__control adu-only">
+              <label class="field-label--inline">
+                <input type="checkbox" id="ep-adu-loft"> Includes a sleeping loft
+              </label>
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Type of vertical circulation. 'Single-story' means no stair at all.">Stair</span>
+            <div class="ep-row__control adu-only">
+              <div class="admin-dropdown ep-adu-stair-dropdown" id="ep-adu-stair-dropdown">
+                <button class="admin-dropdown__button" aria-expanded="false" type="button">
+                  <span class="admin-dropdown__label" id="ep-adu-stair-label">—</span>
+                  <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                    <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </button>
+                <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-adu-stair-drawer">
+                  <button class="admin-dropdown__item" type="button" data-value="">—</button>
+                  <button class="admin-dropdown__item" type="button" data-value="ladder">Ladder</button>
+                  <button class="admin-dropdown__item" type="button" data-value="spiral">Spiral stair</button>
+                  <button class="admin-dropdown__item" type="button" data-value="straight">Straight stair</button>
+                  <button class="admin-dropdown__item" type="button" data-value="switchback">Switchback stair</button>
+                  <button class="admin-dropdown__item" type="button" data-value="none">Single-story (none)</button>
+                </div>
+              </div>
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Conditioned floor area in square feet.">Square footage</span>
+            <div class="ep-row__control adu-only">
+              <input type="number" id="ep-adu-sqft" min="0" step="10" placeholder="380">
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Estimated low-end build cost (whole dollars). Shown on /adu-library/ and the project page as a range.">Build cost — low</span>
+            <div class="ep-row__control adu-only">
+              <input type="number" id="ep-adu-budget-low" min="0" step="1000" placeholder="65000">
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Estimated high-end build cost (whole dollars).">Build cost — high</span>
+            <div class="ep-row__control adu-only">
+              <input type="number" id="ep-adu-budget-high" min="0" step="1000" placeholder="95000">
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Lot orientation the design works best on.">Orientation</span>
+            <div class="ep-row__control adu-only">
+              <div class="admin-dropdown ep-adu-orientation-dropdown" id="ep-adu-orientation-dropdown">
+                <button class="admin-dropdown__button" aria-expanded="false" type="button">
+                  <span class="admin-dropdown__label" id="ep-adu-orientation-label">—</span>
+                  <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                    <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </button>
+                <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-adu-orientation-drawer">
+                  <button class="admin-dropdown__item" type="button" data-value="">—</button>
+                  <button class="admin-dropdown__item" type="button" data-value="any">Any</button>
+                  <button class="admin-dropdown__item" type="button" data-value="north-south">North–South</button>
+                  <button class="admin-dropdown__item" type="button" data-value="east-west">East–West</button>
+                </div>
+              </div>
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Plan footprint dimensions, e.g. '12×16 ft' or 'L-plan 28×26 ft'.">Footprint</span>
+            <div class="ep-row__control adu-only">
+              <input type="text" id="ep-adu-footprint" placeholder="12×16 ft">
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Volume description, e.g. 'single', 'two-story', 'single + loft'.">Height</span>
+            <div class="ep-row__control adu-only">
+              <input type="text" id="ep-adu-height" placeholder="single + loft">
+            </div>
+
+            <span class="ep-row__label adu-only" data-tooltip="Notable features included in the design. Pick all that apply.">Features</span>
+            <div class="ep-row__control adu-only">
+              <div id="ep-adu-features-tags" class="tag-list"></div>
+              <div class="admin-dropdown ep-adu-features-dropdown" id="ep-adu-features-dropdown">
+                <button class="admin-dropdown__button" aria-expanded="false" type="button" id="ep-adu-features-dropdown-btn">
+                  <span class="admin-dropdown__label">Add Feature</span>
+                  <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                    <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </button>
+                <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-adu-features-drawer">
+                  <button class="admin-dropdown__item" type="button" data-value="loft">loft</button>
+                  <button class="admin-dropdown__item" type="button" data-value="porch">porch</button>
+                  <button class="admin-dropdown__item" type="button" data-value="deck">deck</button>
+                  <button class="admin-dropdown__item" type="button" data-value="courtyard">courtyard</button>
+                  <button class="admin-dropdown__item" type="button" data-value="stair">stair</button>
+                  <button class="admin-dropdown__item" type="button" data-value="accessible">accessible</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
       <div class="edit-panel__footer">
         <button id="ep-apply-btn" class="btn btn--primary">Apply Changes</button>
@@ -579,6 +708,8 @@ eleventyExcludeFromCollections: true
         active: {{ (entry.data.active if entry.data.active is defined else true) | dump | safe }},
         collaborators: {{ (entry.data.collaborators or []) | dump | safe }},
         relatedProjects: {{ (entry.data.relatedProjects or []) | dump | safe }},
+        adu_library: {{ (entry.data.adu_library or false) | dump | safe }},
+        adu: {{ (entry.data.adu or null) | dump | safe }},
         body: {{ (entry.rawInput or "") | trim | dump | safe }},
         filePath: {{ entry.inputPath | replace("./", "") | dump | safe }}
       },

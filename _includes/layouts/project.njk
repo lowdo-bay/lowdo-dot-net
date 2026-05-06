@@ -751,6 +751,58 @@ section: project
     margin-top: var(--space-6);
   }
 
+  /* ────────────────────────────────────────────────────────────────────
+     Specifications panel — only rendered for ADU projects (when `adu`
+     frontmatter is present). 4-col grid, each row label/value/label/value.
+     Final FEATURES row has its value spanning 3 cols.
+     Lines under each row extend edge-to-edge to match full-width sections.
+     ──────────────────────────────────────────────────────────────────── */
+  .project-specs-section { margin-top: var(--space-6); }
+
+  .project-specs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 840px) {
+    .project-specs-grid { grid-template-columns: 1fr; }
+  }
+
+  .project-specs-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+  }
+  @media (min-width: 840px) {
+    .project-specs-row { grid-template-columns: repeat(4, 1fr); }
+  }
+  .project-specs-row::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    pointer-events: none;
+  }
+
+  .project-specs-cell {
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .project-specs-cell--label {
+    font-weight: normal;
+    opacity: 0.6;
+  }
+  .project-specs-cell--value-wide {
+    grid-column: 1 / -1;
+  }
+  @media (min-width: 840px) {
+    .project-specs-cell--value-wide { grid-column: 2 / 5; }
+  }
+
   /* Toolkit section should not have its own ::after line (uses child header line) */
   .project-toolkit-section::after {
     display: none !important;
@@ -1155,6 +1207,61 @@ section: project
 
     </div>
   </header>
+
+  {# =========================================================
+     SECTION 1.5: Specifications panel — ADU projects only
+     Renders only when the `adu` frontmatter object is present.
+     ========================================================= #}
+  {% if adu %}
+  <section class="project-specs-section">
+
+    <div class="project-section-header">
+      <div class="project-section-header-inner">
+        <div class="project-section-header-cell">Specifications</div>
+      </div>
+    </div>
+
+    <div class="project-specs-grid">
+
+      <div class="project-specs-row">
+        <div class="project-specs-cell project-specs-cell--label">Tier</div>
+        <div class="project-specs-cell">{{ adu.tier | upper }}</div>
+        <div class="project-specs-cell project-specs-cell--label">Bedrooms</div>
+        <div class="project-specs-cell">{{ adu.bedrooms }}{% if adu.loft %} + LOFT{% endif %}</div>
+      </div>
+
+      <div class="project-specs-row">
+        <div class="project-specs-cell project-specs-cell--label">Square footage</div>
+        <div class="project-specs-cell">{{ adu.sqft }} SQFT</div>
+        <div class="project-specs-cell project-specs-cell--label">Footprint</div>
+        <div class="project-specs-cell">{{ adu.footprint | upper }}</div>
+      </div>
+
+      <div class="project-specs-row">
+        <div class="project-specs-cell project-specs-cell--label">Stair</div>
+        <div class="project-specs-cell">{{ adu.stair | aduStairLabel | upper }}</div>
+        <div class="project-specs-cell project-specs-cell--label">Height</div>
+        <div class="project-specs-cell">{{ adu.height | upper }}</div>
+      </div>
+
+      <div class="project-specs-row">
+        <div class="project-specs-cell project-specs-cell--label">Orientation</div>
+        <div class="project-specs-cell">{% if adu.orientation == "any" %}ANY LOT{% else %}{{ adu.orientation | upper }}{% endif %}</div>
+        <div class="project-specs-cell project-specs-cell--label">Build cost (est.)</div>
+        <div class="project-specs-cell">{{ adu | aduPriceRange }}</div>
+      </div>
+
+      {% if adu.features and adu.features.length %}
+      <div class="project-specs-row">
+        <div class="project-specs-cell project-specs-cell--label">Features</div>
+        <div class="project-specs-cell project-specs-cell--value-wide">{{ adu.features | join(", ") | upper }}</div>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </section>
+  {% endif %}
 
   {# =========================================================
      SECTION 2: Collaborators (left) + Description (right)
