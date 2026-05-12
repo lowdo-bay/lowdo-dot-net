@@ -1,0 +1,581 @@
+{# ─────────────────────────────────────────────────────────────────────
+   ADU MATCH QUIZ — 4-step configurator that ranks the catalog by fit.
+   State lives in sessionStorage (key "lowdo-adu-match"). Submitting
+   clones every .adu-row-link, scores it, badges the top 3, and
+   appends the sorted set into a flat results container after .adu-meta.
+   ───────────────────────────────────────────────────────────────────── #}
+<style>
+  /* Quiz panel — sits between intro and filters. */
+  .adu-match-quiz {
+    position: relative;
+    background: var(--color-background);
+  }
+  .adu-match-quiz::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--color-accent-1);
+    pointer-events: none;
+  }
+
+  /* Step tab strip — 4 cells. */
+  .adu-match-quiz__steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 840px) {
+    .adu-match-quiz__steps { grid-template-columns: repeat(4, 1fr); }
+  }
+  .adu-match-quiz__steps::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    pointer-events: none;
+  }
+  .adu-match-quiz__tab {
+    padding: 0 var(--space-2) var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-2);
+    background: none;
+    border: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .adu-match-quiz__tab-num {
+    display: block;
+    color: var(--color-accent-2);
+    margin-bottom: var(--space-1);
+  }
+  .adu-match-quiz__tab.is-active {
+    color: var(--color-accent-1);
+    font-weight: 700;
+  }
+  .adu-match-quiz__tab.is-active .adu-match-quiz__tab-num { color: var(--color-accent-1); }
+  .adu-match-quiz__tab.is-done { color: var(--color-accent-1); }
+
+  /* Step body. */
+  .adu-match-quiz__step { display: none; }
+  .adu-match-quiz__step.is-active { display: block; }
+  .adu-match-quiz__step-title {
+    color: var(--color-accent-1);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-2);
+  }
+  .adu-match-quiz__step-hint {
+    font-size: var(--font-size-small);
+    padding: 0 var(--space-2) var(--space-2);
+    line-height: 1.5;
+    color: var(--color-accent-2);
+  }
+
+  /* Chip grid — chips sit directly in the page's 4-col grid, abutting
+     each other like .adu-row__cell. Each chip's own padding makes the
+     internal gutter; no outer padding or gap. */
+  .adu-match-quiz__chips {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 840px) {
+    .adu-match-quiz__chips { grid-template-columns: repeat(4, 1fr); }
+  }
+  .adu-match-quiz__chips::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    pointer-events: none;
+  }
+  .adu-match-quiz__chip {
+    background: transparent;
+    border: none;
+    color: var(--color-accent-1);
+    font: inherit;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-2);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--transition-time) ease, color var(--transition-time) ease;
+  }
+  .adu-match-quiz__chip:hover,
+  .adu-match-quiz__chip.is-selected {
+    background: var(--color-accent-1);
+    color: #ffffff;
+  }
+
+  /* Footer nav — BACK in col 1, NEXT in col 4. Each button fills its
+     own grid cell with the same padding as a row cell. */
+  .adu-match-quiz__nav {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 840px) {
+    .adu-match-quiz__nav { grid-template-columns: repeat(4, 1fr); }
+  }
+  .adu-match-quiz__nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    pointer-events: none;
+  }
+  .adu-match-quiz__back,
+  .adu-match-quiz__next {
+    padding: var(--space-2);
+    background: none;
+    border: none;
+    color: var(--color-accent-1);
+    font: inherit;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-align: left;
+  }
+  .adu-match-quiz__back:hover:not(:disabled),
+  .adu-match-quiz__next:hover:not(:disabled) {
+    background: var(--color-accent-1);
+    color: #ffffff;
+  }
+  .adu-match-quiz__back { grid-column: 1; }
+  .adu-match-quiz__next { grid-column: 1; text-align: right; }
+  @media (min-width: 840px) {
+    .adu-match-quiz__next { grid-column: 4; }
+  }
+  .adu-match-quiz__back:disabled,
+  .adu-match-quiz__next:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  /* MATCH RESULTS bar — replaces .adu-meta while matching is active. */
+  .adu-match-bar {
+    display: none;
+    position: relative;
+    grid-template-columns: 1fr;
+    align-items: baseline;
+  }
+  body.is-matching .adu-match-bar { display: grid; }
+  @media (min-width: 840px) {
+    body.is-matching .adu-match-bar { grid-template-columns: repeat(4, 1fr); }
+  }
+  .adu-match-bar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--color-accent-1);
+    pointer-events: none;
+  }
+  .adu-match-bar__summary {
+    grid-column: 1 / 3;
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-2);
+  }
+  .adu-match-bar__summary strong { color: var(--color-accent-1); font-weight: bold; }
+  .adu-match-bar__edit,
+  .adu-match-bar__clear {
+    padding: var(--space-2);
+    background: none;
+    border: none;
+    font: inherit;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-1);
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: right;
+  }
+  .adu-match-bar__edit { grid-column: 3; }
+  .adu-match-bar__clear { grid-column: 4; }
+  @media (max-width: 839px) {
+    .adu-match-bar__summary,
+    .adu-match-bar__edit,
+    .adu-match-bar__clear { grid-column: 1; text-align: left; }
+  }
+
+  /* Results container — flat list of cloned rows, post-submit. */
+  .adu-match-results {
+    display: none;
+  }
+  body.is-matching .adu-match-results { display: block; }
+</style>
+
+{# Quiz panel — hidden until trigger button is clicked. #}
+<section class="adu-match-quiz" id="adu-match-quiz" hidden>
+  <div class="adu-match-quiz__steps" id="adu-match-steps">
+    <button class="adu-match-quiz__tab is-active" type="button" data-step="0">
+      <span class="adu-match-quiz__tab-num">01</span>BUDGET
+    </button>
+    <button class="adu-match-quiz__tab" type="button" data-step="1">
+      <span class="adu-match-quiz__tab-num">02</span>BEDROOMS
+    </button>
+    <button class="adu-match-quiz__tab" type="button" data-step="2">
+      <span class="adu-match-quiz__tab-num">03</span>ORIENTATION
+    </button>
+    <button class="adu-match-quiz__tab" type="button" data-step="3">
+      <span class="adu-match-quiz__tab-num">04</span>MUST-HAVES
+    </button>
+  </div>
+
+  <div class="adu-match-quiz__body" id="adu-match-body">
+    {# STEP 0: Budget #}
+    <section class="adu-match-quiz__step is-active" data-step="0">
+      <h2 class="adu-match-quiz__step-title">01 · WHAT'S YOUR CONSTRUCTION BUDGET?</h2>
+      <p class="adu-match-quiz__step-hint">Estimated all-in build cost (materials + labor). Pick the range closest to your number.</p>
+      <div class="adu-match-quiz__chips">
+        <button class="adu-match-quiz__chip" type="button" data-field="budget" data-value="under-100k">&lt; $100K</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="budget" data-value="100k-150k">$100–150K</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="budget" data-value="150k-200k">$150–200K</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="budget" data-value="over-200k">&gt; $200K</button>
+      </div>
+    </section>
+
+    {# STEP 1: Bedrooms #}
+    <section class="adu-match-quiz__step" data-step="1">
+      <h2 class="adu-match-quiz__step-title">02 · HOW MANY BEDROOMS?</h2>
+      <p class="adu-match-quiz__step-hint">"Bedroom" means a fully enclosed sleeping room. Lofts count as a sleeping space but not a bedroom for code purposes.</p>
+      <div class="adu-match-quiz__chips">
+        <button class="adu-match-quiz__chip" type="button" data-field="bedrooms" data-value="1">1 BEDROOM</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="bedrooms" data-value="1+loft">1 BR + LOFT</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="bedrooms" data-value="2">2 BEDROOMS</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="bedrooms" data-value="any">FLEXIBLE</button>
+      </div>
+    </section>
+
+    {# STEP 2: Orientation #}
+    <section class="adu-match-quiz__step" data-step="2">
+      <h2 class="adu-match-quiz__step-title">03 · LOT ORIENTATION</h2>
+      <p class="adu-match-quiz__step-hint">Which direction does the long axis of your buildable area run?</p>
+      <div class="adu-match-quiz__chips">
+        <button class="adu-match-quiz__chip" type="button" data-field="orientation" data-value="any">FLEXIBLE / SQUARE</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="orientation" data-value="north-south">NORTH ↔ SOUTH</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="orientation" data-value="east-west">EAST ↔ WEST</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="orientation" data-value="any">NOT SURE YET</button>
+      </div>
+    </section>
+
+    {# STEP 3: Must-haves (multi-select) #}
+    <section class="adu-match-quiz__step" data-step="3">
+      <h2 class="adu-match-quiz__step-title">04 · ANYTHING YOU MUST HAVE?</h2>
+      <p class="adu-match-quiz__step-hint">Pick any features that are non-negotiable. Leave blank if you're flexible.</p>
+      <div class="adu-match-quiz__chips">
+        <button class="adu-match-quiz__chip" type="button" data-field="prefs" data-value="stair">STAIR</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="prefs" data-value="loft">LOFT</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="prefs" data-value="porch">PORCH</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="prefs" data-value="deck">DECK</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="prefs" data-value="courtyard">COURTYARD</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="prefs" data-value="single-story">SINGLE-STORY</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="adu-match-quiz__nav">
+    <button class="adu-match-quiz__back" id="adu-match-back" type="button" disabled>← BACK</button>
+    <button class="adu-match-quiz__next" id="adu-match-next" type="button">NEXT →</button>
+  </div>
+</section>
+
+{# Active-state bar — replaces .adu-meta while matching is active. #}
+<div class="adu-match-bar" id="adu-match-bar" hidden>
+  <span class="adu-match-bar__summary" id="adu-match-bar-summary"></span>
+  <button class="adu-match-bar__edit" id="adu-match-edit" type="button">EDIT</button>
+  <button class="adu-match-bar__clear" id="adu-match-clear" type="button">CLEAR</button>
+</div>
+
+{# Flat results container — populated on submit with cloned rows. #}
+<div class="adu-match-results" id="adu-match-results"></div>
+
+<script>
+(function () {
+  const STORAGE_KEY = "lowdo-adu-match";
+  const BUDGET_MIDPOINT = {
+    "under-100k": 80000,
+    "100k-150k": 125000,
+    "150k-200k": 175000,
+    "over-200k": 230000
+  };
+  const BUDGET_LABEL = {
+    "under-100k": "< $100K",
+    "100k-150k": "$100–150K",
+    "150k-200k": "$150–200K",
+    "over-200k": "> $200K"
+  };
+  const BEDROOMS_LABEL = {
+    "1": "1 BR",
+    "1+loft": "1 BR + LOFT",
+    "2": "2 BR",
+    "any": "FLEXIBLE BR"
+  };
+  const ORIENTATION_LABEL = {
+    "any": "ANY ORIENTATION",
+    "north-south": "NORTH–SOUTH",
+    "east-west": "EAST–WEST"
+  };
+  const TOTAL_STEPS = 4;
+
+  const trigger = document.getElementById("adu-match-open");
+  const quiz    = document.getElementById("adu-match-quiz");
+  const tabs    = quiz.querySelectorAll(".adu-match-quiz__tab");
+  const steps   = quiz.querySelectorAll(".adu-match-quiz__step");
+  const chips   = quiz.querySelectorAll(".adu-match-quiz__chip");
+  const backBtn = document.getElementById("adu-match-back");
+  const nextBtn = document.getElementById("adu-match-next");
+  const bar     = document.getElementById("adu-match-bar");
+  const barSum  = document.getElementById("adu-match-bar-summary");
+  const editBtn = document.getElementById("adu-match-edit");
+  const clearBtn= document.getElementById("adu-match-clear");
+  const results = document.getElementById("adu-match-results");
+
+  const defaultState = () => ({ active: false, step: 0, budget: null, bedrooms: null, orientation: null, prefs: [] });
+  const load = () => { try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "null") || defaultState(); } catch (e) { return defaultState(); } };
+  const save = (s) => sessionStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+  const esc  = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+
+  let state = load();
+
+  function setStep(n) {
+    state.step = Math.max(0, Math.min(TOTAL_STEPS - 1, n));
+    tabs.forEach((t) => {
+      const i = parseInt(t.dataset.step, 10);
+      t.classList.toggle("is-active", i === state.step);
+      t.classList.toggle("is-done",   i <  state.step);
+    });
+    steps.forEach((s) => s.classList.toggle("is-active", parseInt(s.dataset.step, 10) === state.step));
+    backBtn.disabled = state.step === 0;
+    nextBtn.textContent = state.step === TOTAL_STEPS - 1 ? "SEE MATCHES →" : "NEXT →";
+    nextBtn.disabled = !canAdvance();
+    save(state);
+  }
+
+  function canAdvance() {
+    if (state.step === 0) return state.budget != null;
+    if (state.step === 1) return state.bedrooms != null;
+    if (state.step === 2) return state.orientation != null;
+    if (state.step === 3) return true; // prefs is optional
+    return false;
+  }
+
+  function paintChips() {
+    chips.forEach((c) => {
+      const field = c.dataset.field;
+      const value = c.dataset.value;
+      if (field === "prefs") {
+        c.classList.toggle("is-selected", state.prefs.includes(value));
+      } else {
+        c.classList.toggle("is-selected", state[field] === value);
+      }
+    });
+  }
+
+  chips.forEach((c) => {
+    c.addEventListener("click", () => {
+      const field = c.dataset.field;
+      const value = c.dataset.value;
+      if (field === "prefs") {
+        const idx = state.prefs.indexOf(value);
+        if (idx >= 0) state.prefs.splice(idx, 1);
+        else state.prefs.push(value);
+      } else {
+        state[field] = value;
+      }
+      save(state); paintChips(); nextBtn.disabled = !canAdvance();
+    });
+  });
+
+  tabs.forEach((t) => {
+    t.addEventListener("click", () => {
+      const i = parseInt(t.dataset.step, 10);
+      if (i <= state.step) setStep(i);
+    });
+  });
+
+  backBtn.addEventListener("click", () => setStep(state.step - 1));
+  nextBtn.addEventListener("click", () => {
+    if (state.step === TOTAL_STEPS - 1) submit();
+    else setStep(state.step + 1);
+  });
+
+  function openQuiz(startStep) {
+    if (typeof startStep === "number") state.step = startStep;
+    quiz.hidden = false;
+    document.body.classList.add("is-quizzing");
+    paintChips();
+    setStep(state.step);
+  }
+  function closeQuiz() {
+    quiz.hidden = true;
+    document.body.classList.remove("is-quizzing");
+  }
+
+  trigger.addEventListener("click", () => openQuiz(0));
+
+  // Scoring — ported from mockups/a-configurator.html scoreAdu().
+  function scoreRow(row) {
+    const ds = row.dataset;
+    const budgetMid = BUDGET_MIDPOINT[state.budget] || 0;
+    const lo = parseInt(ds.budgetLow, 10) || 0;
+    const hi = parseInt(ds.budgetHigh, 10) || 0;
+    const median = (lo + hi) / 2;
+    let score = 0;
+
+    if (budgetMid >= lo && budgetMid <= hi)       score += 30;
+    else if (budgetMid > hi)                      score += 22;
+    else if (budgetMid >= median * 0.85)          score += 10;
+    else                                          score -= 10;
+
+    const beds = parseInt(ds.bedrooms, 10);
+    const loft = ds.loft === "true";
+    if      (state.bedrooms === "1"      && beds === 1 && !loft) score += 25;
+    else if (state.bedrooms === "1+loft" && beds === 1 &&  loft) score += 25;
+    else if (state.bedrooms === "2"      && beds === 2)          score += 25;
+    else if (state.bedrooms === "any")                           score += 12;
+    else if (state.bedrooms === "1"      && beds === 1 &&  loft) score += 12;
+    else if (state.bedrooms === "2"      && beds === 1)          score -=  8;
+    else if (state.bedrooms === "1"      && beds === 2)          score -=  8;
+
+    if (state.orientation === ds.orientation)   score += 12;
+    else if (ds.orientation === "any")          score +=  6;
+    else                                        score -=  4;
+
+    const rowFeats = (ds.features || "").split(",").filter(Boolean);
+    state.prefs.forEach((p) => {
+      if (p === "single-story") {
+        if (ds.height === "single" || ds.height === "single + loft") score += 8;
+        else score -= 3;
+      } else if (rowFeats.includes(p)) {
+        score += 8;
+      } else {
+        score -= 3;
+      }
+    });
+    return score;
+  }
+  function matchPct(score) {
+    return Math.max(40, Math.min(100, Math.round(60 + score * 0.5)));
+  }
+
+  function clearFilters() {
+    document.querySelectorAll('.adu-filters input[type="checkbox"]').forEach((cb) => {
+      if (cb.checked) { cb.checked = false; cb.dispatchEvent(new Event("change", { bubbles: true })); }
+    });
+  }
+
+  function summaryText() {
+    const parts = [];
+    if (state.budget)       parts.push(BUDGET_LABEL[state.budget]);
+    if (state.bedrooms)     parts.push(BEDROOMS_LABEL[state.bedrooms]);
+    if (state.orientation && state.orientation !== "any") parts.push(ORIENTATION_LABEL[state.orientation]);
+    if (state.prefs.length) parts.push("+" + state.prefs.length + " MUST-HAVE" + (state.prefs.length === 1 ? "" : "S"));
+    return "<strong>MATCH RESULTS</strong> — Based on " + parts.join(", ");
+  }
+
+  function submit() {
+    clearFilters();
+    state.active = true;
+    save(state);
+    document.body.classList.add("is-matching");
+
+    // Score every row in the page, sort, clone, badge top 3.
+    const rowLinks = Array.from(document.querySelectorAll(".adu-tier-group .adu-row-link"));
+    const scored = rowLinks.map((link) => {
+      const row = link.querySelector(".adu-row");
+      return { link: link, score: scoreRow(row) };
+    }).sort((a, b) => b.score - a.score);
+
+    results.innerHTML = "";
+    scored.forEach((entry, idx) => {
+      const clone = entry.link.cloneNode(true);
+      if (idx < 3) {
+        const nameCell = clone.querySelector(".adu-row__name");
+        if (nameCell) {
+          const badge = document.createElement("div");
+          badge.className = "adu-match-badge";
+          badge.textContent = "#" + (idx + 1) + " · " + matchPct(entry.score) + "%";
+          nameCell.parentNode.insertBefore(badge, nameCell);
+        }
+      }
+      results.appendChild(clone);
+    });
+
+    barSum.innerHTML = summaryText();
+    bar.hidden = false;
+    closeQuiz();
+  }
+
+  function clearMatch() {
+    state = defaultState();
+    save(state);
+    document.body.classList.remove("is-matching");
+    results.innerHTML = "";
+    bar.hidden = true;
+    closeQuiz();
+  }
+
+  editBtn.addEventListener("click", () => openQuiz(0));
+  clearBtn.addEventListener("click", clearMatch);
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("#adu-match-exit")) closeQuiz();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !quiz.hidden) closeQuiz();
+  });
+
+  // On boot, if a previous session left the quiz active, replay submit().
+  if (state.active && state.budget) {
+    // Re-run submit() to rebuild the flat list. We bypass clearFilters here
+    // because no filters can be active on a fresh load.
+    document.body.classList.add("is-matching");
+    const rowLinks = Array.from(document.querySelectorAll(".adu-tier-group .adu-row-link"));
+    const scored = rowLinks.map((link) => {
+      const row = link.querySelector(".adu-row");
+      return { link: link, score: scoreRow(row) };
+    }).sort((a, b) => b.score - a.score);
+    scored.forEach((entry, idx) => {
+      const clone = entry.link.cloneNode(true);
+      if (idx < 3) {
+        const nameCell = clone.querySelector(".adu-row__name");
+        if (nameCell) {
+          const badge = document.createElement("div");
+          badge.className = "adu-match-badge";
+          badge.textContent = "#" + (idx + 1) + " · " + matchPct(entry.score) + "%";
+          nameCell.parentNode.insertBefore(badge, nameCell);
+        }
+      }
+      results.appendChild(clone);
+    });
+    barSum.innerHTML = summaryText();
+    bar.hidden = false;
+  } else {
+    paintChips();
+    setStep(state.step || 0);
+  }
+})();
+</script>

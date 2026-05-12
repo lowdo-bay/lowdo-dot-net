@@ -25,6 +25,7 @@
         "npm:markdown-it@^14.1.0",
         "npm:netlify-plugin-11ty@^1.5.0",
         "npm:netlify-plugin-csp-generator@^1.6.1",
+        "npm:sharp@~0.34.5",
         "npm:uglify-js@^3.19.3"
       ]
     }

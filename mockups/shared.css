@@ -1,0 +1,883 @@
+/* =========================================================================
+   LowDO ADU Library — shared.css
+   Curated copy of the LowDO design system tokens and primitives so the
+   mockups read as the same site without depending on the production build.
+   Source: _includes/assets/css/theme.njk + _includes/assets/css/base.css
+                + _data/settings.yaml
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;700&display=swap');
+
+:root {
+  /* Colors — light mode (from settings.yaml) */
+  --color-background: #ffffff;
+  --color-text: #101010;
+  --color-accent-1: #001489;   /* lowdo-blue */
+  --color-accent-2: #2D4BA8;
+  --color-accent-3: #5A73C7;
+  --color-accent-4: #A8B9E6;
+  --color-accent-5: #EAEEFD;
+  --color-link: var(--color-accent-1);
+  --project-header-bg: var(--color-accent-5);
+  --grid-line-color: #001489;
+  --grid-line-thickness: 1px;
+  --grid-line-vertical-style: dashed;
+  --grid-line-horizontal-major-style: solid;
+  --grid-line-horizontal-minor-style: dashed;
+
+  /* Typography — Overpass Mono (from settings.yaml) */
+  --font: "Overpass Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-weight: 400;
+  --font-size-base: 0.95rem;
+  --font-size-small: 0.76rem;
+  --transition-time: 300ms;
+
+  /* Spacing scale (matches base.css; --space scales at 840px breakpoint) */
+  --space-scale: 100;
+  --space: calc(var(--space-scale) / 100 * 1rem);
+  --space-0: 0;
+  --space-1: calc(var(--space) * 0.25);
+  --space-2: calc(var(--space) * 0.5);
+  --space-3: var(--space);
+  --space-4: calc(var(--space) * 1.5);
+  --space-5: calc(var(--space) * 2);
+  --space-6: calc(var(--space) * 3);
+  --space-7: calc(var(--space) * 4);
+  --space-8: calc(var(--space) * 6);
+  --space-9: calc(var(--space) * 8);
+
+  /* Layout */
+  --content-margin: var(--space-5);
+  --max-content-width: 1200px;
+  --grid-gap: 0;
+  --content-width: calc(min(100vw, var(--max-content-width)) - 2 * var(--content-margin));
+  --col-width: calc(var(--content-width) / 4);
+  --line-pos-1: 0%;
+  --line-pos-2: 25%;
+  --line-pos-3: 50%;
+  --line-pos-4: 75%;
+  --line-pos-5: 100%;
+  --hamburger-left: calc(var(--content-margin) + var(--content-width) * 0.96875);
+
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:root[dark] {
+  --color-background: #101010;
+  --color-text: #E1E1E1;
+  --color-accent-1: #4D6FFF;
+  --color-accent-2: #3D5ACC;
+  --color-accent-3: #2D4499;
+  --color-accent-4: #1D2E66;
+  --color-accent-5: #171F3D;
+  --grid-line-color: #4a5568;
+}
+
+@media (min-width: 840px) {
+  :root {
+    --space: calc(var(--space-scale) / 100 * 1.5rem);
+  }
+}
+
+/* Reset */
+*, *:before, *:after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  transition: background-color var(--transition-time) ease, color var(--transition-time) ease;
+}
+
+a[href], a[href]:visited {
+  color: var(--color-link);
+  text-decoration: none;
+}
+a[href]:hover { color: var(--color-accent-3); }
+a[href].link-nostyle { color: currentColor; text-decoration: none; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight);
+}
+
+small, .text--small { font-size: var(--font-size-small); }
+
+p { margin-bottom: var(--space-3); }
+
+img { max-width: 100%; height: auto; display: block; }
+
+button {
+  font: inherit;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+input, select, textarea { font: inherit; }
+
+.hide { display: none !important; }
+
+/* =========================================================================
+   GRID — standard 4 equal columns (repeat(4, 1fr))
+   Mirrors .grid--header / .grid--intro / .grid--project from base.css
+   ========================================================================= */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  column-gap: var(--grid-gap);
+}
+
+.grid--4 {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
+@media (min-width: 840px) {
+  .grid--4,
+  .grid--header,
+  .grid--intro,
+  .grid--project {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Column spans (no internal padding by default — minimize padding!) */
+.col-1 { grid-column: 1; }
+.col-2 { grid-column: 2; }
+.col-3 { grid-column: 3; }
+.col-4 { grid-column: 4; }
+.col-1-2 { grid-column: 1 / 3; }
+.col-2-3 { grid-column: 2 / 4; }
+.col-3-4 { grid-column: 3 / 5; }
+.col-1-2-3 { grid-column: 1 / 4; }
+.col-2-3-4 { grid-column: 2 / 5; }
+.col-1-2-3-4 { grid-column: 1 / -1; }
+
+/* Padded variant — only use when a cell holds text that needs breathing room */
+.col-padded { padding: var(--space-2); }
+
+/* Mobile: every span collapses to full-width */
+@media (max-width: 839px) {
+  .col-1, .col-2, .col-3, .col-4,
+  .col-1-2, .col-2-3, .col-3-4,
+  .col-1-2-3, .col-2-3-4, .col-1-2-3-4 {
+    grid-column: 1 / -1;
+  }
+}
+
+/* p--content: outer page container with content margins */
+.p--content {
+  padding: var(--content-margin);
+  max-width: var(--max-content-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+.pb--3 { padding-bottom: var(--space-6); }
+.pb--6 { padding-bottom: var(--space-8); }
+.mb--3 { margin-bottom: var(--space-6); }
+
+/* =========================================================================
+   HORIZONTAL LINES
+   Two flavors:
+     - "edge" lines span all 4 columns (full content width). These extend
+       PAST the outer vertical lines all the way to the viewport edge.
+     - "bounded" lines (NOT defined here) span fewer columns and stay
+       inside the relevant cell — implemented per-cell with simple borders.
+   ========================================================================= */
+
+/* Major (solid) line under a section that fills all 4 cols */
+.line-major-bottom { position: relative; }
+.line-major-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  pointer-events: none;
+}
+.line-major-top { position: relative; }
+.line-major-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  pointer-events: none;
+}
+
+/* Minor (dashed) line under a section that fills all 4 cols */
+.line-minor-bottom { position: relative; }
+.line-minor-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  pointer-events: none;
+}
+
+/* =========================================================================
+   HEADER (sticky, with bottom solid line bounded to content width)
+   ========================================================================= */
+
+header.p--content {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+header.p--content::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background-color: var(--color-background);
+  z-index: -1;
+}
+header.p--content::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  bottom: 0;
+  border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  z-index: 998;
+}
+@media (min-width: 600px) {
+  header.p--content::after { bottom: auto; top: 120px; }
+}
+
+.header-title { display: flex; flex-direction: column; padding: 0 var(--space-2); }
+.header-subtitle { font-size: var(--font-size-small); opacity: 0.8; padding: 0 var(--space-2); }
+
+.grid__item--end {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: var(--space-2);
+}
+
+@media (min-width: 840px) {
+  .grid--header .grid__item--end {
+    position: absolute;
+    top: var(--content-margin);
+    left: var(--hamburger-left);
+    transform: translateX(-50%);
+    grid-column: unset;
+    padding: 0;
+  }
+}
+
+/* Header menu button */
+.header-menu { position: relative; }
+.header-menu__button {
+  background: none; border: none;
+  font: inherit; color: var(--color-text);
+  cursor: pointer; padding: 0;
+  display: flex; align-items: center;
+}
+.header-menu__button:hover { opacity: 0.7; }
+
+.header-menu__drawer {
+  display: flex;
+  position: absolute;
+  top: 100%;
+  left: var(--content-margin);
+  right: var(--content-margin);
+  z-index: 998;
+  flex-direction: column;
+  background: var(--color-background);
+  border-bottom: 1px solid transparent;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 250ms ease, visibility 250ms ease;
+  pointer-events: none;
+  visibility: hidden;
+}
+.header-menu__drawer.is-open {
+  clip-path: inset(0 0 0 0);
+  pointer-events: auto;
+  visibility: visible;
+  border-bottom-color: var(--color-accent-1);
+}
+:root[dark] .header-menu__drawer.is-open { border-bottom-color: var(--grid-line-color); }
+.header-menu__item {
+  display: flex;
+  padding: var(--space-2);
+  text-decoration: none;
+  color: var(--color-text);
+  border-bottom: 1px dashed var(--color-accent-1);
+  background: var(--color-background);
+}
+.header-menu__item:last-child { border-bottom: none; }
+.header-menu__drawer:not(.is-open) .header-menu__item { border-bottom-color: transparent; }
+:root[dark] .header-menu__item { border-bottom-color: var(--grid-line-color); }
+.header-menu__item.dark-toggle { cursor: pointer; }
+.header-menu__item.dark-toggle .toggle__label {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-2); width: 100%; padding: 0; cursor: pointer;
+}
+.header-menu__item.dark-toggle .toggle__text { color: var(--color-accent-1); }
+.header-menu__item.dark-toggle svg { color: var(--color-accent-1); }
+.toggle__checkbox { display: none; }
+
+@media (min-width: 840px) {
+  .header-menu__drawer {
+    left: auto;
+    right: var(--content-margin);
+    width: calc(var(--content-width) / 4);
+    top: 120px;
+  }
+}
+
+/* =========================================================================
+   FOOTER (top solid line bounded to content width)
+   ========================================================================= */
+
+footer.p--content {
+  position: relative;
+  width: 100%;
+  padding-top: calc(var(--content-margin) + var(--space-1));
+  text-transform: uppercase;
+  font-size: var(--font-size-small);
+}
+footer.p--content::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  top: var(--content-margin);
+  border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  z-index: 998;
+}
+.footer__body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+@media (min-width: 840px) {
+  .footer__body { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+}
+.footer__logo-column { padding: var(--space-2); }
+.footer__column { padding: var(--space-2); display: flex; flex-direction: column; }
+.footer__section-label { font-weight: 700; padding: 0 0 var(--space-1); }
+.footer__nav { display: flex; flex-direction: column; gap: var(--space-1); }
+.footer__nav-link { text-decoration: none; }
+.footer__nav-link:hover { text-decoration: underline; }
+
+/* =========================================================================
+   VERTICAL DASHED GRID LINES (the body::after spreadsheet overlay)
+   Only visible at >= 840px where the 4-col grid is active
+   ========================================================================= */
+
+body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--content-width);
+  bottom: 0;
+  height: 100%;
+  background:
+    repeating-linear-gradient(to bottom, var(--grid-line-color) 0, var(--grid-line-color) 4px, transparent 4px, transparent 8px),
+    repeating-linear-gradient(to bottom, var(--grid-line-color) 0, var(--grid-line-color) 4px, transparent 4px, transparent 8px),
+    repeating-linear-gradient(to bottom, var(--grid-line-color) 0, var(--grid-line-color) 4px, transparent 4px, transparent 8px),
+    repeating-linear-gradient(to bottom, var(--grid-line-color) 0, var(--grid-line-color) 4px, transparent 4px, transparent 8px),
+    repeating-linear-gradient(to bottom, var(--grid-line-color) 0, var(--grid-line-color) 4px, transparent 4px, transparent 8px);
+  background-size:
+    var(--grid-line-thickness) 100%, var(--grid-line-thickness) 100%, var(--grid-line-thickness) 100%,
+    var(--grid-line-thickness) 100%, var(--grid-line-thickness) 100%;
+  background-position:
+    var(--line-pos-1) 0, var(--line-pos-2) 0, var(--line-pos-3) 0,
+    var(--line-pos-4) 0, var(--line-pos-5) 0;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+}
+@media (min-width: 840px) { body::after { display: block; } }
+
+/* Mobile: only outer left/right lines */
+@media (max-width: 839px) {
+  body::after {
+    display: block;
+    background:
+      repeating-linear-gradient(to bottom, var(--grid-line-color) 0, var(--grid-line-color) 4px, transparent 4px, transparent 8px),
+      repeating-linear-gradient(to bottom, var(--grid-line-color) 0, var(--grid-line-color) 4px, transparent 4px, transparent 8px);
+    background-size: var(--grid-line-thickness) 100%, var(--grid-line-thickness) 100%;
+    background-position: var(--line-pos-1) 0, var(--line-pos-5) 0;
+  }
+}
+
+/* =========================================================================
+   PAGE INTRO — uses the grid; padding only on text cells
+   ========================================================================= */
+
+.page-intro { position: relative; }
+.page-intro__title {
+  color: var(--color-accent-1);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: var(--space-3) var(--space-2) var(--space-1);
+}
+.page-intro__description {
+  font-size: var(--font-size-small);
+  padding: 0 var(--space-2) var(--space-3);
+  line-height: 1.5;
+}
+
+/* =========================================================================
+   SECTION HEADERS — solid line stops at vertical grid lines
+   ========================================================================= */
+
+.section-header {
+  position: relative;
+}
+.section-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+  pointer-events: none;
+}
+.section-header__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 840px) {
+  .section-header__inner { grid-template-columns: repeat(4, 1fr); }
+}
+.section-header__cell {
+  padding: var(--space-2);
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =========================================================================
+   ROW — adapted from index-row, on the standard 4-col grid
+   Cells use minimal padding; text-only cells get padding for legibility.
+   ========================================================================= */
+
+.adu-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  position: relative;
+  align-items: stretch;
+}
+@media (min-width: 840px) {
+  .adu-row { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Hover tint: full screen width — extends past outer vertical lines */
+.adu-row::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  background-color: transparent;
+  transition: background-color var(--transition-time) ease;
+  z-index: -1;
+  pointer-events: none;
+}
+.adu-row:hover::before { background-color: var(--color-accent-5); }
+
+/* Dashed bottom line — full row spans 4 cols, so line extends to screen edge */
+.adu-row::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  pointer-events: none;
+}
+
+/* Cells: text-only cells get padding; image cells stay flush */
+.adu-row__cell {
+  font-size: var(--font-size-small);
+  padding: var(--space-2);
+}
+.adu-row__cell--thumb { padding: 0; }   /* image flush to grid lines */
+
+@media (min-width: 840px) {
+  .adu-row__cell--thumb { grid-column: 1; }
+  .adu-row__cell--name  { grid-column: 2; }
+  .adu-row__cell--specs { grid-column: 3; }
+  .adu-row__cell--price { grid-column: 4; text-align: right; }
+}
+
+.adu-row__thumb {
+  display: block;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  background: var(--color-accent-5);
+  /* No border-right — body::after already draws the dashed line at this boundary */
+}
+
+.adu-row__name {
+  display: inline-block;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--color-accent-1);
+  position: relative;
+  z-index: 1;
+  transition: color var(--transition-time) ease;
+  width: fit-content;
+  max-width: 100%;
+}
+.adu-row__name::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--color-accent-1);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--transition-time) ease;
+  z-index: -1;
+}
+.adu-row:hover .adu-row__name::before { transform: scaleX(1); }
+.adu-row:hover .adu-row__name { color: #ffffff; }
+
+.adu-row__sub {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--font-size-small);
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.adu-row__spec-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.adu-row__spec-list span { display: block; }
+.adu-row__spec-label {
+  opacity: 0.6;
+  font-weight: normal;
+}
+
+.adu-row__price {
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.adu-row__price-range { display: block; font-weight: bold; color: var(--color-accent-1); }
+.adu-row__price-label { display: block; opacity: 0.6; font-size: 0.7rem; margin-top: var(--space-1); }
+
+/* =========================================================================
+   FILTERS — laid out on the 4-col grid, no floating chips
+   ========================================================================= */
+
+.filter-group { padding: var(--space-2); display: flex; flex-direction: column; gap: var(--space-1); }
+.filter-group__heading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-1);
+  margin-bottom: var(--space-1);
+}
+.filter-group__list { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.filter {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.filter input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+.filter__box {
+  display: inline-block;
+  width: 0.85em; height: 0.85em;
+  border: var(--grid-line-thickness) solid var(--color-link);
+  margin-right: var(--space-1);
+  position: relative;
+  flex-shrink: 0;
+}
+.filter input[type="checkbox"]:checked + .filter__box::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px; right: 2px; bottom: 2px;
+  background-color: var(--color-accent-2);
+}
+.filter__label {
+  font-size: var(--font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* =========================================================================
+   BUTTONS — full-width within their grid cell
+   No floating buttons; they should always occupy a column or column span.
+   ========================================================================= */
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-2);
+  border: var(--grid-line-thickness) solid var(--color-accent-1);
+  background: transparent;
+  color: var(--color-accent-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: var(--font-size-small);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transition-time), color var(--transition-time);
+}
+.btn:hover {
+  background-color: var(--color-accent-1);
+  color: #ffffff;
+}
+.btn--solid {
+  background: var(--color-accent-1);
+  color: #ffffff;
+}
+.btn--solid:hover {
+  background: var(--color-accent-2);
+  color: #ffffff;
+}
+.btn--ghost {
+  border-color: var(--color-accent-3);
+  color: var(--color-accent-1);
+}
+.btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.arrow--right::after { content: " \2192"; }
+.arrow--down::after { content: " \2193"; }
+.arrow--left::before { content: "\2190 "; }
+
+/* =========================================================================
+   DOWNLOAD GATE
+   Fills its grid cell; no floating elements.
+   ========================================================================= */
+
+.download-gate {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 300ms ease;
+  background-color: var(--color-accent-5);
+}
+.download-gate.is-open { max-height: 320px; }
+.download-gate__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2);
+}
+.download-gate__email {
+  background: transparent;
+  border: none;
+  border-bottom: var(--grid-line-thickness) solid var(--grid-line-color);
+  color: inherit;
+  font: inherit;
+  font-size: var(--font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 100%;
+  padding: var(--space-1) 0;
+  outline: none;
+}
+.download-gate__email::placeholder { opacity: 0.4; }
+.download-gate__check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--font-size-small);
+  opacity: 0.85;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.download-gate__check input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  margin-top: 2px;
+  flex-shrink: 0;
+  width: 0.85em;
+  height: 0.85em;
+  border: var(--grid-line-thickness) solid var(--grid-line-color);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+.download-gate__check input[type="checkbox"]:checked { background: var(--color-accent-1); }
+.download-gate__check input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 15%; top: 5%;
+  width: 40%; height: 65%;
+  border-right: 2px solid var(--color-background);
+  border-bottom: 2px solid var(--color-background);
+  transform: rotate(40deg);
+}
+
+/* =========================================================================
+   TOOLTIP
+   ========================================================================= */
+
+.tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  background: var(--color-background);
+  color: var(--color-text);
+  padding: var(--space-2);
+  font-size: var(--font-size-small);
+  white-space: nowrap;
+  display: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  border: var(--grid-line-thickness) solid var(--grid-line-color);
+}
+.tooltip.is-visible { display: block; }
+.tooltip__title {
+  display: block;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.tooltip__hint {
+  display: block;
+  opacity: 0.6;
+  font-size: 0.7rem;
+}
+:root[dark] .tooltip { background: #111; box-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+
+/* =========================================================================
+   TIER PILL
+   ========================================================================= */
+.tier-pill {
+  display: inline-block;
+  padding: 1px 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: var(--grid-line-thickness) solid currentColor;
+  margin-bottom: var(--space-1);
+}
+.tier-pill--Essential { color: var(--color-accent-3); }
+.tier-pill--Standard { color: var(--color-accent-2); }
+.tier-pill--Plus { color: var(--color-accent-1); }
+
+/* =========================================================================
+   MOCKUPS LANDING — used by /mockups/index.html
+   Each card is a full grid cell with no floating elements.
+   ========================================================================= */
+
+.mockup-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 840px) {
+  .mockup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.mockup-card {
+  display: block;
+  position: relative;
+  padding: var(--space-3) var(--space-2);
+  text-decoration: none;
+  color: var(--color-text);
+  border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  transition: background-color var(--transition-time) ease;
+}
+.mockup-card:hover { background-color: var(--color-accent-5); color: var(--color-text); }
+/* No border-right between odd/even cards — body::after's center dashed line already separates them */
+.mockup-card__letter {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-accent-1);
+  display: block;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+.mockup-card__title {
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+.mockup-card__desc {
+  font-size: var(--font-size-small);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+/* =========================================================================
+   UTILITIES
+   ========================================================================= */
+
+.uppercase { text-transform: uppercase; letter-spacing: 0.05em; }
+.tabular { font-variant-numeric: tabular-nums; }
+.muted { opacity: 0.6; }
+
+/* SR-only */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}

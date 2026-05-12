@@ -1,0 +1,18 @@
+- name: Essential
+  edition: EDITION 01
+  pitch: >-
+    The smallest envelopes, the lowest construction cost. One bedroom, ladder
+    access if there's a loft, single-story or near it. Designed to be the
+    easiest possible introduction to building an ADU.
+- name: Standard
+  edition: EDITION 02
+  pitch: >-
+    A real stair to a real upstairs. Still one bedroom, but with the spatial
+    generosity of two stories — separate sleeping and living, a more grown-up
+    plan, room for a deck.
+- name: Plus
+  edition: EDITION 03
+  pitch: >-
+    Two enclosed bedrooms, full kitchens, and the most architectural ambition.
+    For property owners building an ADU as a long-term rental,
+    multi-generational housing, or a primary creative space.

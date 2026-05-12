@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E · Spectrum — ADU Library Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    /* ---- Spectrum-specific styles ---- */
+
+    /* Controls row: 4 cells = 4 columns. axis-x in 1, axis-y in 2, legend in 3-4 */
+    .spectrum-controls {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .spectrum-controls { grid-template-columns: repeat(4, 1fr); }
+    }
+    .spectrum-controls::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    }
+
+    .spectrum-control {
+      padding: var(--space-2);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    /* Mobile only — desktop relies on body::after vertical lines */
+    @media (max-width: 839px) {
+      .spectrum-control { border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color); }
+    }
+    .spectrum-control__label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--color-accent-1);
+      letter-spacing: 0.08em;
+    }
+    .spectrum-control select {
+      background: var(--color-background);
+      color: var(--color-text);
+      border: var(--grid-line-thickness) solid var(--color-accent-1);
+      padding: var(--space-1) var(--space-2);
+      font: inherit;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      outline: none;
+      width: 100%;
+    }
+    .spectrum-control select:hover { background: var(--color-accent-5); }
+
+    /* Tier filter chips inside their grid cell */
+    .spectrum-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+    }
+    .spectrum-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: 2px 6px;
+      border: var(--grid-line-thickness) solid var(--color-accent-1);
+      background: transparent;
+      color: var(--color-accent-1);
+      font: inherit;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: background-color var(--transition-time) ease, color var(--transition-time) ease;
+    }
+    .spectrum-chip:hover { background: var(--color-accent-5); }
+    .spectrum-chip.is-active { background: var(--color-accent-1); color: #ffffff; }
+    .spectrum-chip.is-active::before { content: "✓ "; }
+
+    /* Legend cells */
+    .spectrum-legend-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .spectrum-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+    .spectrum-legend-swatch {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      background: var(--color-background);
+    }
+    .spectrum-legend-item.essential { color: var(--color-accent-3); }
+    .spectrum-legend-item.standard { color: var(--color-accent-2); }
+    .spectrum-legend-item.plus { color: var(--color-accent-1); }
+    .spectrum-legend-item.plus .spectrum-legend-swatch { background: var(--color-accent-1); }
+
+    /* Canvas occupies all 4 cols */
+    .spectrum-canvas-wrap {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .spectrum-canvas-wrap { grid-template-columns: repeat(4, 1fr); }
+    }
+    .spectrum-canvas-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    }
+
+    /* Canvas is flush to the column grid — no internal padding */
+    .spectrum-canvas {
+      grid-column: 1 / -1;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 400px;
+      padding: 0;
+      background: var(--color-background);
+    }
+
+    /* Axis labels — small overlays at canvas corners. Live INSIDE the canvas
+       cell, so they're aligned with the grid (the body::after vertical at 0%
+       and 100% defines the canvas edges). */
+    .axis-x-label {
+      position: absolute;
+      bottom: 4px;
+      right: 8px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent-1);
+      font-weight: bold;
+      background: var(--color-background);
+      padding: 1px 4px;
+    }
+    .axis-y-label {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent-1);
+      font-weight: bold;
+      background: var(--color-background);
+      padding: 1px 4px;
+    }
+
+    .spectrum-canvas svg.grid-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Dots positioned within the inner plot area */
+    .spectrum-dot {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      transition: opacity 200ms ease, transform 150ms ease;
+      z-index: 2;
+    }
+    .spectrum-dot.is-faded { opacity: 0.18; }
+    .spectrum-dot:hover { transform: translate(-50%, -50%) scale(1.15); z-index: 5; }
+    .spectrum-dot__circle {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--color-background);
+      border: 2px solid var(--color-accent-1);
+    }
+    .spectrum-dot--Essential .spectrum-dot__circle { border-color: var(--color-accent-3); }
+    .spectrum-dot--Standard .spectrum-dot__circle { border-color: var(--color-accent-2); }
+    .spectrum-dot--Plus .spectrum-dot__circle { border-color: var(--color-accent-1); background: var(--color-accent-1); }
+    .spectrum-dot.is-active .spectrum-dot__circle {
+      background: var(--color-accent-1);
+      border-color: var(--color-accent-1);
+      box-shadow: 0 0 0 4px var(--color-accent-5), 0 0 0 5px var(--color-accent-1);
+    }
+    .spectrum-dot__label {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 4px);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text);
+      pointer-events: none;
+    }
+    .spectrum-dot.is-active .spectrum-dot__label { font-weight: bold; color: var(--color-accent-1); }
+
+    /* Detail panel — 4-col grid; close button occupies first cell, content in 2-4 */
+    .spectrum-panel {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .spectrum-panel { grid-template-columns: repeat(4, 1fr); }
+    }
+    .spectrum-panel--placeholder {
+      padding: var(--space-7) var(--space-2);
+      text-align: center;
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: var(--font-size-small);
+    }
+    .spectrum-panel__cell {
+      padding: var(--space-3) var(--space-2);
+    }
+    /* Mobile only — desktop relies on body::after vertical lines */
+    @media (max-width: 839px) {
+      .spectrum-panel__cell { border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color); }
+    }
+    .spectrum-panel__close {
+      width: 100%;
+      background: var(--color-accent-1);
+      color: #ffffff;
+      padding: var(--space-1);
+      border: none;
+      cursor: pointer;
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-2);
+    }
+    .spectrum-panel__label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent-2);
+      margin-bottom: var(--space-2);
+      font-weight: bold;
+    }
+    .spectrum-panel__name {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--color-accent-1);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: var(--space-1);
+    }
+    .spectrum-panel__id {
+      font-size: 0.7rem;
+      opacity: 0.5;
+      margin-bottom: var(--space-2);
+    }
+    .spectrum-panel__summary {
+      font-size: var(--font-size-small);
+      line-height: 1.6;
+      margin-bottom: var(--space-3);
+    }
+    .spectrum-panel__specs {
+      list-style: none;
+      font-size: var(--font-size-small);
+    }
+    .spectrum-panel__specs li {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-2);
+      padding: var(--space-1) 0;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .spectrum-panel__specs .label { opacity: 0.6; }
+
+    .spectrum-panel-deliverable {
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: var(--space-1) 0;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+      display: flex;
+      justify-content: space-between;
+    }
+    .spectrum-panel-deliverable__format { opacity: 0.5; font-size: 0.7rem; }
+  </style>
+</head>
+<body data-page="e">
+
+  <div id="layout-header"></div>
+
+  <main class="p--content">
+
+    <section class="page-intro">
+      <div class="grid grid--4">
+        <div class="col-1-2">
+          <h1 class="page-intro__title">E · SPECTRUM</h1>
+          <p class="page-intro__description">The full library plotted as a single diagram. Every dot is a design. Hover for the name, click for the full packet. Change axes or filter families using the controls.</p>
+        </div>
+        <div class="col-3-4 col-padded">
+          <p class="text--small uppercase muted">An attempt to make the catalog legible at a glance — like a contact sheet for floor plans.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTROLS — 4 cells = 4 columns -->
+    <div class="spectrum-controls">
+
+      <div class="spectrum-control">
+        <span class="spectrum-control__label">X AXIS</span>
+        <select id="axis-x">
+          <option value="budget" selected>BUILD COST</option>
+          <option value="sqft">SQUARE FOOTAGE</option>
+          <option value="bedrooms">BEDROOMS</option>
+        </select>
+      </div>
+
+      <div class="spectrum-control">
+        <span class="spectrum-control__label">Y AXIS</span>
+        <select id="axis-y">
+          <option value="complexity" selected>SPATIAL COMPLEXITY</option>
+          <option value="sqft">SQUARE FOOTAGE</option>
+          <option value="budget">BUILD COST</option>
+        </select>
+      </div>
+
+      <div class="spectrum-control">
+        <span class="spectrum-control__label">FILTER TIERS</span>
+        <div class="spectrum-chips" id="tier-chips">
+          <button class="spectrum-chip is-active" data-tier="Essential">ESSENTIAL</button>
+          <button class="spectrum-chip is-active" data-tier="Standard">STANDARD</button>
+          <button class="spectrum-chip is-active" data-tier="Plus">PLUS</button>
+        </div>
+      </div>
+
+      <div class="spectrum-control">
+        <span class="spectrum-control__label">LEGEND</span>
+        <div class="spectrum-legend-list">
+          <span class="spectrum-legend-item essential"><span class="spectrum-legend-swatch"></span>ESSENTIAL</span>
+          <span class="spectrum-legend-item standard"><span class="spectrum-legend-swatch"></span>STANDARD</span>
+          <span class="spectrum-legend-item plus"><span class="spectrum-legend-swatch"></span>PLUS</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CANVAS — full 4-col span, flush to the grid (no internal padding).
+         Verticals are drawn by body::after (at 0%, 25%, 50%, 75%, 100% of content),
+         so the SVG only adds horizontals to complete the matrix. -->
+    <div class="spectrum-canvas-wrap">
+      <div class="spectrum-canvas" id="canvas">
+        <svg class="grid-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line x1="0" y1="0"   x2="100" y2="0"   stroke="var(--grid-line-color)" stroke-width="0.15" stroke-dasharray="0.5 0.5"/>
+          <line x1="0" y1="25"  x2="100" y2="25"  stroke="var(--grid-line-color)" stroke-width="0.15" stroke-dasharray="0.5 0.5"/>
+          <line x1="0" y1="50"  x2="100" y2="50"  stroke="var(--grid-line-color)" stroke-width="0.2"  stroke-dasharray="0.5 0.5"/>
+          <line x1="0" y1="75"  x2="100" y2="75"  stroke="var(--grid-line-color)" stroke-width="0.15" stroke-dasharray="0.5 0.5"/>
+          <line x1="0" y1="100" x2="100" y2="100" stroke="var(--grid-line-color)" stroke-width="0.15" stroke-dasharray="0.5 0.5"/>
+        </svg>
+        <span class="axis-x-label" id="x-label">BUILD COST →</span>
+        <span class="axis-y-label" id="y-label">COMPLEXITY →</span>
+      </div>
+    </div>
+
+    <!-- DETAIL PANEL — 4-col grid, hidden until a dot is clicked -->
+    <div class="spectrum-panel spectrum-panel--placeholder" id="panel">
+      Click a dot above to see full design details and downloads.
+    </div>
+
+  </main>
+
+  <!-- Tooltip -->
+  <div class="tooltip" id="hover-tooltip">
+    <span class="tooltip__title" id="tooltip-title"></span>
+    <span class="tooltip__hint">CLICK FOR DETAILS</span>
+  </div>
+
+  <div id="layout-footer"></div>
+
+  <script src="./data.js"></script>
+  <script src="./shared.js"></script>
+  <script>
+  window.bootMockup = function () {
+    const canvas = document.getElementById("canvas");
+    const tooltip = document.getElementById("hover-tooltip");
+    const tooltipTitle = document.getElementById("tooltip-title");
+    const panel = document.getElementById("panel");
+
+    const xSel = document.getElementById("axis-x");
+    const ySel = document.getElementById("axis-y");
+    const tierChips = document.querySelectorAll("#tier-chips .spectrum-chip");
+
+    const activeTiers = new Set(["Essential", "Standard", "Plus"]);
+    let activeAduId = null;
+
+    const ATTRS = {
+      budget: { get: a => (a.budget_low + a.budget_high) / 2, label: "BUILD COST" },
+      sqft: { get: a => a.sqft, label: "SQUARE FOOTAGE" },
+      bedrooms: { get: a => a.bedrooms + (a.loft ? 0.5 : 0), label: "BEDROOMS" },
+      complexity: {
+        get: a => {
+          let c = 0;
+          if (a.height === "two-story" || a.height === "two-story + loft") c += 2;
+          if (a.height === "split") c += 1.5;
+          if (a.loft) c += 0.5;
+          c += a.features.length * 0.4;
+          if (a.bedrooms === 2) c += 1;
+          return c;
+        },
+        label: "COMPLEXITY"
+      }
+    };
+
+    function normalize(values) {
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const range = max - min || 1;
+      return v => (v - min) / range;
+    }
+
+    function renderCanvas() {
+      canvas.querySelectorAll(".spectrum-dot").forEach((d) => d.remove());
+
+      const xKey = xSel.value;
+      const yKey = ySel.value;
+      const xAttr = ATTRS[xKey];
+      const yAttr = ATTRS[yKey];
+
+      const xs = window.LOWDO_ADUS.map(xAttr.get);
+      const ys = window.LOWDO_ADUS.map(yAttr.get);
+      const normX = normalize(xs);
+      const normY = normalize(ys);
+
+      document.getElementById("x-label").textContent = xAttr.label + " →";
+      document.getElementById("y-label").textContent = yAttr.label + " →";
+
+      window.LOWDO_ADUS.forEach((adu) => {
+        const x = normX(xAttr.get(adu));
+        const y = normY(yAttr.get(adu));
+
+        const dot = document.createElement("div");
+        dot.className = "spectrum-dot spectrum-dot--" + adu.tier;
+        if (!activeTiers.has(adu.tier)) dot.classList.add("is-faded");
+        if (adu.id === activeAduId) dot.classList.add("is-active");
+        // Small inset (5%) so dots near edges aren't clipped and labels fit
+        dot.style.left = (5 + x * 90) + "%";
+        dot.style.top  = (8 + (1 - y) * 84) + "%";
+
+        dot.innerHTML = `
+          <div class="spectrum-dot__circle"></div>
+          <div class="spectrum-dot__label">${window.LOWDO_SHARED.esc(adu.name).toUpperCase()}</div>
+        `;
+
+        dot.addEventListener("mouseenter", () => {
+          tooltipTitle.textContent = adu.name;
+          tooltip.classList.add("is-visible");
+        });
+        dot.addEventListener("mousemove", (e) => {
+          tooltip.style.left = (e.clientX + 14) + "px";
+          tooltip.style.top  = (e.clientY + 14) + "px";
+        });
+        dot.addEventListener("mouseleave", () => {
+          tooltip.classList.remove("is-visible");
+        });
+
+        dot.addEventListener("click", (e) => {
+          e.stopPropagation();
+          activeAduId = adu.id;
+          renderCanvas();
+          renderPanel(adu);
+          panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+
+        canvas.appendChild(dot);
+      });
+    }
+
+    function renderPanel(adu) {
+      panel.classList.remove("spectrum-panel--placeholder");
+      panel.innerHTML = `
+        <div class="spectrum-panel__cell">
+          <button class="spectrum-panel__close" id="panel-close">× CLOSE</button>
+          <div class="spectrum-panel__label">PLAN</div>
+          ${window.LOWDO_SHARED.planSvg(adu)}
+        </div>
+        <div class="spectrum-panel__cell">
+          <div class="spectrum-panel__label">${adu.tier.toUpperCase()} EDITION</div>
+          <div class="spectrum-panel__name">${window.LOWDO_SHARED.esc(adu.name)}</div>
+          <div class="spectrum-panel__id">${adu.id}</div>
+          <p class="spectrum-panel__summary">${window.LOWDO_SHARED.esc(adu.summary)}</p>
+        </div>
+        <div class="spectrum-panel__cell">
+          <div class="spectrum-panel__label">SPECIFICATIONS</div>
+          <ul class="spectrum-panel__specs">
+            <li><span class="label">FOOTPRINT</span><span>${adu.footprint}</span></li>
+            <li><span class="label">SQUARE FT</span><span>${adu.sqft}</span></li>
+            <li><span class="label">BEDROOMS</span><span>${adu.bedrooms}${adu.loft ? " + LOFT" : ""}</span></li>
+            <li><span class="label">STAIR</span><span>${window.LOWDO_HELPERS.stairLabel(adu.stair).toUpperCase()}</span></li>
+            <li><span class="label">HEIGHT</span><span>${adu.height.toUpperCase()}</span></li>
+            <li><span class="label">BUILD COST</span><span>${window.LOWDO_HELPERS.priceRange(adu)}</span></li>
+            <li><span class="label">ORIENTATION</span><span>${adu.orientation === "any" ? "ANY" : adu.orientation.toUpperCase()}</span></li>
+          </ul>
+        </div>
+        <div class="spectrum-panel__cell js-gate-container">
+          <div class="spectrum-panel__label">DESIGN PACKET</div>
+          ${adu.deliverables.map((d) => `
+            <div class="spectrum-panel-deliverable">
+              <span>${window.LOWDO_HELPERS.deliverableLabel(d).toUpperCase()}</span>
+              <span class="spectrum-panel-deliverable__format">${window.LOWDO_HELPERS.deliverableFormat(d)}</span>
+            </div>
+          `).join("")}
+          <button class="btn btn--solid js-download-trigger" data-label="${window.LOWDO_SHARED.esc(adu.name)} — full packet" style="margin-top: var(--space-2);">↓ DOWNLOAD PACKET</button>
+          <div class="download-gate" aria-hidden="true">
+            <div class="download-gate__inner">
+              <input type="email" class="download-gate__email" placeholder="EMAIL ADDRESS" autocomplete="email">
+              <label class="download-gate__check">
+                <input type="checkbox">
+                <span>I understand these are for personal use only.</span>
+              </label>
+              <button class="btn btn--solid js-gate-submit" data-label="${window.LOWDO_SHARED.esc(adu.name)} — full packet">↓ DOWNLOAD</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById("panel-close").addEventListener("click", () => {
+        activeAduId = null;
+        renderCanvas();
+        panel.classList.add("spectrum-panel--placeholder");
+        panel.innerHTML = "Click a dot above to see full design details and downloads.";
+      });
+      window.LOWDO_SHARED.initDownloadGate();
+    }
+
+    xSel.addEventListener("change", renderCanvas);
+    ySel.addEventListener("change", renderCanvas);
+    tierChips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const tier = chip.dataset.tier;
+        if (activeTiers.has(tier)) activeTiers.delete(tier);
+        else activeTiers.add(tier);
+        chip.classList.toggle("is-active");
+        renderCanvas();
+      });
+    });
+
+    renderCanvas();
+  };
+  </script>
+</body>
+</html>

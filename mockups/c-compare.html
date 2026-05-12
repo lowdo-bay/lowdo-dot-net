@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C · Compare — ADU Library Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    /* ---- Compare-specific styles ---- */
+
+    /* "+ Compare" cell action button — fills its grid cell */
+    .compare-row__add {
+      display: block;
+      width: 100%;
+      background: transparent;
+      border: var(--grid-line-thickness) solid var(--color-accent-1);
+      color: var(--color-accent-1);
+      padding: var(--space-1) var(--space-2);
+      font: inherit;
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      margin-top: var(--space-1);
+      transition: background-color var(--transition-time) ease, color var(--transition-time) ease;
+    }
+    .compare-row__add:hover { background: var(--color-accent-1); color: #ffffff; }
+    .compare-row__add.is-added { background: var(--color-accent-1); color: #ffffff; }
+    .compare-row__add.is-added::before { content: "✓ "; }
+
+    /* Compare tray — fixed at bottom of the viewport, full-screen-width line above */
+    .compare-tray {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 990;
+      background: var(--color-background);
+      display: none;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+    }
+    .compare-tray.is-active { display: block; }
+    .compare-tray::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      width: 100vw;
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--color-accent-1);
+    }
+
+    /* Inner grid — same content max-width and 4-col structure as the rest of the page */
+    .compare-tray__inner {
+      max-width: var(--max-content-width);
+      margin: 0 auto;
+      padding: 0 var(--content-margin);
+      display: grid;
+      grid-template-columns: 1fr;
+      position: relative;
+    }
+    @media (min-width: 840px) {
+      .compare-tray__inner { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* Each tray slot fills one column */
+    .compare-tray__slot {
+      padding: var(--space-2);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      min-height: 64px;
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .compare-tray__slot.is-empty {
+      opacity: 0.4;
+      font-style: italic;
+    }
+    .compare-tray__slot-thumb {
+      width: 36px; height: 28px;
+      flex-shrink: 0;
+    }
+    .compare-tray__slot-name {
+      flex: 1;
+      font-weight: bold;
+      color: var(--color-accent-1);
+    }
+    .compare-tray__slot-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-accent-1);
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0;
+    }
+
+    /* Action cell — column 4 — holds clear + compare buttons */
+    .compare-tray__actions {
+      padding: var(--space-2);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-1);
+    }
+
+    /* Mobile only — desktop relies on body::after vertical lines */
+    @media (max-width: 839px) {
+      .compare-tray__slot { border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color); }
+    }
+
+    /* Body padding so fixed tray doesn't cover content */
+    body.has-tray { padding-bottom: 96px; }
+
+    /* Comparison view — also on the 4-col grid */
+    .compare-view { display: none; }
+    .compare-view.is-active { display: block; }
+    .browse-view.is-hidden { display: none; }
+
+    .compare-view__header {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .compare-view__header { grid-template-columns: repeat(4, 1fr); }
+    }
+    .compare-view__header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--color-accent-1);
+    }
+    .compare-view__title {
+      grid-column: 1 / 4;
+      padding: var(--space-3) var(--space-2);
+      color: var(--color-accent-1);
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .compare-view__back-cell { grid-column: 4; padding: var(--space-3) var(--space-2); }
+    @media (max-width: 839px) {
+      .compare-view__title, .compare-view__back-cell { grid-column: 1; }
+    }
+
+    /* Spreadsheet table — block container; each row is its own 4-col grid
+       so its ::after line can anchor to the row (full content width) and
+       extend cleanly to the viewport edges. */
+    .compare-table { display: block; }
+
+    .compare-table__head,
+    .compare-table__row {
+      display: grid;
+      grid-template-columns: 1fr;
+      position: relative;
+    }
+    @media (min-width: 840px) {
+      .compare-table__head,
+      .compare-table__row { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* Major (solid) line under the header row — extends edge-to-edge */
+    .compare-table__head::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--color-accent-1);
+      pointer-events: none;
+    }
+
+    /* Minor (dashed) line under each data row — extends edge-to-edge */
+    .compare-table__row::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+      pointer-events: none;
+    }
+
+    .compare-table__head-cell {
+      padding: var(--space-3) var(--space-2);
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .compare-table__head-cell.head-cell--label { font-weight: bold; }
+    .compare-table__head-cell .iso-thumb { margin-bottom: var(--space-2); aspect-ratio: 4 / 3; background: var(--color-accent-5); }
+    .compare-table__head-cell .name {
+      font-weight: bold;
+      color: var(--color-accent-1);
+      font-size: 1rem;
+    }
+    .compare-table__head-cell .id {
+      display: block;
+      font-size: 0.7rem;
+      opacity: 0.6;
+      margin-top: var(--space-1);
+    }
+
+    .compare-table__cell {
+      padding: var(--space-2);
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      min-height: 3rem;
+    }
+    .compare-table__cell--label {
+      font-weight: bold;
+      color: var(--color-accent-1);
+      opacity: 0.85;
+    }
+    .compare-table__cell.is-winner {
+      background: var(--color-accent-5);
+      font-weight: bold;
+      color: var(--color-accent-1);
+    }
+    .compare-table__cell.is-winner::before {
+      content: "★ ";
+      color: var(--color-accent-1);
+    }
+
+    /* Mobile: stacked rows */
+    @media (max-width: 839px) {
+      .compare-table { display: block; }
+      .compare-table__head, .compare-table__row { display: block; }
+      .compare-table__head-cell, .compare-table__cell {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-2);
+      }
+      .compare-table__head-cell.head-cell--label,
+      .compare-table__cell--label {
+        background: var(--color-accent-5);
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body data-page="c">
+
+  <div id="layout-header"></div>
+
+  <main class="p--content">
+
+    <section class="page-intro">
+      <div class="grid grid--4">
+        <div class="col-1-2-3">
+          <h1 class="page-intro__title">C · COMPARE</h1>
+          <p class="page-intro__description">Browse the library and add up to three designs to the compare tray. When you're ready, see them side-by-side as a true spreadsheet — winning attributes get highlighted.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARE TRAY — sticky at top when items selected, on 4-col grid -->
+    <div class="compare-tray" id="compare-tray">
+      <!-- 3 slot cells injected, plus 1 actions cell -->
+    </div>
+
+    <!-- BROWSE VIEW -->
+    <div class="browse-view" id="browse-view">
+      <section class="section-header">
+        <div class="section-header__inner">
+          <div class="section-header__cell">DESIGN</div>
+          <div class="section-header__cell">NAME</div>
+          <div class="section-header__cell">SPECS</div>
+          <div class="section-header__cell" style="text-align:right;">COST · COMPARE</div>
+        </div>
+      </section>
+      <div id="browse-rows"></div>
+    </div>
+
+    <!-- COMPARE VIEW -->
+    <div class="compare-view" id="compare-view">
+      <div class="compare-view__header">
+        <span class="compare-view__title">SIDE-BY-SIDE COMPARISON</span>
+        <div class="compare-view__back-cell">
+          <button class="btn btn--ghost" id="back-to-browse">← BACK TO BROWSE</button>
+        </div>
+      </div>
+      <div id="compare-table-mount"></div>
+    </div>
+
+  </main>
+
+  <div id="layout-footer"></div>
+
+  <script src="./data.js"></script>
+  <script src="./shared.js"></script>
+  <script>
+  window.bootMockup = function () {
+    const browseView = document.getElementById("browse-view");
+    const compareView = document.getElementById("compare-view");
+    const browseRows = document.getElementById("browse-rows");
+    const tray = document.getElementById("compare-tray");
+    const compareTableMount = document.getElementById("compare-table-mount");
+
+    const selected = [];
+    const MAX = 3;
+    const isSelected = (id) => selected.includes(id);
+
+    function renderRows() {
+      browseRows.innerHTML = window.LOWDO_ADUS.map((adu) => `
+        <div class="adu-row" data-adu="${adu.id}">
+          <div class="adu-row__cell adu-row__cell--thumb">
+            <div class="adu-row__thumb">${window.LOWDO_SHARED.isoSvg(adu)}</div>
+          </div>
+          <div class="adu-row__cell adu-row__cell--name">
+            <div class="tier-pill tier-pill--${adu.tier}">${adu.tier}</div>
+            <div class="adu-row__name">${window.LOWDO_SHARED.esc(adu.name)}</div>
+            <span class="adu-row__sub">${adu.id}</span>
+          </div>
+          <div class="adu-row__cell adu-row__cell--specs">
+            <div class="adu-row__spec-list">
+              <span><span class="adu-row__spec-label">SQFT</span> ${adu.sqft}</span>
+              <span><span class="adu-row__spec-label">BEDS</span> ${adu.bedrooms}${adu.loft ? " + LOFT" : ""}</span>
+              <span><span class="adu-row__spec-label">STAIR</span> ${window.LOWDO_HELPERS.stairLabel(adu.stair).toUpperCase()}</span>
+            </div>
+          </div>
+          <div class="adu-row__cell adu-row__cell--price">
+            <span class="adu-row__price">
+              <span class="adu-row__price-range">${window.LOWDO_HELPERS.priceRange(adu)}</span>
+              <span class="adu-row__price-label">EST. BUILD COST</span>
+            </span>
+            <button class="compare-row__add ${isSelected(adu.id) ? "is-added" : ""}" data-add-id="${adu.id}">
+              ${isSelected(adu.id) ? "ADDED" : "+ COMPARE"}
+            </button>
+          </div>
+        </div>
+      `).join("");
+
+      browseRows.querySelectorAll("[data-add-id]").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleSelect(btn.dataset.addId);
+        });
+      });
+    }
+
+    function toggleSelect(id) {
+      const idx = selected.indexOf(id);
+      if (idx >= 0) {
+        selected.splice(idx, 1);
+      } else {
+        if (selected.length >= MAX) return;
+        selected.push(id);
+      }
+      renderRows();
+      renderTray();
+    }
+
+    function renderTray() {
+      if (selected.length === 0) {
+        tray.classList.remove("is-active");
+        document.body.classList.remove("has-tray");
+        tray.innerHTML = "";
+        return;
+      }
+      tray.classList.add("is-active");
+      document.body.classList.add("has-tray");
+
+      let inner = "";
+      // 3 slot cells (one per column)
+      for (let i = 0; i < MAX; i++) {
+        const id = selected[i];
+        if (id) {
+          const adu = window.LOWDO_ADUS.find((a) => a.id === id);
+          inner += `
+            <div class="compare-tray__slot">
+              <span class="compare-tray__slot-thumb">${window.LOWDO_SHARED.isoSvg(adu, {width:36, height:28})}</span>
+              <span class="compare-tray__slot-name">${window.LOWDO_SHARED.esc(adu.name)}</span>
+              <button class="compare-tray__slot-remove" data-remove="${id}" aria-label="Remove">×</button>
+            </div>
+          `;
+        } else {
+          inner += `<div class="compare-tray__slot is-empty"><span>SLOT ${i+1} · EMPTY</span></div>`;
+        }
+      }
+      // 4th cell = action buttons (clear + compare)
+      inner += `
+        <div class="compare-tray__actions">
+          <button class="btn btn--ghost" id="clear-tray">CLEAR</button>
+          <button class="btn btn--solid" id="open-compare" ${selected.length < 2 ? "disabled" : ""}>COMPARE →</button>
+        </div>
+      `;
+      tray.innerHTML = `<div class="compare-tray__inner">${inner}</div>`;
+
+      tray.querySelectorAll("[data-remove]").forEach((b) => {
+        b.addEventListener("click", () => toggleSelect(b.dataset.remove));
+      });
+      const clearBtn = document.getElementById("clear-tray");
+      const openBtn = document.getElementById("open-compare");
+      if (clearBtn) clearBtn.addEventListener("click", () => {
+        selected.length = 0;
+        renderRows();
+        renderTray();
+        if (compareView.classList.contains("is-active")) {
+          compareView.classList.remove("is-active");
+          browseView.classList.remove("is-hidden");
+        }
+      });
+      if (openBtn) openBtn.addEventListener("click", () => {
+        renderCompareTable();
+        browseView.classList.add("is-hidden");
+        compareView.classList.add("is-active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    /* Comparison view */
+    const ATTRS = [
+      { label: "TIER",          get: a => a.tier },
+      { label: "BEDROOMS",      get: a => a.bedrooms + (a.loft ? " + LOFT" : ""), winner: list => maxIdx(list.map(a => a.bedrooms + (a.loft ? 0.5 : 0))) },
+      { label: "STAIR",         get: a => window.LOWDO_HELPERS.stairLabel(a.stair).toUpperCase() },
+      { label: "FOOTPRINT",     get: a => a.footprint },
+      { label: "SQUARE FOOTAGE",get: a => a.sqft + " SQFT", winner: list => maxIdx(list.map(a => a.sqft)) },
+      { label: "BUILD COST",    get: a => window.LOWDO_HELPERS.priceRange(a), winner: list => minIdx(list.map(a => (a.budget_low + a.budget_high)/2)) },
+      { label: "ORIENTATION",   get: a => a.orientation === "any" ? "ANY" : a.orientation.toUpperCase() },
+      { label: "HEIGHT",        get: a => a.height.toUpperCase() },
+      { label: "FEATURES",      get: a => a.features.join(", ").toUpperCase() || "—", winner: list => maxIdx(list.map(a => a.features.length)) },
+      { label: "DELIVERABLES",  get: a => a.deliverables.length + " FILES" }
+    ];
+
+    function maxIdx(nums) {
+      let max = -Infinity, idx = -1;
+      nums.forEach((v, i) => { if (v > max) { max = v; idx = i; } });
+      const tied = nums.filter(v => v === max).length > 1;
+      return tied ? -1 : idx;
+    }
+    function minIdx(nums) {
+      let min = Infinity, idx = -1;
+      nums.forEach((v, i) => { if (v < min) { min = v; idx = i; } });
+      const tied = nums.filter(v => v === min).length > 1;
+      return tied ? -1 : idx;
+    }
+
+    function renderCompareTable() {
+      const list = selected.map((id) => window.LOWDO_ADUS.find((a) => a.id === id));
+
+      let html = `<div class="compare-table">`;
+
+      html += `<div class="compare-table__head">`;
+      html += `<div class="compare-table__head-cell head-cell--label">ATTRIBUTE</div>`;
+      list.forEach((adu) => {
+        html += `<div class="compare-table__head-cell">
+          <div class="iso-thumb">${window.LOWDO_SHARED.isoSvg(adu)}</div>
+          <div class="name">${window.LOWDO_SHARED.esc(adu.name)}</div>
+          <span class="id">${adu.id}</span>
+        </div>`;
+      });
+      for (let i = list.length; i < MAX; i++) {
+        html += `<div class="compare-table__head-cell" style="opacity:0.3;">— EMPTY SLOT —</div>`;
+      }
+      html += `</div>`;
+
+      ATTRS.forEach((attr) => {
+        const winnerIdx = attr.winner ? attr.winner(list) : -1;
+        html += `<div class="compare-table__row">`;
+        html += `<div class="compare-table__cell compare-table__cell--label">${attr.label}</div>`;
+        list.forEach((adu, i) => {
+          const winClass = (i === winnerIdx) ? " is-winner" : "";
+          html += `<div class="compare-table__cell${winClass}">${window.LOWDO_SHARED.esc(attr.get(adu))}</div>`;
+        });
+        for (let i = list.length; i < MAX; i++) {
+          html += `<div class="compare-table__cell" style="opacity:0.3;">—</div>`;
+        }
+        html += `</div>`;
+      });
+
+      // Final action row: download per design
+      html += `<div class="compare-table__row">`;
+      html += `<div class="compare-table__cell compare-table__cell--label">DOWNLOAD</div>`;
+      list.forEach((adu) => {
+        html += `<div class="compare-table__cell js-gate-container">
+          <button class="btn btn--solid js-download-trigger" data-label="${window.LOWDO_SHARED.esc(adu.name)} — full packet">↓ PACKET</button>
+          <div class="download-gate" aria-hidden="true">
+            <div class="download-gate__inner">
+              <input type="email" class="download-gate__email" placeholder="EMAIL" autocomplete="email">
+              <label class="download-gate__check"><input type="checkbox"><span>Personal use only.</span></label>
+              <button class="btn btn--solid js-gate-submit" data-label="${window.LOWDO_SHARED.esc(adu.name)} — full packet">↓ DOWNLOAD</button>
+            </div>
+          </div>
+        </div>`;
+      });
+      for (let i = list.length; i < MAX; i++) {
+        html += `<div class="compare-table__cell"></div>`;
+      }
+      html += `</div>`;
+
+      html += `</div>`;
+
+      compareTableMount.innerHTML = html;
+      window.LOWDO_SHARED.initDownloadGate();
+    }
+
+    document.getElementById("back-to-browse").addEventListener("click", () => {
+      compareView.classList.remove("is-active");
+      browseView.classList.remove("is-hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    renderRows();
+    renderTray();
+  };
+  </script>
+</body>
+</html>

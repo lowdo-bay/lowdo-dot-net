@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D · Tiers — ADU Library Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    /* ---- Tiered showcase styles ---- */
+
+    .tier-section {
+      position: relative;
+    }
+    .tier-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--color-accent-1);
+    }
+
+    /* Tier head: 4-col grid. name (cols 1-2), pitch (col 3), price (col 4). */
+    .tier-section__head {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .tier-section__head { grid-template-columns: repeat(4, 1fr); }
+    }
+    .tier-section__head::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
+
+    .tier-section__name-cell {
+      grid-column: 1 / 3;
+      padding: var(--space-3) var(--space-2);
+    }
+    .tier-section__pitch-cell {
+      grid-column: 3;
+      padding: var(--space-3) var(--space-2);
+      font-size: var(--font-size-small);
+      line-height: 1.6;
+    }
+    .tier-section__price-cell {
+      grid-column: 4;
+      padding: var(--space-3) var(--space-2);
+    }
+    @media (max-width: 839px) {
+      .tier-section__name-cell, .tier-section__pitch-cell, .tier-section__price-cell { grid-column: 1; }
+    }
+
+    .tier-section__edition {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent-2);
+      margin-bottom: var(--space-1);
+    }
+    .tier-section__name {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--color-accent-1);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+    @media (min-width: 840px) {
+      .tier-section__name { font-size: 2.4rem; }
+    }
+    .tier-section__price-label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.6;
+      margin-bottom: var(--space-1);
+    }
+    .tier-section__price-amount {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--color-accent-1);
+      font-variant-numeric: tabular-nums;
+    }
+    .tier-section__price-amount small { font-size: 0.7em; opacity: 0.5; font-weight: normal; }
+
+    /* Designs grid: full 4-col grid, one card per column */
+    .tier-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .tier-cards { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .tier-card {
+      padding: var(--space-3) var(--space-2);
+      position: relative;
+      cursor: pointer;
+      background: var(--color-background);
+      transition: background-color var(--transition-time) ease;
+    }
+    .tier-card:hover { background: var(--color-accent-5); }
+    /* Mobile only — desktop relies on body::after vertical lines */
+    @media (max-width: 839px) {
+      .tier-card { border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color); }
+    }
+
+    .tier-card__thumb {
+      aspect-ratio: 4 / 3;
+      background: var(--color-accent-5);
+      margin-bottom: var(--space-2);
+    }
+    .tier-card__name {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: var(--color-accent-1);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: var(--space-1);
+    }
+    .tier-card__id {
+      font-size: 0.7rem;
+      opacity: 0.5;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-2);
+    }
+    .tier-card__summary {
+      font-size: var(--font-size-small);
+      line-height: 1.5;
+      margin-bottom: var(--space-3);
+      opacity: 0.85;
+    }
+    .tier-card__specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-3);
+    }
+    .tier-card__spec {
+      padding: 1px 4px;
+      border: var(--grid-line-thickness) solid var(--color-accent-3);
+      background: var(--color-background);
+    }
+    .tier-card__price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: var(--space-2);
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .tier-card__price {
+      color: var(--color-accent-1);
+      font-weight: bold;
+      font-variant-numeric: tabular-nums;
+    }
+    .tier-card__price-label { opacity: 0.5; font-size: 0.7rem; }
+
+    /* Empty slot card (placeholder when tier has fewer than 4 designs) */
+    .tier-card--empty {
+      padding: var(--space-3) var(--space-2);
+      position: relative;
+      background: var(--color-background);
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      min-height: 320px;
+    }
+    /* No vertical separator on desktop — body::after handles it */
+    .tier-card--empty__label {
+      text-align: center;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.4;
+      margin-bottom: var(--space-3);
+    }
+
+    /* Includes block: 4 cells = 4 columns */
+    .tier-section__includes {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .tier-section__includes { grid-template-columns: repeat(4, 1fr); }
+    }
+    .tier-section__includes::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
+    .tier-includes-cell {
+      padding: var(--space-2);
+      font-size: var(--font-size-small);
+    }
+    /* No vertical separator on desktop — body::after handles it */
+    @media (max-width: 839px) {
+      .tier-includes-cell { border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color); }
+    }
+    .tier-includes-cell__label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.5;
+      margin-bottom: var(--space-1);
+    }
+    .tier-includes-cell__check {
+      color: var(--color-accent-1);
+      margin-right: var(--space-1);
+    }
+
+    /* Browse-all row: link occupies full grid */
+    .browse-all {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .browse-all { grid-template-columns: repeat(4, 1fr); }
+    }
+    .browse-all::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--color-accent-1);
+    }
+    .browse-all__cell {
+      grid-column: 1 / -1;
+      padding: var(--space-5) var(--space-2);
+      text-align: center;
+    }
+    .browse-all__link {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-accent-1);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body data-page="d">
+
+  <div id="layout-header"></div>
+
+  <main class="p--content">
+
+    <section class="page-intro">
+      <div class="grid grid--4">
+        <div class="col-1-2">
+          <h1 class="page-intro__title">D · TIERS</h1>
+          <p class="page-intro__description">Three editions, from the smallest envelope to a generous two-bedroom. Pick the tier that fits your lot, your budget, and how much complexity you want to take on.</p>
+        </div>
+        <div class="col-3-4 col-padded">
+          <p class="text--small uppercase muted">Each tier shares the same level of design rigor, drawings, and code-compliance documentation. Tier just describes scope.</p>
+        </div>
+      </div>
+    </section>
+
+    <div id="tiers-mount"></div>
+
+    <div class="browse-all">
+      <div class="browse-all__cell">
+        <a href="./b-catalog.html" class="browse-all__link arrow--right">OR BROWSE ALL DESIGNS</a>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="layout-footer"></div>
+
+  <script src="./data.js"></script>
+  <script src="./shared.js"></script>
+  <script>
+  window.bootMockup = function () {
+    const TIERS = [
+      {
+        name: "Essential",
+        edition: "EDITION 01",
+        pitch: "The smallest envelopes, the lowest construction cost. One bedroom, ladder access if there's a loft, single-story or near it. Designed to be the easiest possible introduction to building an ADU.",
+        startsAt: "$62K"
+      },
+      {
+        name: "Standard",
+        edition: "EDITION 02",
+        pitch: "A real stair to a real upstairs. Still one bedroom, but with the spatial generosity of two stories — separate sleeping and living, a more grown-up plan, room for a deck.",
+        startsAt: "$88K"
+      },
+      {
+        name: "Plus",
+        edition: "EDITION 03",
+        pitch: "Two enclosed bedrooms, full kitchens, and the most architectural ambition. For property owners building an ADU as a long-term rental, multi-generational housing, or a primary creative space.",
+        startsAt: "$145K"
+      }
+    ];
+
+    const INCLUDES = [
+      { label: "DRAWINGS", value: "Full PDF set: site, plans, elevations, sections, details" },
+      { label: "3D MODEL", value: "SketchUp + Revit (.skp / .rvt)" },
+      { label: "SPEC SHEET", value: "Itemized materials list with cost ranges" },
+      { label: "PERMIT DOCS", value: "Energy calcs + structural notes (Austin code)" }
+    ];
+
+    const mount = document.getElementById("tiers-mount");
+    let html = "";
+
+    TIERS.forEach((tier) => {
+      const designs = window.LOWDO_ADUS.filter((a) => a.tier === tier.name).slice(0, 4);
+      // Pad with empty cells so each tier always shows 4 columns
+      const slots = [...designs];
+      while (slots.length < 4) slots.push(null);
+
+      html += `
+        <section class="tier-section tier-section--${tier.name}">
+
+          <div class="tier-section__head">
+            <div class="tier-section__name-cell">
+              <div class="tier-section__edition">${tier.edition}</div>
+              <div class="tier-section__name">${tier.name.toUpperCase()}</div>
+            </div>
+            <div class="tier-section__pitch-cell">${window.LOWDO_SHARED.esc(tier.pitch)}</div>
+            <div class="tier-section__price-cell">
+              <span class="tier-section__price-label">STARTS AT</span>
+              <span class="tier-section__price-amount">${tier.startsAt} <small>BUILD COST</small></span>
+            </div>
+          </div>
+
+          <div class="tier-cards">
+            ${slots.map((adu) => {
+              if (!adu) {
+                return `
+                  <div class="tier-card--empty">
+                    <div class="tier-card--empty__label">— ${tier.name.toUpperCase()} SLOT OPEN —</div>
+                  </div>
+                `;
+              }
+              return `
+                <div class="tier-card js-gate-container" data-adu="${adu.id}">
+                  <div class="tier-card__thumb">${window.LOWDO_SHARED.isoSvg(adu)}</div>
+                  <div class="tier-card__id">${adu.id}</div>
+                  <div class="tier-card__name">${window.LOWDO_SHARED.esc(adu.name).toUpperCase()}</div>
+                  <p class="tier-card__summary">${window.LOWDO_SHARED.esc(adu.summary)}</p>
+                  <div class="tier-card__specs">
+                    <span class="tier-card__spec">${adu.sqft} SQFT</span>
+                    <span class="tier-card__spec">${adu.bedrooms} BR${adu.loft ? " + LOFT" : ""}</span>
+                    <span class="tier-card__spec">${window.LOWDO_HELPERS.stairLabel(adu.stair).toUpperCase()}</span>
+                  </div>
+                  <div class="tier-card__price-row">
+                    <span class="tier-card__price-label">BUILD COST</span>
+                    <span class="tier-card__price">${window.LOWDO_HELPERS.priceRange(adu)}</span>
+                  </div>
+                  <button class="btn btn--solid js-download-trigger" data-label="${window.LOWDO_SHARED.esc(adu.name)} — full packet">↓ DOWNLOAD PACKET</button>
+                  <div class="download-gate" aria-hidden="true">
+                    <div class="download-gate__inner">
+                      <input type="email" class="download-gate__email" placeholder="EMAIL ADDRESS" autocomplete="email">
+                      <label class="download-gate__check">
+                        <input type="checkbox">
+                        <span>I understand these are for personal use only.</span>
+                      </label>
+                      <button class="btn btn--solid js-gate-submit" data-label="${window.LOWDO_SHARED.esc(adu.name)} — full packet">↓ DOWNLOAD</button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+
+          <div class="tier-section__includes">
+            ${INCLUDES.map((inc) => `
+              <div class="tier-includes-cell">
+                <div class="tier-includes-cell__label">${inc.label}</div>
+                <div><span class="tier-includes-cell__check">✓</span>${inc.value}</div>
+              </div>
+            `).join("")}
+          </div>
+        </section>
+      `;
+    });
+
+    mount.innerHTML = html;
+  };
+  </script>
+</body>
+</html>

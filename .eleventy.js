@@ -409,6 +409,23 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
     return "over-200k";
   });
 
+  // Minimum budget_low across a list of ADU projects, formatted "$62K".
+  // Used by the tier header to show "Starts at $XK".
+  eleventyConfig.addFilter("aduTierMinPrice", function(projects) {
+    if (!Array.isArray(projects) || projects.length === 0) return "";
+    const lows = projects
+      .map(p => p.data && p.data.adu && p.data.adu.budget_low)
+      .filter(n => typeof n === "number");
+    if (lows.length === 0) return "";
+    return "$" + Math.round(Math.min(...lows) / 1000) + "K";
+  });
+
+  // Filter an aduLibrary collection to just one tier.
+  eleventyConfig.addFilter("aduByTier", function(projects, tier) {
+    if (!Array.isArray(projects)) return [];
+    return projects.filter(p => p.data && p.data.adu && p.data.adu.tier === tier);
+  });
+
   // Human-readable stair label
   eleventyConfig.addFilter("aduStairLabel", function(stair) {
     return ({

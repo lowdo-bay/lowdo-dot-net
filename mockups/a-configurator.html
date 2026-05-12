@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A · Configurator — ADU Library Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    /* ---- Configurator-specific styles ---- */
+
+    /* Progress: 4 cells = 4 columns. Major line below stops at vertical lines. */
+    .config-progress {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .config-progress { grid-template-columns: repeat(4, 1fr); }
+    }
+    .config-progress::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    }
+    .config-step-tab {
+      padding: var(--space-2);
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      position: relative;
+      color: var(--color-text);
+      opacity: 0.4;
+      transition: color var(--transition-time) ease, opacity var(--transition-time) ease;
+    }
+    .config-step-tab.is-active { opacity: 1; color: var(--color-accent-1); font-weight: bold; }
+    .config-step-tab.is-done { opacity: 0.85; }
+    .config-step-tab.is-active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 3px;
+      background: var(--color-accent-1);
+    }
+    .config-step-tab__num {
+      display: block;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.7rem;
+      opacity: 0.6;
+      margin-bottom: 2px;
+    }
+
+    /* Step container — uses the 4-col grid throughout */
+    .config-step { display: none; animation: fadeIn 250ms ease; }
+    .config-step.is-active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .config-step__title {
+      color: var(--color-accent-1);
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: var(--space-3) var(--space-2) var(--space-1);
+    }
+    .config-step__hint {
+      font-size: var(--font-size-small);
+      padding: 0 var(--space-2) var(--space-3);
+      line-height: 1.5;
+    }
+
+    /* Choice cells: 1 per column on desktop. Match grid. */
+    .config-choices {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .config-choices--3 { grid-template-columns: repeat(4, 1fr); }
+      .config-choices--3 > .config-choice:nth-child(4) { display: none; } /* keep 3 visible if only 3 options */
+    }
+
+    .config-choice {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding: var(--space-3) var(--space-2);
+      cursor: pointer;
+      background: var(--color-background);
+      transition: background-color var(--transition-time) ease;
+      position: relative;
+    }
+    /* Mobile only: cells stack vertically, so use a horizontal separator */
+    @media (max-width: 839px) {
+      .config-choice {
+        border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+      }
+    }
+    /* Desktop: rely on body::after vertical lines for column separation */
+    .config-choice:hover { background-color: var(--color-accent-5); }
+    .config-choice input { position: absolute; opacity: 0; pointer-events: none; }
+    .config-choice.is-selected {
+      background-color: var(--color-accent-1);
+      color: #ffffff;
+      z-index: 1;
+    }
+    .config-choice.is-selected .config-choice__hint { color: #ffffff; opacity: 0.85; }
+    .config-choice__label {
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      font-size: var(--font-size-base);
+    }
+    .config-choice__hint {
+      font-size: var(--font-size-small);
+      opacity: 0.65;
+      line-height: 1.4;
+    }
+
+    /* Slider — placed in cols 1-3, current value in col 4 */
+    .config-slider {
+      padding: var(--space-3) var(--space-2);
+    }
+    .config-slider__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: var(--space-2);
+    }
+    .config-slider__label {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: var(--font-size-small);
+      opacity: 0.6;
+    }
+    .config-slider__current {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: var(--color-accent-1);
+      font-variant-numeric: tabular-nums;
+    }
+    input[type=range].config-slider__input {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 2px;
+      background: var(--grid-line-color);
+      outline: none;
+      margin: var(--space-2) 0;
+    }
+    input[type=range].config-slider__input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      background: var(--color-accent-1);
+      border: var(--grid-line-thickness) solid var(--color-accent-1);
+      cursor: pointer;
+    }
+    input[type=range].config-slider__input::-moz-range-thumb {
+      width: 18px; height: 18px;
+      background: var(--color-accent-1);
+      border: var(--grid-line-thickness) solid var(--color-accent-1);
+      cursor: pointer;
+    }
+    .config-slider__ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      opacity: 0.5;
+      font-variant-numeric: tabular-nums;
+      text-transform: uppercase;
+    }
+
+    /* Toggle list: 4 across on desktop, 1 per column */
+    .config-toggles {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .config-toggles { grid-template-columns: repeat(4, 1fr); }
+    }
+    .config-toggle {
+      display: flex;
+      gap: var(--space-2);
+      align-items: center;
+      padding: var(--space-2);
+      cursor: pointer;
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      position: relative;
+    }
+    /* Mobile only — desktop relies on body::after vertical lines */
+    @media (max-width: 839px) {
+      .config-toggle { border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color); }
+    }
+    .config-toggle input {
+      appearance: none; -webkit-appearance: none;
+      width: 1em; height: 1em;
+      border: var(--grid-line-thickness) solid var(--color-link);
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .config-toggle input:checked::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px; right: 2px; bottom: 2px;
+      background: var(--color-accent-2);
+    }
+
+    /* Footer nav — buttons live on the 4-col grid */
+    .config-nav {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .config-nav { grid-template-columns: repeat(4, 1fr); }
+    }
+    .config-nav::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
+    .config-nav__back  { grid-column: 1; }
+    .config-nav__next  { grid-column: 4; }
+    @media (max-width: 839px) {
+      .config-nav__back, .config-nav__next { grid-column: 1; }
+    }
+
+    /* Results header */
+    .config-results__intro {
+      padding: var(--space-3) var(--space-2);
+    }
+    .config-results__intro h2 {
+      color: var(--color-accent-1);
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: var(--space-2);
+    }
+    .config-results__intro p {
+      font-size: var(--font-size-small);
+      line-height: 1.6;
+    }
+
+    /* Result row uses the standard 4-col grid */
+    .config-result {
+      display: grid;
+      grid-template-columns: 1fr;
+      position: relative;
+    }
+    @media (min-width: 840px) {
+      .config-result { grid-template-columns: repeat(4, 1fr); align-items: stretch; }
+    }
+    .config-result::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
+
+    .config-result__rank {
+      padding: var(--space-3) var(--space-2);
+      font-size: 2rem;
+      color: var(--color-accent-1);
+      font-weight: bold;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .config-result__rank-label {
+      display: block;
+      font-size: 0.7rem;
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: var(--space-1);
+      font-weight: normal;
+    }
+    .config-result__thumb { padding: 0; }
+    .config-result__thumb-inner {
+      aspect-ratio: 4/3;
+      background: var(--color-accent-5);
+      width: 100%;
+    }
+
+    .config-result__details { padding: var(--space-2); }
+    .config-result__match {
+      display: inline-block;
+      padding: 1px 6px;
+      background: var(--color-accent-1);
+      color: #ffffff;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-1);
+    }
+    .config-result__name {
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      font-size: 1.05rem;
+      color: var(--color-accent-1);
+      margin-bottom: var(--space-1);
+    }
+    .config-result__why {
+      font-size: var(--font-size-small);
+      line-height: 1.5;
+      opacity: 0.85;
+    }
+
+    .config-result__action { padding: 0; display: flex; flex-direction: column; }
+    .config-result__specs {
+      list-style: none;
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: var(--space-2);
+    }
+    .config-result__specs li {
+      padding: var(--space-1) 0;
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-2);
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
+    .config-result__specs li:last-child { border-bottom: none; }
+    .config-result__specs .label { opacity: 0.6; }
+
+    /* Restart placed in column 4 of its own grid row */
+    .config-restart-row {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .config-restart-row { grid-template-columns: repeat(4, 1fr); }
+    }
+    .config-restart-row__btn { grid-column: 1; }
+    @media (min-width: 840px) {
+      .config-restart-row__btn { grid-column: 4; }
+    }
+  </style>
+</head>
+<body data-page="a">
+
+  <div id="layout-header"></div>
+
+  <main class="p--content">
+
+    <section class="page-intro">
+      <div class="grid grid--4">
+        <div class="col-1-2-3">
+          <h1 class="page-intro__title">A · CONFIGURATOR</h1>
+          <p class="page-intro__description">Answer four short questions and we'll narrow the library down to the three designs that fit your situation best. Roughly 90 seconds.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRESS — 4 cells = 4 columns -->
+    <div class="config-progress" id="progress">
+      <div class="config-step-tab is-active" data-step="0">
+        <span class="config-step-tab__num">01</span>BUDGET
+      </div>
+      <div class="config-step-tab" data-step="1">
+        <span class="config-step-tab__num">02</span>BEDROOMS
+      </div>
+      <div class="config-step-tab" data-step="2">
+        <span class="config-step-tab__num">03</span>ORIENTATION
+      </div>
+      <div class="config-step-tab" data-step="3">
+        <span class="config-step-tab__num">04</span>PREFERENCES
+      </div>
+    </div>
+
+    <!-- STEPS -->
+
+    <!-- STEP 1: Budget -->
+    <section class="config-step is-active" data-step="0">
+      <div class="grid grid--4">
+        <div class="col-1-2-3-4">
+          <h2 class="config-step__title">01 · WHAT'S YOUR CONSTRUCTION BUDGET?</h2>
+          <p class="config-step__hint">Estimated all-in build cost (materials + labor). LowDO's free design packets work for most contractors and ambitious DIY-with-help projects.</p>
+        </div>
+      </div>
+      <div class="grid grid--4">
+        <div class="col-1-2-3-4">
+          <div class="config-slider">
+            <div class="config-slider__row">
+              <span class="config-slider__label">YOUR BUDGET</span>
+              <span class="config-slider__current" id="budget-current">$120K</span>
+            </div>
+            <input type="range" min="50000" max="280000" step="5000" value="120000" class="config-slider__input" id="budget-slider">
+            <div class="config-slider__ticks">
+              <span>$50K</span>
+              <span>$100K</span>
+              <span>$150K</span>
+              <span>$200K</span>
+              <span>$280K</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: Bedrooms -->
+    <section class="config-step" data-step="1">
+      <div class="grid grid--4">
+        <div class="col-1-2-3-4">
+          <h2 class="config-step__title">02 · HOW MANY BEDROOMS?</h2>
+          <p class="config-step__hint">"Bedroom" here means a fully enclosed sleeping room. Lofts count as a sleeping space but not a bedroom for code purposes.</p>
+        </div>
+      </div>
+
+      <div class="config-choices config-choices--3" id="bedrooms-choices">
+        <label class="config-choice" data-value="1">
+          <input type="radio" name="bedrooms" value="1">
+          <span class="config-choice__label">1 BEDROOM</span>
+          <span class="config-choice__hint">Studio or one-bedroom layout. Smallest envelope, lowest cost.</span>
+        </label>
+        <label class="config-choice" data-value="1+loft">
+          <input type="radio" name="bedrooms" value="1+loft">
+          <span class="config-choice__label">1 BR + LOFT</span>
+          <span class="config-choice__hint">Adds a sleeping loft above for guests or storage. Ladder or stair access.</span>
+        </label>
+        <label class="config-choice" data-value="2">
+          <input type="radio" name="bedrooms" value="2">
+          <span class="config-choice__label">2 BEDROOMS</span>
+          <span class="config-choice__hint">Two enclosed bedrooms. Bigger footprint and higher cost, but real second bedroom.</span>
+        </label>
+        <label class="config-choice" data-value="any">
+          <input type="radio" name="bedrooms" value="any">
+          <span class="config-choice__label">FLEXIBLE</span>
+          <span class="config-choice__hint">No strong preference. Show me everything ranked by other factors.</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- STEP 3: Orientation -->
+    <section class="config-step" data-step="2">
+      <div class="grid grid--4">
+        <div class="col-1-2-3-4">
+          <h2 class="config-step__title">03 · LOT ORIENTATION</h2>
+          <p class="config-step__hint">Which direction does the long axis of your buildable area run? This affects which designs work without modification.</p>
+        </div>
+      </div>
+
+      <div class="config-choices config-choices--3" id="orientation-choices">
+        <label class="config-choice" data-value="any">
+          <input type="radio" name="orientation" value="any">
+          <span class="config-choice__label">FLEXIBLE / SQUARE</span>
+          <span class="config-choice__hint">Plenty of room or no strong constraint. Any design works.</span>
+        </label>
+        <label class="config-choice" data-value="north-south">
+          <input type="radio" name="orientation" value="north-south">
+          <span class="config-choice__label">NORTH ↔ SOUTH</span>
+          <span class="config-choice__hint">Long axis runs N–S. Best for designs with stacked or split volumes.</span>
+        </label>
+        <label class="config-choice" data-value="east-west">
+          <input type="radio" name="orientation" value="east-west">
+          <span class="config-choice__label">EAST ↔ WEST</span>
+          <span class="config-choice__hint">Long axis runs E–W. Favors single-story bars with deep eaves.</span>
+        </label>
+        <label class="config-choice" data-value="any">
+          <input type="radio" name="orientation" value="any" checked>
+          <span class="config-choice__label">NOT SURE YET</span>
+          <span class="config-choice__hint">We'll show designs that work in any orientation.</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- STEP 4: Preferences -->
+    <section class="config-step" data-step="3">
+      <div class="grid grid--4">
+        <div class="col-1-2-3-4">
+          <h2 class="config-step__title">04 · ANYTHING YOU MUST HAVE?</h2>
+          <p class="config-step__hint">Pick any features that are non-negotiable. Leave blank if you're flexible. Your matches will be ranked by how many of these they have.</p>
+        </div>
+      </div>
+
+      <div class="config-toggles" id="prefs-toggles">
+        <label class="config-toggle"><input type="checkbox" value="stair">A real stair</label>
+        <label class="config-toggle"><input type="checkbox" value="loft">A sleeping loft</label>
+        <label class="config-toggle"><input type="checkbox" value="porch">Covered porch</label>
+        <label class="config-toggle"><input type="checkbox" value="deck">Outdoor deck</label>
+        <label class="config-toggle"><input type="checkbox" value="courtyard">Private courtyard</label>
+        <label class="config-toggle"><input type="checkbox" value="single-story">Single-story</label>
+        <label class="config-toggle"><input type="checkbox" value="2-bath">Two bathrooms</label>
+        <label class="config-toggle"><input type="checkbox" value="accessible">Accessible</label>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="config-step" data-step="4">
+      <div class="grid grid--4">
+        <div class="col-1-2-3-4">
+          <div class="config-results__intro">
+            <h2>YOUR THREE BEST MATCHES</h2>
+            <p id="results-why"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="results-list"></div>
+
+      <div class="config-restart-row">
+        <button class="btn btn--ghost config-restart-row__btn" id="restart-btn">← START OVER</button>
+      </div>
+    </section>
+
+    <!-- NAV: back in col 1, next in col 4 -->
+    <div class="config-nav" id="nav-bar">
+      <button class="btn btn--ghost config-nav__back" id="back-btn" disabled>← BACK</button>
+      <button class="btn btn--solid config-nav__next" id="next-btn">NEXT →</button>
+    </div>
+
+  </main>
+
+  <div id="layout-footer"></div>
+
+  <script src="./data.js"></script>
+  <script src="./shared.js"></script>
+  <script>
+  (function () {
+    const state = {
+      step: 0,
+      budget: 120000,
+      bedrooms: null,
+      orientation: "any",
+      prefs: new Set()
+    };
+
+    const STEP_COUNT = 4;
+    const stepEls = document.querySelectorAll(".config-step");
+    const tabEls  = document.querySelectorAll(".config-step-tab");
+    const backBtn = document.getElementById("back-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const navBar  = document.getElementById("nav-bar");
+
+    function setStep(n) {
+      state.step = Math.max(0, Math.min(STEP_COUNT, n));
+      stepEls.forEach((el) => el.classList.toggle("is-active", parseInt(el.dataset.step, 10) === state.step));
+      tabEls.forEach((el) => {
+        const i = parseInt(el.dataset.step, 10);
+        el.classList.toggle("is-active", i === state.step);
+        el.classList.toggle("is-done", i < state.step);
+      });
+      backBtn.disabled = state.step === 0;
+      nextBtn.textContent = state.step === STEP_COUNT - 1 ? "SEE MATCHES →" : "NEXT →";
+      navBar.style.display = state.step === STEP_COUNT ? "none" : "grid";
+      validateStep();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function validateStep() {
+      let ok = false;
+      if (state.step === 0) ok = true;
+      else if (state.step === 1) ok = !!state.bedrooms;
+      else if (state.step === 2) ok = !!state.orientation;
+      else if (state.step === 3) ok = true;
+      nextBtn.disabled = !ok;
+    }
+
+    /* Budget slider */
+    const slider = document.getElementById("budget-slider");
+    const budgetCurrent = document.getElementById("budget-current");
+    slider.addEventListener("input", () => {
+      state.budget = parseInt(slider.value, 10);
+      budgetCurrent.textContent = window.LOWDO_HELPERS.formatPrice(state.budget);
+    });
+
+    /* Bedrooms choices */
+    document.querySelectorAll("#bedrooms-choices .config-choice").forEach((el) => {
+      el.addEventListener("click", () => {
+        document.querySelectorAll("#bedrooms-choices .config-choice").forEach((c) => c.classList.remove("is-selected"));
+        el.classList.add("is-selected");
+        el.querySelector("input").checked = true;
+        state.bedrooms = el.dataset.value;
+        validateStep();
+      });
+    });
+
+    /* Orientation choices */
+    document.querySelectorAll("#orientation-choices .config-choice").forEach((el) => {
+      el.addEventListener("click", () => {
+        document.querySelectorAll("#orientation-choices .config-choice").forEach((c) => c.classList.remove("is-selected"));
+        el.classList.add("is-selected");
+        el.querySelector("input").checked = true;
+        state.orientation = el.dataset.value;
+        validateStep();
+      });
+    });
+
+    /* Prefs toggles */
+    document.querySelectorAll("#prefs-toggles input").forEach((cb) => {
+      cb.addEventListener("change", () => {
+        if (cb.checked) state.prefs.add(cb.value);
+        else state.prefs.delete(cb.value);
+      });
+    });
+
+    /* Tab clicks (jump back, no skipping forward) */
+    tabEls.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const i = parseInt(tab.dataset.step, 10);
+        if (i <= state.step) setStep(i);
+      });
+    });
+
+    backBtn.addEventListener("click", () => setStep(state.step - 1));
+    nextBtn.addEventListener("click", () => {
+      if (state.step === STEP_COUNT - 1) {
+        renderResults();
+        setStep(STEP_COUNT);
+      } else setStep(state.step + 1);
+    });
+
+    document.getElementById("restart-btn").addEventListener("click", () => {
+      state.bedrooms = null; state.orientation = "any"; state.prefs.clear();
+      document.querySelectorAll(".config-choice").forEach((c) => c.classList.remove("is-selected"));
+      document.querySelectorAll(".config-choice input").forEach((i) => i.checked = false);
+      document.querySelectorAll("#prefs-toggles input").forEach((i) => i.checked = false);
+      slider.value = 120000;
+      state.budget = 120000;
+      budgetCurrent.textContent = "$120K";
+      setStep(0);
+    });
+
+    /* Scoring */
+    function scoreAdu(adu) {
+      let score = 0;
+      const reasons = [];
+      const median = (adu.budget_low + adu.budget_high) / 2;
+      if (state.budget >= adu.budget_low && state.budget <= adu.budget_high) { score += 30; reasons.push("budget falls inside the build range"); }
+      else if (state.budget > adu.budget_high) { score += 22; reasons.push("budget comfortably exceeds the build range"); }
+      else if (state.budget >= median * 0.85) { score += 10; reasons.push("budget is close to the build range"); }
+      else { score -= 10; }
+
+      if (state.bedrooms === "1" && adu.bedrooms === 1 && !adu.loft) { score += 25; reasons.push("matches your 1-bedroom preference"); }
+      else if (state.bedrooms === "1+loft" && adu.bedrooms === 1 && adu.loft) { score += 25; reasons.push("matches your 1-bedroom + loft preference"); }
+      else if (state.bedrooms === "2" && adu.bedrooms === 2) { score += 25; reasons.push("matches your 2-bedroom preference"); }
+      else if (state.bedrooms === "any") { score += 12; }
+      else if (state.bedrooms === "1" && adu.bedrooms === 1 && adu.loft) { score += 12; }
+      else if (state.bedrooms === "2" && adu.bedrooms === 1) { score -= 8; }
+      else if (state.bedrooms === "1" && adu.bedrooms === 2) { score -= 8; }
+
+      if (state.orientation === adu.orientation) { score += 12; reasons.push("orientation matches your lot"); }
+      else if (adu.orientation === "any") { score += 6; reasons.push("works on any lot orientation"); }
+      else { score -= 4; }
+
+      let prefHits = 0;
+      state.prefs.forEach((p) => {
+        if (p === "single-story" && adu.height === "single") { score += 8; prefHits++; }
+        else if (p === "stair" && adu.features.includes("stair")) { score += 8; prefHits++; }
+        else if (adu.features.includes(p)) { score += 8; prefHits++; }
+        else { score -= 3; }
+      });
+      if (prefHits > 0) reasons.push("includes " + prefHits + " of your must-haves");
+
+      return { score, reasons };
+    }
+
+    function renderResults() {
+      const ranked = window.LOWDO_ADUS
+        .map((a) => ({ adu: a, ...scoreAdu(a) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+
+      const why = document.getElementById("results-why");
+      const bedroomLabel = state.bedrooms === "1+loft" ? "1 bedroom + loft"
+        : state.bedrooms === "1" ? "1 bedroom"
+        : state.bedrooms === "2" ? "2 bedrooms" : "flexible bedrooms";
+      const orientLabel = state.orientation === "any" ? "flexible orientation" : state.orientation.replace("-", "–");
+      why.textContent = "Based on your " + window.LOWDO_HELPERS.formatPrice(state.budget) +
+        " budget, " + bedroomLabel + ", " + orientLabel +
+        (state.prefs.size ? ", and " + state.prefs.size + " must-have feature" + (state.prefs.size === 1 ? "" : "s") : "") +
+        " — these are the three designs that fit your situation best.";
+
+      const list = document.getElementById("results-list");
+      list.innerHTML = ranked.map((entry, idx) => {
+        const a = entry.adu;
+        const matchPct = Math.max(40, Math.min(100, Math.round(60 + entry.score * 0.5)));
+        const reason = entry.reasons[0] ? entry.reasons[0].charAt(0).toUpperCase() + entry.reasons[0].slice(1) + "." : a.summary;
+        return `
+          <div class="config-result js-gate-container">
+            <div class="config-result__rank">
+              ${idx + 1}<span class="config-result__rank-label">RANK</span>
+            </div>
+            <div class="config-result__thumb">
+              <div class="config-result__thumb-inner">${window.LOWDO_SHARED.isoSvg(a)}</div>
+            </div>
+            <div class="config-result__details">
+              <span class="config-result__match">${matchPct}% MATCH</span>
+              <div class="config-result__name">${window.LOWDO_SHARED.esc(a.name)}</div>
+              <p class="config-result__why">${window.LOWDO_SHARED.esc(reason)}</p>
+            </div>
+            <div class="config-result__action">
+              <ul class="config-result__specs">
+                <li><span class="label">SQFT</span><span>${a.sqft}</span></li>
+                <li><span class="label">BEDROOMS</span><span>${a.bedrooms}${a.loft ? " + LOFT" : ""}</span></li>
+                <li><span class="label">STAIR</span><span>${window.LOWDO_HELPERS.stairLabel(a.stair).toUpperCase()}</span></li>
+                <li><span class="label">BUILD COST</span><span>${window.LOWDO_HELPERS.priceRange(a)}</span></li>
+              </ul>
+              <button class="btn btn--solid js-download-trigger" data-label="${window.LOWDO_SHARED.esc(a.name)} — full packet">↓ DOWNLOAD PACKET</button>
+              <div class="download-gate" aria-hidden="true">
+                <div class="download-gate__inner">
+                  <input type="email" class="download-gate__email" placeholder="EMAIL ADDRESS" autocomplete="email">
+                  <label class="download-gate__check">
+                    <input type="checkbox">
+                    <span>I understand these are for personal use only.</span>
+                  </label>
+                  <button class="btn btn--solid js-gate-submit" data-label="${window.LOWDO_SHARED.esc(a.name)} — full packet">↓ DOWNLOAD</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      window.LOWDO_SHARED.initDownloadGate();
+    }
+
+    setStep(0);
+  })();
+  </script>
+</body>
+</html>

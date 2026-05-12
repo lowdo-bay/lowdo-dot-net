@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B · Catalog — ADU Library Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;700&display=swap">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    /* ---- Catalog-specific styles ---- */
+
+    /* Filter rail: 4 filter groups, one per column */
+    .catalog-filters {
+      position: sticky;
+      top: 121px;
+      z-index: 900;
+      background: var(--color-background);
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .catalog-filters { grid-template-columns: repeat(4, 1fr); }
+    }
+    .catalog-filters::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    }
+
+    .catalog-filter-block {
+      padding: var(--space-2);
+      position: relative;
+    }
+    /* Mobile only — desktop relies on body::after vertical lines */
+    @media (max-width: 839px) {
+      .catalog-filter-block { border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color); }
+    }
+
+    .catalog-filter-block__heading {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent-1);
+      margin-bottom: var(--space-2);
+    }
+    .catalog-filter-block__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1) var(--space-3);
+    }
+    .catalog-filter-block .filter { padding: 1px 0; }
+
+    /* Meta row (count + clear) — count in col 1-3, clear in col 4 */
+    .catalog-meta {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: baseline;
+    }
+    @media (min-width: 840px) {
+      .catalog-meta { grid-template-columns: repeat(4, 1fr); }
+    }
+    .catalog-meta__count {
+      grid-column: 1 / 4;
+      padding: var(--space-2);
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .catalog-meta__count strong { color: var(--color-accent-1); }
+    .catalog-meta__clear {
+      grid-column: 4;
+      padding: var(--space-2);
+      cursor: pointer;
+      text-decoration: underline;
+      color: var(--color-accent-1);
+      background: none; border: none;
+      font: inherit;
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: right;
+    }
+    @media (max-width: 839px) {
+      .catalog-meta__count { grid-column: 1; }
+      .catalog-meta__clear { grid-column: 1; text-align: left; }
+    }
+
+    /* Row tweaks for catalog */
+    .catalog-row { cursor: pointer; }
+    .catalog-row .adu-row__thumb {
+      aspect-ratio: 4 / 3;
+      background: var(--color-accent-5);
+    }
+
+    /* Expanded body: 4 cells = 4 columns */
+    .catalog-row__expander {
+      grid-column: 1 / -1;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 400ms ease;
+      background: var(--color-accent-5);
+      position: relative;
+    }
+    .catalog-row__expander.is-open { max-height: 1400px; }
+    .catalog-row__expander-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 840px) {
+      .catalog-row__expander-inner { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .catalog-row__plan { grid-column: 1 / 3; padding: var(--space-2); }
+    @media (max-width: 839px) { .catalog-row__plan { grid-column: 1; } }
+    .catalog-row__plan-svg {
+      background: var(--color-background);
+      border: var(--grid-line-thickness) solid var(--grid-line-color);
+    }
+    .catalog-row__plan-caption {
+      margin-top: var(--space-1);
+      font-size: 0.7rem;
+      opacity: 0.6;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .catalog-row__copy { grid-column: 3; padding: var(--space-2); }
+    @media (max-width: 839px) { .catalog-row__copy { grid-column: 1; } }
+    .catalog-row__copy h3 {
+      color: var(--color-accent-1);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: var(--space-2);
+    }
+    .catalog-row__copy p {
+      font-size: var(--font-size-small);
+      line-height: 1.5;
+      margin-bottom: var(--space-2);
+    }
+
+    .catalog-row__downloads { grid-column: 4; padding: var(--space-2); }
+    @media (max-width: 839px) { .catalog-row__downloads { grid-column: 1; } }
+    .catalog-row__downloads h4 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent-1);
+      margin-bottom: var(--space-2);
+    }
+
+    .catalog-download-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: var(--space-2);
+      align-items: baseline;
+      padding: var(--space-1) 0;
+      border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .catalog-download-row__title {}
+    .catalog-download-row__format { opacity: 0.5; font-size: 0.7rem; }
+    .catalog-download-row__action button {
+      background: none; border: none; padding: 0;
+      color: var(--color-accent-1);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: var(--font-size-small);
+      text-decoration: underline;
+    }
+    .catalog-download-all {
+      margin-top: var(--space-2);
+    }
+
+    .catalog-row__expand-mark {
+      display: inline-block;
+      font-size: 1rem;
+      color: var(--color-accent-1);
+      transition: transform 200ms ease;
+      margin-left: var(--space-1);
+    }
+    .catalog-row.is-expanded .catalog-row__expand-mark { transform: rotate(45deg); }
+
+    .catalog-empty {
+      padding: var(--space-7) var(--space-2);
+      text-align: center;
+      opacity: 0.6;
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body data-page="b">
+
+  <div id="layout-header"></div>
+
+  <main class="p--content">
+
+    <section class="page-intro">
+      <div class="grid grid--4">
+        <div class="col-1-2-3">
+          <h1 class="page-intro__title">B · CATALOG</h1>
+          <p class="page-intro__description">Every design in the library, as a single filterable index. Click any row to open its floor plan, cost breakdown, and download packet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTERS — 4 groups in 4 columns -->
+    <div class="catalog-filters">
+
+      <div class="catalog-filter-block">
+        <div class="catalog-filter-block__heading">BEDROOMS</div>
+        <div class="catalog-filter-block__list">
+          <label class="filter">
+            <input type="checkbox" data-filter="bedrooms" data-value="1">
+            <span class="filter__box"></span>
+            <span class="filter__label">1 BR</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="bedrooms" data-value="2">
+            <span class="filter__box"></span>
+            <span class="filter__label">2 BR</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="loft" data-value="true">
+            <span class="filter__box"></span>
+            <span class="filter__label">+ LOFT</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="catalog-filter-block">
+        <div class="catalog-filter-block__heading">STAIR</div>
+        <div class="catalog-filter-block__list">
+          <label class="filter">
+            <input type="checkbox" data-filter="stair" data-value="ladder">
+            <span class="filter__box"></span>
+            <span class="filter__label">LADDER</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="stair" data-value="spiral">
+            <span class="filter__box"></span>
+            <span class="filter__label">SPIRAL</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="stair" data-value="straight">
+            <span class="filter__box"></span>
+            <span class="filter__label">STRAIGHT</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="stair" data-value="switchback">
+            <span class="filter__box"></span>
+            <span class="filter__label">SWITCHBACK</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="stair" data-value="none">
+            <span class="filter__box"></span>
+            <span class="filter__label">SINGLE-STORY</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="catalog-filter-block">
+        <div class="catalog-filter-block__heading">BUDGET</div>
+        <div class="catalog-filter-block__list">
+          <label class="filter">
+            <input type="checkbox" data-filter="budget" data-value="under-100k">
+            <span class="filter__box"></span>
+            <span class="filter__label">&lt; $100K</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="budget" data-value="100k-150k">
+            <span class="filter__box"></span>
+            <span class="filter__label">$100–150K</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="budget" data-value="150k-200k">
+            <span class="filter__box"></span>
+            <span class="filter__label">$150–200K</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="budget" data-value="over-200k">
+            <span class="filter__box"></span>
+            <span class="filter__label">&gt; $200K</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="catalog-filter-block">
+        <div class="catalog-filter-block__heading">FEATURES</div>
+        <div class="catalog-filter-block__list">
+          <label class="filter">
+            <input type="checkbox" data-filter="feature" data-value="porch">
+            <span class="filter__box"></span>
+            <span class="filter__label">PORCH</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="feature" data-value="deck">
+            <span class="filter__box"></span>
+            <span class="filter__label">DECK</span>
+          </label>
+          <label class="filter">
+            <input type="checkbox" data-filter="feature" data-value="courtyard">
+            <span class="filter__box"></span>
+            <span class="filter__label">COURTYARD</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- META + CLEAR — count in cols 1-3, clear in col 4 -->
+    <div class="catalog-meta">
+      <span class="catalog-meta__count"><strong id="result-count">10</strong> / <span id="total-count">10</span> DESIGNS</span>
+      <button class="catalog-meta__clear" id="clear-filters">CLEAR FILTERS</button>
+    </div>
+
+    <!-- COLUMN HEADERS -->
+    <section class="section-header">
+      <div class="section-header__inner">
+        <div class="section-header__cell">DESIGN</div>
+        <div class="section-header__cell">NAME</div>
+        <div class="section-header__cell">SPECS</div>
+        <div class="section-header__cell" style="text-align:right;">COST · ACTION</div>
+      </div>
+    </section>
+
+    <!-- ROWS -->
+    <div id="catalog-rows"></div>
+
+  </main>
+
+  <div id="layout-footer"></div>
+
+  <script src="./data.js"></script>
+  <script src="./shared.js"></script>
+  <script>
+  window.bootMockup = function () {
+    const rowsEl = document.getElementById("catalog-rows");
+    const countEl = document.getElementById("result-count");
+    const totalEl = document.getElementById("total-count");
+    totalEl.textContent = window.LOWDO_ADUS.length;
+
+    const filters = {
+      bedrooms: new Set(),
+      loft: new Set(),
+      stair: new Set(),
+      budget: new Set(),
+      feature: new Set()
+    };
+
+    function renderRows() {
+      const filtered = window.LOWDO_ADUS.filter((adu) => {
+        if (filters.bedrooms.size && !filters.bedrooms.has(String(adu.bedrooms))) return false;
+        if (filters.loft.size && !filters.loft.has(String(adu.loft))) return false;
+        if (filters.stair.size && !filters.stair.has(adu.stair)) return false;
+        if (filters.budget.size && !filters.budget.has(window.LOWDO_HELPERS.budgetBucket(adu))) return false;
+        if (filters.feature.size) {
+          const want = Array.from(filters.feature);
+          if (!want.every((f) => adu.features.includes(f))) return false;
+        }
+        return true;
+      });
+
+      countEl.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        rowsEl.innerHTML = `<div class="catalog-empty">NO DESIGNS MATCH THESE FILTERS. TRY CLEARING SOME.</div>`;
+        return;
+      }
+
+      rowsEl.innerHTML = filtered.map((adu) => `
+        <div class="adu-row catalog-row" data-adu="${adu.id}">
+          <div class="adu-row__cell adu-row__cell--thumb">
+            <div class="adu-row__thumb">${window.LOWDO_SHARED.isoSvg(adu)}</div>
+          </div>
+          <div class="adu-row__cell adu-row__cell--name">
+            <div class="tier-pill tier-pill--${adu.tier}">${adu.tier}</div>
+            <div class="adu-row__name">${window.LOWDO_SHARED.esc(adu.name)} <span class="catalog-row__expand-mark">+</span></div>
+            <span class="adu-row__sub">${adu.id}</span>
+          </div>
+          <div class="adu-row__cell adu-row__cell--specs">
+            <div class="adu-row__spec-list">
+              <span><span class="adu-row__spec-label">FOOTPRINT</span> ${adu.footprint}</span>
+              <span><span class="adu-row__spec-label">SQFT</span> ${adu.sqft}</span>
+              <span><span class="adu-row__spec-label">BEDS</span> ${adu.bedrooms}${adu.loft ? " + LOFT" : ""}</span>
+              <span><span class="adu-row__spec-label">STAIR</span> ${window.LOWDO_HELPERS.stairLabel(adu.stair).toUpperCase()}</span>
+            </div>
+          </div>
+          <div class="adu-row__cell adu-row__cell--price">
+            <span class="adu-row__price">
+              <span class="adu-row__price-range">${window.LOWDO_HELPERS.priceRange(adu)}</span>
+              <span class="adu-row__price-label">EST. BUILD COST</span>
+            </span>
+          </div>
+
+          <div class="catalog-row__expander">
+            <div class="catalog-row__expander-inner">
+              <div class="catalog-row__plan">
+                <div class="catalog-row__plan-svg">${window.LOWDO_SHARED.planSvg(adu)}</div>
+                <div class="catalog-row__plan-caption">SCHEMATIC FLOOR PLAN · ${adu.footprint} · ${adu.sqft} SQFT</div>
+              </div>
+              <div class="catalog-row__copy">
+                <h3>ABOUT THIS DESIGN</h3>
+                <p>${window.LOWDO_SHARED.esc(adu.summary)}</p>
+                <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;opacity:0.65;">BEST FOR: ${adu.orientation === "any" ? "ANY LOT" : adu.orientation.toUpperCase() + " LOTS"} · ${adu.height.toUpperCase()}</p>
+              </div>
+              <div class="catalog-row__downloads js-gate-container">
+                <h4>DESIGN PACKET</h4>
+                ${adu.deliverables.map((d) => `
+                  <div class="catalog-download-row">
+                    <span class="catalog-download-row__title">${window.LOWDO_HELPERS.deliverableLabel(d).toUpperCase()}</span>
+                    <span class="catalog-download-row__format">${window.LOWDO_HELPERS.deliverableFormat(d)}</span>
+                    <span class="catalog-download-row__action">
+                      <button class="js-download-trigger" data-label="${window.LOWDO_SHARED.esc(adu.name)} · ${window.LOWDO_HELPERS.deliverableLabel(d)}">↓</button>
+                    </span>
+                  </div>
+                `).join("")}
+                <button class="btn btn--solid catalog-download-all js-download-trigger" data-label="${window.LOWDO_SHARED.esc(adu.name)} — full packet">↓ DOWNLOAD ALL</button>
+                <div class="download-gate" aria-hidden="true">
+                  <div class="download-gate__inner">
+                    <input type="email" class="download-gate__email" placeholder="EMAIL ADDRESS" autocomplete="email">
+                    <label class="download-gate__check">
+                      <input type="checkbox">
+                      <span>I understand these are for personal use only.</span>
+                    </label>
+                    <button class="btn btn--solid js-gate-submit" data-label="${window.LOWDO_SHARED.esc(adu.name)} — full packet">↓ DOWNLOAD</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      rowsEl.querySelectorAll(".catalog-row").forEach((row) => {
+        const expander = row.querySelector(".catalog-row__expander");
+        row.querySelectorAll(".adu-row__cell").forEach((cell) => {
+          cell.addEventListener("click", (e) => {
+            if (e.target.closest("button, input, label, a, .catalog-download-row")) return;
+            row.classList.toggle("is-expanded");
+            expander.classList.toggle("is-open");
+          });
+        });
+      });
+    }
+
+    document.querySelectorAll(".catalog-filters input[type='checkbox']").forEach((cb) => {
+      cb.addEventListener("change", () => {
+        const key = cb.dataset.filter;
+        const val = cb.dataset.value;
+        if (cb.checked) filters[key].add(val);
+        else filters[key].delete(val);
+        renderRows();
+      });
+    });
+
+    document.getElementById("clear-filters").addEventListener("click", () => {
+      Object.keys(filters).forEach((k) => filters[k].clear());
+      document.querySelectorAll(".catalog-filters input[type='checkbox']").forEach((cb) => cb.checked = false);
+      renderRows();
+    });
+
+    renderRows();
+  };
+  </script>
+</body>
+</html>

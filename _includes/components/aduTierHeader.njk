@@ -1,0 +1,15 @@
+{# ─────────────────────────────────────────────────────────────────────
+   ADU TIER HEADER — 4-col band that introduces a tier section.
+   Expects: tier (object with .name, .edition, .pitch), projects (list)
+   ───────────────────────────────────────────────────────────────────── #}
+<section class="adu-tier-header adu-tier-header--{{ tier.name }}" id="tier-{{ tier.name | lower }}">
+  <div class="adu-tier-header__name-cell">
+    <div class="adu-tier-header__edition">{{ tier.edition }}</div>
+    <div class="adu-tier-header__name">{{ tier.name | upper }}</div>
+  </div>
+  <div class="adu-tier-header__pitch-cell">{{ tier.pitch }}</div>
+  <div class="adu-tier-header__price-cell">
+    <span class="adu-tier-header__price-label">STARTS AT</span>
+    <span class="adu-tier-header__price-amount">{{ tierProjects | aduTierMinPrice }} <small>BUILD COST</small></span>
+  </div>
+</section>

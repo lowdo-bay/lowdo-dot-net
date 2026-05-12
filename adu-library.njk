@@ -30,10 +30,9 @@ section: adu-library
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    left: 0;
+    width: 100%;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
 
   .adu-filter-block { padding: var(--space-2); }
@@ -41,28 +40,39 @@ section: adu-library
     .adu-filter-block { border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color); }
   }
   .adu-filter-block__heading {
-    font-size: 0.7rem;
+    font-size: var(--font-size-small);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
     color: var(--color-accent-1);
     margin-bottom: var(--space-2);
   }
   .adu-filter-block__list {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-1) var(--space);
+    gap: calc(var(--space) * 0.75);
     font-size: var(--font-size-small);
   }
 
   /* Result count + clear */
   .adu-meta {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr;
     align-items: baseline;
   }
   @media (min-width: 840px) {
     .adu-meta { grid-template-columns: repeat(4, 1fr); }
+  }
+  .adu-meta::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--grid-line-color);
+    pointer-events: none;
   }
   .adu-meta__count {
     grid-column: 1 / 4;
@@ -109,6 +119,8 @@ section: adu-library
     grid-template-columns: 1fr;
     position: relative;
     align-items: stretch;
+    min-height: 6rem;
+    padding: 0;
   }
   @media (min-width: 840px) {
     .adu-row { grid-template-columns: repeat(4, 1fr); }
@@ -129,24 +141,22 @@ section: adu-library
   }
   .adu-row-link:hover .adu-row::before { background-color: var(--color-accent-5); }
 
-  /* Dashed bottom line, edge to edge */
+  /* Dashed bottom line, spans only the page grid (cols 1–4). */
   .adu-row::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
+    left: 0;
+    width: 100%;
     border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
     pointer-events: none;
   }
 
   .adu-row__cell { padding: var(--space-2); font-size: var(--font-size-small); }
-  .adu-row__cell--thumb { padding: 0; }
 
   .adu-row__thumb {
     display: block;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
     width: 100%;
     background: var(--color-accent-5);
     overflow: hidden;
@@ -166,6 +176,7 @@ section: adu-library
 
   .adu-row__name {
     display: inline-block;
+    font-size: var(--font-size-base);
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.02em;
@@ -212,6 +223,7 @@ section: adu-library
   .adu-row__cell--price { text-align: right; }
   .adu-row__price-range {
     display: block;
+    font-size: var(--font-size-base);
     font-weight: bold;
     color: var(--color-accent-1);
     text-transform: uppercase;
@@ -219,8 +231,8 @@ section: adu-library
   }
   .adu-row__price-label {
     display: block;
-    opacity: 0.6;
-    font-size: 0.7rem;
+    color: var(--color-accent-2);
+    font-size: var(--font-size-small);
     margin-top: var(--space-1);
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -228,26 +240,11 @@ section: adu-library
   .adu-row__view {
     display: block;
     margin-top: var(--space-1);
-    font-size: 0.7rem;
-    opacity: 0.7;
+    font-size: var(--font-size-small);
+    color: var(--color-accent-2);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
   }
-
-  /* Tier pill */
-  .tier-pill {
-    display: inline-block;
-    padding: 1px 4px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    border: var(--grid-line-thickness) solid currentColor;
-    margin-bottom: var(--space-1);
-  }
-  .tier-pill--Essential { color: var(--color-accent-3); }
-  .tier-pill--Standard { color: var(--color-accent-2); }
-  .tier-pill--Plus { color: var(--color-accent-1); }
 
   /* Empty state */
   .adu-empty {
@@ -259,22 +256,223 @@ section: adu-library
     letter-spacing: 0.05em;
   }
 
-  /* Page intro reuses the production index header pattern */
+  /* Tier section header — 4-col band that introduces each tier group */
+  .adu-tier-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    scroll-margin-top: 121px;
+  }
+  @media (min-width: 840px) {
+    .adu-tier-header { grid-template-columns: repeat(4, 1fr); }
+  }
+  .adu-tier-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-major-style) var(--color-accent-1);
+    pointer-events: none;
+  }
+  .adu-tier-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    pointer-events: none;
+  }
+  .adu-tier-header__name-cell {
+    grid-column: 1;
+    padding: var(--space-2);
+  }
+  .adu-tier-header__pitch-cell {
+    grid-column: 2 / 4;
+    padding: var(--space-2);
+    font-size: var(--font-size-small);
+    line-height: 1.6;
+  }
+  .adu-tier-header__price-cell {
+    grid-column: 4;
+    padding: var(--space-2);
+    text-align: right;
+  }
+  @media (max-width: 839px) {
+    .adu-tier-header__name-cell,
+    .adu-tier-header__pitch-cell,
+    .adu-tier-header__price-cell { grid-column: 1; }
+    .adu-tier-header__pitch-cell,
+    .adu-tier-header__price-cell {
+      border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+    }
+  }
+  .adu-tier-header__edition {
+    font-size: var(--font-size-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-2);
+    margin-bottom: var(--space-1);
+  }
+  .adu-tier-header__name {
+    font-weight: 700;
+    color: var(--color-accent-1);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+  }
+  .adu-tier-header__price-label {
+    display: block;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-2);
+    margin-bottom: var(--space-1);
+  }
+  .adu-tier-header__price-amount {
+    font-weight: bold;
+    color: var(--color-accent-1);
+    font-variant-numeric: tabular-nums;
+  }
+  .adu-tier-header__price-amount small {
+    font-size: var(--font-size-small);
+    color: var(--color-accent-2);
+    font-weight: normal;
+    margin-left: var(--space-1);
+  }
+
+  /* Per-tier empty state — shown when filters hide every row in a tier */
+  .adu-tier-empty {
+    padding: var(--space-3) var(--space-2);
+    text-align: center;
+    opacity: 0.5;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+  }
+  .adu-tier-empty::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
+
+  /* Page intro — vertical rhythm matches a tier-header cell.
+     Horizontal padding is supplied by the inner .grid__item wrapper. */
   .adu-intro {
     position: relative;
-    padding: 0 0 var(--space-3);
+    padding: var(--space-5) 0;
   }
   .adu-intro__title {
     color: var(--color-accent-1);
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 0.02em;
-    padding: var(--space-3) var(--space-2) var(--space-1);
+    margin-bottom: var(--space-1);
   }
   .adu-intro__description {
     font-size: var(--font-size-small);
-    padding: 0 var(--space-2);
     line-height: 1.5;
+  }
+
+  /* Tier group breathing room — the rhythm of the page. */
+  .adu-tier-group:first-of-type { margin-top: var(--space-7); }
+  .adu-tier-group + .adu-tier-group { margin-top: var(--space-7); }
+
+  /* + Compare button — sits below VIEW PROJECT in the price cell.
+     Toggles to a solid "✓ ADDED" state via the .is-added class. */
+  .adu-compare-btn {
+    display: block;
+    width: 100%;
+    margin-top: var(--space-2);
+    background: transparent;
+    border: var(--grid-line-thickness) solid var(--color-accent-1);
+    color: var(--color-accent-1);
+    font: inherit;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-1) var(--space-2);
+    cursor: pointer;
+    transition: background-color var(--transition-time) ease, color var(--transition-time) ease;
+  }
+  .adu-compare-btn:hover,
+  .adu-compare-btn.is-added {
+    background: var(--color-accent-1);
+    color: #ffffff;
+  }
+
+  /* Leave space at the bottom of the page so the fixed tray
+     never covers the last row of the catalog. */
+  body.has-compare-tray { padding-bottom: 96px; }
+
+  /* "Help me choose" trigger + "× CLOSE" buttons — sit in column 4 of the intro.
+     Bottom margin matches the <p> default so the buttons line up with the
+     description's bottom edge. CLOSE is hidden until the quiz panel is open. */
+  .adu-intro__action-cell {
+    align-self: end;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: var(--space-1);
+    margin-bottom: var(--space);
+  }
+  @media (max-width: 839px) {
+    .adu-intro__action-cell {
+      align-self: auto;
+      align-items: flex-start;
+      justify-content: flex-start;
+      margin-bottom: 0;
+    }
+  }
+  .adu-match-trigger,
+  .adu-match-exit {
+    background: transparent;
+    border: var(--grid-line-thickness) solid var(--color-accent-1);
+    color: var(--color-accent-1);
+    font: inherit;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-1) var(--space-2);
+    cursor: pointer;
+    transition: background-color var(--transition-time) ease, color var(--transition-time) ease;
+  }
+  .adu-match-trigger:hover,
+  .adu-match-exit:hover {
+    background: var(--color-accent-1);
+    color: #ffffff;
+  }
+  .adu-match-exit { display: none; }
+  body.is-quizzing .adu-match-exit { display: inline-block; }
+
+  /* Matching mode — flat list, no filter/meta/tier-header chrome. */
+  body.is-matching .adu-filters,
+  body.is-matching .adu-meta,
+  body.is-matching .adu-tier-group,
+  body.is-matching .adu-match-trigger { display: none; }
+
+  /* Quiz mode — quiz panel takes over; hide the catalog chrome behind it. */
+  body.is-quizzing .adu-filters,
+  body.is-quizzing .adu-meta { display: none; }
+
+  /* Top-3 match badge above the row title (rendered only on cloned rows
+     inside .adu-match-results). */
+  .adu-match-badge {
+    display: inline-block;
+    background: var(--color-accent-1);
+    color: #ffffff;
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1px 6px;
+    margin-bottom: var(--space-1);
   }
 </style>
 
@@ -282,13 +480,19 @@ section: adu-library
 
   {# Page title #}
   <section class="adu-intro">
-    <div class="grid">
-      <div class="grid__item col-1-2-3">
+    <div class="grid grid--4">
+      <div class="grid__item col-1-2">
         <h1 class="adu-intro__title">ADU LIBRARY</h1>
         <p class="adu-intro__description text--small">Free, downloadable design packets for accessory dwelling units. Browse, click into any scheme to view drawings and download the full design toolkit.</p>
       </div>
+      <div class="grid__item col-4 adu-intro__action-cell">
+        <button class="adu-match-exit" type="button" id="adu-match-exit" aria-label="Close quiz">× CLOSE</button>
+        <button class="adu-match-trigger" type="button" id="adu-match-open">HELP ME CHOOSE →</button>
+      </div>
     </div>
   </section>
+
+  {% include "components/aduMatchQuiz.njk" %}
 
   {# ─────────────────────────────────────────────────────────────
      FILTERS — bedrooms / stair / budget / features
@@ -350,92 +554,141 @@ section: adu-library
     <button class="adu-meta__clear" id="adu-clear-filters">CLEAR FILTERS</button>
   </div>
 
-  {# Column header row #}
-  <section class="index-columns-header">
-    <div class="grid">
-      <div class="grid__item col-1 index-col index-col--image">DESIGN</div>
-      <div class="grid__item col-2 index-col">NAME</div>
-      <div class="grid__item col-3 index-col">SPECS</div>
-      <div class="grid__item col-4 index-col" style="text-align:right;">COST · ACTION</div>
-    </div>
-  </section>
-
   {# ─────────────────────────────────────────────────────────────
-     ADU ROWS — each row is an <a> linking to /project/{slug}/
+     ADU ROWS — grouped by tier. Each tier section is preceded by a
+     tier header. Filter logic in JS hides individual rows and the
+     per-tier empty state appears when a section's rows are all hidden.
      ───────────────────────────────────────────────────────────── #}
 
   <div class="adu-rows">
 
     {% if collections.aduLibrary | length %}
-      {% for project in collections.aduLibrary %}
-        {% set adu = project.data.adu %}
-        <a href="{{ project.url | url }}" class="adu-row-link">
-          <div class="adu-row"
-               data-adu
-               data-bedrooms="{{ adu.bedrooms }}"
-               data-loft="{{ 'true' if adu.loft else 'false' }}"
-               data-stair="{{ adu.stair }}"
-               data-budget="{{ adu | aduBudgetBucket }}"
-               data-features="{{ adu.features | join(',') if adu.features else '' }}">
+      {% for tier in aduTiers %}
+        {% set tierProjects = collections.aduLibrary | aduByTier(tier.name) %}
+        {% if tierProjects | length %}
+          <div class="adu-tier-group" data-tier-group="{{ tier.name }}">
+            {% include "components/aduTierHeader.njk" %}
+            {% for project in tierProjects %}
+              {% set adu = project.data.adu %}
+              <a href="{{ project.url | url }}" class="adu-row-link">
+                <div class="adu-row"
+                     data-adu
+                     data-tier="{{ adu.tier }}"
+                     data-bedrooms="{{ adu.bedrooms }}"
+                     data-loft="{{ 'true' if adu.loft else 'false' }}"
+                     data-stair="{{ adu.stair }}"
+                     data-budget="{{ adu | aduBudgetBucket }}"
+                     data-budget-low="{{ adu.budget_low }}"
+                     data-budget-high="{{ adu.budget_high }}"
+                     data-orientation="{{ adu.orientation }}"
+                     data-height="{{ adu.height }}"
+                     data-features="{{ adu.features | join(',') if adu.features else '' }}">
 
-            <div class="adu-row__cell adu-row__cell--thumb">
-              <div class="adu-row__thumb">
-                {% if project.data.headerImage %}
-                  {% set outputFormats = [] %}
-                  {% for format, i in settings.images %}
-                    {% if i.enabled === true %}
-                      {{ '' if outputFormats.push(format) }}
-                    {% endif %}
-                  {% endfor %}
-                  {% set params = {
-                    "src": project.data.headerImage.src,
-                    "alt": project.data.headerImage.alt or project.data.title,
-                    "loadingType": "lazy",
-                    "viewportSizes": "(min-width: 840px) 25vw, 100vw",
-                    "outputWidths": [
-                      settings.config.image_grid_width_sm,
-                      settings.config.image_grid_width_md
-                    ],
-                    "outputFormats": outputFormats,
-                    "outputQualityJpeg": settings.images.jpeg.quality,
-                    "outputQualityWebp": settings.images.webp.quality
-                  } %}
-                  {% generateImage params %}
-                {% else %}
-                  <div class="adu-row__thumb-empty"></div>
-                {% endif %}
-              </div>
+                  <div class="adu-row__cell adu-row__cell--thumb">
+                    <div class="adu-row__thumb">
+                      {% if project.data.headerImage %}
+                        {% set outputFormats = [] %}
+                        {% for format, i in settings.images %}
+                          {% if i.enabled === true %}
+                            {{ '' if outputFormats.push(format) }}
+                          {% endif %}
+                        {% endfor %}
+                        {% set params = {
+                          "src": project.data.headerImage.src,
+                          "alt": project.data.headerImage.alt or project.data.title,
+                          "loadingType": "lazy",
+                          "viewportSizes": "(min-width: 840px) 25vw, 100vw",
+                          "outputWidths": [
+                            settings.config.image_grid_width_sm,
+                            settings.config.image_grid_width_md
+                          ],
+                          "outputFormats": outputFormats,
+                          "outputQualityJpeg": settings.images.jpeg.quality,
+                          "outputQualityWebp": settings.images.webp.quality
+                        } %}
+                        {% generateImage params %}
+                      {% else %}
+                        <div class="adu-row__thumb-empty"></div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="adu-row__cell">
+                    <div class="adu-row__name">{{ project.data.title | upper }}</div>
+                    <span class="adu-row__sub">{{ project.fileSlug }}</span>
+                  </div>
+
+                  <div class="adu-row__cell">
+                    <div class="adu-row__spec-list">
+                      <span><span class="adu-row__spec-label">FOOTPRINT</span> {{ adu.footprint | upper }}</span>
+                      <span><span class="adu-row__spec-label">SQFT</span> {{ adu.sqft }}</span>
+                      <span><span class="adu-row__spec-label">BEDS</span> {{ adu.bedrooms }}{% if adu.loft %} + LOFT{% endif %}</span>
+                      <span><span class="adu-row__spec-label">STAIR</span> {{ adu.stair | aduStairLabel | upper }}</span>
+                    </div>
+                  </div>
+
+                  <div class="adu-row__cell adu-row__cell--price">
+                    <span class="adu-row__price-range">{{ adu | aduPriceRange }}</span>
+                    <span class="adu-row__price-label">EST. BUILD COST</span>
+                    <span class="adu-row__view arrow--right">VIEW PROJECT</span>
+                    <button class="adu-compare-btn"
+                            type="button"
+                            data-compare-add="{{ project.fileSlug }}"
+                            data-compare-name="{{ project.data.title | upper }}"
+                            data-compare-url="{{ project.url | url }}"
+                            data-compare-tier="{{ adu.tier | upper }}"
+                            data-compare-bedrooms="{{ adu.bedrooms }}{% if adu.loft %} + LOFT{% endif %}"
+                            data-compare-stair="{{ adu.stair | aduStairLabel | upper }}"
+                            data-compare-footprint="{{ adu.footprint | upper }}"
+                            data-compare-sqft="{{ adu.sqft }}"
+                            data-compare-price="{{ adu | aduPriceRange }}"
+                            data-compare-orientation="{{ adu.orientation | upper }}"
+                            data-compare-height="{{ adu.height | upper }}"
+                            data-compare-features="{% if adu.features %}{{ adu.features | join(', ') | upper }}{% endif %}">
+                      <span class="adu-compare-btn__label">+ COMPARE</span>
+                      {% if project.data.headerImage %}
+                      <template class="adu-compare-btn__thumb-tpl">
+                        {% set cmpOutputFormats = [] %}
+                        {% for format, i in settings.images %}
+                          {% if i.enabled === true %}
+                            {{ '' if cmpOutputFormats.push(format) }}
+                          {% endif %}
+                        {% endfor %}
+                        {% set thumbParams = {
+                          "src": project.data.headerImage.src,
+                          "alt": project.data.headerImage.alt or project.data.title,
+                          "loadingType": "lazy",
+                          "viewportSizes": "(min-width: 840px) 25vw, 90vw",
+                          "outputWidths": [
+                            settings.config.image_grid_width_sm,
+                            settings.config.image_grid_width_md
+                          ],
+                          "outputFormats": cmpOutputFormats,
+                          "outputQualityJpeg": settings.images.jpeg.quality,
+                          "outputQualityWebp": settings.images.webp.quality
+                        } %}
+                        {% generateImage thumbParams %}
+                      </template>
+                      {% endif %}
+                    </button>
+                  </div>
+
+                </div>
+              </a>
+            {% endfor %}
+            <div class="adu-tier-empty" data-tier-empty="{{ tier.name }}" style="display:none;">
+              No {{ tier.name | upper }} designs match these filters.
             </div>
-
-            <div class="adu-row__cell">
-              <div class="tier-pill tier-pill--{{ adu.tier }}">{{ adu.tier | upper }}</div>
-              <div class="adu-row__name">{{ project.data.title | upper }}</div>
-              <span class="adu-row__sub">{{ project.fileSlug }}</span>
-            </div>
-
-            <div class="adu-row__cell">
-              <div class="adu-row__spec-list">
-                <span><span class="adu-row__spec-label">FOOTPRINT</span> {{ adu.footprint | upper }}</span>
-                <span><span class="adu-row__spec-label">SQFT</span> {{ adu.sqft }}</span>
-                <span><span class="adu-row__spec-label">BEDS</span> {{ adu.bedrooms }}{% if adu.loft %} + LOFT{% endif %}</span>
-                <span><span class="adu-row__spec-label">STAIR</span> {{ adu.stair | aduStairLabel | upper }}</span>
-              </div>
-            </div>
-
-            <div class="adu-row__cell adu-row__cell--price">
-              <span class="adu-row__price-range">{{ adu | aduPriceRange }}</span>
-              <span class="adu-row__price-label">EST. BUILD COST</span>
-              <span class="adu-row__view arrow--right">VIEW PROJECT</span>
-            </div>
-
           </div>
-        </a>
+        {% endif %}
       {% endfor %}
     {% else %}
-      <div class="adu-empty">No ADU schemes published yet. Add a project entry with <code>adu_library: true</code> to populate.</div>
+      <div class="adu-empty">The ADU library is being prepared. Check back soon for free, downloadable design packets.</div>
     {% endif %}
 
   </div>
+
+  {% include "components/aduCompareTray.njk" %}
 
 </article>
 
@@ -464,14 +717,22 @@ section: adu-library
 
   function rerender() {
     var visible = 0;
+    // Per-tier visible counters so we can toggle the per-tier empty state.
+    var tierCounts = {};
     rows.forEach(function (row) {
       var match = rowMatches(row);
-      // Hide the outer anchor wrapper, not just the inner div
       var wrapper = row.closest('.adu-row-link') || row;
       wrapper.style.display = match ? '' : 'none';
       if (match) visible++;
+      var tier = row.dataset.tier;
+      if (tier) tierCounts[tier] = (tierCounts[tier] || 0) + (match ? 1 : 0);
     });
     if (countEl) countEl.textContent = visible;
+    // Show per-tier empty state when a tier section has zero matches.
+    document.querySelectorAll('[data-tier-empty]').forEach(function (el) {
+      var t = el.getAttribute('data-tier-empty');
+      el.style.display = (tierCounts[t] === 0) ? '' : 'none';
+    });
   }
 
   document.querySelectorAll('.adu-filters input[type="checkbox"]').forEach(function (cb) {
