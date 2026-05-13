@@ -12,9 +12,10 @@ categories:
   - ADU
 adu_library: true
 adu:
-  tier: Plus
-  bedrooms: 2
-  stair: none
+  tier: Standard
+  bedrooms: 1
+  loft: true
+  stair: ladder
   sqft: 720
   budget_low: 145000
   budget_high: 195000
