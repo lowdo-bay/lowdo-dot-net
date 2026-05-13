@@ -1,7 +1,7 @@
 ---
 draft: false
 type: project
-title: Gable + Shade
+title: 'ADU_0201: Gable + Shade'
 description: Same as the Essential ADU but with a covered porch.
 date: 2026-01-03T00:00:00.000Z
 year: '2026'

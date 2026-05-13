@@ -1,12 +1,12 @@
 ---
 draft: false
 type: project
-title: Shell + Wraparound Porch
+title: 'ADU_0303: Monitor + Wraparound Porch'
 date: 2026-05-13T00:00:00.000Z
 categories: []
 adu_library: true
 adu:
-  tier: Standard
+  tier: Plus
   bedrooms: 2
   stair: ladder
 ---

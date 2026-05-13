@@ -1,7 +1,7 @@
 ---
 draft: false
 type: project
-title: Essential
+title: 'ADU_0101: Essential'
 description: >-
   The most economical in the ADU library. A living room, kitchen, bedroom, and
   bathroom with a sleeping loft above, accessed by a ladder stair.
