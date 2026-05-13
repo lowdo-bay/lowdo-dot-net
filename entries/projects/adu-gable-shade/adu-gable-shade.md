@@ -1,35 +1,36 @@
 ---
 draft: false
 type: project
-title: Courtyard
-description: Two bedrooms wrapped around a small private courtyard. All single-story, accessible-friendly throughout.
+title: Gable + Shade
+description: Same as the Essential ADU but with a covered porch.
 date: 2026-01-03T00:00:00.000Z
-year: 2026
+year: '2026'
 location: Open source
 status: Available
 categories:
   - HOUSING
   - ADU
-  - ACCESSIBLE
 adu_library: true
-
 adu:
   tier: Plus
   bedrooms: 2
-  loft: false
   stair: none
   sqft: 720
   budget_low: 145000
   budget_high: 195000
   orientation: any
-  footprint: L-plan 28×26 ft
-  height: single
+  footprint: 28×26 ft
+  height: two levels
   features:
     - porch
-    - deck
-    - courtyard
+position: 999
+featured: false
+showInAwardsTable: false
+collaborators: []
+relatedProjects: []
+relatedEntries: []
+active: true
 ---
-
 The Courtyard is a single-story L-plan design with two enclosed bedrooms organized around a small private exterior courtyard. The plan was developed for property owners building an ADU as a long-term rental for older family members or as a multi-generational guest house — every room is on grade, every doorway meets accessible width minimums, and the kitchen and bathrooms are designed to retrofit easily for additional accessibility hardware.
 
 ## Who it's for

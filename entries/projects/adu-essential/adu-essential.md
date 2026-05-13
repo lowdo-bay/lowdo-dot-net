@@ -3,8 +3,8 @@ draft: false
 type: project
 title: Essential
 description: >-
-  The smallest envelope in the ADU library. A single open room with a sleeping
-  loft above, accessed by ladder.
+  The most economical in the ADU library. A living room, kitchen, bedroom, and
+  bathroom with a sleeping loft above, accessed by a ladder stair.
 date: 2026-01-01T00:00:00.000Z
 year: '2026'
 location: Open source
@@ -21,7 +21,6 @@ adu:
   loft: true
   stair: ladder
   sqft: 592
-  budget_low: 66000
   budget_high: 95000
   orientation: north-south
   footprint: 21×33 ft
