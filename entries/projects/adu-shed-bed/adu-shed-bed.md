@@ -14,10 +14,10 @@ adu_library: true
 adu:
   tier: Standard
   bedrooms: 2
+  bathrooms: 1
   stair: ladder
   sqft: 671
-  budget_low: 92000
-  budget_high: 135000
+  cost_tier: medium
   orientation: north-south
   footprint: 21x33 ft
   height: two-story

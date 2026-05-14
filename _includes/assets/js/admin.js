@@ -198,13 +198,15 @@
   var epAduTierLabel = document.getElementById('ep-adu-tier-label');
   var epAduTierDrawer = document.getElementById('ep-adu-tier-drawer');
   var epAduBedrooms = document.getElementById('ep-adu-bedrooms');
+  var epAduBathrooms = document.getElementById('ep-adu-bathrooms');
   var epAduLoft = document.getElementById('ep-adu-loft');
   var epAduStairDropdown = document.getElementById('ep-adu-stair-dropdown');
   var epAduStairLabel = document.getElementById('ep-adu-stair-label');
   var epAduStairDrawer = document.getElementById('ep-adu-stair-drawer');
   var epAduSqft = document.getElementById('ep-adu-sqft');
-  var epAduBudgetLow = document.getElementById('ep-adu-budget-low');
-  var epAduBudgetHigh = document.getElementById('ep-adu-budget-high');
+  var epAduCostTierDropdown = document.getElementById('ep-adu-cost-tier-dropdown');
+  var epAduCostTierLabel = document.getElementById('ep-adu-cost-tier-label');
+  var epAduCostTierDrawer = document.getElementById('ep-adu-cost-tier-drawer');
   var epAduOrientationDropdown = document.getElementById('ep-adu-orientation-dropdown');
   var epAduOrientationLabel = document.getElementById('ep-adu-orientation-label');
   var epAduOrientationDrawer = document.getElementById('ep-adu-orientation-drawer');
@@ -217,6 +219,7 @@
 
   // Local state for the ADU sub-panel while the panel is open
   var epAduTierValue = '';
+  var epAduCostTierValue = '';
   var epAduStairValue = '';
   var epAduOrientationValue = '';
   var epAduFeaturesValue = [];
@@ -586,9 +589,25 @@
   // Show/hide ADU spec sub-fields. They appear only when:
   //   1. The entry is a project (so .project-only block is visible at all), AND
   //   2. The "ADU library" checkbox is on
+  // When ADU library is on, also hide .project-only-not-adu rows (Year, Location,
+  // Status) since the ADU header swap replaces them with Tier / Bed-Bath / Sqft.
   function updateAduVisibility() {
     var show = !!(epAduLibrary && epAduLibrary.checked);
     document.querySelectorAll('.adu-only').forEach(function(el) { el.hidden = !show; });
+    // Re-evaluate Year/Location/Status: hidden when ADU is on; visible when ADU is
+    // off AND the parent .project-only group is currently visible (entry is a project).
+    document.querySelectorAll('.project-only-not-adu').forEach(function(el) {
+      if (show) {
+        el.hidden = true;
+      } else {
+        // .project-only-not-adu always also carries .project-only; mirror its visibility.
+        // If the project-only group is hidden (non-project entry), keep hidden.
+        // Detect by checking another pure .project-only element that lacks the -not-adu class.
+        var projOnlyRef = document.querySelector('.project-only:not(.project-only-not-adu)');
+        var projVisible = projOnlyRef ? !projOnlyRef.hidden : true;
+        el.hidden = !projVisible;
+      }
+    });
   }
 
   function toDateInputValue(dateVal) {
@@ -2306,12 +2325,19 @@
     none: 'Single-story (none)'
   };
   var ADU_ORIENTATION_LABELS = { any: 'Any', 'north-south': 'North–South', 'east-west': 'East–West' };
+  var ADU_COST_TIER_LABELS = { low: 'Low', medium: 'Medium', high: 'High' };
 
   bindAduSelectDropdown(
     epAduTierDropdown, epAduTierDrawer, epAduTierLabel,
     function(v) { epAduTierValue = v; },
     function() { return epAduTierValue; },
     ADU_TIER_LABELS
+  );
+  bindAduSelectDropdown(
+    epAduCostTierDropdown, epAduCostTierDrawer, epAduCostTierLabel,
+    function(v) { epAduCostTierValue = v; },
+    function() { return epAduCostTierValue; },
+    ADU_COST_TIER_LABELS
   );
   bindAduSelectDropdown(
     epAduStairDropdown, epAduStairDrawer, epAduStairLabel,
@@ -2391,11 +2417,11 @@
     var obj = {};
     if (epAduTierValue) obj.tier = epAduTierValue;
     if (epAduBedrooms.value !== '')                      obj.bedrooms = Number(epAduBedrooms.value);
+    if (epAduBathrooms && epAduBathrooms.value !== '')   obj.bathrooms = Number(epAduBathrooms.value);
     if (epAduLoft.checked)                               obj.loft = true;
     if (epAduStairValue) obj.stair = epAduStairValue;
     if (epAduSqft.value !== '')                          obj.sqft = Number(epAduSqft.value);
-    if (epAduBudgetLow.value !== '')                     obj.budget_low = Number(epAduBudgetLow.value);
-    if (epAduBudgetHigh.value !== '')                    obj.budget_high = Number(epAduBudgetHigh.value);
+    if (epAduCostTierValue) obj.cost_tier = epAduCostTierValue;
     if (epAduOrientationValue) obj.orientation = epAduOrientationValue;
     if (epAduFootprint.value.trim())                     obj.footprint = epAduFootprint.value.trim();
     if (epAduHeight.value.trim())                        obj.height = epAduHeight.value.trim();
@@ -2415,10 +2441,11 @@
     setAduSelectFromValue(epAduStairDrawer, epAduStairLabel, epAduStairValue, ADU_STAIR_LABELS);
     setAduSelectFromValue(epAduOrientationDrawer, epAduOrientationLabel, epAduOrientationValue, ADU_ORIENTATION_LABELS);
     if (epAduBedrooms)    epAduBedrooms.value = adu.bedrooms != null ? adu.bedrooms : '';
+    if (epAduBathrooms)   epAduBathrooms.value = adu.bathrooms != null ? adu.bathrooms : '';
     if (epAduLoft)        epAduLoft.checked = !!adu.loft;
     if (epAduSqft)        epAduSqft.value = adu.sqft != null ? adu.sqft : '';
-    if (epAduBudgetLow)   epAduBudgetLow.value = adu.budget_low != null ? adu.budget_low : '';
-    if (epAduBudgetHigh)  epAduBudgetHigh.value = adu.budget_high != null ? adu.budget_high : '';
+    epAduCostTierValue = adu.cost_tier || '';
+    setAduSelectFromValue(epAduCostTierDrawer, epAduCostTierLabel, epAduCostTierValue, ADU_COST_TIER_LABELS);
     if (epAduFootprint)   epAduFootprint.value = adu.footprint || '';
     if (epAduHeight)      epAduHeight.value = adu.height || '';
     renderAduFeatureTags();

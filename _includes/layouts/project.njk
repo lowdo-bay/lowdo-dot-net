@@ -1180,26 +1180,48 @@ section: project
           </div>
         </div>
 
-        {# Bottom section: Location, year, status #}
+        {# Bottom section: header metadata
+           - ADU library entries: Tier, Bed/Bath, Square footage (from `adu` object)
+           - Other projects: Location, Year, Status #}
         <div class="project-meta-bottom">
-          {# Rows: Label (col 3) + Value (col 4) #}
-          {% if location %}
-            <div class="project-meta-row">
-              <div class="project-meta-label">Location</div>
-              <div class="project-meta-value">{{ location }}</div>
-            </div>
-          {% endif %}
-          {% if year and settings.theme.theme_features.show_project_year %}
-            <div class="project-meta-row">
-              <div class="project-meta-label">Year</div>
-              <div class="project-meta-value">{{ year }}</div>
-            </div>
-          {% endif %}
-          {% if status %}
-            <div class="project-meta-row">
-              <div class="project-meta-label">Status</div>
-              <div class="project-meta-value">{{ status }}</div>
-            </div>
+          {% if adu_library and adu %}
+            {% if adu.tier %}
+              <div class="project-meta-row">
+                <div class="project-meta-label">Tier</div>
+                <div class="project-meta-value">{{ adu.tier | upper }}</div>
+              </div>
+            {% endif %}
+            {% if adu.bedrooms != null %}
+              <div class="project-meta-row">
+                <div class="project-meta-label">Bed / Bath</div>
+                <div class="project-meta-value">{{ adu.bedrooms }} BR / {{ adu.bathrooms or 1 }} BA{% if adu.loft %} + LOFT{% endif %}</div>
+              </div>
+            {% endif %}
+            {% if adu.sqft %}
+              <div class="project-meta-row">
+                <div class="project-meta-label">Square footage</div>
+                <div class="project-meta-value">{{ adu.sqft }} SQFT</div>
+              </div>
+            {% endif %}
+          {% else %}
+            {% if location %}
+              <div class="project-meta-row">
+                <div class="project-meta-label">Location</div>
+                <div class="project-meta-value">{{ location }}</div>
+              </div>
+            {% endif %}
+            {% if year and settings.theme.theme_features.show_project_year %}
+              <div class="project-meta-row">
+                <div class="project-meta-label">Year</div>
+                <div class="project-meta-value">{{ year }}</div>
+              </div>
+            {% endif %}
+            {% if status %}
+              <div class="project-meta-row">
+                <div class="project-meta-label">Status</div>
+                <div class="project-meta-value">{{ status }}</div>
+              </div>
+            {% endif %}
           {% endif %}
         </div>
 
@@ -1226,8 +1248,8 @@ section: project
       <div class="project-specs-row">
         <div class="project-specs-cell project-specs-cell--label">Tier</div>
         <div class="project-specs-cell">{{ adu.tier | upper }}</div>
-        <div class="project-specs-cell project-specs-cell--label">Bedrooms</div>
-        <div class="project-specs-cell">{{ adu.bedrooms }}{% if adu.loft %} + LOFT{% endif %}</div>
+        <div class="project-specs-cell project-specs-cell--label">Bed / Bath</div>
+        <div class="project-specs-cell">{{ adu.bedrooms }} BR / {{ adu.bathrooms or 1 }} BA{% if adu.loft %} + LOFT{% endif %}</div>
       </div>
 
       <div class="project-specs-row">
@@ -1247,7 +1269,7 @@ section: project
       <div class="project-specs-row">
         <div class="project-specs-cell project-specs-cell--label">Orientation</div>
         <div class="project-specs-cell">{% if adu.orientation == "any" %}ANY LOT{% else %}{{ adu.orientation | upper }}{% endif %}</div>
-        <div class="project-specs-cell project-specs-cell--label">Build cost (est.)</div>
+        <div class="project-specs-cell project-specs-cell--label">Cost tier</div>
         <div class="project-specs-cell">{{ adu | aduPriceRange }}</div>
       </div>
 

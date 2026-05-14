@@ -8,6 +8,8 @@ adu_library: true
 adu:
   tier: Plus
   bedrooms: 2
+  bathrooms: 1
   stair: ladder
+  cost_tier: medium
 ---
 

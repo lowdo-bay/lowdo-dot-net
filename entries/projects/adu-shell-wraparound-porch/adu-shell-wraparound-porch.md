@@ -8,7 +8,9 @@ adu_library: true
 adu:
   tier: Standard
   bedrooms: 2
+  bathrooms: 1
   stair: ladder
+  cost_tier: medium
 position: 999
 featured: false
 showInAwardsTable: false

@@ -234,16 +234,16 @@ eleventyExcludeFromCollections: true
             <div class="ep-row__control">
               <input type="date" id="ep-date">
             </div>
-            <span class="ep-row__label project-only" data-tooltip="Displayed in the project header on the detail page (e.g. '2022–Present').">Year</span>
-            <div class="ep-row__control project-only">
+            <span class="ep-row__label project-only project-only-not-adu" data-tooltip="Displayed in the project header on the detail page (e.g. '2022–Present'). Hidden for ADU library entries.">Year</span>
+            <div class="ep-row__control project-only project-only-not-adu">
               <input type="text" id="ep-year" placeholder="2024 or 2022–Present">
             </div>
-            <span class="ep-row__label project-only" data-tooltip="Shown in the project header metadata on the detail page.">Location</span>
-            <div class="ep-row__control project-only">
+            <span class="ep-row__label project-only project-only-not-adu" data-tooltip="Shown in the project header metadata on the detail page. Hidden for ADU library entries.">Location</span>
+            <div class="ep-row__control project-only project-only-not-adu">
               <input type="text" id="ep-location" placeholder="Austin, TX">
             </div>
-            <span class="ep-row__label project-only" data-tooltip="Shown in the project header metadata on the detail page (e.g. 'Built', 'In Progress').">Status</span>
-            <div class="ep-row__control project-only">
+            <span class="ep-row__label project-only project-only-not-adu" data-tooltip="Shown in the project header metadata on the detail page (e.g. 'Built', 'In Progress'). Hidden for ADU library entries.">Status</span>
+            <div class="ep-row__control project-only project-only-not-adu">
               <div class="tag-input-wrap">
                 <input type="text" id="ep-status" placeholder="Built / In Progress / Unbuilt" autocomplete="off">
                 <ul id="ep-status-suggestions" class="tag-suggestions" hidden></ul>
@@ -397,6 +397,11 @@ eleventyExcludeFromCollections: true
               <input type="number" id="ep-adu-bedrooms" min="0" step="1" placeholder="1">
             </div>
 
+            <span class="ep-row__label adu-only" data-tooltip="Number of full bathrooms. Use 0.5 increments for half-baths.">Bathrooms</span>
+            <div class="ep-row__control adu-only">
+              <input type="number" id="ep-adu-bathrooms" min="0" step="0.5" placeholder="1">
+            </div>
+
             <span class="ep-row__label adu-only" data-tooltip="Whether this design includes an additional sleeping loft above the main floor.">Loft</span>
             <div class="ep-row__control adu-only">
               <label class="field-label--inline">
@@ -429,14 +434,22 @@ eleventyExcludeFromCollections: true
               <input type="number" id="ep-adu-sqft" min="0" step="10" placeholder="380">
             </div>
 
-            <span class="ep-row__label adu-only" data-tooltip="Estimated low-end build cost (whole dollars). Shown on /adu-library/ and the project page as a range.">Build cost — low</span>
+            <span class="ep-row__label adu-only" data-tooltip="Qualitative build-cost tier. Shown on /adu-library/ and the project page as a single word (LOW/MEDIUM/HIGH).">Cost tier</span>
             <div class="ep-row__control adu-only">
-              <input type="number" id="ep-adu-budget-low" min="0" step="1000" placeholder="65000">
-            </div>
-
-            <span class="ep-row__label adu-only" data-tooltip="Estimated high-end build cost (whole dollars).">Build cost — high</span>
-            <div class="ep-row__control adu-only">
-              <input type="number" id="ep-adu-budget-high" min="0" step="1000" placeholder="95000">
+              <div class="admin-dropdown ep-adu-cost-tier-dropdown" id="ep-adu-cost-tier-dropdown">
+                <button class="admin-dropdown__button" aria-expanded="false" type="button">
+                  <span class="admin-dropdown__label" id="ep-adu-cost-tier-label">—</span>
+                  <svg class="admin-dropdown__chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" aria-hidden="true">
+                    <path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </button>
+                <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-adu-cost-tier-drawer">
+                  <button class="admin-dropdown__item" type="button" data-value="">—</button>
+                  <button class="admin-dropdown__item" type="button" data-value="low">Low</button>
+                  <button class="admin-dropdown__item" type="button" data-value="medium">Medium</button>
+                  <button class="admin-dropdown__item" type="button" data-value="high">High</button>
+                </div>
+              </div>
             </div>
 
             <span class="ep-row__label adu-only" data-tooltip="Lot orientation the design works best on.">Orientation</span>

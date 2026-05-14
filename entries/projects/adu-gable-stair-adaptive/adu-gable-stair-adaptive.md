@@ -16,5 +16,6 @@ adu:
   tier: Plus
   bedrooms: 2
   stair: straight
+  cost_tier: medium
 ---
 

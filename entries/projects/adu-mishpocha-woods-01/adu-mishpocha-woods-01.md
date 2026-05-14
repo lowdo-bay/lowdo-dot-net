@@ -7,5 +7,6 @@ categories: []
 adu_library: true
 adu:
   tier: Plus
+  cost_tier: medium
 ---
 

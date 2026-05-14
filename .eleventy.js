@@ -393,31 +393,11 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
     return "$" + Math.round(n / 1000) + "K";
   });
 
-  // Format an ADU object's budget as "$LOW–$HIGH" (e.g. "$65K–$95K")
+  // Return an ADU object's qualitative cost tier as an uppercase word.
+  // Filter name retained (was "aduPriceRange") to minimize churn at call sites.
   eleventyConfig.addFilter("aduPriceRange", function(adu) {
-    if (!adu || typeof adu.budget_low !== "number" || typeof adu.budget_high !== "number") return "";
-    return "$" + Math.round(adu.budget_low / 1000) + "K–$" + Math.round(adu.budget_high / 1000) + "K";
-  });
-
-  // Bucket key for budget filtering ("under-100k", "100k-150k", etc.)
-  eleventyConfig.addFilter("aduBudgetBucket", function(adu) {
-    if (!adu || typeof adu.budget_low !== "number") return "";
-    const mid = (adu.budget_low + adu.budget_high) / 2;
-    if (mid < 100000) return "under-100k";
-    if (mid < 150000) return "100k-150k";
-    if (mid < 200000) return "150k-200k";
-    return "over-200k";
-  });
-
-  // Minimum budget_low across a list of ADU projects, formatted "$62K".
-  // Used by the tier header to show "Starts at $XK".
-  eleventyConfig.addFilter("aduTierMinPrice", function(projects) {
-    if (!Array.isArray(projects) || projects.length === 0) return "";
-    const lows = projects
-      .map(p => p.data && p.data.adu && p.data.adu.budget_low)
-      .filter(n => typeof n === "number");
-    if (lows.length === 0) return "";
-    return "$" + Math.round(Math.min(...lows) / 1000) + "K";
+    if (!adu || !adu.cost_tier) return "";
+    return String(adu.cost_tier).toUpperCase();
   });
 
   // Filter an aduLibrary collection to just one tier.

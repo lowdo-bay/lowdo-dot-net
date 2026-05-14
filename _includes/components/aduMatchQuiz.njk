@@ -245,15 +245,14 @@
   </div>
 
   <div class="adu-match-quiz__body" id="adu-match-body">
-    {# STEP 0: Budget #}
+    {# STEP 0: Cost tier #}
     <section class="adu-match-quiz__step is-active" data-step="0">
       <h2 class="adu-match-quiz__step-title">01 · WHAT'S YOUR CONSTRUCTION BUDGET?</h2>
-      <p class="adu-match-quiz__step-hint">Estimated all-in build cost (materials + labor). Pick the range closest to your number.</p>
+      <p class="adu-match-quiz__step-hint">Build cost varies by location, year, and builder, so we use qualitative tiers. Pick the level that best matches your means.</p>
       <div class="adu-match-quiz__chips">
-        <button class="adu-match-quiz__chip" type="button" data-field="budget" data-value="under-100k">&lt; $100K</button>
-        <button class="adu-match-quiz__chip" type="button" data-field="budget" data-value="100k-150k">$100–150K</button>
-        <button class="adu-match-quiz__chip" type="button" data-field="budget" data-value="150k-200k">$150–200K</button>
-        <button class="adu-match-quiz__chip" type="button" data-field="budget" data-value="over-200k">&gt; $200K</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="cost_tier" data-value="low">LOW</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="cost_tier" data-value="medium">MEDIUM</button>
+        <button class="adu-match-quiz__chip" type="button" data-field="cost_tier" data-value="high">HIGH</button>
       </div>
     </section>
 
@@ -315,18 +314,12 @@
 <script>
 (function () {
   const STORAGE_KEY = "lowdo-adu-match";
-  const BUDGET_MIDPOINT = {
-    "under-100k": 80000,
-    "100k-150k": 125000,
-    "150k-200k": 175000,
-    "over-200k": 230000
+  const COST_TIER_LABEL = {
+    "low": "LOW",
+    "medium": "MEDIUM",
+    "high": "HIGH"
   };
-  const BUDGET_LABEL = {
-    "under-100k": "< $100K",
-    "100k-150k": "$100–150K",
-    "150k-200k": "$150–200K",
-    "over-200k": "> $200K"
-  };
+  const COST_TIER_RANK = { "low": 0, "medium": 1, "high": 2 };
   const BEDROOMS_LABEL = {
     "1": "1 BR",
     "1+loft": "1 BR + LOFT",
@@ -353,7 +346,7 @@
   const clearBtn= document.getElementById("adu-match-clear");
   const results = document.getElementById("adu-match-results");
 
-  const defaultState = () => ({ active: false, step: 0, budget: null, bedrooms: null, orientation: null, prefs: [] });
+  const defaultState = () => ({ active: false, step: 0, cost_tier: null, bedrooms: null, orientation: null, prefs: [] });
   const load = () => { try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "null") || defaultState(); } catch (e) { return defaultState(); } };
   const save = (s) => sessionStorage.setItem(STORAGE_KEY, JSON.stringify(s));
   const esc  = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
@@ -375,7 +368,7 @@
   }
 
   function canAdvance() {
-    if (state.step === 0) return state.budget != null;
+    if (state.step === 0) return state.cost_tier != null;
     if (state.step === 1) return state.bedrooms != null;
     if (state.step === 2) return state.orientation != null;
     if (state.step === 3) return true; // prefs is optional
@@ -436,19 +429,20 @@
 
   trigger.addEventListener("click", () => openQuiz(0));
 
-  // Scoring — ported from mockups/a-configurator.html scoreAdu().
+  // Scoring — tier-distance for cost; exact-or-near for other fields.
   function scoreRow(row) {
     const ds = row.dataset;
-    const budgetMid = BUDGET_MIDPOINT[state.budget] || 0;
-    const lo = parseInt(ds.budgetLow, 10) || 0;
-    const hi = parseInt(ds.budgetHigh, 10) || 0;
-    const median = (lo + hi) / 2;
     let score = 0;
 
-    if (budgetMid >= lo && budgetMid <= hi)       score += 30;
-    else if (budgetMid > hi)                      score += 22;
-    else if (budgetMid >= median * 0.85)          score += 10;
-    else                                          score -= 10;
+    // Cost tier: exact match wins big; adjacent gets a small bonus; far gets nothing.
+    // Entries missing cost_tier score 0 (no penalty).
+    const pickRank = COST_TIER_RANK[state.cost_tier];
+    const rowRank  = COST_TIER_RANK[ds.costTier];
+    if (pickRank != null && rowRank != null) {
+      const dist = Math.abs(pickRank - rowRank);
+      if (dist === 0)      score += 30;
+      else if (dist === 1) score += 10;
+    }
 
     const beds = parseInt(ds.bedrooms, 10);
     const loft = ds.loft === "true";
@@ -489,7 +483,7 @@
 
   function summaryText() {
     const parts = [];
-    if (state.budget)       parts.push(BUDGET_LABEL[state.budget]);
+    if (state.cost_tier)    parts.push(COST_TIER_LABEL[state.cost_tier]);
     if (state.bedrooms)     parts.push(BEDROOMS_LABEL[state.bedrooms]);
     if (state.orientation && state.orientation !== "any") parts.push(ORIENTATION_LABEL[state.orientation]);
     if (state.prefs.length) parts.push("+" + state.prefs.length + " MUST-HAVE" + (state.prefs.length === 1 ? "" : "S"));
@@ -549,7 +543,7 @@
   });
 
   // On boot, if a previous session left the quiz active, replay submit().
-  if (state.active && state.budget) {
+  if (state.active && state.cost_tier) {
     // Re-run submit() to rebuild the flat list. We bypass clearFilters here
     // because no filters can be active on a fresh load.
     document.body.classList.add("is-matching");
