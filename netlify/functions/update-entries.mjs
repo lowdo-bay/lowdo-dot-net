@@ -201,7 +201,29 @@ export async function handler(event) {
     return { statusCode: 405, body: 'Method not allowed' };
   }
 
-  const { token, changes } = JSON.parse(event.body || '{}');
+  const parsedBody = JSON.parse(event.body || '{}');
+
+  // Phase 1: upload a single blob and return its SHA — no commit, no deploy.
+  if (parsedBody.action === 'uploadBlob') {
+    if (!parsedBody.token || !verifyToken(parsedBody.token, secret)) {
+      return { statusCode: 401, body: JSON.stringify({ error: 'Invalid or expired token' }) };
+    }
+    if (!parsedBody.base64) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing base64' }) };
+    }
+    try {
+      const sha = await createBlob(parsedBody.base64, 'base64');
+      return {
+        statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sha })
+      };
+    } catch (err) {
+      return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    }
+  }
+
+  const { token, changes } = parsedBody;
 
   if (!token || !verifyToken(token, secret)) {
     return { statusCode: 401, body: JSON.stringify({ error: 'Invalid or expired token' }) };
@@ -226,7 +248,11 @@ export async function handler(event) {
       if (change.fileOps && change.fileOps.length) {
         for (const op of change.fileOps) {
           if (op.action === 'upload') {
-            const blobSha = await createBlob(op.base64, 'base64');
+            // Prefer a precomputed SHA from Phase 1; fall back to base64 for older clients.
+            let blobSha = op.sha;
+            if (!blobSha && op.base64) {
+              blobSha = await createBlob(op.base64, 'base64');
+            }
             treeItems.push({ path: op.path, mode: '100644', type: 'blob', sha: blobSha });
           } else if (op.action === 'delete') {
             treeItems.push({ path: op.path, mode: '100644', type: 'blob', sha: null });

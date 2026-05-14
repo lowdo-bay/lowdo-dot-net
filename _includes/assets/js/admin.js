@@ -129,6 +129,10 @@
   var deleteModalCancel = document.getElementById('delete-modal-cancel');
   var saveOverlay = document.getElementById('save-overlay');
   var saveStatus = document.getElementById('save-status');
+  var saveProgress = document.getElementById('save-progress');
+  var saveActions = document.getElementById('save-actions');
+  var saveCancelBtn = document.getElementById('save-cancel');
+  var saveRetryBtn = document.getElementById('save-retry');
   var docsBtn = document.getElementById('docs-btn');
   var docsModal = document.getElementById('docs-modal');
   var docsModalClose = document.getElementById('docs-modal-close');
@@ -1493,7 +1497,7 @@
 
     if (ops.header) {
       if (ops.header.status === 'upload') {
-        result.push({ action: 'upload', path: ops.header.path, base64: ops.header.base64, mimeType: ops.header.mimeType });
+        result.push({ action: 'upload', path: ops.header.path, base64: ops.header.base64, sha: ops.header.sha, mimeType: ops.header.mimeType, _ref: ops.header });
       } else if (ops.header.status === 'delete') {
         result.push({ action: 'delete', path: ops.header.path });
       }
@@ -1511,7 +1515,7 @@
         var ext = item._ext || getExtension(item.origPath || item.path || '');
         var newPath = dirPath + '/' + numStr + '_' + (item.displayName || 'image') + '.' + ext;
         if (item.status === 'upload') {
-          result.push({ action: 'upload', path: newPath, base64: item.base64, mimeType: item.mimeType });
+          result.push({ action: 'upload', path: newPath, base64: item.base64, sha: item.sha, mimeType: item.mimeType, _ref: item });
         } else if (item.status === 'existing' && item.origPath && item.origPath !== newPath) {
           result.push({ action: 'rename', oldPath: item.origPath, newPath: newPath, sha: item.sha });
         }
@@ -1529,7 +1533,7 @@
         var ext = item._ext || getExtension(item.origPath || item.path || '');
         var newPath = dirPath + '/' + prefix + (item.displayName || 'file') + '.' + ext;
         if (item.status === 'upload') {
-          result.push({ action: 'upload', path: newPath, base64: item.base64, mimeType: item.mimeType });
+          result.push({ action: 'upload', path: newPath, base64: item.base64, sha: item.sha, mimeType: item.mimeType, _ref: item });
         } else if (item.status === 'existing' && item.origPath && item.origPath !== newPath) {
           result.push({ action: 'rename', oldPath: item.origPath, newPath: newPath, sha: item.sha });
         }
@@ -1541,6 +1545,54 @@
     processPrefixedList(ops.toolkit, 'toolkit-');
 
     return result;
+  }
+
+  // Walk every entry's fileOps and collect upload ops that haven't been blob-uploaded yet.
+  // Each queue item holds a reference to the source object inside `fileOps` so the
+  // returned SHA can be written back in place — this is what makes retry-from-failure work.
+  function buildPhase1Queue() {
+    var queue = [];
+    Object.keys(fileOps).forEach(function(filePath) {
+      var opsList = buildFileOpsList(filePath, fileOps[filePath]);
+      opsList.forEach(function(op) {
+        if (op.action !== 'upload') return;
+        if (op.sha) return; // already uploaded in a prior attempt
+        if (!op._ref || !op._ref.base64) return;
+        queue.push({ filePath: filePath, path: op.path, ref: op._ref });
+      });
+    });
+    return queue;
+  }
+
+  // POST a single base64 blob to the server; resolves with { sha } or rejects with Error.
+  function uploadOneBlob(base64, mimeType) {
+    return fetch('/.netlify/functions/update-entries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'uploadBlob', token: token, base64: base64, mimeType: mimeType })
+    }).then(function(res) {
+      return res.json().then(function(data) {
+        if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+        if (!data.sha) throw new Error('Server did not return a SHA');
+        return data;
+      });
+    });
+  }
+
+  // Decode the admin token's payload and return the exp timestamp in ms, or 0 if unreadable.
+  // Token format (see netlify/functions/admin-auth.mjs): `${base64url(payload)}.${base64url(sig)}`
+  // payload = { exp: <ms-since-epoch> }
+  function tokenExpMs(tok) {
+    try {
+      var parts = (tok || '').split('.');
+      if (!parts[0]) return 0;
+      var b64 = parts[0].replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      var payload = JSON.parse(atob(b64));
+      return payload.exp || 0;
+    } catch (e) {
+      return 0;
+    }
   }
 
   // ---- Edit panel ----
@@ -3394,29 +3446,161 @@
     });
   }
 
-  function doSave() {
+  // Phase-1 cancel flag — checked between sequential blob uploads.
+  var phase1Cancelled = false;
+
+  // Strip the client-only `_ref` pointer (and any leftover base64 once a SHA exists)
+  // before POSTing fileOps to the server in Phase 2.
+  function stripOpForCommit(op) {
+    var clean = {};
+    Object.keys(op).forEach(function(k) {
+      if (k === '_ref') return;
+      if (k === 'base64' && op.sha) return; // SHA already on the server; don't re-send bytes
+      clean[k] = op[k];
+    });
+    return clean;
+  }
+
+  function buildChangeListForCommit() {
     var changeList = Object.keys(changes).map(function(path) {
       var change = changes[path];
       var ops = fileOps[path];
       if (ops) {
-        var opsList = buildFileOpsList(path, ops);
+        var opsList = buildFileOpsList(path, ops).map(stripOpForCommit);
         if (opsList.length > 0) change.fileOps = opsList;
       }
       return change;
     });
-    // Include entries that have file ops but no frontmatter changes
     Object.keys(fileOps).forEach(function(path) {
       if (changes[path]) return;
-      var opsList = buildFileOpsList(path, fileOps[path]);
+      var opsList = buildFileOpsList(path, fileOps[path]).map(stripOpForCommit);
       if (opsList.length > 0) {
         changeList.push({ filePath: path, action: 'fileOpsOnly', fileOps: opsList });
       }
     });
-    if (changeList.length === 0) return;
+    return changeList;
+  }
+
+  function showSaveActions(opts) {
+    opts = opts || {};
+    saveCancelBtn.hidden = !opts.cancel;
+    saveRetryBtn.hidden = !opts.retry;
+    saveActions.hidden = !opts.cancel && !opts.retry;
+  }
+
+  function hideSaveOverlay(delayMs) {
+    setTimeout(function() {
+      saveOverlay.hidden = true;
+      saveProgress.hidden = true;
+      saveProgress.textContent = '';
+      showSaveActions({});
+    }, delayMs || 0);
+  }
+
+  function fileNameFromPath(p) {
+    var parts = (p || '').split('/');
+    return parts[parts.length - 1] || p;
+  }
+
+  function doSave() {
+    // Token expiry pre-flight — uploads can take a while; bail early if the token is close to expiring.
+    var exp = tokenExpMs(token);
+    if (exp && exp - Date.now() < 5 * 60 * 1000) {
+      saveConfirmModal.hidden = true;
+      saveOverlay.hidden = false;
+      saveStatus.textContent = 'Session expiring soon. Please log in again.';
+      saveProgress.hidden = true;
+      showSaveActions({});
+      setTimeout(function() {
+        saveOverlay.hidden = true;
+        token = '';
+        sessionStorage.removeItem('admin_token');
+        showLogin();
+      }, 2500);
+      return;
+    }
+
+    // Bail if nothing to do.
+    var initialChangeList = buildChangeListForCommit();
+    if (initialChangeList.length === 0) return;
 
     saveConfirmModal.hidden = true;
     saveOverlay.hidden = false;
+    phase1Cancelled = false;
+
+    runPhase1ThenCommit();
+  }
+
+  function runPhase1ThenCommit() {
+    var queue = buildPhase1Queue();
+    if (queue.length === 0) {
+      runPhase2Commit();
+      return;
+    }
+
+    saveStatus.textContent = 'Uploading images...';
+    saveProgress.hidden = false;
+    showSaveActions({ cancel: true });
+
+    var total = queue.length;
+    var i = 0;
+
+    function next() {
+      if (phase1Cancelled) {
+        saveStatus.textContent = 'Cancelled.';
+        saveProgress.hidden = true;
+        showSaveActions({});
+        hideSaveOverlay(1500);
+        return;
+      }
+      if (i >= total) {
+        showSaveActions({});
+        runPhase2Commit();
+        return;
+      }
+      var item = queue[i];
+      saveProgress.textContent = 'Uploading ' + (i + 1) + ' of ' + total + ': ' + fileNameFromPath(item.path);
+
+      uploadOneBlob(item.ref.base64, item.ref.mimeType)
+        .then(function(data) {
+          // Write the SHA back onto the source fileOps entry, drop the base64 bytes.
+          item.ref.sha = data.sha;
+          delete item.ref.base64;
+          i += 1;
+          next();
+        })
+        .catch(function(err) {
+          if (err && err.message === 'Invalid or expired token') {
+            saveStatus.textContent = 'Session expired. Please log in again.';
+            saveProgress.hidden = true;
+            showSaveActions({});
+            setTimeout(function() {
+              saveOverlay.hidden = true;
+              token = '';
+              sessionStorage.removeItem('admin_token');
+              showLogin();
+            }, 2000);
+            return;
+          }
+          saveStatus.textContent = 'Upload failed: ' + (err && err.message ? err.message : 'unknown error');
+          saveProgress.textContent = 'Stopped at ' + (i + 1) + ' of ' + total + '. Already-uploaded images will not be re-sent on retry.';
+          showSaveActions({ cancel: true, retry: true });
+        });
+    }
+
+    next();
+  }
+
+  function runPhase2Commit() {
+    var changeList = buildChangeListForCommit();
+    if (changeList.length === 0) {
+      hideSaveOverlay();
+      return;
+    }
+
     saveStatus.textContent = 'Saving ' + changeList.length + ' change(s)...';
+    saveProgress.hidden = true;
+    showSaveActions({});
 
     fetch('/.netlify/functions/update-entries', {
       method: 'POST',
@@ -3437,7 +3621,7 @@
           return;
         }
         saveStatus.textContent = 'Error: ' + (result.data.error || 'Save failed');
-        setTimeout(function() { saveOverlay.hidden = true; }, 3000);
+        hideSaveOverlay(3000);
         return;
       }
 
@@ -3462,12 +3646,26 @@
 
       setTimeout(function() {
         saveOverlay.hidden = true;
+        saveProgress.hidden = true;
+        saveProgress.textContent = '';
         renderTable();
       }, 2000);
     })
     .catch(function(err) {
       saveStatus.textContent = 'Network error: ' + err.message;
-      setTimeout(function() { saveOverlay.hidden = true; }, 3000);
+      hideSaveOverlay(3000);
+    });
+  }
+
+  if (saveCancelBtn) {
+    saveCancelBtn.addEventListener('click', function() {
+      phase1Cancelled = true;
+    });
+  }
+  if (saveRetryBtn) {
+    saveRetryBtn.addEventListener('click', function() {
+      phase1Cancelled = false;
+      runPhase1ThenCommit();
     });
   }
 

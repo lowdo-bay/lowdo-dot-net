@@ -692,6 +692,11 @@ eleventyExcludeFromCollections: true
     <div id="save-overlay" class="save-overlay" hidden>
       <div class="save-overlay__content">
         <p id="save-status">Saving...</p>
+        <p id="save-progress" hidden></p>
+        <div id="save-actions" class="save-overlay__actions" hidden>
+          <button type="button" id="save-cancel" class="btn btn--small" hidden>Cancel</button>
+          <button type="button" id="save-retry" class="btn btn--small" hidden>Retry</button>
+        </div>
       </div>
     </div>
 
