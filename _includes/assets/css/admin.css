@@ -867,6 +867,17 @@ body.modal-open { overflow: hidden; }
   font-size: 14px;
   font-weight: 600;
 }
+.save-overlay__content #save-progress {
+  margin-top: 6px;
+  font-weight: 400;
+  color: var(--admin-muted, #666);
+}
+.save-overlay__actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
 
 /* Danger solid button (delete confirm) */
 .btn--danger-solid {
