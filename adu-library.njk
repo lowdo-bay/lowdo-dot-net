@@ -524,12 +524,11 @@ section: adu-library
     </div>
 
     <div class="adu-filter-block">
-      <div class="adu-filter-block__heading">BUDGET</div>
+      <div class="adu-filter-block__heading">COST TIER</div>
       <div class="adu-filter-block__list">
-        <label class="index-filter"><input type="checkbox" data-filter="budget" data-value="under-100k"><span class="index-filter__box"></span><span class="index-filter__label">&lt; $100K</span></label>
-        <label class="index-filter"><input type="checkbox" data-filter="budget" data-value="100k-150k"><span class="index-filter__box"></span><span class="index-filter__label">$100–150K</span></label>
-        <label class="index-filter"><input type="checkbox" data-filter="budget" data-value="150k-200k"><span class="index-filter__box"></span><span class="index-filter__label">$150–200K</span></label>
-        <label class="index-filter"><input type="checkbox" data-filter="budget" data-value="over-200k"><span class="index-filter__box"></span><span class="index-filter__label">&gt; $200K</span></label>
+        <label class="index-filter"><input type="checkbox" data-filter="cost_tier" data-value="low"><span class="index-filter__box"></span><span class="index-filter__label">LOW</span></label>
+        <label class="index-filter"><input type="checkbox" data-filter="cost_tier" data-value="medium"><span class="index-filter__box"></span><span class="index-filter__label">MEDIUM</span></label>
+        <label class="index-filter"><input type="checkbox" data-filter="cost_tier" data-value="high"><span class="index-filter__box"></span><span class="index-filter__label">HIGH</span></label>
       </div>
     </div>
 
@@ -577,9 +576,7 @@ section: adu-library
                      data-bedrooms="{{ adu.bedrooms }}"
                      data-loft="{{ 'true' if adu.loft else 'false' }}"
                      data-stair="{{ adu.stair }}"
-                     data-budget="{{ adu | aduBudgetBucket }}"
-                     data-budget-low="{{ adu.budget_low }}"
-                     data-budget-high="{{ adu.budget_high }}"
+                     data-cost-tier="{{ adu.cost_tier }}"
                      data-orientation="{{ adu.orientation }}"
                      data-height="{{ adu.height }}"
                      data-features="{{ adu.features | join(',') if adu.features else '' }}">
@@ -622,14 +619,14 @@ section: adu-library
                     <div class="adu-row__spec-list">
                       <span><span class="adu-row__spec-label">FOOTPRINT</span> {{ adu.footprint | upper }}</span>
                       <span><span class="adu-row__spec-label">SQFT</span> {{ adu.sqft }}</span>
-                      <span><span class="adu-row__spec-label">BEDS</span> {{ adu.bedrooms }}{% if adu.loft %} + LOFT{% endif %}</span>
+                      <span><span class="adu-row__spec-label">BED/BATH</span> {{ adu.bedrooms }} BR / {{ adu.bathrooms or 1 }} BA{% if adu.loft %} + LOFT{% endif %}</span>
                       <span><span class="adu-row__spec-label">STAIR</span> {{ adu.stair | aduStairLabel | upper }}</span>
                     </div>
                   </div>
 
                   <div class="adu-row__cell adu-row__cell--price">
                     <span class="adu-row__price-range">{{ adu | aduPriceRange }}</span>
-                    <span class="adu-row__price-label">EST. BUILD COST</span>
+                    <span class="adu-row__price-label">COST TIER</span>
                     <span class="adu-row__view arrow--right">VIEW PROJECT</span>
                     <button class="adu-compare-btn"
                             type="button"
@@ -637,7 +634,7 @@ section: adu-library
                             data-compare-name="{{ project.data.title | upper }}"
                             data-compare-url="{{ project.url | url }}"
                             data-compare-tier="{{ adu.tier | upper }}"
-                            data-compare-bedrooms="{{ adu.bedrooms }}{% if adu.loft %} + LOFT{% endif %}"
+                            data-compare-bedrooms="{{ adu.bedrooms }} BR / {{ adu.bathrooms or 1 }} BA{% if adu.loft %} + LOFT{% endif %}"
                             data-compare-stair="{{ adu.stair | aduStairLabel | upper }}"
                             data-compare-footprint="{{ adu.footprint | upper }}"
                             data-compare-sqft="{{ adu.sqft }}"
@@ -699,13 +696,13 @@ section: adu-library
 (function () {
   var rows = Array.prototype.slice.call(document.querySelectorAll('.adu-row[data-adu]'));
   var countEl = document.getElementById('adu-result-count');
-  var filters = { bedrooms: [], loft: [], stair: [], budget: [], feature: [] };
+  var filters = { bedrooms: [], loft: [], stair: [], cost_tier: [], feature: [] };
 
   function rowMatches(row) {
     if (filters.bedrooms.length && filters.bedrooms.indexOf(row.dataset.bedrooms) < 0) return false;
     if (filters.loft.length && filters.loft.indexOf(row.dataset.loft) < 0) return false;
     if (filters.stair.length && filters.stair.indexOf(row.dataset.stair) < 0) return false;
-    if (filters.budget.length && filters.budget.indexOf(row.dataset.budget) < 0) return false;
+    if (filters.cost_tier.length && filters.cost_tier.indexOf(row.dataset.costTier) < 0) return false;
     if (filters.feature.length) {
       var rowFeats = (row.dataset.features || '').split(',').filter(Boolean);
       for (var i = 0; i < filters.feature.length; i++) {

@@ -18,10 +18,11 @@ adu_library: true
 adu:
   tier: Essential
   bedrooms: 1
+  bathrooms: 1
   loft: true
   stair: ladder
   sqft: 592
-  budget_high: 95000
+  cost_tier: low
   orientation: north-south
   footprint: 21×33 ft
   height: single + loft

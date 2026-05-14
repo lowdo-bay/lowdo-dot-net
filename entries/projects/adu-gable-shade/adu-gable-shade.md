@@ -14,11 +14,11 @@ adu_library: true
 adu:
   tier: Standard
   bedrooms: 1
+  bathrooms: 1
   loft: true
   stair: ladder
   sqft: 720
-  budget_low: 145000
-  budget_high: 195000
+  cost_tier: high
   orientation: any
   footprint: 28×26 ft
   height: two levels
