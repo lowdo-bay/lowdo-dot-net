@@ -17,11 +17,11 @@ adu:
   bathrooms: 1
   loft: true
   stair: ladder
-  sqft: 720
-  cost_tier: high
+  sqft: 592
+  cost_tier: low
   orientation: any
-  footprint: 28×26 ft
-  height: two levels
+  footprint: 33x33 ft
+  height: 20 ft
   features:
     - porch
 position: 999

@@ -12,7 +12,6 @@ status: Available
 categories:
   - HOUSING
   - ADU
-  - SUSTAINABLE
 collaborators: []
 adu_library: true
 adu:
@@ -23,11 +22,10 @@ adu:
   stair: ladder
   sqft: 592
   cost_tier: low
-  orientation: north-south
+  orientation: any
   footprint: 21×33 ft
-  height: single + loft
+  height: 20 ft
   features:
-    - loft
     - porch
 position: 999
 featured: false
