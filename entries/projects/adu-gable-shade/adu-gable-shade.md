@@ -3,7 +3,7 @@ draft: false
 type: project
 title: 'ADU_0102: Gable + Shade'
 description: Same as the Essential ADU but with a covered porch.
-date: 2026-01-03T00:00:00.000Z
+date: 2026-01-02T00:00:00.000Z
 year: '2026'
 location: Open source
 status: Available
