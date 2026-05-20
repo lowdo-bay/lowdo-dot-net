@@ -8,7 +8,7 @@ categories:
   - ADU
 adu_library: true
 adu:
-  tier: Plus
+  tier: "For Past Clients"
   cost_tier: medium
 position: 999
 featured: false

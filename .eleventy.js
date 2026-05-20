@@ -185,7 +185,7 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   // ADU library collection — projects that opt in via `adu_library: true`.
   // Sorted by tier (Essential → Standard → Plus) then by sqft (smallest first).
   eleventyConfig.addCollection("aduLibrary", function(collectionApi) {
-    const tierOrder = { Essential: 1, Standard: 2, Plus: 3 };
+    const tierOrder = { Essential: 1, Standard: 2, Plus: 3, "For Past Clients": 4 };
     return collectionApi.getFilteredByGlob("entries/projects/**/*.md")
       .filter(project => project.data.draft !== true)
       .filter(project => project.data.adu_library === true)
