@@ -13,7 +13,7 @@ adu:
   bathrooms: 1
   stair: straight
   cost_tier: medium
-position: 999
+position: 6
 featured: false
 showInAwardsTable: false
 collaborators: []

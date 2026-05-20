@@ -20,7 +20,7 @@ adu:
   features:
     - porch
     - stair
-position: 999
+position: 4
 featured: false
 showInAwardsTable: false
 collaborators: []
