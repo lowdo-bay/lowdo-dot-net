@@ -6,7 +6,7 @@ date: 2026-05-13T00:00:00.000Z
 categories: []
 adu_library: true
 adu:
-  tier: Plus
+  tier: "For Past Clients"
   bedrooms: 2
   bathrooms: 1
   stair: straight
