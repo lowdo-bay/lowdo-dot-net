@@ -12,7 +12,7 @@ categories:
   - ADU
 adu_library: true
 adu:
-  tier: Standard
+  tier: Essential
   bedrooms: 1
   bathrooms: 1
   loft: true
@@ -24,7 +24,7 @@ adu:
   height: 20 ft
   features:
     - porch
-position: 999
+position: 2
 featured: false
 showInAwardsTable: false
 collaborators: []

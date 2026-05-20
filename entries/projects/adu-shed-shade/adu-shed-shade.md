@@ -1,7 +1,7 @@
 ---
 draft: false
 type: project
-title: 'ADU_0202: Shed + Bed'
+title: 'ADU_0202: Shed + Shade'
 description: A shed roof with a fully separated upstairs bedroom.
 date: 2026-01-02T00:00:00.000Z
 year: '2026'
