@@ -14,7 +14,7 @@ adu:
   stair: straight
   cost_tier: high
   orientation: any
-position: 3
+position: 999
 featured: false
 showInAwardsTable: false
 collaborators: []

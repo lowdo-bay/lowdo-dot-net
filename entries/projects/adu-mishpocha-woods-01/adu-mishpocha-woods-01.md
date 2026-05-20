@@ -10,7 +10,7 @@ adu_library: true
 adu:
   tier: Plus
   cost_tier: medium
-position: 5
+position: 999
 featured: false
 showInAwardsTable: false
 collaborators: []

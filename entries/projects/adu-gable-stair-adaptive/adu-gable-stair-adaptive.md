@@ -7,7 +7,7 @@ categories:
   - HOUSING
   - ADU
 adu_library: true
-position: 1
+position: 999
 featured: false
 showInAwardsTable: false
 collaborators: []

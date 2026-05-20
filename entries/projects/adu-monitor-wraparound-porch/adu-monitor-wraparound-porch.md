@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 type: project
 title: 'ADU_0303: Monitor + Wraparound Porch'
 date: 2026-05-13T00:00:00.000Z
@@ -19,7 +19,7 @@ adu:
   height: 21 ft
   features:
     - porch
-position: 2
+position: 999
 featured: false
 showInAwardsTable: false
 collaborators: []

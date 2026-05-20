@@ -27,7 +27,7 @@ adu:
   height: 20 ft
   features:
     - porch
-position: 1
+position: 999
 featured: false
 showInAwardsTable: false
 relatedProjects: []
