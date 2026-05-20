@@ -5,6 +5,7 @@ title: 'ADU_0402: Shell + Stair + Adaptive'
 date: 2026-05-13T00:00:00.000Z
 categories:
   - HOUSING
+  - ADU
 adu_library: true
 adu:
   tier: Plus

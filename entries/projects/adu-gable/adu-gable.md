@@ -1,7 +1,7 @@
 ---
 draft: false
 type: project
-title: 'ADU_0101: Essential'
+title: 'ADU_0101: Gable'
 description: >-
   The most economical in the ADU library. A living room, kitchen, bedroom, and
   bathroom with a sleeping loft above, accessed by a ladder stair.
@@ -34,7 +34,6 @@ relatedProjects: []
 relatedEntries: []
 active: true
 ---
-
 The Loft Cabin is the most compact design in the LowDO ADU library. A 192-square-foot footprint stretches into 380 square feet of usable space by lifting the sleeping area into a generous loft above the kitchen and bath. Access is by ladder — a deliberate choice that keeps the design small, simple, and inexpensive to build.
 
 ## Who it's for

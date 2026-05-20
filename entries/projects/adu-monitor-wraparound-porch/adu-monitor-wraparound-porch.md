@@ -5,6 +5,7 @@ title: 'ADU_0303: Monitor + Wraparound Porch'
 date: 2026-05-13T00:00:00.000Z
 categories:
   - HOUSING
+  - ADU
 adu_library: true
 adu:
   tier: Standard

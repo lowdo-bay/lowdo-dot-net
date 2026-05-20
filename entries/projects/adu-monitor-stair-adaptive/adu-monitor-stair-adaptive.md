@@ -1,10 +1,11 @@
 ---
 draft: false
 type: project
-title: 'ADU_0404: Monitor + Stair + Adaptive'
+title: 'ADU_0304: Monitor + Stair + Adaptive'
 date: 2026-05-20T00:00:00.000Z
 categories:
   - HOUSING
+  - ADU
 adu_library: true
 adu:
   tier: Plus
@@ -13,5 +14,12 @@ adu:
   stair: straight
   cost_tier: high
   orientation: any
+position: 999
+featured: false
+showInAwardsTable: false
+collaborators: []
+relatedProjects: []
+relatedEntries: []
+active: true
 ---
 
