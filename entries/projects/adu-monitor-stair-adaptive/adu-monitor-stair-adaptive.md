@@ -11,7 +11,7 @@ adu:
   tier: Plus
   bedrooms: 2
   bathrooms: 1
-  stair: straight
+  stair: full-int
   cost_tier: high
   orientation: any
 position: 999

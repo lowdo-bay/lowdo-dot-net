@@ -2370,11 +2370,9 @@
 
   var ADU_TIER_LABELS = { Essential: 'Essential', Standard: 'Standard', Plus: 'Plus' };
   var ADU_STAIR_LABELS = {
-    ladder: 'Ladder',
-    spiral: 'Spiral stair',
-    straight: 'Straight stair',
-    switchback: 'Switchback stair',
-    none: 'Single-story (none)'
+    'ladder-int': 'Ladder-Int',
+    'full-int': 'Full-Int',
+    'full-ext': 'Full-Ext'
   };
   var ADU_ORIENTATION_LABELS = { any: 'Any', 'north-south': 'North–South', 'east-west': 'East–West' };
   var ADU_COST_TIER_LABELS = { low: 'Low', medium: 'Medium', high: 'High' };

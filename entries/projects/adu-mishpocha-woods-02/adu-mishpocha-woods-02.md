@@ -11,7 +11,7 @@ adu:
   tier: "For Past Clients"
   bedrooms: 2
   bathrooms: 1
-  stair: straight
+  stair: full-int
   cost_tier: medium
 position: 999
 featured: false

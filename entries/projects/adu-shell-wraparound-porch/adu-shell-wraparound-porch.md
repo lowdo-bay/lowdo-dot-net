@@ -12,7 +12,7 @@ adu:
   bedrooms: 1
   bathrooms: 1
   loft: true
-  stair: ladder
+  stair: ladder-int
   sqft: 581
   cost_tier: medium
   orientation: any

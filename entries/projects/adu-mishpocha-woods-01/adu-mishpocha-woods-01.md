@@ -10,6 +10,7 @@ adu_library: true
 adu:
   tier: "For Past Clients"
   cost_tier: medium
+  stair: full-ext
 position: 999
 featured: false
 showInAwardsTable: false
