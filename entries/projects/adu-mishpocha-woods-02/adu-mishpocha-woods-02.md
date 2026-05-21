@@ -8,7 +8,7 @@ categories:
   - ADU
 adu_library: true
 adu:
-  tier: "For Past Clients"
+  tier: For Past Clients
   bedrooms: 2
   bathrooms: 1
   stair: full-int

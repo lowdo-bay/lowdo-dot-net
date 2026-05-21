@@ -8,9 +8,9 @@ categories:
   - ADU
 adu_library: true
 adu:
-  tier: "For Past Clients"
-  cost_tier: medium
+  tier: For Past Clients
   stair: full-ext
+  cost_tier: medium
 position: 999
 featured: false
 showInAwardsTable: false
