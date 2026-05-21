@@ -183,7 +183,7 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   });
 
   // ADU library collection — projects that opt in via `adu_library: true`.
-  // Sorted by tier (Essential → Standard → Plus) then by sqft (smallest first).
+  // Sorted by tier (Essential → Standard → Plus) then alphabetically by title.
   eleventyConfig.addCollection("aduLibrary", function(collectionApi) {
     const tierOrder = { Essential: 1, Standard: 2, Plus: 3, "For Past Clients": 4 };
     return collectionApi.getFilteredByGlob("entries/projects/**/*.md")
@@ -193,7 +193,7 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
         const tierA = tierOrder[a.data.adu?.tier] || 99;
         const tierB = tierOrder[b.data.adu?.tier] || 99;
         if (tierA !== tierB) return tierA - tierB;
-        return (a.data.adu?.sqft || 0) - (b.data.adu?.sqft || 0);
+        return (a.data.title || "").localeCompare(b.data.title || "");
       });
   });
 
