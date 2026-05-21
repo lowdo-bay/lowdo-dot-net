@@ -17,7 +17,7 @@ active: true
 adu:
   tier: Plus
   bedrooms: 2
-  stair: straight
+  stair: full-int
   sqft: 591
   cost_tier: high
   orientation: any

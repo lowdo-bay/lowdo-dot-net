@@ -409,11 +409,9 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   // Human-readable stair label
   eleventyConfig.addFilter("aduStairLabel", function(stair) {
     return ({
-      "ladder":     "Ladder",
-      "spiral":     "Spiral stair",
-      "straight":   "Straight stair",
-      "switchback": "Switchback stair",
-      "none":       "Single-story"
+      "ladder-int": "Ladder-Int",
+      "full-int":   "Full-Int",
+      "full-ext":   "Full-Ext"
     })[stair] || stair || "";
   });
 

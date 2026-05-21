@@ -15,7 +15,7 @@ adu:
   tier: Standard
   bedrooms: 2
   bathrooms: 1
-  stair: ladder
+  stair: ladder-int
   sqft: 671
   cost_tier: low
   orientation: any

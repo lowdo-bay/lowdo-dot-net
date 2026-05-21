@@ -11,7 +11,7 @@ adu:
   tier: Plus
   bedrooms: 2
   bathrooms: 1
-  stair: straight
+  stair: full-int
   sqft: 621
   cost_tier: high
   orientation: any
