@@ -42,11 +42,6 @@ export default function() {
         return false;
       },
 
-      eleventyExcludeFromCollections(data) {
-        if (data.draft) return true;
-        return data.eleventyExcludeFromCollections;
-      },
-
       // Auto-discover thumbnail image from entry folder
       thumbnail(data) {
         if (data.thumbnail) return data.thumbnail;
