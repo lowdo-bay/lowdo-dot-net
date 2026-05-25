@@ -225,7 +225,7 @@ section: adu-library
     letter-spacing: 0.05em;
   }
   .adu-row__spec-divider {
-    margin: var(--space-1) 0;
+    margin: var(--space-1) calc(var(--space-2) * -1);
     border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
   }
   .adu-row__spec-label {
@@ -233,21 +233,27 @@ section: adu-library
     font-weight: normal;
   }
 
-  .adu-row__cell--price { text-align: right; }
+  .adu-row__cell--price {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
   .adu-row__cost-pill {
     display: inline-block;
-    border: var(--grid-line-thickness) solid var(--color-accent-1);
     color: var(--color-accent-1);
     font-size: var(--font-size-small);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: var(--space-1) var(--space-2);
     font-weight: bold;
   }
   .adu-row__cost-pill-label {
     color: var(--color-accent-2);
     font-weight: normal;
     margin-left: var(--space-1);
+  }
+  .adu-row__cell--price .adu-compare-btn {
+    margin-top: auto;
   }
 
   /* Empty state */
