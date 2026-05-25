@@ -16,10 +16,10 @@ adu:
   bedrooms: 2
   bathrooms: 1
   stair: ladder-int
-  sqft: 671
+  sqft: 657
   cost_tier: low
   orientation: any
-  footprint: 24x33 ft
+  footprint: 21x33 ft
   height: 21 ft
   features:
     - porch
