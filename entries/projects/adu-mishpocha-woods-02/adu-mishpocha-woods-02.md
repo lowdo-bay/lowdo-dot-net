@@ -10,9 +10,17 @@ adu_library: true
 adu:
   tier: For Past Clients
   bedrooms: 2
-  bathrooms: 1
+  bathrooms: 1.5
   stair: full-int
-  cost_tier: medium
+  sqft: 1264
+  cost_tier: high
+  orientation: any
+  footprint: 26 x 36
+  height: 24 ft
+  features:
+    - deck
+    - porch
+    - stair
 position: 999
 featured: false
 showInAwardsTable: false

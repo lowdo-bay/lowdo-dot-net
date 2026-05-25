@@ -9,8 +9,18 @@ categories:
 adu_library: true
 adu:
   tier: For Past Clients
-  stair: full-ext
-  cost_tier: medium
+  bedrooms: 1
+  bathrooms: 1.5
+  stair: full-int
+  sqft: 1098
+  cost_tier: high
+  orientation: any
+  footprint: 25x31 ft
+  height: '24'
+  features:
+    - porch
+    - deck
+    - stair
 position: 999
 featured: false
 showInAwardsTable: false

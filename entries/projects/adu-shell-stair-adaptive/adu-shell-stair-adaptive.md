@@ -11,11 +11,11 @@ adu:
   tier: Plus
   bedrooms: 2
   bathrooms: 1
-  stair: full-int
-  sqft: 621
+  stair: full-ext
+  sqft: 602
   cost_tier: high
   orientation: any
-  footprint: 30 x 39 ft
+  footprint: 31 x 39 ft
   height: 20 ft
   features:
     - porch

@@ -17,14 +17,14 @@ active: true
 adu:
   tier: Plus
   bedrooms: 2
-  stair: full-int
-  sqft: 591
+  stair: full-ext
+  sqft: 607
   cost_tier: high
   orientation: any
-  footprint: 24x33 ft
+  footprint: 21x28 ft
   height: 20 ft
   features:
-    - porch
     - stair
+    - porch
 ---
 

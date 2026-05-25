@@ -12,7 +12,7 @@ adu:
   bedrooms: 2
   bathrooms: 1
   stair: ladder-int
-  sqft: 653
+  sqft: 630
   cost_tier: medium
   orientation: any
   footprint: 24x36 ft
