@@ -835,7 +835,7 @@ section: project
     animation: modal-scrim-in var(--transition-time) ease reverse forwards;
   }
   .photo-modal__scrim {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23E1E1E1" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>') 12 12, auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>') 12 12, auto;
   }
   .photo-modal__card {
     position: relative;
@@ -866,11 +866,20 @@ section: project
   }
   .photo-modal__zone-prev {
     left: 0;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23E1E1E1" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="10 6 4 12 10 18"/></svg>') 12 12, auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="10 6 4 12 10 18"/></svg>') 12 12, auto;
   }
   .photo-modal__zone-next {
     right: 0;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23E1E1E1" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>') 12 12, auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>') 12 12, auto;
+  }
+  :root[dark] .photo-modal__scrim {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234D6FFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>') 12 12, auto;
+  }
+  :root[dark] .photo-modal__zone-prev {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234D6FFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="10 6 4 12 10 18"/></svg>') 12 12, auto;
+  }
+  :root[dark] .photo-modal__zone-next {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234D6FFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>') 12 12, auto;
   }
   .photo-modal__zone-prev.is-disabled,
   .photo-modal__zone-next.is-disabled {
