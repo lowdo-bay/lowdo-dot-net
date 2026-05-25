@@ -215,35 +215,45 @@ section: adu-library
     text-transform: uppercase;
     letter-spacing: 0.02em;
   }
+  .adu-row__spec-list--primary {
+    font-weight: bold;
+    color: var(--color-accent-1);
+  }
+  .adu-row__spec-list--secondary {
+    font-size: var(--font-size-small);
+    color: var(--color-accent-2);
+    letter-spacing: 0.05em;
+  }
+  .adu-row__spec-divider {
+    margin: var(--space-1) calc(var(--space-2) * -1);
+    border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
+  }
   .adu-row__spec-label {
     opacity: 0.6;
     font-weight: normal;
   }
 
-  .adu-row__cell--price { text-align: right; }
-  .adu-row__price-range {
-    display: block;
-    font-size: var(--font-size-base);
-    font-weight: bold;
+  .adu-row__cell--price {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .adu-row__cost-pill {
+    display: inline-block;
     color: var(--color-accent-1);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-  }
-  .adu-row__price-label {
-    display: block;
-    color: var(--color-accent-2);
     font-size: var(--font-size-small);
-    margin-top: var(--space-1);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: bold;
   }
-  .adu-row__view {
-    display: block;
-    margin-top: var(--space-1);
-    font-size: var(--font-size-small);
+  .adu-row__cost-pill-label {
     color: var(--color-accent-2);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-weight: normal;
+    margin-left: var(--space-1);
+  }
+  .adu-row__cell--price .adu-compare-btn {
+    margin-top: auto;
   }
 
   /* Empty state */
@@ -610,22 +620,23 @@ section: adu-library
 
                   <div class="adu-row__cell">
                     <div class="adu-row__name">{{ project.data.title | upper }}</div>
-                    <span class="adu-row__sub">{{ project.fileSlug }}</span>
+                    <span class="adu-row__sub">{{ adu.tier | upper }}</span>
                   </div>
 
                   <div class="adu-row__cell">
-                    <div class="adu-row__spec-list">
+                    <div class="adu-row__spec-list adu-row__spec-list--primary">
+                      <span>{{ adu.bedrooms }} BR / {{ adu.bathrooms or 1 }} BA{% if adu.loft %} + LOFT{% endif %}</span>
+                      <span>{{ adu.sqft }} SQFT</span>
+                    </div>
+                    <div class="adu-row__spec-divider"></div>
+                    <div class="adu-row__spec-list adu-row__spec-list--secondary">
                       <span><span class="adu-row__spec-label">FOOTPRINT</span> {{ adu.footprint | upper }}</span>
-                      <span><span class="adu-row__spec-label">SQFT</span> {{ adu.sqft }}</span>
-                      <span><span class="adu-row__spec-label">BED/BATH</span> {{ adu.bedrooms }} BR / {{ adu.bathrooms or 1 }} BA{% if adu.loft %} + LOFT{% endif %}</span>
                       <span><span class="adu-row__spec-label">STAIR</span> {{ adu.stair | aduStairLabel | upper }}</span>
                     </div>
                   </div>
 
                   <div class="adu-row__cell adu-row__cell--price">
-                    <span class="adu-row__price-range">{{ adu | aduPriceRange }}</span>
-                    <span class="adu-row__price-label">COST TIER</span>
-                    <span class="adu-row__view arrow--right">VIEW PROJECT</span>
+                    <span class="adu-row__cost-pill">{{ adu | aduPriceRange }} <span class="adu-row__cost-pill-label">COST TIER</span></span>
                     <button class="adu-compare-btn"
                             type="button"
                             data-compare-add="{{ project.fileSlug }}"
