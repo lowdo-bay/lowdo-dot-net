@@ -2,7 +2,7 @@
 draft: false
 type: project
 title: 'ADU_0202: Shed + Shade'
-description: A shed roof with a fully separated upstairs bedroom.
+description: A two-bedroom home under a single shed roof that extends out to form a deep covered porch — simple to build, with a real second bedroom upstairs.
 date: 2026-01-02T00:00:00.000Z
 year: '2026'
 location: Open source
@@ -31,12 +31,6 @@ relatedProjects: []
 relatedEntries: []
 active: true
 ---
-The Switchback is the smallest design in the library to include a true second story. A switchback stair — half a flight, a landing, then a second half flight — makes the journey upstairs feel architectural without consuming the whole footprint. The downstairs is a continuous live/work room with a small deck off the back; the upstairs holds a private bedroom, full bath, and reading loft.
+This home is shaped by one long shed roof that slopes from a high front wall down past the back of the house, creating a deep covered porch on the way. The shape is simple to frame, sheds rain easily, and gives the main living space a tall, light-filled feel with windows up high.
 
-## Who it's for
-
-Property owners who want the spatial generosity of a real two-story ADU but aren't ready to commit to a second bedroom. The Switchback is the right scale for a long-term rental, a creative studio with sleeping space, or a multi-generational guest house.
-
-## What you can change
-
-The deck is dimensionally optional — it can shrink to a small landing or grow to a full outdoor room without affecting the structural design. The stair itself is the main spatial feature and the toolkit includes drawings for both a straight-run and a U-shaped variation.
+Inside, the downstairs holds a vaulted great room with an open kitchen, a small storage room, a private bedroom, and a full bath. An interior stair leads up to a second bedroom — a real enclosed room rather than just a loft — plus a small lofted area and extra storage. At about 657 square feet, this is one of the more affordable two-bedroom plans in the collection. It's a good fit for a couple sharing the home with a child or roommate, or as a long-term rental that can comfortably sleep more than one person.

@@ -2,7 +2,7 @@
 draft: false
 type: project
 title: 'ADU_0102: Gable + Shade'
-description: Same as the Essential ADU but with a covered porch.
+description: The Gable plan with one roof slope extended into a deep covered porch — same interior, plus a shaded outdoor room running along the length of the house.
 date: 2026-01-02T00:00:00.000Z
 year: '2026'
 location: Open source
@@ -32,12 +32,6 @@ relatedProjects: []
 relatedEntries: []
 active: true
 ---
-The Courtyard is a single-story L-plan design with two enclosed bedrooms organized around a small private exterior courtyard. The plan was developed for property owners building an ADU as a long-term rental for older family members or as a multi-generational guest house — every room is on grade, every doorway meets accessible width minimums, and the kitchen and bathrooms are designed to retrofit easily for additional accessibility hardware.
+This home keeps the simple, affordable one-bedroom plan of the basic Gable, but adds a dramatic move on the outside: one side of the roof sweeps all the way down to the ground to form a deep covered porch running the full length of the house. The shade keeps the interior cool in summer and gives you a real outdoor room for a long table, hammocks, or chairs.
 
-## Who it's for
-
-The Courtyard is the most generous single-story design in the library and the most flexible for accessibility. It's the right scale for long-term renters, multi-generational housing, or a property owner who wants the option to age in place in their own ADU later.
-
-## What you can change
-
-The courtyard itself is the design's defining move and isn't structurally optional. But its surface treatment is wide open: gravel, decomposed granite, full hardscape, or a small planted garden are all detailed in the toolkit. The L-plan can be mirrored to suit either left- or right-handed lots without changes to the structural drawings.
+Inside, the layout is the same as the basic Gable — an open great room with a vaulted ceiling, a kitchen along the back wall, a private ground-floor bedroom and bath, and a sleeping loft above. The covered porch costs a little more than a bare gable but pays you back in usable square footage that doesn't count against the conditioned area. It's a strong choice for warm climates, families who like to eat outdoors, or anyone who wants a porch as the front room of the house.
