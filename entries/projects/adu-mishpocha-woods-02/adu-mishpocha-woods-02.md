@@ -2,7 +2,9 @@
 draft: false
 type: project
 title: 'ADU_0502: Mishpocha Woods 02'
-description: A two-story two-bedroom home with an open kitchen and living room downstairs, a covered porch, and a full primary suite plus a guest bedroom upstairs.
+description: >-
+  A two-story two-bedroom home with an open kitchen and living room downstairs,
+  a covered porch, and a full primary suite plus a guest bedroom upstairs.
 date: 2026-05-13T00:00:00.000Z
 categories:
   - HOUSING

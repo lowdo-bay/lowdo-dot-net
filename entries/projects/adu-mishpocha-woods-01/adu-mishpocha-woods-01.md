@@ -2,7 +2,9 @@
 draft: false
 type: project
 title: 'ADU_0501: Mishpocha Woods 01'
-description: A full two-story one-bedroom home with a covered patio downstairs, an upstairs primary suite under cathedral ceilings, and an upper-level covered porch.
+description: >-
+  A full two-story one-bedroom home with a covered patio downstairs, an upstairs
+  primary suite under cathedral ceilings, and an upper-level covered porch.
 date: 2026-05-13T00:00:00.000Z
 categories:
   - HOUSING
