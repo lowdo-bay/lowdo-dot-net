@@ -7,5 +7,10 @@
     <div class="adu-tier-header__edition">{{ tier.edition }}</div>
     <div class="adu-tier-header__name">{{ tier.name | upper }}</div>
   </div>
+  <div class="adu-tier-header__count-cell">
+    <span class="adu-tier-header__count" data-tier-count="{{ tier.name }}">
+      <strong>{{ tierProjects | length }}</strong> / {{ tierProjects | length }} DESIGNS
+    </span>
+  </div>
   <div class="adu-tier-header__pitch-cell">{{ tier.pitch }}</div>
 </section>

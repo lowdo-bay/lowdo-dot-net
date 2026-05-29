@@ -204,7 +204,6 @@ section: adu-library
     display: block;
     margin-top: var(--space-1);
     font-size: var(--font-size-small);
-    text-transform: uppercase;
     opacity: 0.7;
   }
 
@@ -255,6 +254,10 @@ section: adu-library
   .adu-row__cell--price .adu-compare-btn {
     margin-top: auto;
   }
+  .adu-row__cell--price .adu-row__sub {
+    text-align: left;
+    align-self: stretch;
+  }
 
   /* Empty state */
   .adu-empty {
@@ -299,8 +302,18 @@ section: adu-library
     grid-column: 1;
     padding: var(--space-2);
   }
+  .adu-tier-header__count-cell {
+    grid-column: 2;
+    padding: var(--space-2);
+  }
+  .adu-tier-header__count {
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .adu-tier-header__count strong { color: var(--color-accent-1); }
   .adu-tier-header__pitch-cell {
-    grid-column: 2 / 4;
+    grid-column: 3 / 5;
     padding: var(--space-2);
     font-size: var(--font-size-small);
     line-height: 1.6;
@@ -312,8 +325,10 @@ section: adu-library
   }
   @media (max-width: 839px) {
     .adu-tier-header__name-cell,
+    .adu-tier-header__count-cell,
     .adu-tier-header__pitch-cell,
     .adu-tier-header__price-cell { grid-column: 1; }
+    .adu-tier-header__count-cell,
     .adu-tier-header__pitch-cell,
     .adu-tier-header__price-cell {
       border-top: var(--grid-line-thickness) var(--grid-line-horizontal-minor-style) var(--grid-line-color);
@@ -620,7 +635,7 @@ section: adu-library
 
                   <div class="adu-row__cell">
                     <div class="adu-row__name">{{ project.data.title | upper }}</div>
-                    <span class="adu-row__sub">{{ project.data.description }}</span>
+                    <span class="adu-row__cost-pill">{{ adu | aduPriceRange }} <span class="adu-row__cost-pill-label">COST TIER</span></span>
                   </div>
 
                   <div class="adu-row__cell">
@@ -636,7 +651,7 @@ section: adu-library
                   </div>
 
                   <div class="adu-row__cell adu-row__cell--price">
-                    <span class="adu-row__cost-pill">{{ adu | aduPriceRange }} <span class="adu-row__cost-pill-label">COST TIER</span></span>
+                    <span class="adu-row__sub">{{ project.data.description }}</span>
                     <button class="adu-compare-btn"
                             type="button"
                             data-compare-add="{{ project.fileSlug }}"
@@ -738,6 +753,12 @@ section: adu-library
     document.querySelectorAll('[data-tier-empty]').forEach(function (el) {
       var t = el.getAttribute('data-tier-empty');
       el.style.display = (tierCounts[t] === 0) ? '' : 'none';
+    });
+    // Update the per-tier header count ("N / TOTAL DESIGNS").
+    document.querySelectorAll('[data-tier-count]').forEach(function (el) {
+      var t = el.getAttribute('data-tier-count');
+      var strong = el.querySelector('strong');
+      if (strong) strong.textContent = tierCounts[t] || 0;
     });
   }
 
