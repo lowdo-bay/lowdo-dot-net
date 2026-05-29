@@ -259,6 +259,41 @@
   }
   .adu-compare-thumb--empty { background: var(--color-accent-5); }
 
+  /* Drawing flipper inside the compare panel — mirrors the rules in
+     adu-library.njk so the cloned thumbnail markup behaves identically. */
+  .adu-compare-thumb .adu-thumb-flipper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .adu-compare-thumb .adu-thumb-frame { display: none; }
+  .adu-compare-thumb .adu-thumb-frame.is-active { display: block; height: 100%; }
+  .adu-compare-thumb .adu-thumb-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 2;
+  }
+  .adu-compare-thumb .adu-thumb-zone--prev {
+    left: 0;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="10 6 4 12 10 18"/></svg>') 12 12, auto;
+  }
+  .adu-compare-thumb .adu-thumb-zone--next {
+    right: 0;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>') 12 12, auto;
+  }
+  :root[dark] .adu-compare-thumb .adu-thumb-zone--prev {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234D6FFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="10 6 4 12 10 18"/></svg>') 12 12, auto;
+  }
+  :root[dark] .adu-compare-thumb .adu-thumb-zone--next {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234D6FFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>') 12 12, auto;
+  }
+  .adu-compare-thumb .adu-thumb-flipper[data-single] .adu-thumb-zone {
+    display: none;
+  }
+
   /* Mobile: stack rows; label inlines before each value. */
   @media (max-width: 839px) {
     .adu-compare-row { display: block; }
@@ -386,7 +421,11 @@
     document.querySelectorAll("[data-compare-add]").forEach((b) => {
       const isAdded = state.some((s) => s.slug === b.dataset.compareAdd);
       b.classList.toggle("is-added", isAdded);
-      b.textContent = isAdded ? "✓ ADDED" : "+ COMPARE";
+      // Update only the label span — setting b.textContent would destroy the
+      // sibling <template> that carries the thumbnail/drawing frames.
+      const label = b.querySelector(".adu-compare-btn__label");
+      if (label) label.textContent = isAdded ? "✓ ADDED" : "+ COMPARE";
+      else b.textContent = isAdded ? "✓ ADDED" : "+ COMPARE";
     });
 
     if (state.length === 0) {
@@ -443,7 +482,14 @@
     });
     html += `</div>`;
     body.innerHTML = html;
+
+    // Re-attach the synced drawing flipper to the freshly rendered thumbs.
+    // The frames are new DOM each render, so tear down any prior controller
+    // and start fresh from the header frame.
+    if (detachFlip) { detachFlip(); detachFlip = null; }
+    if (window.aduThumbFlip) detachFlip = window.aduThumbFlip.attach(body);
   }
+  let detachFlip = null;
 
   function expandPanel() {
     if (state.length < 2) return;

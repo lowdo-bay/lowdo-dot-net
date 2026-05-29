@@ -174,6 +174,42 @@ section: adu-library
     background: var(--color-accent-5);
   }
 
+  /* Drawing flipper — stacked frames (header + drawings) with prev/next zones.
+     Shared markup also rendered inside the compare modal (aduCompareTray.njk). */
+  .adu-thumb-flipper {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+  }
+  .adu-thumb-frame { display: none; }
+  .adu-thumb-frame.is-active { display: block; }
+  .adu-thumb-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 2;
+  }
+  .adu-thumb-zone--prev {
+    left: 0;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="10 6 4 12 10 18"/></svg>') 12 12, auto;
+  }
+  .adu-thumb-zone--next {
+    right: 0;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23001489" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>') 12 12, auto;
+  }
+  :root[dark] .adu-thumb-zone--prev {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234D6FFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="10 6 4 12 10 18"/></svg>') 12 12, auto;
+  }
+  :root[dark] .adu-thumb-zone--next {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234D6FFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"><line x1="6" y1="12" x2="18" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>') 12 12, auto;
+  }
+  /* No drawings → no flipping; suppress arrow zones entirely. */
+  .adu-thumb-flipper[data-single] .adu-thumb-zone {
+    display: none;
+  }
+
   .adu-row__name {
     display: inline-block;
     font-size: var(--font-size-base);
@@ -613,20 +649,45 @@ section: adu-library
                             {{ '' if outputFormats.push(format) }}
                           {% endif %}
                         {% endfor %}
-                        {% set params = {
-                          "src": project.data.headerImage.src,
-                          "alt": project.data.headerImage.alt or project.data.title,
-                          "loadingType": "lazy",
-                          "viewportSizes": "(min-width: 840px) 25vw, 100vw",
-                          "outputWidths": [
-                            settings.config.image_grid_width_sm,
-                            settings.config.image_grid_width_md
-                          ],
-                          "outputFormats": outputFormats,
-                          "outputQualityJpeg": settings.images.jpeg.quality,
-                          "outputQualityWebp": settings.images.webp.quality
-                        } %}
-                        {% generateImage params %}
+                        {% set drawings = project.data.drawings or [] %}
+                        <div class="adu-thumb-flipper" data-flipper{% if drawings | length == 0 %} data-single{% endif %}>
+                          <div class="adu-thumb-frame is-active" data-frame="0">
+                            {% set params = {
+                              "src": project.data.headerImage.src,
+                              "alt": project.data.headerImage.alt or project.data.title,
+                              "loadingType": "lazy",
+                              "viewportSizes": "(min-width: 840px) 25vw, 100vw",
+                              "outputWidths": [
+                                settings.config.image_grid_width_sm,
+                                settings.config.image_grid_width_md
+                              ],
+                              "outputFormats": outputFormats,
+                              "outputQualityJpeg": settings.images.jpeg.quality,
+                              "outputQualityWebp": settings.images.webp.quality
+                            } %}
+                            {% generateImage params %}
+                          </div>
+                          {% for d in drawings %}
+                            <div class="adu-thumb-frame" data-frame="{{ loop.index }}">
+                              {% set dParams = {
+                                "src": d.src,
+                                "alt": d.caption or project.data.title,
+                                "loadingType": "lazy",
+                                "viewportSizes": "(min-width: 840px) 25vw, 100vw",
+                                "outputWidths": [
+                                  settings.config.image_grid_width_sm,
+                                  settings.config.image_grid_width_md
+                                ],
+                                "outputFormats": outputFormats,
+                                "outputQualityJpeg": settings.images.jpeg.quality,
+                                "outputQualityWebp": settings.images.webp.quality
+                              } %}
+                              {% generateImage dParams %}
+                            </div>
+                          {% endfor %}
+                          <div class="adu-thumb-zone adu-thumb-zone--prev" data-flip-prev aria-hidden="true"></div>
+                          <div class="adu-thumb-zone adu-thumb-zone--next" data-flip-next aria-hidden="true"></div>
+                        </div>
                       {% else %}
                         <div class="adu-row__thumb-empty"></div>
                       {% endif %}
@@ -675,20 +736,45 @@ section: adu-library
                             {{ '' if cmpOutputFormats.push(format) }}
                           {% endif %}
                         {% endfor %}
-                        {% set thumbParams = {
-                          "src": project.data.headerImage.src,
-                          "alt": project.data.headerImage.alt or project.data.title,
-                          "loadingType": "lazy",
-                          "viewportSizes": "(min-width: 840px) 25vw, 90vw",
-                          "outputWidths": [
-                            settings.config.image_grid_width_sm,
-                            settings.config.image_grid_width_md
-                          ],
-                          "outputFormats": cmpOutputFormats,
-                          "outputQualityJpeg": settings.images.jpeg.quality,
-                          "outputQualityWebp": settings.images.webp.quality
-                        } %}
-                        {% generateImage thumbParams %}
+                        {% set cmpDrawings = project.data.drawings or [] %}
+                        <div class="adu-thumb-flipper" data-flipper{% if cmpDrawings | length == 0 %} data-single{% endif %}>
+                          <div class="adu-thumb-frame is-active" data-frame="0">
+                            {% set thumbParams = {
+                              "src": project.data.headerImage.src,
+                              "alt": project.data.headerImage.alt or project.data.title,
+                              "loadingType": "lazy",
+                              "viewportSizes": "(min-width: 840px) 25vw, 90vw",
+                              "outputWidths": [
+                                settings.config.image_grid_width_sm,
+                                settings.config.image_grid_width_md
+                              ],
+                              "outputFormats": cmpOutputFormats,
+                              "outputQualityJpeg": settings.images.jpeg.quality,
+                              "outputQualityWebp": settings.images.webp.quality
+                            } %}
+                            {% generateImage thumbParams %}
+                          </div>
+                          {% for d in cmpDrawings %}
+                            <div class="adu-thumb-frame" data-frame="{{ loop.index }}">
+                              {% set cmpDParams = {
+                                "src": d.src,
+                                "alt": d.caption or project.data.title,
+                                "loadingType": "lazy",
+                                "viewportSizes": "(min-width: 840px) 25vw, 90vw",
+                                "outputWidths": [
+                                  settings.config.image_grid_width_sm,
+                                  settings.config.image_grid_width_md
+                                ],
+                                "outputFormats": cmpOutputFormats,
+                                "outputQualityJpeg": settings.images.jpeg.quality,
+                                "outputQualityWebp": settings.images.webp.quality
+                              } %}
+                              {% generateImage cmpDParams %}
+                            </div>
+                          {% endfor %}
+                          <div class="adu-thumb-zone adu-thumb-zone--prev" data-flip-prev aria-hidden="true"></div>
+                          <div class="adu-thumb-zone adu-thumb-zone--next" data-flip-next aria-hidden="true"></div>
+                        </div>
                       </template>
                       {% endif %}
                     </button>
@@ -781,6 +867,61 @@ section: adu-library
   });
 
   rerender();
+})();
+</script>
+
+{# ── Drawing flipper ──────────────────────────────────────────────────
+   Click a thumbnail's right zone to advance every thumbnail under `root`
+   to its next drawing at once (left zone steps back). Each flipper wraps
+   independently within its own frame count, so schemes with no drawings
+   simply stay on their header. Exposed as window.aduThumbFlip so the
+   compare modal can drive the same logic on its panel. #}
+<script>
+(function () {
+  // Attach a synced flipper controller to every [data-flipper] inside root.
+  // Returns a teardown fn that removes the listeners (used by the modal,
+  // which rebuilds its DOM on every open).
+  function attach(root) {
+    var flippers = Array.prototype.map.call(
+      root.querySelectorAll("[data-flipper]"),
+      function (el) {
+        return { el: el, frames: el.querySelectorAll("[data-frame]") };
+      }
+    ).filter(function (f) { return f.frames.length > 1; });
+
+    if (!flippers.length) return function () {};
+
+    var shared = 0;
+
+    function show() {
+      flippers.forEach(function (f) {
+        var len = f.frames.length;
+        var idx = ((shared % len) + len) % len;
+        for (var n = 0; n < len; n++) {
+          f.frames[n].classList.toggle("is-active", n === idx);
+        }
+      });
+    }
+
+    function onClick(e) {
+      var next = e.target.closest("[data-flip-next]");
+      var prev = e.target.closest("[data-flip-prev]");
+      if (!next && !prev) return;
+      if (!root.contains(next || prev)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      shared += next ? 1 : -1;
+      show();
+    }
+
+    root.addEventListener("click", onClick);
+    return function () { root.removeEventListener("click", onClick); };
+  }
+
+  window.aduThumbFlip = { attach: attach };
+
+  // Drive the library page's own rows.
+  attach(document.querySelector(".adu-rows") || document.body);
 })();
 </script>
 
