@@ -13,5 +13,10 @@ relatedProjects:
   - 201230_wolf-creek-ranch
 featured: false
 type: award
+position: 999
+showInAwardsTable: true
+collaborators: []
+relatedEntries: []
+active: true
 ---
 
