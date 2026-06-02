@@ -1,15 +1,17 @@
 ---
-draft: true
-type: award
-title: 'AIA Austin Design Award: Wolf Creek Ranch Residence'
+draft: false
+title: 'AIA Austin Award: Wolf Creek Ranch Residence'
+subtitle: AIA Austin
+description: >-
+  LowDO recieved the program’s highest honor, given to projects that demonstrate
+  the highest level of design, performance, and sustainability within the AIA
+  Austin Design Awards.
 date: 2026-05-13T00:00:00.000Z
 categories: []
-position: 0
+link: 'https://vimeo.com/1192342111?fl=pl&fe=vl'
+relatedProjects:
+  - 201230_wolf-creek-ranch
 featured: false
-showInAwardsTable: false
-collaborators: []
-relatedProjects: []
-relatedEntries: []
-active: true
+type: award
 ---
 
