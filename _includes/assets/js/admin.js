@@ -1403,71 +1403,61 @@
     renderFilesHeader(fileOps[activeEditPath]);
   });
 
+  // Read every selected file (async, possibly out of order), then append to the
+  // target list in original selection order and render once. Shared by the
+  // gallery, drawings, and toolkit multi-select inputs.
+  function handleMultiFileSelect(listEl, opsKey) {
+    return function() {
+      var files = this.files;
+      if (!files || !files.length || !activeEditPath) return;
+      var editPath = activeEditPath;                 // capture; may change before reads finish
+      ensureFileOps(editPath);
+      // Capture any in-progress display-name edits ONCE, before mutating the array.
+      syncFileNamesFromRows(listEl, fileOps[editPath][opsKey]);
+
+      var fileArr = Array.prototype.slice.call(files);
+      var results = new Array(fileArr.length);        // index-keyed: preserves order
+      var remaining = fileArr.length;
+
+      fileArr.forEach(function(file, i) {
+        readFileAsBase64(file, function(base64, mimeType) {
+          results[i] = {
+            status: 'upload', base64: base64, mimeType: mimeType,
+            displayName: file.name.replace(/\.[^.]+$/, ''),
+            path: '', origPath: null, _ext: getExtension(file.name)
+          };
+          if (--remaining === 0) finish();
+        });
+      });
+
+      function finish() {
+        // Guard: user may have navigated to a different entry mid-read.
+        if (activeEditPath !== editPath || !fileOps[editPath]) return;
+        results.forEach(function(item) {
+          if (item) fileOps[editPath][opsKey].push(item);
+        });
+        renderFilesList(listEl, fileOps[editPath][opsKey]);
+      }
+    };
+  }
+
   epFilesGalleryAdd.addEventListener('click', function() {
     epFilesGalleryInput.value = '';
     epFilesGalleryInput.click();
   });
-
-  epFilesGalleryInput.addEventListener('change', function() {
-    if (!this.files || !this.files[0] || !activeEditPath) return;
-    var file = this.files[0];
-    readFileAsBase64(file, function(base64, mimeType) {
-      var ext = getExtension(file.name);
-      var defaultName = file.name.replace(/\.[^.]+$/, '');
-      ensureFileOps(activeEditPath);
-      syncFileNamesFromRows(epFilesGalleryList, fileOps[activeEditPath].gallery);
-      fileOps[activeEditPath].gallery.push({
-        status: 'upload', base64: base64, mimeType: mimeType,
-        displayName: defaultName, path: '', origPath: null,
-        _ext: ext
-      });
-      renderFilesList(epFilesGalleryList, fileOps[activeEditPath].gallery);
-    });
-  });
+  epFilesGalleryInput.addEventListener('change', handleMultiFileSelect(epFilesGalleryList, 'gallery'));
 
   epFilesDrawingsAdd.addEventListener('click', function() {
     epFilesDrawingsInput.value = '';
     epFilesDrawingsInput.click();
   });
-
-  epFilesDrawingsInput.addEventListener('change', function() {
-    if (!this.files || !this.files[0] || !activeEditPath) return;
-    var file = this.files[0];
-    readFileAsBase64(file, function(base64, mimeType) {
-      var ext = getExtension(file.name);
-      var defaultName = file.name.replace(/\.[^.]+$/, '');
-      ensureFileOps(activeEditPath);
-      syncFileNamesFromRows(epFilesDrawingsList, fileOps[activeEditPath].drawings);
-      fileOps[activeEditPath].drawings.push({
-        status: 'upload', base64: base64, mimeType: mimeType,
-        displayName: defaultName, path: '', origPath: null,
-        _ext: ext
-      });
-      renderFilesList(epFilesDrawingsList, fileOps[activeEditPath].drawings);
-    });
-  });
+  epFilesDrawingsInput.addEventListener('change', handleMultiFileSelect(epFilesDrawingsList, 'drawings'));
 
   epFilesToolkitAdd.addEventListener('click', function() {
     epFilesToolkitInput.value = '';
     epFilesToolkitInput.click();
   });
-
-  epFilesToolkitInput.addEventListener('change', function() {
-    if (!this.files || !this.files[0] || !activeEditPath) return;
-    var file = this.files[0];
-    readFileAsBase64(file, function(base64, mimeType) {
-      var ext = getExtension(file.name);
-      var defaultName = file.name.replace(/\.[^.]+$/, '');
-      ensureFileOps(activeEditPath);
-      syncFileNamesFromRows(epFilesToolkitList, fileOps[activeEditPath].toolkit);
-      fileOps[activeEditPath].toolkit.push({
-        status: 'upload', base64: base64, mimeType: mimeType,
-        displayName: defaultName, path: '', origPath: null,
-        _ext: ext
-      });
-      renderFilesList(epFilesToolkitList, fileOps[activeEditPath].toolkit);
-    });
-  });
+  epFilesToolkitInput.addEventListener('change', handleMultiFileSelect(epFilesToolkitList, 'toolkit'));
 
   function wireFilesListEvents(listEl, getItems) {
     listEl.addEventListener('click', function(e) {
