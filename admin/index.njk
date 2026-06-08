@@ -301,7 +301,7 @@ eleventyExcludeFromCollections: true
                 <div class="ep-files-group__title"><span data-tooltip="Appear in the image gallery on the project detail page, below the body text. Accepts JPEG, PNG, WebP, AVIF.">Gallery Images</span></div>
                 <div class="ep-files-list" id="ep-files-gallery-list"></div>
                 <button type="button" class="btn btn--small" id="ep-files-gallery-add">+ Add Image</button>
-                <input type="file" id="ep-files-gallery-input" accept="image/*" hidden>
+                <input type="file" id="ep-files-gallery-input" accept="image/*" multiple hidden>
               </div>
 
               {# Drawings #}
@@ -309,7 +309,7 @@ eleventyExcludeFromCollections: true
                 <div class="ep-files-group__title"><span data-tooltip="Technical drawings displayed in a separate section on the project detail page. Accepts JPEG, PNG, WebP, AVIF, PDF, DWG, DXF.">Drawings</span></div>
                 <div class="ep-files-list" id="ep-files-drawings-list"></div>
                 <button type="button" class="btn btn--small" id="ep-files-drawings-add">+ Add Drawing</button>
-                <input type="file" id="ep-files-drawings-input" accept="image/*,.pdf,.dwg,.dxf" hidden>
+                <input type="file" id="ep-files-drawings-input" accept="image/*,.pdf,.dwg,.dxf" multiple hidden>
               </div>
 
               {# Toolkit files #}
@@ -317,7 +317,7 @@ eleventyExcludeFromCollections: true
                 <div class="ep-files-group__title"><span data-tooltip="Downloadable files listed in the Toolkit section on the project detail page. Accepts any file type.">Toolkit Files</span></div>
                 <div class="ep-files-list" id="ep-files-toolkit-list"></div>
                 <button type="button" class="btn btn--small" id="ep-files-toolkit-add">+ Add File</button>
-                <input type="file" id="ep-files-toolkit-input" hidden>
+                <input type="file" id="ep-files-toolkit-input" multiple hidden>
               </div>
             </div>
           </div>
