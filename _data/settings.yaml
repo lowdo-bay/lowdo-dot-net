@@ -128,7 +128,7 @@ i18n:
   site_language: en
   # single-language translations can be defined here
   site_social_title: GitHub
-# Internal config, hidden from Tina CMS
+# Internal config (not surfaced in the admin editor)
 config:
   # define responsive image widths for project thumbnails and large images
   # modifying these will require a corresponding change to viewport sizes in responsive image markup
