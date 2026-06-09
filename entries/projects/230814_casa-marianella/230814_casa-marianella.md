@@ -22,6 +22,128 @@ collaborators:
   - name: Brooke Murray
     role: Landscape Contractor
 type: project
+headerImage:
+  src: entries/projects/230814_casa-marianella/header.jpg
+  width: 3254
+  height: 2250
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: Casa Marianella
+images:
+  - src: entries/projects/230814_casa-marianella/01_Exterior view.jpg
+    width: 1650
+    height: 929
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 01 Exterior view
+  - src: entries/projects/230814_casa-marianella/02_Exterior wide view.jpg
+    width: 3000
+    height: 1687
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 02 Exterior wide view
+  - src: entries/projects/230814_casa-marianella/03_Play area.png
+    width: 1586
+    height: 1200
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 03 Play area
+  - src: entries/projects/230814_casa-marianella/04_Garden view.png
+    width: 3286
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 04 Garden view
+  - src: entries/projects/230814_casa-marianella/05_Community engagement.jpg
+    width: 4000
+    height: 3000
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 05 Community engagement
+  - src: entries/projects/230814_casa-marianella/06_Community engagement.jpg
+    width: 3024
+    height: 4032
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 06 Community engagement
+  - src: entries/projects/230814_casa-marianella/07_Community engagement.jpg
+    width: 4000
+    height: 3000
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 07 Community engagement
+  - src: entries/projects/230814_casa-marianella/08_Community engagement.jpg
+    width: 3024
+    height: 4032
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 08 Community engagement
+drawings:
+  - src: entries/projects/230814_casa-marianella/drawing-site-plan.jpg
+    width: 10800
+    height: 7200
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing site plan
+  - src: entries/projects/230814_casa-marianella/drawing-sun study.jpg
+    width: 4000
+    height: 1787
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing sun study
 ---
 
 LowDO and FORGE Landscape Architecture have designed a new community dwelling, garden, and playscape for Casa Marianella. Casa is a non-profit that provides essential shelter and support for immigrants and refugees, and the project will create shared spaces for their Posada campus, which exclusively serves women and children who have traveled to Austin from myriad countries across the Americas and Africa. Casa promotes self-sufficiency by offering these women and their families a temporary home and supportive services to place children in school, find jobs, complete paperwork, and adjust to living in a new culture after often-traumatic journeys.

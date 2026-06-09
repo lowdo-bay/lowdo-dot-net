@@ -34,7 +34,7 @@
 
 {# Project detail pages: CreativeWork schema #}
 {% elif section == "project" %}
-  {% set imageUrl = (siteUrl + "/" + headerImage.src) if headerImage and headerImage.src else null %}
+  {% set imageUrl = (headerImage | r2url(siteUrl)) if headerImage and headerImage.src else null %}
   {% set creativeWorkSchema = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",

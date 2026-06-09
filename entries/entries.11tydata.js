@@ -65,6 +65,8 @@ export default function() {
       // Auto-discover thumbnail image from entry folder
       thumbnail(data) {
         if (data.thumbnail) return data.thumbnail;
+        // Migrated entries: reuse the R2 header record so listings serve from R2.
+        if (data.headerImage && data.headerImage.r2) return data.headerImage;
         const entryDir = path.dirname(data.page.inputPath);
         try {
           const files = fs.readdirSync(entryDir);

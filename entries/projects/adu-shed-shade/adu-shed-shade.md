@@ -32,6 +32,82 @@ collaborators: []
 relatedProjects: []
 relatedEntries: []
 active: true
+headerImage:
+  src: entries/projects/adu-shed-shade/header.jpg
+  width: 1224
+  height: 792
+  r2: true
+  widths:
+    - 640
+    - 1080
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: 'ADU_0202: Shed + Shade'
+images:
+  - src: entries/projects/adu-shed-shade/00_Isometric 01.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 00 Isometric 01
+  - src: entries/projects/adu-shed-shade/01_Isometric 02.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 01 Isometric 02
+drawings:
+  - src: entries/projects/adu-shed-shade/drawing-Plan 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 01
+  - src: entries/projects/adu-shed-shade/drawing-Plan 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 02
+  - src: entries/projects/adu-shed-shade/drawing-Section 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 01
+  - src: entries/projects/adu-shed-shade/drawing-Section 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 02
 ---
 This home is shaped by one long shed roof that slopes from a high back wall down past the front of the house, creating a deep covered porch on the way. The shape is simple to frame, sheds rain easily, and gives the main living space a tall, light-filled feel with windows up high.
 

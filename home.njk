@@ -1065,6 +1065,7 @@ permalink: "/index.html"
                 {% if featuredImage %}
                   {% set params = {
                     "src": featuredImage.src,
+                    "r2record": featuredImage,
                     "alt": featuredImage.alt or project.data.title,
                     "loadingType": "lazy",
                     "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 840px) 25vw, 45vw",

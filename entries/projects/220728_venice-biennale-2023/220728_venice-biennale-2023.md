@@ -12,6 +12,154 @@ categories:
 location: 'Venice, Italy'
 status: Exhibition
 type: project
+headerImage:
+  src: entries/projects/220728_venice-biennale-2023/header.jpg
+  width: 4000
+  height: 2236
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: 'Enviromolecular: Venice Biennale 2023'
+images:
+  - src: entries/projects/220728_venice-biennale-2023/01_Upwards view.jpg
+    width: 1024
+    height: 768
+    r2: true
+    widths:
+      - 640
+    formats: *ref_0
+    caption: 01 Upwards view
+  - src: entries/projects/220728_venice-biennale-2023/02_Exhibition graphics.jpg
+    width: 1600
+    height: 777
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 02 Exhibition graphics
+  - src: entries/projects/220728_venice-biennale-2023/03_Wide.jpg
+    width: 1600
+    height: 777
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 03 Wide
+  - src: entries/projects/220728_venice-biennale-2023/04_Exhibition.jpg
+    width: 4000
+    height: 1944
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 04 Exhibition
+  - src: entries/projects/220728_venice-biennale-2023/05_Projected image.jpg
+    width: 4000
+    height: 1944
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 05 Projected image
+  - src: entries/projects/220728_venice-biennale-2023/06_Detail.jpg
+    width: 1883
+    height: 1412
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 06 Detail
+  - src: entries/projects/220728_venice-biennale-2023/07_Wide.jpg
+    width: 1600
+    height: 1234
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 07 Wide
+  - src: entries/projects/220728_venice-biennale-2023/08_Exhibition.jpg
+    width: 4000
+    height: 2877
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 08 Exhibition
+drawings:
+  - src: entries/projects/220728_venice-biennale-2023/drawing-Axonometric.jpg
+    width: 1695
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Axonometric
+  - src: entries/projects/220728_venice-biennale-2023/drawing-Cut pattern.jpg
+    width: 1695
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Cut pattern
+  - src: entries/projects/220728_venice-biennale-2023/drawing-Diagrams 01.jpg
+    width: 1695
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Diagrams 01
+  - src: entries/projects/220728_venice-biennale-2023/drawing-Diagrams 02.jpg
+    width: 1695
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Diagrams 02
+  - src: entries/projects/220728_venice-biennale-2023/drawing-Nkimyu grid.jpg
+    width: 1695
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Nkimyu grid
+  - src: entries/projects/220728_venice-biennale-2023/drawing-Square grid.jpg
+    width: 1695
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Square grid
 ---
 
 “Enviromolecular” refers to basic structure for life support and a “chemical” approach to building dynamic space. Atoms conjoin periodically to form molecules, minimum microstructures capable of performing a material’s chemical behavior – how matter interacts, electronically – enabling quantum effects to register harmonically at human-scale.

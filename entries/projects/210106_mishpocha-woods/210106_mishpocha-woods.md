@@ -23,6 +23,269 @@ collaborators:
   - name: Leonid Furmansky
     role: Photography
 type: project
+headerImage:
+  src: entries/projects/210106_mishpocha-woods/header.jpg
+  width: 3000
+  height: 2318
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: Mishpocha Woods Compound
+featureImage:
+  src: entries/projects/210106_mishpocha-woods/featured.jpg
+  width: 3000
+  height: 2249
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: *ref_0
+  alt: Mishpocha Woods Compound
+images:
+  - src: entries/projects/210106_mishpocha-woods/01_Exterior.jpg
+    width: 3000
+    height: 2249
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 01 Exterior
+  - src: entries/projects/210106_mishpocha-woods/02_Exterior.jpg
+    width: 3000
+    height: 2250
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 02 Exterior
+  - src: entries/projects/210106_mishpocha-woods/03_Exterior.jpg
+    width: 3000
+    height: 2250
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 03 Exterior
+  - src: entries/projects/210106_mishpocha-woods/04_Exterior.jpg
+    width: 3000
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 04 Exterior
+  - src: entries/projects/210106_mishpocha-woods/05_Exterior.jpg
+    width: 3000
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 05 Exterior
+  - src: entries/projects/210106_mishpocha-woods/06_Exterior.jpg
+    width: 3000
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 06 Exterior
+  - src: entries/projects/210106_mishpocha-woods/07_Exterior.jpg
+    width: 2250
+    height: 3000
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 07 Exterior
+  - src: entries/projects/210106_mishpocha-woods/08_Exterior veranda.jpg
+    width: 3000
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 08 Exterior veranda
+  - src: entries/projects/210106_mishpocha-woods/09_Exterior.jpg
+    width: 3000
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 09 Exterior
+  - src: entries/projects/210106_mishpocha-woods/10_Exterior.jpg
+    width: 3000
+    height: 2250
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 10 Exterior
+  - src: entries/projects/210106_mishpocha-woods/11_Exterior.jpg
+    width: 3000
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 11 Exterior
+  - src: entries/projects/210106_mishpocha-woods/12_Kitchen.jpg
+    width: 2400
+    height: 3000
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 12 Kitchen
+  - src: entries/projects/210106_mishpocha-woods/13_Bedroom.jpg
+    width: 2400
+    height: 3000
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 13 Bedroom
+  - src: entries/projects/210106_mishpocha-woods/14_Interior.jpg
+    width: 3000
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 14 Interior
+  - src: entries/projects/210106_mishpocha-woods/15_Bathroom.jpg
+    width: 2400
+    height: 3000
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 15 Bathroom
+  - src: entries/projects/210106_mishpocha-woods/16_Exterior.jpg
+    width: 3000
+    height: 2400
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 16 Exterior
+drawings:
+  - src: entries/projects/210106_mishpocha-woods/drawing-Axon.jpg
+    width: 1020
+    height: 1320
+    r2: true
+    widths:
+      - 640
+    formats: *ref_0
+    caption: drawing Axon
+  - src: entries/projects/210106_mishpocha-woods/drawing-Massing illustration.jpg
+    width: 1650
+    height: 1275
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Massing illustration
+  - src: entries/projects/210106_mishpocha-woods/drawing-Ponca flex house.jpg
+    width: 776
+    height: 600
+    r2: true
+    widths:
+      - 640
+    formats: *ref_0
+    caption: drawing Ponca flex house
+  - src: entries/projects/210106_mishpocha-woods/drawing-Ponca main house.jpg
+    width: 776
+    height: 600
+    r2: true
+    widths:
+      - 640
+    formats: *ref_0
+    caption: drawing Ponca main house
+  - src: >-
+      entries/projects/210106_mishpocha-woods/drawing-Richardson affordable
+      house.jpg
+    width: 776
+    height: 600
+    r2: true
+    widths:
+      - 640
+    formats: *ref_0
+    caption: drawing Richardson affordable house
+  - src: entries/projects/210106_mishpocha-woods/drawing-Richardson flex unit.jpg
+    width: 776
+    height: 600
+    r2: true
+    widths:
+      - 640
+    formats: *ref_0
+    caption: drawing Richardson flex unit
+  - src: entries/projects/210106_mishpocha-woods/drawing-Site plan.jpg
+    width: 1650
+    height: 1275
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Site plan
 ---
 
 "It's like I had a dinner party 10 years ago and no one left." - Robin, Mishpocha Woods client and GC

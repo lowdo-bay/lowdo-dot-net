@@ -66,6 +66,21 @@ export default function(eleventyConfig) {
     return mdRender.render(rawString);
   });
 
+  // Resolve an image record to a URL for raw <img>/meta references (outside generateImage).
+  // R2 records → absolute R2 URL; legacy records → base + "/" + src (base optional for absolute).
+  eleventyConfig.addFilter("r2url", function(record, base) {
+    if (!record || !record.src) return "";
+    if (record.r2) return r2PublicUrl(record.src);
+    return (base ? String(base).replace(/\/$/, "") : "") + "/" + record.src;
+  });
+  // Like r2url but returns a small resized variant when available (for thumbnails).
+  eleventyConfig.addFilter("r2variant", function(record, width, fmt) {
+    if (!record || !record.src) return "";
+    if (record.r2 && (record.widths || []).includes(width)) return r2VariantUrl(record.src, width, fmt || "webp");
+    if (record.r2) return r2PublicUrl(record.src);
+    return "/" + record.src;
+  });
+
   // https://www.11ty.dev/docs/plugins/image/
   // Generate PNG icon files and a link tag from a source SVG or PNG file
   eleventyConfig.addShortcode("favicon", async function(src) {

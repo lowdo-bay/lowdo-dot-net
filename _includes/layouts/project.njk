@@ -1549,6 +1549,7 @@ section: project
                 {% if project.data.headerImage %}
                   {% set params = {
                     "src": project.data.headerImage.src,
+                    "r2record": project.data.headerImage,
                     "alt": project.data.headerImage.alt or project.data.title,
                     "loadingType": "lazy",
                     "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 840px) 25vw, 45vw",
@@ -1562,7 +1563,7 @@ section: project
                     "outputQualityWebp": settings.images.webp.quality,
                     "outputQualityAvif": settings.images.avif.quality
                   } %}
-                  {% if project.data.headerImage.src | endsWith('.gif') %}
+                  {% if project.data.headerImage.src | endsWith('.gif') and not project.data.headerImage.r2 %}
                     <picture>
                       <img src="/{{ project.data.headerImage.src }}" alt="{{ project.data.headerImage.alt or project.data.title }}" loading="lazy" decoding="async" class="hover-fade">
                     </picture>

@@ -17,6 +17,86 @@ collaborators:
   - name: Positive Energy
     role: MEP
 type: project
+headerImage:
+  src: entries/projects/201209_flex-appeal/header.gif
+  r2: true
+  widths: []
+  formats: []
+  alt: Flex Appeal
+images:
+  - src: entries/projects/201209_flex-appeal/01_Alleyside view.jpg
+    width: 3836
+    height: 1672
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: &ref_0
+      - webp
+      - jpeg
+    caption: 01 Alleyside view
+  - src: entries/projects/201209_flex-appeal/02_Community front.jpg
+    width: 3836
+    height: 1672
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 02 Community front
+drawings:
+  - src: entries/projects/201209_flex-appeal/drawing-Adaptive diagrams.gif
+    r2: true
+    widths: []
+    formats: []
+    caption: drawing Adaptive diagrams
+  - src: entries/projects/201209_flex-appeal/drawing-Axonometric.jpg
+    width: 4000
+    height: 2588
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Axonometric
+  - src: entries/projects/201209_flex-appeal/drawing-Configurations.gif
+    r2: true
+    widths: []
+    formats: []
+    caption: drawing Configurations
+  - src: entries/projects/201209_flex-appeal/drawing-Oblique.jpg
+    width: 3789
+    height: 2452
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Oblique
+  - src: entries/projects/201209_flex-appeal/drawing-Shape grammar.gif
+    r2: true
+    widths: []
+    formats: []
+    caption: drawing Shape grammar
+  - src: entries/projects/201209_flex-appeal/drawing-plans.jpg
+    width: 2702
+    height: 2628
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing plans
 ---
 
 2021 Honorable Mention in LA Low-rise Competition.

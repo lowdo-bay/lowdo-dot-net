@@ -23,6 +23,86 @@ collaborators:
   - name: Diego Arauja
     role: Artist
 active: true
+headerImage:
+  src: entries/projects/220113_Ghana Pavilion/header.jpg
+  width: 9728
+  height: 3968
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: 'Ghana Pavilion: Venice Biennale Art 2022'
+images:
+  - src: >-
+      entries/projects/220113_Ghana Pavilion/01_Ghana Pavilion Structure
+      View.jpg
+    width: 4032
+    height: 3024
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 01 Ghana Pavilion Structure View
+  - src: >-
+      entries/projects/220113_Ghana Pavilion/02_Ghana Pavilion Exhibtion
+      View3.jpg
+    width: 4032
+    height: 3024
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 02 Ghana Pavilion Exhibtion View3
+  - src: >-
+      entries/projects/220113_Ghana Pavilion/03_Ghana Pavilion Exhibtion
+      View.jpg
+    width: 4032
+    height: 3024
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 03 Ghana Pavilion Exhibtion View
+  - src: >-
+      entries/projects/220113_Ghana Pavilion/04_Ghana Pavilion Exhibtion
+      View2.jpg
+    width: 4032
+    height: 3024
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 04 Ghana Pavilion Exhibtion View2
+  - src: >-
+      entries/projects/220113_Ghana Pavilion/05_Ghana Pavilion Structure
+      View2.jpg
+    width: 4032
+    height: 3024
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 05 Ghana Pavilion Structure View2
 ---
 From the curator, Nana Oforiatta Ayim:
 "Here we are, the world in crisis, riddled in disease and war and damage, our particular narrative now expanded across the globe. This Ghana Pavilion riddled with challenges and obstacles and yet, still the need to express ourselves, our visions, to be counted, to be among. Why was it so important for us to be here? Because we have been sidelined, marginalised, and spoken for for so long? At least here we get to define ourselves and our place in the world, or at least a few of us can, those who have understood these codes of belonging, within this rarified world of expression.

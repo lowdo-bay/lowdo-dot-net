@@ -11,6 +11,71 @@ categories:
 location: 'Anam, Nigeria'
 status: Unbuilt
 type: project
+headerImage:
+  src: entries/projects/100408_anam-school/header.png
+  width: 1080
+  height: 565
+  r2: true
+  widths:
+    - 640
+    - 1080
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: Anam City School
+images:
+  - src: entries/projects/100408_anam-school/01_Outdoor classoorm.jpg
+    width: 2816
+    height: 1472
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 01 Outdoor classoorm
+  - src: entries/projects/100408_anam-school/02_Flooded river.jpg
+    width: 3072
+    height: 1344
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 02 Flooded river
+drawings:
+  - src: entries/projects/100408_anam-school/drawing-Flooded isometric.jpg
+    width: 4000
+    height: 2588
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Flooded isometric
+  - src: entries/projects/100408_anam-school/drawing-Plan 01.jpg
+    width: 1650
+    height: 1275
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Plan 01
+  - src: entries/projects/100408_anam-school/drawing-Section.jpg
+    width: 1300
+    height: 624
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: drawing Section
 ---
 
 The Anam City School is a five-block, eight-classroom campus designed to serve children from four surrounding remote villages of Ebenebe, as part of the Anam City Masterplan, the school embodies the masterplan’s vision of building community infrastructure that is both resilient and self-sustaining.
