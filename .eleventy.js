@@ -8,7 +8,57 @@ import eleventyHelmetPlugin from "eleventy-plugin-helmet";
 import EleventyFetch from "@11ty/eleventy-fetch";
 import Image from "@11ty/eleventy-img";
 import MarkdownIt from "markdown-it";
-const mdRender = new MarkdownIt(); 
+import 'dotenv/config';
+const mdRender = new MarkdownIt();
+
+// --- Cloudflare R2 helpers (for migrated image/asset records) ---------------
+// Build a public R2 URL from a relative object key (percent-encoding each segment).
+function r2PublicUrl(key) {
+  const base = (process.env.R2_PUBLIC_BASE_URL || "").replace(/\/$/, "");
+  return base + "/" + String(key).split("/").map(encodeURIComponent).join("/");
+}
+// Variant key convention written by the migration script: "<dir>/<basename>-<width>.<fmt>".
+function r2VariantUrl(srcKey, width, fmt) {
+  const dot = srcKey.lastIndexOf(".");
+  const baseKey = dot >= 0 ? srcKey.slice(0, dot) : srcKey;
+  return r2PublicUrl(baseKey + "-" + width + "." + fmt);
+}
+const R2_SOURCE_TYPE = { webp: "image/webp", jpeg: "image/jpeg", jpg: "image/jpeg", png: "image/png", avif: "image/avif" };
+
+// Build a responsive <picture> from a pre-generated R2 image record. Mirrors the
+// markup produced by the eleventy-img path so templates/CSS need no other changes.
+function buildR2Picture(params) {
+  const rec = params.r2record;
+  const classes = params.classes || "";
+  const alt = params.alt || "";
+  const viewportSizes = params.viewportSizes || "";
+  const loadingType = params.loadingType || "lazy";
+  const w = rec.width, h = rec.height;
+  let orientation = "landscape";
+  if (w && h) orientation = w > h ? "landscape" : (w < h ? "portrait" : "square");
+  const widths = rec.widths || [];
+  const formats = rec.formats || [];
+  const dim = (w && h) ? ` width="${w}" height="${h}"` : "";
+
+  // No resized variants (e.g. gif/svg originals): emit a plain <img> to the original.
+  if (!widths.length || !formats.length) {
+    return `<picture class="${classes}" data-orientation="${orientation}">
+                <img src="${r2PublicUrl(rec.src)}"${dim} alt="${alt}" class="hover-fade" loading="${loadingType}" decoding="async">
+              </picture>`;
+  }
+
+  const sources = formats.map(fmt => {
+    const srcset = widths.map(width => `${r2VariantUrl(rec.src, width, fmt)} ${width}w`).join(", ");
+    return `  <source type="${R2_SOURCE_TYPE[fmt] || ("image/" + fmt)}" srcset="${srcset}" sizes="${viewportSizes}">`;
+  }).join("\n");
+  const fallbackFmt = formats.includes("jpeg") ? "jpeg" : formats[0];
+  const imgUrl = r2VariantUrl(rec.src, widths[0], fallbackFmt);
+
+  return `<picture class="${classes}" data-orientation="${orientation}">
+${sources}
+                <img src="${imgUrl}"${dim} alt="${alt}" class="hover-fade" loading="${loadingType}" decoding="async">
+              </picture>`;
+}
 
 export default function(eleventyConfig) {
 
@@ -42,6 +92,11 @@ export default function(eleventyConfig) {
 
 // Shortcode to generate a responsive project image
 eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
+
+  // R2-migrated images: build <picture> from pre-generated variant URLs (no build-time processing).
+  if (params.r2record && params.r2record.r2) {
+    return buildR2Picture(params);
+  }
 
   let {
     src,
@@ -129,6 +184,10 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   // Shortcode to return just the URL of the largest generated JPEG for a given image.
   // Used to set data-fullsrc on gallery thumbnails so the lightbox can load a full-size image.
   eleventyConfig.addAsyncShortcode("getImageSrc", async function(params) {
+    // R2-migrated images: the original upload is the full-size source for the lightbox.
+    if (params.r2record && params.r2record.r2) {
+      return r2PublicUrl(params.r2record.src);
+    }
     let { src, width = 2400, quality = 85 } = params;
     if (!src) return '';
     src = src.startsWith("/") ? src.slice(1) : src;

@@ -18,9 +18,9 @@ collaborators:
   - name: Alcocer Construction
     role: Foundation
   - name: Lago Plumbing
-    role: Plumbing 
+    role: Plumbing
   - name: Wilkins Electric
-    role: Electrical 
+    role: Electrical
   - name: J&T Stucco
     role: Stucco
   - name: Longhorn Welding
@@ -50,6 +50,235 @@ collaborators:
   - name: All Solutions Remodeling Services
     role: Final Clean
 type: project
+headerImage:
+  src: entries/projects/201202_alamo-st/header.jpg
+  width: 4000
+  height: 5000
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: Alamo St House
+images:
+  - src: entries/projects/201202_alamo-st/01_Exterior view.jpg
+    width: 2000
+    height: 1600
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 01 Exterior view
+  - src: entries/projects/201202_alamo-st/02_Street approach.jpg
+    width: 2000
+    height: 1600
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 02 Street approach
+  - src: entries/projects/201202_alamo-st/03_Exterior view.jpg
+    width: 2000
+    height: 1600
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 03 Exterior view
+  - src: entries/projects/201202_alamo-st/04_Garden room.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 04 Garden room
+  - src: entries/projects/201202_alamo-st/05_Garden room.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 05 Garden room
+  - src: entries/projects/201202_alamo-st/06_View towards garden room.jpg
+    width: 2000
+    height: 1600
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 06 View towards garden room
+  - src: entries/projects/201202_alamo-st/07_Bathroom.jpg
+    width: 2000
+    height: 1600
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 07 Bathroom
+  - src: entries/projects/201202_alamo-st/08_View from garden room.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 08 View from garden room
+  - src: entries/projects/201202_alamo-st/09_Secondary bedroom.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 09 Secondary bedroom
+  - src: entries/projects/201202_alamo-st/10_Secondary bedroom.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 10 Secondary bedroom
+  - src: entries/projects/201202_alamo-st/11_Kitchen.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 11 Kitchen
+  - src: entries/projects/201202_alamo-st/12_Dining room.jpg
+    width: 2000
+    height: 1600
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 12 Dining room
+  - src: entries/projects/201202_alamo-st/13_Front entrance.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 13 Front entrance
+  - src: entries/projects/201202_alamo-st/14_View towards garden room.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 14 View towards garden room
+  - src: entries/projects/201202_alamo-st/15_Exterior.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 15 Exterior
+  - src: entries/projects/201202_alamo-st/16_Exterior.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 16 Exterior
+  - src: entries/projects/201202_alamo-st/17_Skylight.jpg
+    width: 2942
+    height: 3928
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 17 Skylight
+  - src: entries/projects/201202_alamo-st/18_Exterior finishes.jpg
+    width: 2892
+    height: 3856
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 18 Exterior finishes
+  - src: entries/projects/201202_alamo-st/19_Kitchen.jpg
+    width: 1600
+    height: 2000
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 19 Kitchen
+drawings:
+  - src: entries/projects/201202_alamo-st/drawing-Plan-concept.gif
+    r2: true
+    widths: []
+    formats: []
+    caption: drawing Plan concept
+  - src: entries/projects/201202_alamo-st/drawing-Plans.jpg
+    width: 2604
+    height: 2358
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plans
+  - src: entries/projects/201202_alamo-st/drawing-Second floor plan and section.jpg
+    width: 3181
+    height: 2511
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Second floor plan and section
+toolkitFiles:
+  - filename: toolkit-Sample Drawing Set.pdf
+    title: Sample Drawing Set
+    format: PDF
+    key: entries/projects/201202_alamo-st/toolkit-Sample Drawing Set.pdf
 ---
 
 **Design Program**

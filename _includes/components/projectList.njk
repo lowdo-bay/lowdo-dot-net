@@ -31,9 +31,10 @@
 
 						{# Create an object for our project thumbnail image parameters which we can then
         		destructure inside our shortcode function. See eleventy.js for what's going on #}
-						{% set params = 
+						{% set params =
 							{
 								"src": image.src,
+								"r2record": image,
 								"alt": image.caption or title,
 								"loadingType": "eager" if (loop.first and section != "project") else "lazy",
 								"viewportSizes": "(min-width: 1140px) 22vw, (min-width: 540px) 45vw, 85vw",
@@ -50,7 +51,7 @@
 						%}
 
 						{# The image shortcode #}
-						{% if image.src | endsWith('.gif') %}
+						{% if image.src | endsWith('.gif') and not image.r2 %}
 							<picture>
 								<img src="/{{ image.src }}" alt="{{ image.caption or title }}" loading="{{ 'eager' if (loop.first and section != 'project') else 'lazy' }}" decoding="async" class="hover-fade">
 							</picture>
