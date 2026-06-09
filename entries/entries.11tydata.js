@@ -18,6 +18,26 @@ function resolveEntryType(data) {
   return 'other';
 }
 
+// Build a public R2 URL from a relative object key (used for migrated assets).
+function r2Url(key) {
+  const base = (process.env.R2_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+  const encoded = String(key).split('/').map(encodeURIComponent).join('/');
+  return `${base}/${encoded}`;
+}
+
+// Read an image record's dimensions, preferring stored values (R2-migrated records)
+// and falling back to reading the local file for not-yet-migrated entries.
+function imageDims(record) {
+  if (record && record.width && record.height) {
+    return { width: record.width, height: record.height };
+  }
+  try {
+    return sizeOf(record.src);
+  } catch (e) {
+    return null;
+  }
+}
+
 export default function() {
   return {
     eleventyComputed: {
@@ -45,6 +65,8 @@ export default function() {
       // Auto-discover thumbnail image from entry folder
       thumbnail(data) {
         if (data.thumbnail) return data.thumbnail;
+        // Migrated entries: reuse the R2 header record so listings serve from R2.
+        if (data.headerImage && data.headerImage.r2) return data.headerImage;
         const entryDir = path.dirname(data.page.inputPath);
         try {
           const files = fs.readdirSync(entryDir);
@@ -103,24 +125,18 @@ export default function() {
 
       headerImageOrientation(data) {
         if (!data.headerImage) return null;
-        try {
-          const dims = sizeOf(data.headerImage.src);
-          if (dims.width > dims.height) return 'landscape';
-          if (dims.width < dims.height) return 'portrait';
-          return 'square';
-        } catch (e) {
-          return null;
-        }
+        const dims = imageDims(data.headerImage);
+        if (!dims) return null;
+        if (dims.width > dims.height) return 'landscape';
+        if (dims.width < dims.height) return 'portrait';
+        return 'square';
       },
 
       headerImageRatio(data) {
         if (!data.headerImage) return null;
-        try {
-          const dims = sizeOf(data.headerImage.src);
-          return dims.height / dims.width;
-        } catch (e) {
-          return null;
-        }
+        const dims = imageDims(data.headerImage);
+        if (!dims) return null;
+        return dims.height / dims.width;
       },
 
       // Auto-discover gallery images (projects only)
@@ -174,7 +190,13 @@ export default function() {
       // Auto-discover toolkit files (projects only)
       toolkitFiles(data) {
         if (resolveEntryType(data) !== 'project') return [];
-        if (data.toolkitFiles && data.toolkitFiles.length > 0) return data.toolkitFiles;
+        // Frontmatter-provided records: R2-migrated entries carry a relative `key`,
+        // from which we build the public download URL. Legacy records already have `url`.
+        if (data.toolkitFiles && data.toolkitFiles.length > 0) {
+          return data.toolkitFiles.map(item =>
+            (item.key && !item.url) ? { ...item, url: r2Url(item.key) } : item
+          );
+        }
         const entryDir = path.dirname(data.page.inputPath);
         try {
           const files = fs.readdirSync(entryDir);

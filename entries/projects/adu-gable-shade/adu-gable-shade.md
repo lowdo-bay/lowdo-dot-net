@@ -33,6 +33,82 @@ collaborators: []
 relatedProjects: []
 relatedEntries: []
 active: true
+headerImage:
+  src: entries/projects/adu-gable-shade/header.jpg
+  width: 1224
+  height: 792
+  r2: true
+  widths:
+    - 640
+    - 1080
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: 'ADU_0102: Gable + Shade'
+images:
+  - src: entries/projects/adu-gable-shade/00_Isometric 01.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 00 Isometric 01
+  - src: entries/projects/adu-gable-shade/01_Isometric 02.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 01 Isometric 02
+drawings:
+  - src: entries/projects/adu-gable-shade/drawing-Plan 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 01
+  - src: entries/projects/adu-gable-shade/drawing-Plan 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 02
+  - src: entries/projects/adu-gable-shade/drawing-Section 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 01
+  - src: entries/projects/adu-gable-shade/drawing-Section 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 02
 ---
 This home keeps the simple, affordable one-bedroom plan of the basic ADU_0101: Gable, but adds a dramatic move on the outside: one side of the roof sweeps all the way down to the ground to form a deep covered porch running the full length of the house. The shade keeps the interior cool in summer and gives you a real outdoor room for a long table, hammocks, or chairs.
 

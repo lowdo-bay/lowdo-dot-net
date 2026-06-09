@@ -11,7 +11,7 @@
   {# Column 1: Thumbnail Image #}
   <div class="index-col index-col--image">
     {% if entry.data.thumbnail and entry.data.thumbnail.src %}
-      <img src="/{{ entry.data.thumbnail.src }}" alt="{{ entry.data.thumbnail.alt or entry.data.title }}" loading="lazy" class="index-row__thumbnail">
+      <img src="{{ entry.data.thumbnail | r2variant(640, 'webp') }}" alt="{{ entry.data.thumbnail.alt or entry.data.title }}" loading="lazy" class="index-row__thumbnail">
     {% endif %}
   </div>
 

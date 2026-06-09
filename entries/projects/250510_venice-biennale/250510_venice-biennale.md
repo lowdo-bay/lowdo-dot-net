@@ -20,6 +20,151 @@ collaborators:
     role: Collaborator
   - name: Pennsylvania State University
     role: Collaborator
+headerImage:
+  src: entries/projects/250510_venice-biennale/header.jpg
+  width: 6048
+  height: 6048
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: Nyame Dua
+images:
+  - src: entries/projects/250510_venice-biennale/01_Nyame Dua.jpg
+    width: 3920
+    height: 3920
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 01 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/02_Nyame Dua.jpg
+    width: 3920
+    height: 3920
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 02 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/03_Nyame Dua.jpg
+    width: 1554
+    height: 1554
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 03 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/04_Nyame Dua.jpg
+    width: 6048
+    height: 6048
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 04 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/05_Nyame Dua.jpg
+    width: 6048
+    height: 6048
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 05 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/06_Nyame Dua.jpg
+    width: 3920
+    height: 3920
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 06 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/07_Nyame Dua.jpg
+    width: 5704
+    height: 5704
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 07 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/08_Nyame Dua.jpg
+    width: 6048
+    height: 6048
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 08 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/09_Nyame Dua.jpg
+    width: 6048
+    height: 6048
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 09 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/10_Nyame Dua.jpg
+    width: 6048
+    height: 6048
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 10 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/11_Nyame Dua.jpg
+    width: 3920
+    height: 3920
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 11 Nyame Dua
+  - src: entries/projects/250510_venice-biennale/12_Nyame Dua.jpg
+    width: 6048
+    height: 6048
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 12 Nyame Dua
 ---
 
 **Architecture Amid the Elements**

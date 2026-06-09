@@ -11,6 +11,66 @@ categories:
 location: 'Accra + Tema, Ghana'
 status: Research
 type: project
+headerImage:
+  src: entries/projects/090000_kiosk-culture/header.jpg
+  width: 2400
+  height: 1800
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: Kiosk Culture
+images:
+  - src: entries/projects/090000_kiosk-culture/01_Free zones.jpg
+    width: 1300
+    height: 632
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 01 Free zones
+  - src: entries/projects/090000_kiosk-culture/02_Trucking routes map.jpg
+    width: 1300
+    height: 650
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 02 Trucking routes map
+  - src: entries/projects/090000_kiosk-culture/03_Tema harbor.jpg
+    width: 1300
+    height: 649
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 03 Tema harbor
+  - src: entries/projects/090000_kiosk-culture/04_Site images.jpg
+    width: 1300
+    height: 632
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 04 Site images
+  - src: entries/projects/090000_kiosk-culture/05_Components diagram.jpg
+    width: 1300
+    height: 632
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 05 Components diagram
 ---
 
 **Africa today has among the highest rates of urbanization on the planet. In the twin cities Accra and Tema, the human settlement closest to the earth's geographic origin 0-0, this urban growth puts pressure on networks of electricity, transportation and ecology.**

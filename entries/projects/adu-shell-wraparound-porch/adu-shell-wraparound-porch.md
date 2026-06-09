@@ -31,6 +31,82 @@ collaborators: []
 relatedProjects: []
 relatedEntries: []
 active: true
+headerImage:
+  src: entries/projects/adu-shell-wraparound-porch/header.jpg
+  width: 1224
+  height: 792
+  r2: true
+  widths:
+    - 640
+    - 1080
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: 'ADU_0403: Shell + Wraparound Porch'
+images:
+  - src: entries/projects/adu-shell-wraparound-porch/00_Isometric 01.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 00 Isometric 01
+  - src: entries/projects/adu-shell-wraparound-porch/01_Isometric 02.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 01 Isometric 02
+drawings:
+  - src: entries/projects/adu-shell-wraparound-porch/drawing-Plan 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 01
+  - src: entries/projects/adu-shell-wraparound-porch/drawing-Plan 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 02
+  - src: entries/projects/adu-shell-wraparound-porch/drawing-Section 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 01
+  - src: entries/projects/adu-shell-wraparound-porch/drawing-Section 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 02
 ---
 This home uses the same dramatic "shell" roof as its larger sibling: a single sweeping form that wraps around the entire house on all four sides, creating a continuous covered porch all the way around. The main payoff is solar shading — the deep eaves keep direct sun off every wall and window throughout the day, which keeps the interior noticeably cooler in summer — while also adding hundreds of square feet of weather-protected outdoor space that doubles as a porch on any side of the house.
 

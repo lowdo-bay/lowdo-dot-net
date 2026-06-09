@@ -11,6 +11,55 @@ categories:
 location: 'Anam, Nigeria'
 status: Unbuilt
 type: project
+headerImage:
+  src: entries/projects/120417_anam-hospital/header.jpg
+  width: 3744
+  height: 2496
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: Anam City Health Center
+images:
+  - src: entries/projects/120417_anam-hospital/01_approach.jpg
+    width: 3744
+    height: 1840
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 01 approach
+drawings:
+  - src: entries/projects/120417_anam-hospital/drawing-Axonometric.jpg
+    width: 4000
+    height: 2588
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Axonometric
+  - src: entries/projects/120417_anam-hospital/drawing-Plan.jpg
+    width: 4000
+    height: 2588
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan
 ---
 
 The Anam New City project is an experimental model for site-specific African development, integrating urban densities of opportunity with rural strategies for productive landscapes through a hybrid RURBAN framework. At the heart of Anam New City is a comprehensive network of programmatic nodes designed to meet the social, economic, educational, and ecological needs of the community:

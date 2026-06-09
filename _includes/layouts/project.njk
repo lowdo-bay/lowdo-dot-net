@@ -1143,6 +1143,7 @@ section: project
           {% endfor %}
           {% set params = {
             "src": headerImage.src,
+            "r2record": headerImage,
             "alt": imageAlt or (title + (", " + location if location else "") + " — Low Design Office"),
             "classes": "header-image",
             "loadingType": "eager",
@@ -1159,9 +1160,9 @@ section: project
           } %}
           <div class="photo-thumb header-image-thumb"
             data-caption="{{ headerImage.caption or title }}"
-            data-fullsrc="{% if not (headerImage.src | endsWith('.gif')) %}{% getImageSrc { src: headerImage.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}"
+            data-fullsrc="{% if not (headerImage.src | endsWith('.gif')) %}{% getImageSrc { src: headerImage.src, r2record: headerImage, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}"
             data-ispng="{{ 'true' if headerImage.src | endsWith('.png') else '' }}">
-            {% if headerImage.src | endsWith('.gif') %}
+            {% if headerImage.src | endsWith('.gif') and not headerImage.r2 %}
               <picture>
                 <img src="/{{ headerImage.src }}" alt="{{ imageAlt or (title + (', ' + location if location else '') + ' — Low Design Office') }}" loading="eager" decoding="async" class="header-image">
               </picture>
@@ -1368,6 +1369,7 @@ section: project
 
         {% set params = {
           "src": image.src,
+          "r2record": image,
           "alt": image.caption or (title + " — Low Design Office"),
           "loadingType": "lazy",
           "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 540px) 45vw, 85vw",
@@ -1383,8 +1385,8 @@ section: project
         } %}
 
         <div class="project-photo-cell">
-          <div class="photo-thumb" data-caption="{{ image.caption or '' }}" data-fullsrc="{% if not (image.src | endsWith('.gif')) %}{% getImageSrc { src: image.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}" data-ispng="{{ 'true' if image.src | endsWith('.png') else '' }}">
-            {% if image.src | endsWith('.gif') %}
+          <div class="photo-thumb" data-caption="{{ image.caption or '' }}" data-fullsrc="{% if not (image.src | endsWith('.gif')) %}{% getImageSrc { src: image.src, r2record: image, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}" data-ispng="{{ 'true' if image.src | endsWith('.png') else '' }}">
+            {% if image.src | endsWith('.gif') and not image.r2 %}
               <picture>
                 <img src="/{{ image.src }}" alt="{{ image.caption or (title + ' — Low Design Office') }}" loading="lazy" decoding="async" class="hover-fade">
               </picture>
@@ -1427,6 +1429,7 @@ section: project
         {% endfor %}
         {% set params = {
           "src": drawing.src,
+          "r2record": drawing,
           "alt": drawing.caption or (title + " drawing — Low Design Office"),
           "loadingType": "lazy",
           "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 540px) 45vw, 85vw",
@@ -1441,8 +1444,8 @@ section: project
           "outputQualityAvif": settings.images.avif.quality
         } %}
         <div class="project-drawing-cell">
-          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}" data-fullsrc="{% if not (drawing.src | endsWith('.gif')) %}{% getImageSrc { src: drawing.src, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}" data-ispng="{{ 'true' if drawing.src | endsWith('.png') else '' }}">
-            {% if drawing.src | endsWith('.gif') %}
+          <div class="drawing-thumb" data-caption="{{ drawing.caption or '' }}" data-fullsrc="{% if not (drawing.src | endsWith('.gif')) %}{% getImageSrc { src: drawing.src, r2record: drawing, width: settings.config.image_width_md, quality: settings.config.image_quality_mediumsrc } %}{% endif %}" data-ispng="{{ 'true' if drawing.src | endsWith('.png') else '' }}">
+            {% if drawing.src | endsWith('.gif') and not drawing.r2 %}
               <picture>
                 <img src="/{{ drawing.src }}" alt="{{ drawing.caption or (title + ' drawing — Low Design Office') }}" loading="lazy" decoding="async" class="hover-fade">
               </picture>
@@ -1546,6 +1549,7 @@ section: project
                 {% if project.data.headerImage %}
                   {% set params = {
                     "src": project.data.headerImage.src,
+                    "r2record": project.data.headerImage,
                     "alt": project.data.headerImage.alt or project.data.title,
                     "loadingType": "lazy",
                     "viewportSizes": "(min-width: 1140px) 22vw, (min-width: 840px) 25vw, 45vw",
@@ -1559,7 +1563,7 @@ section: project
                     "outputQualityWebp": settings.images.webp.quality,
                     "outputQualityAvif": settings.images.avif.quality
                   } %}
-                  {% if project.data.headerImage.src | endsWith('.gif') %}
+                  {% if project.data.headerImage.src | endsWith('.gif') and not project.data.headerImage.r2 %}
                     <picture>
                       <img src="/{{ project.data.headerImage.src }}" alt="{{ project.data.headerImage.alt or project.data.title }}" loading="lazy" decoding="async" class="hover-fade">
                     </picture>

@@ -18,6 +18,108 @@ collaborators:
   - name: VIF Studio
     role: Collaborator
 type: project
+headerImage:
+  src: entries/projects/150215_field-constructs/header.jpg
+  width: 3233
+  height: 1809
+  r2: true
+  widths:
+    - 640
+    - 1080
+    - 1800
+    - 2400
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: Bending the Rules
+images:
+  - src: entries/projects/150215_field-constructs/01_Site context.jpg
+    width: 3400
+    height: 2550
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 01 Site context
+  - src: entries/projects/150215_field-constructs/02_Wide.jpg
+    width: 3070
+    height: 2550
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 02 Wide
+  - src: entries/projects/150215_field-constructs/03_Detail.jpg
+    width: 3364
+    height: 1798
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 03 Detail
+  - src: entries/projects/150215_field-constructs/04_Detail.jpg
+    width: 3364
+    height: 1798
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 04 Detail
+  - src: entries/projects/150215_field-constructs/05_Aerial.jpg
+    width: 2160
+    height: 2160
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+    formats: *ref_0
+    caption: 05 Aerial
+  - src: entries/projects/150215_field-constructs/06_Wide.jpg
+    width: 3400
+    height: 2550
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 06 Wide
+  - src: entries/projects/150215_field-constructs/07_Detail.jpg
+    width: 3233
+    height: 1809
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 07 Detail
+  - src: entries/projects/150215_field-constructs/08_Detail.jpg
+    width: 3233
+    height: 1809
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: 08 Detail
 ---
 In collaboration with Variable Projects and VIF Studio, Bending the Rules is a design competition entry for the Field Constructs art installation in Austin, TX. Our proposal aimed to engage critical thinking about how Austin’s urban evolution addresses the many factors that contribute to Austin as a place—including not only the young, the hip, and the weird, but also the historic neighborhoods, the under-represented communities, and the natural hill-country landscape.
 

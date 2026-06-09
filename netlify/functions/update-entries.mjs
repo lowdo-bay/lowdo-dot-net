@@ -1,9 +1,67 @@
 import { verifyToken } from './admin-auth.mjs';
 import matter from 'gray-matter';
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import sharp from 'sharp';
 
 const REPO_OWNER = 'lowdo-bay';
 const REPO_NAME = 'lowdo-dot-net';
 const BRANCH = 'main';
+
+// --- Cloudflare R2 (S3 API) -------------------------------------------------
+const R2_WIDTHS = [640, 1080, 1800, 2400];
+const R2_FORMATS = ['webp', 'jpeg'];
+const R2_QUALITY = { webp: 75, jpeg: 80 };
+
+let _r2;
+function r2Client() {
+  if (!_r2) {
+    _r2 = new S3Client({
+      region: 'auto',
+      endpoint: (process.env.R2_S3_ENDPOINT || '').replace(/\/$/, ''),
+      credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+      },
+    });
+  }
+  return _r2;
+}
+
+// Presigned PUT URL so the browser can upload an original directly to R2.
+async function presignR2Put(key, contentType) {
+  const cmd = new PutObjectCommand({
+    Bucket: process.env.R2_BUCKET, Key: key, ContentType: contentType || 'application/octet-stream',
+    CacheControl: 'public, max-age=31536000, immutable',
+  });
+  return getSignedUrl(r2Client(), cmd, { expiresIn: 600 });
+}
+
+// Fetch an uploaded original from R2, generate the responsive ladder with sharp,
+// upload the variants back, and return the record fields for the entry frontmatter.
+async function processR2Image(key) {
+  const Bucket = process.env.R2_BUCKET;
+  const obj = await r2Client().send(new GetObjectCommand({ Bucket, Key: key }));
+  const buf = Buffer.from(await obj.Body.transformToByteArray());
+  const meta = await sharp(buf).metadata();
+  const srcW = meta.width || 0, srcH = meta.height || 0;
+  const widths = R2_WIDTHS.filter((w) => w <= srcW);
+  if (widths.length === 0 && srcW > 0) widths.push(srcW);
+
+  const dot = key.lastIndexOf('.');
+  const base = dot >= 0 ? key.slice(0, dot) : key;
+  for (const w of widths) {
+    for (const fmt of R2_FORMATS) {
+      const vbuf = await sharp(buf).resize({ width: w, withoutEnlargement: true })
+        .toFormat(fmt, { quality: R2_QUALITY[fmt] }).toBuffer();
+      await r2Client().send(new PutObjectCommand({
+        Bucket, Key: `${base}-${w}.${fmt}`, Body: vbuf, ContentType: `image/${fmt}`,
+        CacheControl: 'public, max-age=31536000, immutable',
+      }));
+    }
+  }
+  return { width: srcW, height: srcH, widths, formats: R2_FORMATS };
+}
 
 async function githubApi(path, options = {}) {
   const token = process.env.GITHUB_TOKEN;
@@ -104,6 +162,13 @@ function applyChangesToFile(fileContent, change) {
   if (change.relatedEntries !== undefined)    d.relatedEntries = change.relatedEntries;
   if (change.active !== undefined)            d.active = change.active;
 
+  // R2 image/file records — written by the admin's direct-to-R2 upload flow.
+  if (change.headerImage !== undefined)  d.headerImage = change.headerImage || null;
+  if (change.featureImage !== undefined) d.featureImage = change.featureImage || null;
+  if (change.images !== undefined)       d.images = change.images;
+  if (change.drawings !== undefined)     d.drawings = change.drawings;
+  if (change.toolkitFiles !== undefined) d.toolkitFiles = change.toolkitFiles;
+
   // ADU library — top-level flag and nested spec block.
   // When the flag is unchecked, remove BOTH the flag and the nested block from frontmatter
   // so the file stays clean.
@@ -159,6 +224,12 @@ function buildNewEntryContent(change) {
   if (change.relatedEntries && change.relatedEntries.length) d.relatedEntries = change.relatedEntries;
   if (change.adu_library === true) d.adu_library = true;
   if (change.adu && typeof change.adu === 'object' && Object.keys(change.adu).length > 0) d.adu = change.adu;
+  // R2 file records (new entry created with uploads in the same save)
+  if (change.headerImage) d.headerImage = change.headerImage;
+  if (change.featureImage) d.featureImage = change.featureImage;
+  if (change.images && change.images.length) d.images = change.images;
+  if (change.drawings && change.drawings.length) d.drawings = change.drawings;
+  if (change.toolkitFiles && change.toolkitFiles.length) d.toolkitFiles = change.toolkitFiles;
 
   return matter.stringify(change.body || '', d);
 }
@@ -218,6 +289,38 @@ export async function handler(event) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sha })
       };
+    } catch (err) {
+      return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    }
+  }
+
+  // Presign a direct-to-R2 upload so the browser can PUT an original straight to R2.
+  if (parsedBody.action === 'presignUpload') {
+    if (!parsedBody.token || !verifyToken(parsedBody.token, secret)) {
+      return { statusCode: 401, body: JSON.stringify({ error: 'Invalid or expired token' }) };
+    }
+    if (!parsedBody.key) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing key' }) };
+    }
+    try {
+      const url = await presignR2Put(parsedBody.key, parsedBody.contentType);
+      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url, key: parsedBody.key }) };
+    } catch (err) {
+      return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    }
+  }
+
+  // Generate the responsive variant ladder for an already-uploaded R2 original.
+  if (parsedBody.action === 'processImage') {
+    if (!parsedBody.token || !verifyToken(parsedBody.token, secret)) {
+      return { statusCode: 401, body: JSON.stringify({ error: 'Invalid or expired token' }) };
+    }
+    if (!parsedBody.key) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing key' }) };
+    }
+    try {
+      const result = await processR2Image(parsedBody.key);
+      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result) };
     } catch (err) {
       return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
     }

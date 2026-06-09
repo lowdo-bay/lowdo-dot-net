@@ -31,6 +31,82 @@ collaborators: []
 relatedProjects: []
 relatedEntries: []
 active: true
+headerImage:
+  src: entries/projects/adu-shell-stair-adaptive/header.jpg
+  width: 1224
+  height: 792
+  r2: true
+  widths:
+    - 640
+    - 1080
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: 'ADU_0404: Shell + Stair + Adaptive'
+images:
+  - src: entries/projects/adu-shell-stair-adaptive/00_Isometric 01.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 00 Isometric 01
+  - src: entries/projects/adu-shell-stair-adaptive/01_Isometric 02.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 01 Isometric 02
+drawings:
+  - src: entries/projects/adu-shell-stair-adaptive/drawing-Plan 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 01
+  - src: entries/projects/adu-shell-stair-adaptive/drawing-Plan 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 02
+  - src: entries/projects/adu-shell-stair-adaptive/drawing-Section 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 01
+  - src: entries/projects/adu-shell-stair-adaptive/drawing-Section 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 02
 ---
 This home takes its name from the roof: a single sweeping form that wraps the house on all four sides, extending out and down to create a continuous covered porch around the entire building. The main payoff is solar shading — the deep eaves keep direct sun off every wall and window throughout the day, which significantly reduces cooling load in hot climates — while also adding more than 700 square feet of weather-protected outdoor space.
 

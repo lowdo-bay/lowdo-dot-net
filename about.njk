@@ -271,7 +271,7 @@ permalink: /about/index.html
 
         <div class="col-1 staff-row__image">
           {% if person.data.thumbnail and person.data.thumbnail.src %}
-            <img src="/{{ person.data.thumbnail.src }}" alt="{{ person.data.thumbnail.alt or person.data.title }}" loading="lazy">
+            <img src="{{ person.data.thumbnail | r2variant(640, 'webp') }}" alt="{{ person.data.thumbnail.alt or person.data.title }}" loading="lazy">
           {% endif %}
         </div>
 

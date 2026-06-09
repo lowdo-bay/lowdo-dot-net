@@ -10,6 +10,17 @@ categories: []
 link: ''
 type: staff
 active: true
+headerImage:
+  src: entries/other/ryan-bollom-founds/header.jpg
+  width: 1000
+  height: 1000
+  r2: true
+  widths:
+    - 640
+  formats:
+    - webp
+    - jpeg
+  alt: 'Ryan Bollom, AIA'
 ---
 
 Ryan combines expertise across architecture, construction, and structural engineering. His work focuses on sustainable techniques of construction with novel development and delivery models for affordable architecture — designs that are rigorous conceptually while remaining constructable through standard methods.

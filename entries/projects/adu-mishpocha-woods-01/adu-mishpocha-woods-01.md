@@ -31,6 +31,82 @@ collaborators: []
 relatedProjects: []
 relatedEntries: []
 active: true
+headerImage:
+  src: entries/projects/adu-mishpocha-woods-01/header.jpg
+  width: 1224
+  height: 792
+  r2: true
+  widths:
+    - 640
+    - 1080
+  formats: &ref_0
+    - webp
+    - jpeg
+  alt: 'ADU_0501: Mishpocha Woods 01'
+images:
+  - src: entries/projects/adu-mishpocha-woods-01/00_Isometric 01.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 00 Isometric 01
+  - src: entries/projects/adu-mishpocha-woods-01/01_Isometric 02.jpg
+    width: 1224
+    height: 792
+    r2: true
+    widths:
+      - 640
+      - 1080
+    formats: *ref_0
+    caption: 01 Isometric 02
+drawings:
+  - src: entries/projects/adu-mishpocha-woods-01/drawing-Plan 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 01
+  - src: entries/projects/adu-mishpocha-woods-01/drawing-Plan 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Plan 02
+  - src: entries/projects/adu-mishpocha-woods-01/drawing-Section 01.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 01
+  - src: entries/projects/adu-mishpocha-woods-01/drawing-Section 02.jpg
+    width: 5100
+    height: 3300
+    r2: true
+    widths:
+      - 640
+      - 1080
+      - 1800
+      - 2400
+    formats: *ref_0
+    caption: drawing Section 02
 ---
 This is a true two-story home that feels much larger than its small footprint suggests. The ground floor is a single generous great room with an open kitchen and a powder room — flowing out through a wide opening to a covered patio that doubles the living space when the weather is good. An interior stair leads up to a complete primary suite: a big bedroom under a cathedral ceiling, a full bathroom, a walk-in closet, a tucked-in laundry, and a private upper-level covered porch.
 
