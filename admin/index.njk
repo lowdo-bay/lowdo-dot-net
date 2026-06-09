@@ -726,12 +726,18 @@ eleventyExcludeFromCollections: true
         relatedProjects: {{ (entry.data.relatedProjects or []) | dump | safe }},
         adu_library: {{ (entry.data.adu_library or false) | dump | safe }},
         adu: {{ (entry.data.adu or null) | dump | safe }},
+        headerImage: {{ (entry.data.headerImage or null) | dump | safe }},
+        featureImage: {{ (entry.data.featureImage or null) | dump | safe }},
+        images: {{ (entry.data.images or []) | dump | safe }},
+        drawings: {{ (entry.data.drawings or []) | dump | safe }},
+        toolkitFiles: {{ (entry.data.toolkitFiles or []) | dump | safe }},
         body: {{ (entry.rawInput or "") | trim | dump | safe }},
         filePath: {{ entry.inputPath | replace("./", "") | dump | safe }}
       },
       {%- endfor %}
     ];
 
+    window.__R2_BASE__ = {{ r2BaseUrl | dump | safe }};
     window.__ENTRY_TYPES__ = {{ collections.allEntryTypes | dump | safe }};
     window.__CATEGORIES__ = {{ canonicalCategories | dump | safe }};
     window.__PROJECT_SLUGS__ = [

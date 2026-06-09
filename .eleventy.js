@@ -81,6 +81,9 @@ export default function(eleventyConfig) {
     return "/" + record.src;
   });
 
+  // Expose the R2 public base URL to templates (used by the admin to build preview URLs).
+  eleventyConfig.addGlobalData("r2BaseUrl", (process.env.R2_PUBLIC_BASE_URL || "").replace(/\/$/, ""));
+
   // https://www.11ty.dev/docs/plugins/image/
   // Generate PNG icon files and a link tag from a source SVG or PNG file
   eleventyConfig.addShortcode("favicon", async function(src) {
