@@ -10,6 +10,17 @@ categories: []
 link: ''
 type: staff
 active: true
+headerImage:
+  src: entries/other/bay-fujimoto-joins/header.jpg
+  width: 1000
+  height: 1000
+  r2: true
+  widths:
+    - 640
+  formats:
+    - webp
+    - jpeg
+  alt: Bay Fujimoto
 ---
 
 Bay is a recent graduate of Rice University with professional experience at SHoP Architects in New York and Weiss Architecture in Austin. His design focus centers on small-scale construction systems, adaptive reuse, and ecological design strategies, with a strong interest in environmentally responsive architecture.

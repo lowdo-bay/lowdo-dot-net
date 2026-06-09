@@ -10,6 +10,17 @@ categories: []
 link: ''
 type: staff
 active: true
+headerImage:
+  src: entries/other/dk-osseo-asare-founds/header.jpg
+  width: 1000
+  height: 1000
+  r2: true
+  widths:
+    - 640
+  formats:
+    - webp
+    - jpeg
+  alt: 'DK Osseo-Asare, GhIE'
 ---
 
 DK's work explores sustainability by connecting form-making, technology, and geopolitics with environmental and social dimensions. He is a TED Global Fellow, Fulbright Scholar, and Africa 4 Tech Digital Champion.

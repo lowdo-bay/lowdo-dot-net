@@ -74,19 +74,23 @@ const s3 = dryRun ? null : new S3Client({
 
 // --- Helpers ----------------------------------------------------------------
 
-const projectDir = path.join('entries', 'projects', projectArg);
+// Accept "projects/slug", "other/slug", or a bare "slug" (defaults to projects/).
+const entrySub = projectArg.includes('/') ? projectArg.replace(/^entries\//, '') : path.posix.join('projects', projectArg);
+const slug = path.posix.basename(entrySub);
+const keyBase = path.posix.join('entries', entrySub);          // e.g. entries/other/<slug>
+const projectDir = path.join('entries', ...entrySub.split('/'));
 if (!fs.existsSync(projectDir)) {
-  console.error(`Project folder not found: ${projectDir}`);
+  console.error(`Entry folder not found: ${projectDir}`);
   process.exit(1);
 }
 
-// Relative POSIX key from repo root, e.g. entries/projects/<slug>/<file>
-const keyFor = (file) => path.posix.join('entries', 'projects', projectArg, file);
+// Relative POSIX key from repo root, e.g. entries/<sub>/<file>
+const keyFor = (file) => path.posix.join(keyBase, file);
 // Variant key: "<dir>/<basename>-<width>.<format>"
 const variantKey = (file, width, fmt) => {
   const ext = path.extname(file);
   const base = file.slice(0, -ext.length);
-  return path.posix.join('entries', 'projects', projectArg, `${base}-${width}.${fmt}`);
+  return path.posix.join(keyBase, `${base}-${width}.${fmt}`);
 };
 
 let uploadCount = 0;
@@ -158,8 +162,8 @@ console.log(`\nMigrating ${projectDir}${dryRun ? '  (DRY RUN)' : ''}`);
 console.log(`  header:${headerFile ? 1 : 0} feature:${featureFile ? 1 : 0} gallery:${galleryFiles.length} drawings:${drawingFiles.length} toolkit:${toolkitFiles.length}\n`);
 
 // Locate the entry's markdown file (same name as the folder, or the only .md present).
-const mdName = fs.existsSync(path.join(projectDir, `${projectArg}.md`))
-  ? `${projectArg}.md`
+const mdName = fs.existsSync(path.join(projectDir, `${slug}.md`))
+  ? `${slug}.md`
   : allFiles.find((f) => f.endsWith('.md'));
 if (!mdName) { console.error('No .md entry file found in the project folder.'); process.exit(1); }
 const mdPath = path.join(projectDir, mdName);
