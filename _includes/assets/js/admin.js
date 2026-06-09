@@ -40,8 +40,9 @@
     knownStatuses.sort();
   })();
   var changes = {};
-  var fileOps = {}; // { [filePath]: { header, gallery[], drawings[], toolkit[] } }
-  var fileListCache = {}; // { [filePath]: rawFiles[] } — avoids re-fetching on each open
+  var fileOps = {}; // { [filePath]: { header, gallery[], drawings[], toolkit[] } } — items hold R2 records or pending File uploads
+  var fileOpsOrigSig = {}; // { [filePath]: signature } — baseline to detect unsaved file changes
+  var fileListCache = {}; // (legacy) retained for compatibility; no longer populated
   var sortField = 'date';
   var sortDir = 'desc';
   var searchQuery = '';
@@ -711,7 +712,7 @@
     var count = Object.keys(changes).length;
     Object.keys(fileOps).forEach(function(path) {
       if (changes[path]) return;
-      if (buildFileOpsList(path, fileOps[path]).length > 0) count++;
+      if (hasFileChanges(path)) count++;
     });
     changeCountEl.hidden = count === 0;
     changeCountEl.textContent = count + ' change' + (count === 1 ? '' : 's');
@@ -1139,15 +1140,28 @@
     return ext === 'jpg' || ext === 'jpeg' || ext === 'png' || ext === 'gif' || ext === 'webp';
   }
 
+  // Build a preview URL for an R2 image record (small variant when available).
+  function r2PreviewUrl(rec) {
+    if (!rec || !rec.src) return null;
+    var base = (window.__R2_BASE__ || '').replace(/\/$/, '');
+    function enc(k) { return k.split('/').map(encodeURIComponent).join('/'); }
+    if (rec.r2 && rec.widths && rec.widths.indexOf(640) !== -1) {
+      var dot = rec.src.lastIndexOf('.');
+      var b = dot >= 0 ? rec.src.slice(0, dot) : rec.src;
+      return base + '/' + enc(b + '-640.webp');
+    }
+    return base + '/' + enc(rec.src);
+  }
+
   function getPreviewSrc(item) {
     if (!item || item.status === 'delete') return null;
-    var ext = getExtension(item.origPath || item.path || '');
-    if (!isImageExt(ext)) return null;
-    if (item.status === 'upload' && item.base64 && item.mimeType) {
-      return 'data:' + item.mimeType + ';base64,' + item.base64;
+    if (!isImageExt(item._ext || '')) return null;
+    if (item.status === 'upload' && item.file) {
+      if (!item._objUrl) item._objUrl = URL.createObjectURL(item.file);
+      return item._objUrl;
     }
-    if (item.path) {
-      return 'https://raw.githubusercontent.com/lowdo-bay/lowdo-dot-net/main/' + item.path;
+    if (item.record && item.record.src) {
+      return r2PreviewUrl(item.record);
     }
     return null;
   }
@@ -1157,26 +1171,64 @@
     return parts.slice(0, parts.length - 1).join('/');
   }
 
-  function parseEntryFiles(rawFiles) {
+  function recordExt(rec) { return getExtension((rec && (rec.src || rec.key)) || ''); }
+
+  // Build the file-panel state for an entry from its frontmatter image/file records.
+  function parseEntryRecords(entry) {
     var result = { header: null, gallery: [], drawings: [], toolkit: [] };
-    (rawFiles || []).forEach(function(f) {
-      var name = f.name;
-      if (/^header\.(jpg|jpeg|png|gif|webp)$/i.test(name)) {
-        result.header = { status: 'existing', sha: f.sha, path: f.path, displayName: name };
-      } else if (/^\d{2}_/.test(name)) {
-        var m = name.match(/^(\d{2})_(.+)$/);
-        var displayName = m ? m[2].replace(/\.[^.]+$/, '') : name;
-        result.gallery.push({ status: 'existing', sha: f.sha, path: f.path, origPath: f.path, displayName: displayName, prefix: m ? m[1] : '00' });
-      } else if (/^drawing-/.test(name)) {
-        var base = name.replace(/^drawing-/, '').replace(/\.[^.]+$/, '');
-        result.drawings.push({ status: 'existing', sha: f.sha, path: f.path, origPath: f.path, displayName: base });
-      } else if (/^toolkit-/.test(name)) {
-        var base = name.replace(/^toolkit-/, '').replace(/\.[^.]+$/, '');
-        result.toolkit.push({ status: 'existing', sha: f.sha, path: f.path, origPath: f.path, displayName: base });
-      }
+    if (!entry) return result;
+    function imgItem(rec) {
+      var name = (rec.src || '').split('/').pop().replace(/\.[^.]+$/, '');
+      return { status: 'existing', record: rec, displayName: rec.caption || rec.alt || name, _ext: recordExt(rec) };
+    }
+    if (entry.headerImage && entry.headerImage.src) {
+      result.header = { status: 'existing', record: entry.headerImage, displayName: 'header', _ext: recordExt(entry.headerImage) };
+    }
+    (entry.images || []).forEach(function(rec) { if (rec && rec.src) result.gallery.push(imgItem(rec)); });
+    (entry.drawings || []).forEach(function(rec) { if (rec && rec.src) result.drawings.push(imgItem(rec)); });
+    (entry.toolkitFiles || []).forEach(function(rec) {
+      if (!rec) return;
+      var key = rec.key || rec.src || '';
+      result.toolkit.push({ status: 'existing', record: rec, displayName: rec.title || key.split('/').pop().replace(/\.[^.]+$/, ''), _ext: getExtension(key) });
     });
-    result.gallery.sort(function(a, b) { return a.prefix < b.prefix ? -1 : 1; });
     return result;
+  }
+
+  // Signature of the current file-panel state — used to detect unsaved file changes.
+  function fileSig(ops) {
+    if (!ops) return '';
+    function one(item) {
+      if (!item || item.status === 'delete') return '';
+      var id = item.status === 'upload' ? ('NEW:' + (item._uid || '')) : ((item.record && (item.record.src || item.record.key)) || '');
+      return id + '|' + (item.displayName || '');
+    }
+    function list(arr) { return (arr || []).map(one).filter(Boolean).join(','); }
+    return one(ops.header) + '::' + list(ops.gallery) + '::' + list(ops.drawings) + '::' + list(ops.toolkit);
+  }
+
+  function hasFileChanges(filePath) {
+    var ops = fileOps[filePath];
+    if (!ops) return false;
+    return fileSig(ops) !== (fileOpsOrigSig[filePath] || '');
+  }
+
+  // Short unique id for new R2 object keys (collision-safe + cache-busting).
+  function r2uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function sanitizeKeyName(s) {
+    return (s || 'file').replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '') || 'file';
+  }
+
+  // Clone file-panel state for snapshots/revert WITHOUT losing pending File objects
+  // (JSON round-tripping would turn Files into empty objects).
+  function cloneFileOps(ops) {
+    if (!ops) return null;
+    function cl(list) { return (list || []).map(function(i) { return Object.assign({}, i); }); }
+    return {
+      header: ops.header ? Object.assign({}, ops.header) : null,
+      gallery: cl(ops.gallery),
+      drawings: cl(ops.drawings),
+      toolkit: cl(ops.toolkit)
+    };
   }
 
   function renderFilesHeader(ops) {
@@ -1193,7 +1245,7 @@
         el.className = 'ep-files-thumb ep-files-header-thumb';
         el.alt = '';
       } else {
-        var ext = getExtension(h.origPath || h.path || '').toUpperCase() || 'FILE';
+        var ext = (h._ext || '').toUpperCase() || 'FILE';
         el = document.createElement('div');
         el.className = 'ep-files-thumb-placeholder ep-files-header-thumb';
         el.textContent = ext;
@@ -1228,7 +1280,7 @@
       nameInput.value = item.displayName || '';
       nameInput.placeholder = 'Display name';
 
-      var ext = getExtension(item.origPath || item.path || '');
+      var ext = item._ext || '';
       var badge = document.createElement('span');
       badge.className = 'ep-files-type-badge';
       badge.textContent = ext ? '.' + ext : '';
@@ -1314,40 +1366,17 @@
     renderFilesList(epFilesToolkitList, ops.toolkit);
   }
 
+  // Build the file panel from the entry's frontmatter records (R2). No network call.
   function loadEntryFiles(filePath) {
-    var entry = findEntry(filePath);
-    if (entry && entry._isNew) {
-      if (!fileOps[filePath]) fileOps[filePath] = { header: null, gallery: [], drawings: [], toolkit: [] };
-      epFilesLoading.hidden = true;
-      renderFilesPanel(filePath);
-      return;
+    if (!fileOps[filePath]) {
+      var entry = findEntry(filePath);
+      fileOps[filePath] = (entry && entry._isNew)
+        ? { header: null, gallery: [], drawings: [], toolkit: [] }
+        : parseEntryRecords(entry);
+      fileOpsOrigSig[filePath] = fileSig(fileOps[filePath]);
     }
-    if (fileListCache[filePath]) {
-      if (!fileOps[filePath]) fileOps[filePath] = parseEntryFiles(fileListCache[filePath]);
-      epFilesLoading.hidden = true;
-      renderFilesPanel(filePath);
-      return;
-    }
-    epFilesLoading.hidden = false;
-    epFilesLoading.textContent = 'Loading files...';
-    var dirPath = entryDirFromFilePath(filePath);
-    var url = '/.netlify/functions/update-entries?action=listFiles&dirPath=' +
-      encodeURIComponent(dirPath) + '&token=' + encodeURIComponent(token);
-    fetch(url)
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data.error) {
-          epFilesLoading.textContent = 'Error: ' + data.error;
-          return;
-        }
-        fileListCache[filePath] = data.files || [];
-        if (!fileOps[filePath]) fileOps[filePath] = parseEntryFiles(fileListCache[filePath]);
-        epFilesLoading.hidden = true;
-        renderFilesPanel(filePath);
-      })
-      .catch(function(err) {
-        epFilesLoading.textContent = 'Failed to load files: ' + err.message;
-      });
+    epFilesLoading.hidden = true;
+    renderFilesPanel(filePath);
   }
 
   function readFileAsBase64(file, cb) {
@@ -1374,19 +1403,13 @@
   epFilesHeaderInput.addEventListener('change', function() {
     if (!this.files || !this.files[0] || !activeEditPath) return;
     var file = this.files[0];
-    readFileAsBase64(file, function(base64, mimeType) {
-      var ext = getExtension(file.name);
-      var dirPath = entryDirFromFilePath(activeEditPath);
-      ensureFileOps(activeEditPath);
-      fileOps[activeEditPath].header = {
-        status: 'upload',
-        base64: base64,
-        mimeType: mimeType,
-        path: dirPath + '/header.' + ext,
-        displayName: 'header.' + ext
-      };
-      renderFilesHeader(fileOps[activeEditPath]);
-    });
+    ensureFileOps(activeEditPath);
+    fileOps[activeEditPath].header = {
+      status: 'upload', file: file, mimeType: file.type,
+      displayName: 'header', _ext: getExtension(file.name), _uid: r2uid()
+    };
+    renderFilesHeader(fileOps[activeEditPath]);
+    updateChanges();
   });
 
   epFilesHeaderDelete.addEventListener('click', function() {
@@ -1395,12 +1418,13 @@
     var h = fileOps[activeEditPath].header;
     if (!h) return;
     if (h.status === 'upload') {
-      var cached = fileListCache[activeEditPath];
-      fileOps[activeEditPath].header = cached ? parseEntryFiles(cached).header : null;
+      // Revert a not-yet-saved upload back to the entry's original header record (if any).
+      fileOps[activeEditPath].header = parseEntryRecords(findEntry(activeEditPath)).header;
     } else {
-      fileOps[activeEditPath].header = { status: 'delete', path: h.path, sha: h.sha };
+      fileOps[activeEditPath].header = { status: 'delete', record: h.record, _ext: h._ext };
     }
     renderFilesHeader(fileOps[activeEditPath]);
+    updateChanges();
   });
 
   // Read every selected file (async, possibly out of order), then append to the
@@ -1410,34 +1434,19 @@
     return function() {
       var files = this.files;
       if (!files || !files.length || !activeEditPath) return;
-      var editPath = activeEditPath;                 // capture; may change before reads finish
-      ensureFileOps(editPath);
-      // Capture any in-progress display-name edits ONCE, before mutating the array.
-      syncFileNamesFromRows(listEl, fileOps[editPath][opsKey]);
-
-      var fileArr = Array.prototype.slice.call(files);
-      var results = new Array(fileArr.length);        // index-keyed: preserves order
-      var remaining = fileArr.length;
-
-      fileArr.forEach(function(file, i) {
-        readFileAsBase64(file, function(base64, mimeType) {
-          results[i] = {
-            status: 'upload', base64: base64, mimeType: mimeType,
-            displayName: file.name.replace(/\.[^.]+$/, ''),
-            path: '', origPath: null, _ext: getExtension(file.name)
-          };
-          if (--remaining === 0) finish();
+      ensureFileOps(activeEditPath);
+      // Capture any in-progress display-name edits before mutating the array.
+      syncFileNamesFromRows(listEl, fileOps[activeEditPath][opsKey]);
+      // Store the File objects directly (uploaded to R2 at save time, in selection order).
+      Array.prototype.slice.call(files).forEach(function(file) {
+        fileOps[activeEditPath][opsKey].push({
+          status: 'upload', file: file, mimeType: file.type,
+          displayName: file.name.replace(/\.[^.]+$/, ''),
+          _ext: getExtension(file.name), _uid: r2uid()
         });
       });
-
-      function finish() {
-        // Guard: user may have navigated to a different entry mid-read.
-        if (activeEditPath !== editPath || !fileOps[editPath]) return;
-        results.forEach(function(item) {
-          if (item) fileOps[editPath][opsKey].push(item);
-        });
-        renderFilesList(listEl, fileOps[editPath][opsKey]);
-      }
+      renderFilesList(listEl, fileOps[activeEditPath][opsKey]);
+      updateChanges();
     };
   }
 
@@ -1474,6 +1483,7 @@
         item.status = 'delete';
       }
       renderFilesList(listEl, items);
+      updateChanges();
     });
   }
 
@@ -1481,90 +1491,85 @@
   wireFilesListEvents(epFilesDrawingsList, function() { return fileOps[activeEditPath] ? fileOps[activeEditPath].drawings : []; });
   wireFilesListEvents(epFilesToolkitList, function() { return fileOps[activeEditPath] ? fileOps[activeEditPath].toolkit : []; });
 
-  function buildFileOpsList(filePath, ops) {
-    var dirPath = entryDirFromFilePath(filePath);
-    var result = [];
-
-    if (ops.header) {
-      if (ops.header.status === 'upload') {
-        result.push({ action: 'upload', path: ops.header.path, base64: ops.header.base64, sha: ops.header.sha, mimeType: ops.header.mimeType, _ref: ops.header });
-      } else if (ops.header.status === 'delete') {
-        result.push({ action: 'delete', path: ops.header.path });
-      }
+  // Build the entry's image/file record arrays from the current panel state.
+  // New uploads must already be processed (item.record set) before calling.
+  function buildEntryRecords(ops) {
+    // Apply the row's (possibly edited) display name to the record's caption/title.
+    function withCaption(i) { var r = Object.assign({}, i.record); r.caption = i.displayName || r.caption || ''; return r; }
+    function withTitle(i)   { var r = Object.assign({}, i.record); r.title = i.displayName || r.title || ''; return r; }
+    function recs(list, fn) {
+      return (list || []).filter(function(i) { return i.status !== 'delete' && i.record; }).map(fn);
     }
-
-    function processNumberedList(items) {
-      var survivors = items.filter(function(item) { return item.status !== 'delete'; });
-      items.forEach(function(item) {
-        if (item.status === 'delete' && item.origPath) {
-          result.push({ action: 'delete', path: item.origPath });
-        }
-      });
-      survivors.forEach(function(item, i) {
-        var numStr = String(i).padStart(2, '0');
-        var ext = item._ext || getExtension(item.origPath || item.path || '');
-        var newPath = dirPath + '/' + numStr + '_' + (item.displayName || 'image') + '.' + ext;
-        if (item.status === 'upload') {
-          result.push({ action: 'upload', path: newPath, base64: item.base64, sha: item.sha, mimeType: item.mimeType, _ref: item });
-        } else if (item.status === 'existing' && item.origPath && item.origPath !== newPath) {
-          result.push({ action: 'rename', oldPath: item.origPath, newPath: newPath, sha: item.sha });
-        }
-      });
-    }
-
-    function processPrefixedList(items, prefix) {
-      items.forEach(function(item) {
-        if (item.status === 'delete' && item.origPath) {
-          result.push({ action: 'delete', path: item.origPath });
-        }
-      });
-      var survivors = items.filter(function(item) { return item.status !== 'delete'; });
-      survivors.forEach(function(item) {
-        var ext = item._ext || getExtension(item.origPath || item.path || '');
-        var newPath = dirPath + '/' + prefix + (item.displayName || 'file') + '.' + ext;
-        if (item.status === 'upload') {
-          result.push({ action: 'upload', path: newPath, base64: item.base64, sha: item.sha, mimeType: item.mimeType, _ref: item });
-        } else if (item.status === 'existing' && item.origPath && item.origPath !== newPath) {
-          result.push({ action: 'rename', oldPath: item.origPath, newPath: newPath, sha: item.sha });
-        }
-      });
-    }
-
-    processNumberedList(ops.gallery);
-    processPrefixedList(ops.drawings, 'drawing-');
-    processPrefixedList(ops.toolkit, 'toolkit-');
-
-    return result;
+    return {
+      headerImage: (ops.header && ops.header.status !== 'delete' && ops.header.record) ? ops.header.record : null,
+      images: recs(ops.gallery, withCaption),
+      drawings: recs(ops.drawings, withCaption),
+      toolkitFiles: recs(ops.toolkit, withTitle)
+    };
   }
 
-  // Walk every entry's fileOps and collect upload ops that haven't been blob-uploaded yet.
-  // Each queue item holds a reference to the source object inside `fileOps` so the
-  // returned SHA can be written back in place — this is what makes retry-from-failure work.
-  function buildPhase1Queue() {
+  // Collect every pending (not-yet-uploaded) file across entries with file changes.
+  function buildR2UploadQueue() {
     var queue = [];
     Object.keys(fileOps).forEach(function(filePath) {
-      var opsList = buildFileOpsList(filePath, fileOps[filePath]);
-      opsList.forEach(function(op) {
-        if (op.action !== 'upload') return;
-        if (op.sha) return; // already uploaded in a prior attempt
-        if (!op._ref || !op._ref.base64) return;
-        queue.push({ filePath: filePath, path: op.path, ref: op._ref });
-      });
+      if (!hasFileChanges(filePath)) return;
+      var ops = fileOps[filePath];
+      var dir = entryDirFromFilePath(filePath);
+      function add(item, kind) {
+        if (item && item.status === 'upload' && item.file && !item.record) {
+          queue.push({ item: item, dir: dir, kind: kind });
+        }
+      }
+      add(ops.header, 'header');
+      (ops.gallery || []).forEach(function(i) { add(i, 'gallery'); });
+      (ops.drawings || []).forEach(function(i) { add(i, 'drawings'); });
+      (ops.toolkit || []).forEach(function(i) { add(i, 'toolkit'); });
     });
     return queue;
   }
 
-  // POST a single base64 blob to the server; resolves with { sha } or rejects with Error.
-  function uploadOneBlob(base64, mimeType) {
+  // Upload one pending file directly to R2 (presigned PUT), then attach its record.
+  // Images additionally get their responsive variant ladder generated server-side.
+  function r2UploadOne(q) {
+    var item = q.item;
+    var ext = item._ext || getExtension(item.file.name);
+    var keyName = q.kind === 'header'
+      ? ('header-' + item._uid)
+      : (sanitizeKeyName(item.displayName || item.file.name.replace(/\.[^.]+$/, '')) + '-' + item._uid);
+    var key = q.dir + '/' + keyName + '.' + ext;
+    var contentType = item.mimeType || item.file.type || 'application/octet-stream';
+    var isImage = isImageExt(ext);
+
     return fetch('/.netlify/functions/update-entries', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'uploadBlob', token: token, base64: base64, mimeType: mimeType })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'presignUpload', token: token, key: key, contentType: contentType })
     }).then(function(res) {
-      return res.json().then(function(data) {
-        if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
-        if (!data.sha) throw new Error('Server did not return a SHA');
-        return data;
+      return res.json().then(function(d) { if (!res.ok) throw new Error(d.error || ('presign HTTP ' + res.status)); return d; });
+    }).then(function(d) {
+      return fetch(d.url, { method: 'PUT', headers: { 'Content-Type': contentType }, body: item.file })
+        .then(function(pr) { if (!pr.ok) throw new Error('R2 upload failed (HTTP ' + pr.status + ')'); });
+    }).then(function() {
+      if (q.kind === 'toolkit') {
+        item.record = { filename: keyName + '.' + ext, title: item.displayName || keyName, format: ext.toUpperCase(), key: key };
+        item.status = 'existing';
+        return;
+      }
+      if (!isImage) {
+        // Non-image in an image slot: store as a no-variant record (renders as a plain <img>).
+        item.record = { src: key, r2: true, widths: [], formats: [] };
+        if (q.kind !== 'header') item.record.caption = item.displayName || keyName;
+        item.status = 'existing';
+        return;
+      }
+      return fetch('/.netlify/functions/update-entries', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'processImage', token: token, key: key })
+      }).then(function(res) {
+        return res.json().then(function(d) { if (!res.ok) throw new Error(d.error || ('processImage HTTP ' + res.status)); return d; });
+      }).then(function(meta) {
+        item.record = { src: key, r2: true, width: meta.width, height: meta.height, widths: meta.widths, formats: meta.formats };
+        if (q.kind !== 'header') item.record.caption = item.displayName || keyName;
+        item.status = 'existing';
       });
     });
   }
@@ -1619,7 +1624,7 @@
       adu: entry.adu ? JSON.parse(JSON.stringify(entry.adu)) : null,
       body: entry.body,
       active: entry.active,
-      fileOpsCopy: fileOps[filePath] ? JSON.parse(JSON.stringify(fileOps[filePath])) : null
+      fileOpsCopy: cloneFileOps(fileOps[filePath])
     };
     editPanelTitle.textContent = entry._isNew ? 'New Entry' : 'Edit: ' + (entry.title || entry.slug);
 
@@ -1845,7 +1850,7 @@
       adu: entry.adu ? JSON.parse(JSON.stringify(entry.adu)) : null,
       body: entry.body,
       active: entry.active,
-      fileOpsCopy: fileOps[activeEditPath] ? JSON.parse(JSON.stringify(fileOps[activeEditPath])) : null
+      fileOpsCopy: cloneFileOps(fileOps[activeEditPath])
     };
 
     // Sync file display names from DOM before closing
@@ -3388,8 +3393,7 @@
 
     Object.keys(fileOps).forEach(function(path) {
       if (changes[path]) return;
-      var opsList = buildFileOpsList(path, fileOps[path]);
-      if (opsList.length === 0) return;
+      if (!hasFileChanges(path)) return;
       var entry = entries.filter(function(e) { return e.filePath === path; })[0];
       var entryName = entry ? (entry.title || entry.slug || path) : path;
       html += '<tr class="sct-entry-first sct-entry-last">';
@@ -3397,7 +3401,7 @@
       html += '<td class="sct-col-action"><span class="sct-action">Edit</span></td>';
       html += '<td class="sct-col-field">Files</td>';
       html += '<td class="sct-col-old">—</td>';
-      html += '<td class="sct-col-new">' + opsList.length + ' file operation(s)</td>';
+      html += '<td class="sct-col-new">updated</td>';
       html += '</tr>';
     });
 
@@ -3439,32 +3443,28 @@
 
   // Strip the client-only `_ref` pointer (and any leftover base64 once a SHA exists)
   // before POSTing fileOps to the server in Phase 2.
-  function stripOpForCommit(op) {
-    var clean = {};
-    Object.keys(op).forEach(function(k) {
-      if (k === '_ref') return;
-      if (k === 'base64' && op.sha) return; // SHA already on the server; don't re-send bytes
-      clean[k] = op[k];
-    });
-    return clean;
+  // Attach R2 file records to the commit. DEFENSIVE: only set the image/file fields
+  // for an entry whose files actually changed, so non-file edits never touch records.
+  function attachFileRecords(change, path) {
+    if (fileOps[path] && hasFileChanges(path)) {
+      var r = buildEntryRecords(fileOps[path]);
+      change.headerImage = r.headerImage;
+      change.images = r.images;
+      change.drawings = r.drawings;
+      change.toolkitFiles = r.toolkitFiles;
+    }
+    return change;
   }
 
   function buildChangeListForCommit() {
     var changeList = Object.keys(changes).map(function(path) {
-      var change = changes[path];
-      var ops = fileOps[path];
-      if (ops) {
-        var opsList = buildFileOpsList(path, ops).map(stripOpForCommit);
-        if (opsList.length > 0) change.fileOps = opsList;
-      }
-      return change;
+      return attachFileRecords(changes[path], path);
     });
+    // Entries with only file changes (no frontmatter edit) → a plain update carrying records.
     Object.keys(fileOps).forEach(function(path) {
       if (changes[path]) return;
-      var opsList = buildFileOpsList(path, fileOps[path]).map(stripOpForCommit);
-      if (opsList.length > 0) {
-        changeList.push({ filePath: path, action: 'fileOpsOnly', fileOps: opsList });
-      }
+      if (!hasFileChanges(path)) return;
+      changeList.push(attachFileRecords({ filePath: path }, path));
     });
     return changeList;
   }
@@ -3520,13 +3520,15 @@
   }
 
   function runPhase1ThenCommit() {
-    var queue = buildPhase1Queue();
+    // Upload pending files directly to R2 (presigned PUT + server-side image processing).
+    // Already-uploaded items carry item.record, so the queue naturally resumes on retry.
+    var queue = buildR2UploadQueue();
     if (queue.length === 0) {
       runPhase2Commit();
       return;
     }
 
-    saveStatus.textContent = 'Uploading images...';
+    saveStatus.textContent = 'Uploading files to storage...';
     saveProgress.hidden = false;
     showSaveActions({ cancel: true });
 
@@ -3546,19 +3548,16 @@
         runPhase2Commit();
         return;
       }
-      var item = queue[i];
-      saveProgress.textContent = 'Uploading ' + (i + 1) + ' of ' + total + ': ' + fileNameFromPath(item.path);
+      saveProgress.textContent = 'Uploading ' + (i + 1) + ' of ' + total + ': ' + (queue[i].item.displayName || 'file');
 
-      uploadOneBlob(item.ref.base64, item.ref.mimeType)
-        .then(function(data) {
-          // Write the SHA back onto the source fileOps entry, drop the base64 bytes.
-          item.ref.sha = data.sha;
-          delete item.ref.base64;
+      r2UploadOne(queue[i])
+        .then(function() {
           i += 1;
           next();
         })
         .catch(function(err) {
-          if (err && err.message === 'Invalid or expired token') {
+          var msg = (err && err.message) ? err.message : 'unknown error';
+          if (/expired token|Invalid or expired/.test(msg)) {
             saveStatus.textContent = 'Session expired. Please log in again.';
             saveProgress.hidden = true;
             showSaveActions({});
@@ -3570,8 +3569,8 @@
             }, 2000);
             return;
           }
-          saveStatus.textContent = 'Upload failed: ' + (err && err.message ? err.message : 'unknown error');
-          saveProgress.textContent = 'Stopped at ' + (i + 1) + ' of ' + total + '. Already-uploaded images will not be re-sent on retry.';
+          saveStatus.textContent = 'Upload failed: ' + msg;
+          saveProgress.textContent = 'Stopped at ' + (i + 1) + ' of ' + total + '. Already-uploaded files won’t be re-sent on retry.';
           showSaveActions({ cancel: true, retry: true });
         });
     }
@@ -3621,6 +3620,18 @@
         if (e._renameFrom) delete e._renameFrom;
       });
 
+      // Reflect saved file changes back into the in-memory entries so re-editing stays accurate.
+      Object.keys(fileOps).forEach(function(path) {
+        if (!hasFileChanges(path)) return;
+        var ent = findEntry(path);
+        if (!ent) return;
+        var r = buildEntryRecords(fileOps[path]);
+        ent.headerImage = r.headerImage;
+        ent.images = r.images;
+        ent.drawings = r.drawings;
+        ent.toolkitFiles = r.toolkitFiles;
+      });
+
       originals = {};
       entries.forEach(function(e) {
         originals[e.filePath] = snapshot(e);
@@ -3629,6 +3640,7 @@
       canonicalCategoriesChanged = false;
       changes = {};
       fileOps = {};
+      fileOpsOrigSig = {};
       fileListCache = {};
       updateChanges();
 
@@ -3803,7 +3815,7 @@
   saveBtn.addEventListener('click', function() {
     syncRelatedEntries();
     var hasPendingFileOps = Object.keys(fileOps).some(function(path) {
-      return buildFileOpsList(path, fileOps[path]).length > 0;
+      return hasFileChanges(path);
     });
     var changeList = Object.keys(changes).map(function(path) { return changes[path]; });
     if (changeList.length === 0 && !hasPendingFileOps) return;

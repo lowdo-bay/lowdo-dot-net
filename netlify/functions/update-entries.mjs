@@ -224,6 +224,12 @@ function buildNewEntryContent(change) {
   if (change.relatedEntries && change.relatedEntries.length) d.relatedEntries = change.relatedEntries;
   if (change.adu_library === true) d.adu_library = true;
   if (change.adu && typeof change.adu === 'object' && Object.keys(change.adu).length > 0) d.adu = change.adu;
+  // R2 file records (new entry created with uploads in the same save)
+  if (change.headerImage) d.headerImage = change.headerImage;
+  if (change.featureImage) d.featureImage = change.featureImage;
+  if (change.images && change.images.length) d.images = change.images;
+  if (change.drawings && change.drawings.length) d.drawings = change.drawings;
+  if (change.toolkitFiles && change.toolkitFiles.length) d.toolkitFiles = change.toolkitFiles;
 
   return matter.stringify(change.body || '', d);
 }
