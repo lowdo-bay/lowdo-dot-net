@@ -44,7 +44,7 @@
     styleSrc = "'self'"
     scriptSrc = "'self' www.google-analytics.com www.googletagmanager.com"
     fontSrc = "'self' data: fonts.gstatic.com"
-    imgSrc = "'self' data: www.google-analytics.com"
+    imgSrc = "'self' data: www.google-analytics.com https://*.r2.dev"
     connectSrc = "www.google-analytics.com"
     frameAncestors = "'none'"
 
