@@ -1533,14 +1533,33 @@
   var R2_FORMATS = ['webp', 'jpeg'];
   var R2_QUALITY = { webp: 0.75, jpeg: 0.8 };
 
-  // Resize a decoded bitmap to a target width via canvas; resolve a Blob in the given format.
-  function resizeToBlob(bitmap, width, fmt) {
-    var scale = Math.min(1, width / bitmap.width);
-    var w = Math.max(1, Math.round(bitmap.width * scale));
-    var h = Math.max(1, Math.round(bitmap.height * scale));
-    var canvas = document.createElement('canvas');
-    canvas.width = w; canvas.height = h;
-    canvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+  // Downscale a source (ImageBitmap or canvas) to a target width and return a canvas.
+  // Uses high-quality smoothing + stepped halving: a single large downscale looks soft,
+  // so we halve repeatedly until within 2x of the target, then do the final draw.
+  function downscaleToCanvas(src, targetW) {
+    var dstW = Math.max(1, Math.min(src.width, Math.round(targetW)));
+    var dstH = Math.max(1, Math.round(src.height * (dstW / src.width)));
+    var cur = src, curW = src.width, curH = src.height;
+    while (curW > dstW * 2) {
+      var halfW = Math.max(dstW, Math.round(curW / 2));
+      var halfH = Math.max(dstH, Math.round(curH / 2));
+      var step = document.createElement('canvas');
+      step.width = halfW; step.height = halfH;
+      var sctx = step.getContext('2d');
+      sctx.imageSmoothingEnabled = true; sctx.imageSmoothingQuality = 'high';
+      sctx.drawImage(cur, 0, 0, halfW, halfH);
+      cur = step; curW = halfW; curH = halfH;
+    }
+    var out = document.createElement('canvas');
+    out.width = dstW; out.height = dstH;
+    var octx = out.getContext('2d');
+    octx.imageSmoothingEnabled = true; octx.imageSmoothingQuality = 'high';
+    octx.drawImage(cur, 0, 0, dstW, dstH);
+    return out;
+  }
+
+  // Encode a canvas to a Blob in the given format/quality.
+  function canvasToBlob(canvas, fmt) {
     return new Promise(function(resolve, reject) {
       canvas.toBlob(function(blob) {
         blob ? resolve(blob) : reject(new Error('Browser could not encode ' + fmt));
@@ -1594,8 +1613,10 @@
       if (widths.length === 0 && srcW > 0) widths.push(srcW);
       var jobs = [ r2Put(key, item.file, contentType) ];
       widths.forEach(function(w) {
+        // Resize once per width (high-quality), then encode each format from that canvas.
+        var canvas = downscaleToCanvas(bitmap, w);
         R2_FORMATS.forEach(function(fmt) {
-          jobs.push(resizeToBlob(bitmap, w, fmt).then(function(blob) {
+          jobs.push(canvasToBlob(canvas, fmt).then(function(blob) {
             return r2Put(keyBase + '-' + w + '.' + fmt, blob, 'image/' + fmt);
           }));
         });
