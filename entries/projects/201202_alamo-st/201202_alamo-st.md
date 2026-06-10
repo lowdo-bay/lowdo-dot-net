@@ -274,11 +274,6 @@ drawings:
       - 2400
     formats: *ref_0
     caption: drawing Second floor plan and section
-toolkitFiles:
-  - filename: toolkit-Sample Drawing Set.pdf
-    title: Sample Drawing Set
-    format: PDF
-    key: entries/projects/201202_alamo-st/toolkit-Sample Drawing Set.pdf
 ---
 
 **Design Program**
