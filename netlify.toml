@@ -10,10 +10,6 @@
 
 [functions]
   directory = "netlify/functions"
-  node_bundler = "esbuild"
-  # sharp ships native binaries — keep it external so Netlify installs the
-  # linux build instead of esbuild trying to bundle it.
-  external_node_modules = ["sharp"]
 
 [dev]
   command = "npx @11ty/eleventy --serve --port 8080"

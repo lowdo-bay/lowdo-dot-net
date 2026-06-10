@@ -1528,8 +1528,42 @@
     return queue;
   }
 
-  // Upload one pending file directly to R2 (presigned PUT), then attach its record.
-  // Images additionally get their responsive variant ladder generated server-side.
+  // Responsive size ladder + quality for client-side image variants (mirrors the migration output).
+  var R2_WIDTHS = [640, 1080, 1800, 2400];
+  var R2_FORMATS = ['webp', 'jpeg'];
+  var R2_QUALITY = { webp: 0.75, jpeg: 0.8 };
+
+  // Resize a decoded bitmap to a target width via canvas; resolve a Blob in the given format.
+  function resizeToBlob(bitmap, width, fmt) {
+    var scale = Math.min(1, width / bitmap.width);
+    var w = Math.max(1, Math.round(bitmap.width * scale));
+    var h = Math.max(1, Math.round(bitmap.height * scale));
+    var canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+    return new Promise(function(resolve, reject) {
+      canvas.toBlob(function(blob) {
+        blob ? resolve(blob) : reject(new Error('Browser could not encode ' + fmt));
+      }, 'image/' + fmt, R2_QUALITY[fmt]);
+    });
+  }
+
+  // Presign + PUT one blob/file directly to R2 (bytes never pass through the function → any size).
+  function r2Put(key, body, contentType) {
+    return fetch('/.netlify/functions/update-entries', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'presignUpload', token: token, key: key, contentType: contentType })
+    }).then(function(res) {
+      return res.json().then(function(d) { if (!res.ok) throw new Error(d.error || ('presign HTTP ' + res.status)); return d; });
+    }).then(function(d) {
+      return fetch(d.url, { method: 'PUT', headers: { 'Content-Type': contentType }, body: body })
+        .then(function(pr) { if (!pr.ok) throw new Error('R2 upload failed (HTTP ' + pr.status + ')'); });
+    });
+  }
+
+  // Upload one pending file to R2. Images are resized in the BROWSER into the variant ladder
+  // (no server-side processing → no function timeout, handles any size), then the original +
+  // variants are PUT directly to R2.
   function r2UploadOne(q) {
     var item = q.item;
     var ext = item._ext || getExtension(item.file.name);
@@ -1537,37 +1571,38 @@
       ? ('header-' + item._uid)
       : (sanitizeKeyName(item.displayName || item.file.name.replace(/\.[^.]+$/, '')) + '-' + item._uid);
     var key = q.dir + '/' + keyName + '.' + ext;
+    var keyBase = q.dir + '/' + keyName; // variant keys: keyBase-<width>.<fmt>
     var contentType = item.mimeType || item.file.type || 'application/octet-stream';
-    var isImage = isImageExt(ext);
 
-    return fetch('/.netlify/functions/update-entries', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'presignUpload', token: token, key: key, contentType: contentType })
-    }).then(function(res) {
-      return res.json().then(function(d) { if (!res.ok) throw new Error(d.error || ('presign HTTP ' + res.status)); return d; });
-    }).then(function(d) {
-      return fetch(d.url, { method: 'PUT', headers: { 'Content-Type': contentType }, body: item.file })
-        .then(function(pr) { if (!pr.ok) throw new Error('R2 upload failed (HTTP ' + pr.status + ')'); });
-    }).then(function() {
-      if (q.kind === 'toolkit') {
-        item.record = { filename: keyName + '.' + ext, title: item.displayName || keyName, format: ext.toUpperCase(), key: key };
+    // Toolkit / non-image: upload the original as-is (direct PUT, any size).
+    if (q.kind === 'toolkit' || !isImageExt(ext)) {
+      return r2Put(key, item.file, contentType).then(function() {
+        if (q.kind === 'toolkit') {
+          item.record = { filename: keyName + '.' + ext, title: item.displayName || keyName, format: ext.toUpperCase(), key: key };
+        } else {
+          item.record = { src: key, r2: true, widths: [], formats: [] };
+          if (q.kind !== 'header') item.record.caption = item.displayName || keyName;
+        }
         item.status = 'existing';
-        return;
-      }
-      if (!isImage) {
-        // Non-image in an image slot: store as a no-variant record (renders as a plain <img>).
-        item.record = { src: key, r2: true, widths: [], formats: [] };
-        if (q.kind !== 'header') item.record.caption = item.displayName || keyName;
-        item.status = 'existing';
-        return;
-      }
-      return fetch('/.netlify/functions/update-entries', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'processImage', token: token, key: key })
-      }).then(function(res) {
-        return res.json().then(function(d) { if (!res.ok) throw new Error(d.error || ('processImage HTTP ' + res.status)); return d; });
-      }).then(function(meta) {
-        item.record = { src: key, r2: true, width: meta.width, height: meta.height, widths: meta.widths, formats: meta.formats };
+      });
+    }
+
+    // Image: decode once, upload the original, then generate + upload the resized ladder.
+    return createImageBitmap(item.file, { imageOrientation: 'from-image' }).then(function(bitmap) {
+      var srcW = bitmap.width, srcH = bitmap.height;
+      var widths = R2_WIDTHS.filter(function(w) { return w <= srcW; });
+      if (widths.length === 0 && srcW > 0) widths.push(srcW);
+      var jobs = [ r2Put(key, item.file, contentType) ];
+      widths.forEach(function(w) {
+        R2_FORMATS.forEach(function(fmt) {
+          jobs.push(resizeToBlob(bitmap, w, fmt).then(function(blob) {
+            return r2Put(keyBase + '-' + w + '.' + fmt, blob, 'image/' + fmt);
+          }));
+        });
+      });
+      return Promise.all(jobs).then(function() {
+        if (bitmap.close) bitmap.close();
+        item.record = { src: key, r2: true, width: srcW, height: srcH, widths: widths, formats: R2_FORMATS };
         if (q.kind !== 'header') item.record.caption = item.displayName || keyName;
         item.status = 'existing';
       });

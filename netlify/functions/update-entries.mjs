@@ -1,18 +1,15 @@
 import { verifyToken } from './admin-auth.mjs';
 import matter from 'gray-matter';
-import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import sharp from 'sharp';
 
 const REPO_OWNER = 'lowdo-bay';
 const REPO_NAME = 'lowdo-dot-net';
 const BRANCH = 'main';
 
 // --- Cloudflare R2 (S3 API) -------------------------------------------------
-const R2_WIDTHS = [640, 1080, 1800, 2400];
-const R2_FORMATS = ['webp', 'jpeg'];
-const R2_QUALITY = { webp: 75, jpeg: 80 };
-
+// Image resizing happens in the browser (canvas); the function only mints presigned
+// PUT URLs so the browser can upload originals + variants directly to R2.
 let _r2;
 function r2Client() {
   if (!_r2) {
@@ -28,39 +25,13 @@ function r2Client() {
   return _r2;
 }
 
-// Presigned PUT URL so the browser can upload an original directly to R2.
+// Presigned PUT URL so the browser can upload a file directly to R2.
 async function presignR2Put(key, contentType) {
   const cmd = new PutObjectCommand({
     Bucket: process.env.R2_BUCKET, Key: key, ContentType: contentType || 'application/octet-stream',
     CacheControl: 'public, max-age=31536000, immutable',
   });
   return getSignedUrl(r2Client(), cmd, { expiresIn: 600 });
-}
-
-// Fetch an uploaded original from R2, generate the responsive ladder with sharp,
-// upload the variants back, and return the record fields for the entry frontmatter.
-async function processR2Image(key) {
-  const Bucket = process.env.R2_BUCKET;
-  const obj = await r2Client().send(new GetObjectCommand({ Bucket, Key: key }));
-  const buf = Buffer.from(await obj.Body.transformToByteArray());
-  const meta = await sharp(buf).metadata();
-  const srcW = meta.width || 0, srcH = meta.height || 0;
-  const widths = R2_WIDTHS.filter((w) => w <= srcW);
-  if (widths.length === 0 && srcW > 0) widths.push(srcW);
-
-  const dot = key.lastIndexOf('.');
-  const base = dot >= 0 ? key.slice(0, dot) : key;
-  for (const w of widths) {
-    for (const fmt of R2_FORMATS) {
-      const vbuf = await sharp(buf).resize({ width: w, withoutEnlargement: true })
-        .toFormat(fmt, { quality: R2_QUALITY[fmt] }).toBuffer();
-      await r2Client().send(new PutObjectCommand({
-        Bucket, Key: `${base}-${w}.${fmt}`, Body: vbuf, ContentType: `image/${fmt}`,
-        CacheControl: 'public, max-age=31536000, immutable',
-      }));
-    }
-  }
-  return { width: srcW, height: srcH, widths, formats: R2_FORMATS };
 }
 
 async function githubApi(path, options = {}) {
@@ -305,22 +276,6 @@ export async function handler(event) {
     try {
       const url = await presignR2Put(parsedBody.key, parsedBody.contentType);
       return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url, key: parsedBody.key }) };
-    } catch (err) {
-      return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
-    }
-  }
-
-  // Generate the responsive variant ladder for an already-uploaded R2 original.
-  if (parsedBody.action === 'processImage') {
-    if (!parsedBody.token || !verifyToken(parsedBody.token, secret)) {
-      return { statusCode: 401, body: JSON.stringify({ error: 'Invalid or expired token' }) };
-    }
-    if (!parsedBody.key) {
-      return { statusCode: 400, body: JSON.stringify({ error: 'Missing key' }) };
-    }
-    try {
-      const result = await processR2Image(parsedBody.key);
-      return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result) };
     } catch (err) {
       return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
     }
