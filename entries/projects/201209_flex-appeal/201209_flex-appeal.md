@@ -23,6 +23,8 @@ headerImage:
   widths: []
   formats: []
   alt: Flex Appeal
+  width: 1920
+  height: 1080
 images:
   - src: entries/projects/201209_flex-appeal/01_Alleyside view.jpg
     width: 3836

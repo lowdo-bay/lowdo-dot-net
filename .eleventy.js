@@ -647,10 +647,9 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
   // Copy folders or static assets e.g. images to site output
   eleventyConfig.addPassthroughCopy("robots.txt");
   eleventyConfig.addPassthroughCopy({"assets/icons/favicon.svg" : "/favicon.svg"});
-  eleventyConfig.addPassthroughCopy("projects/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
-  eleventyConfig.addPassthroughCopy("entries/**/*.{jpg,jpeg,png,gif,webp,svg,avif}");
-  // Copy toolkit files (all types) from entries
-  eleventyConfig.addPassthroughCopy("entries/**/toolkit-*");
+  // Entry media (images + toolkit files) is served from Cloudflare R2 via the file
+  // records in each entry's frontmatter — no longer passthrough-copied from entries/.
+  // See docs/storage-options-comparison.md for the rationale.
 
   // Copy assets folder to output
   eleventyConfig.addPassthroughCopy("assets");

@@ -5,3 +5,14 @@ package-lock.json
 .cache/
 .env
 .netlify/
+
+# Entry media lives in Cloudflare R2 (referenced via frontmatter records); keep it out of git.
+# Entry .md files remain tracked; static site images under assets/ are unaffected.
+entries/**/*.jpg
+entries/**/*.jpeg
+entries/**/*.png
+entries/**/*.gif
+entries/**/*.webp
+entries/**/*.avif
+entries/**/*.svg
+entries/**/toolkit-*
