@@ -55,6 +55,14 @@
   [plugins.inputs.audits]
     output_path = "reports/lighthouse/index.html"
 
+# Canonical host: send the default Netlify subdomain to the custom domain
+# so Google sees one site, not two. "force" applies even though the paths exist.
+[[redirects]]
+  from = "https://lowdo.netlify.app/*"
+  to = "https://lowdo.net/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "/work"
   to = "/all"

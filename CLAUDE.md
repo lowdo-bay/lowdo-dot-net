@@ -258,4 +258,4 @@ netlify dev            # Full Netlify dev environment
 
 ## Links
 
-- **Live Site**: https://lowdo.netlify.app
+- **Live Site**: https://lowdo.net

@@ -1,7 +1,7 @@
 # Site metadata
 metadata:
   # site_url should match your full production URL
-  site_url: 'https://lowdo.netlify.app'
+  site_url: 'https://lowdo.net'
   site_title: LowDO
   # site subtitles are optional
   site_subtitle_1: Architects who Build
