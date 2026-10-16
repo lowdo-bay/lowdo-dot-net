@@ -10,5 +10,11 @@ categories: []
 relatedProjects:
   - 220728_venice-biennale-2023
 type: award
-showInAwardsTable: true
+showInAwardsTable: false
+position: 999
+featured: false
+collaborators: []
+relatedEntries: []
+active: true
 ---
+
