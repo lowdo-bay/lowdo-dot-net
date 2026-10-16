@@ -3,14 +3,14 @@
   <div class="index-filters__main">
     {# ALL toggle #}
     <label class="index-filter">
-      <input type="checkbox" name="filter" value="all" data-filter-type="all" checked>
+      <input type="checkbox" name="filter" value="all" data-filter-type="all"{% if not presetTypes %} checked{% endif %}>
       <span class="index-filter__box"></span>
       <span class="index-filter__label">ALL</span>
     </label>
     {# Entry type filters (from subfolders) #}
     {% for entryType in collections.allEntryTypes %}
     <label class="index-filter index-filter--entry-type">
-      <input type="checkbox" name="filter" value="{{ entryType | lower }}" data-filter-type="{{ entryType | lower }}" data-filter-category="type">
+      <input type="checkbox" name="filter" value="{{ entryType | lower }}" data-filter-type="{{ entryType | lower }}" data-filter-category="type"{% if presetTypes and (entryType | lower) in presetTypes %} checked{% endif %}>
       <span class="index-filter__box"></span>
       <span class="index-filter__label">{{ entryType }}</span>
     </label>

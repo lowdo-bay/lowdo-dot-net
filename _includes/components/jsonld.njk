@@ -12,12 +12,30 @@
 {% for f in settings.metadata.site_founders %}
   {% set founders = (founders.push({
     "@type": "Person",
+    "@id": siteUrl + "/about/#" + (f.name | slug),
+    "url": siteUrl + "/about/#" + (f.name | slug),
     "name": f.name,
     "jobTitle": f.title,
     "worksFor": { "@type": "Organization", "name": "Low Design Office" },
     "sameAs": f.profiles
   }), founders) %}
 {% endfor %}
+{# Current staff (active staff entries), each anchored to its row on the About page #}
+{% set staff = [] %}
+{% for person in collections.entries %}
+  {% if person.data.entryType == "staff" and person.data.active == true %}
+    {% set personName = person.data.title | replace(", AIA", "") | replace(", GhIE", "") %}
+    {% set staff = (staff.push({
+      "@type": "Person",
+      "@id": siteUrl + "/about/#" + (personName | slug),
+      "url": siteUrl + "/about/#" + (personName | slug),
+      "name": personName,
+      "jobTitle": person.data.subtitle,
+      "worksFor": { "@id": siteUrl + "/#organization" }
+    }), staff) %}
+  {% endif %}
+{% endfor %}
+
 {% set organizationSchema = {
   "@context": "https://schema.org",
   "@type": ["Organization", "ProfessionalService"],
@@ -47,6 +65,7 @@
   "areaServed": ["Texas", "United States", "Ghana"],
   "knowsAbout": ["Architecture", "Design-build", "Residential architecture", "Sustainable design", "Low-carbon construction", "Bamboo construction"],
   "founder": founders,
+  "employee": staff,
   "sameAs": settings.metadata.site_profiles
 } %}
 
