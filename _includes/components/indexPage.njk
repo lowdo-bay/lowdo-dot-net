@@ -1,0 +1,51 @@
+{# Shared body of the Comprehensive Index.
+   Pages set optional variables before including it:
+     indexTitle, indexDescription — heading copy
+     presetTypes — list of lowercase entry types to pre-select (e.g. ["award","feature"]).
+       Rows of other types are rendered with display:none and the matching filter
+       checkboxes start checked, so the page behaves exactly like /all/ with that
+       filter applied, while crawlers get a page whose visible content is the subset. #}
+<article>
+
+  {# Page Title and Filter Controls #}
+  <section class="index-header-section">
+    <div class="grid grid--index">
+      <div class="index-col index-col--item-wide">
+        <h1 class="index-title">{{ indexTitle or "COMPREHENSIVE INDEX" }}</h1>
+        <p class="index-description text--small">{{ indexDescription or "Compendium of all LowDO happenings." }}</p>
+      </div>
+      <div class="index-col index-col--details">
+        {% include "components/indexFilters.njk" %}
+      </div>
+    </div>
+  </section>
+
+  {# Column Headers Row #}
+  <section class="index-columns-header">
+    <div class="grid grid--index">
+      <div class="index-col index-col--image"></div>
+      <div class="index-col index-col--item">ITEM</div>
+      <div class="index-col index-col--details">DETAILS / DESCRIPTION</div>
+      <div class="index-col index-col--date">DATE</div>
+    </div>
+  </section>
+
+  {# Entry Rows #}
+  <section class="index-entries">
+    {% set entryList = collections.entries %}
+    {% if entryList and entryList.length > 0 %}
+      {% for entry in entryList %}
+        {% include "components/indexRow.njk" %}
+      {% endfor %}
+    {% else %}
+      <div class="index-empty p--2">
+        <p>No entries yet. Add markdown files to the <code>entries/</code> folder.</p>
+      </div>
+    {% endif %}
+  </section>
+
+</article>
+
+{# Appended to <head> during build #}
+{% include "components/opengraph.njk" %}
+{% include "components/jsonld.njk" %}
