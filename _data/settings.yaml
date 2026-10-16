@@ -11,6 +11,43 @@ metadata:
     **Low Design Office** is an architecture and design studio that focuses on something simple: **realizing more with less.**
   # footer contact email
   site_email: lowdo@lowdo.net
+  # contact details used in structured data (schema.org) and shared with the footer
+  site_phone: '+1-512-553-5026'
+  site_address:
+    street: 705 W 29th St
+    city: Austin
+    region: TX
+    postal: '78705'
+    country: US
+  # default social-share image (og:image) for pages without their own header image
+  site_og_image:
+    src: entries/projects/201230_wolf-creek-ranch/header.jpg
+    r2: true
+    width: 2000
+    height: 1600
+  # every public profile for the firm — feeds schema.org sameAs so search engines and
+  # AI systems connect them to one entity. Add Wikipedia/Wikidata URLs here once they exist.
+  site_profiles:
+    - 'https://www.instagram.com/lowdesignoffice'
+    - 'https://www.linkedin.com/company/lowdesignoffice'
+    - 'https://x.com/lowdesignoffice'
+    - 'https://www.facebook.com/lowdesignoffice'
+    - 'https://architizer.com/firms/low-design-office'
+    - 'https://aiaaustin.org/architects/low-design-office/'
+    - 'https://www.labiennale.org/en/architecture/2023/dangerous-liaisons/low-design-office'
+    - 'https://archleague.org/article/kounkuey-design-initiative-low-design-office/'
+    - 'https://www.moma.org/slideshows/479'
+  # founders, for schema.org (name, job title, public profile links)
+  site_founders:
+    - name: Ryan Bollom
+      title: Co-founder / Principal
+      profiles:
+        - 'https://aiaaustin.org/architects/low-design-office/'
+    - name: DK Osseo-Asare
+      title: Co-founder / Principal
+      profiles:
+        - 'https://arts.psu.edu/faculty/dk-osseo-asare/'
+        - 'https://www.unitedstatesartists.org/?p=18321'
   # footer social link (the social title is defined in the i18n section)
   site_social_url: 'http://instagram.com/lowdesignoffice'
   # footer navigation columns
@@ -48,7 +85,7 @@ metadata:
     site_title: LowDO - Low Design Office
     # meta description
     site_description: >-
-      Low Design Office is an architecture and design studio that focuses on something simple: **realizing more with less.**
+      Low Design Office (LowDO) is an architecture and design-build studio in Austin, Texas and Tema, Ghana. Architects who build, realizing more with less.
     # Adds a noindex <meta> tag on all site pages, be careful y'all!
     # Instead you can block indexing per-project with no_index: true
     no_index: false
