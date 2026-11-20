@@ -80,7 +80,7 @@ metadata:
   site_logo_light: assets/uploads/favicon.png
   site_logo_dark: assets/uploads/innovation star white.png
   # add a GA4 ID to enable Google Analytics e.g. G-123456789
-  site_ga4_id: ''
+  site_ga4_id: 'G-8PTPN68ZCB'
   # home page SEO fields
   seo:
     # <title> tag
