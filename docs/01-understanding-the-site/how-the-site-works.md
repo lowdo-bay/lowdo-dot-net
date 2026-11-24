@@ -150,7 +150,7 @@ GitHub update → Netlify detects change → Rebuilds site → Publishes to live
 
 ### 5. Live Site Updates
 
-The updated site appears at https://lowdo.netlify.app
+The updated site appears at https://lowdo.net
 
 ```
 Netlify → Live site updated → Visitors see your changes
@@ -267,7 +267,7 @@ Eleventy:
 Netlify:
 - Detects GitHub update
 - Runs the build
-- Publishes new HTML to lowdo.netlify.app
+- Publishes new HTML to lowdo.net
 - Your project appears on the site!
 
 **Total time:** 3-5 minutes from push to live.

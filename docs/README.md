@@ -6,7 +6,7 @@ Welcome to the LowDO website. All content is managed through the **Admin Panel**
 
 ## Quick Start
 
-1. Go to [lowdo.netlify.app/admin](https://lowdo.netlify.app/admin/)
+1. Go to [lowdo.net/admin](https://lowdo.net/admin/)
 2. Enter the admin password (contact Bay if you need it)
 3. Use the table to add, edit, and publish entries
 4. Click **Save Changes** — the site rebuilds automatically in 3–5 minutes

@@ -8,7 +8,7 @@ All changes are batched and committed to GitHub in a single operation when you c
 
 ## Logging In
 
-1. Go to `/admin/` (e.g. `https://lowdo.netlify.app/admin/`)
+1. Go to `/admin/` (e.g. `https://lowdo.net/admin/`)
 2. Enter the admin password
 3. Click **Log In**
 
