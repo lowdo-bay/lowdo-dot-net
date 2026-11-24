@@ -1179,7 +1179,7 @@ section: project
         {# Top section: Title, tagline, tags #}
         <div class="project-meta-top">
           {# Row 1: Title spanning both sub-columns #}
-          <div class="project-meta-title">{{ title }}</div>
+          <h1 class="project-meta-title">{{ title }}</h1>
 
           {# Row 2: Tagline (col 3) + Categories (col 4) #}
           <div class="project-meta-tagline">
@@ -1249,7 +1249,7 @@ section: project
 
     <div class="project-section-header">
       <div class="project-section-header-inner">
-        <div class="project-section-header-cell">Specifications</div>
+        <h2 class="project-section-header-cell">Specifications</h2>
       </div>
     </div>
 
@@ -1318,7 +1318,7 @@ section: project
         {% set projectRecognition = collections.entriesByProject[page.fileSlug] %}
         {% if projectRecognition and projectRecognition.length %}
           <div class="project-collab-grid" style="margin-top: var(--space-6); padding-top: var(--space-6)">
-            <div class="project-collab-cell project-collab-cell--head">Awards & Recognition</div>
+            <h2 class="project-collab-cell project-collab-cell--head">Awards &amp; Recognition</h2>
             <div class="project-collab-cell project-collab-cell--head"> </div>
             {% for item in projectRecognition %}
               <div class="project-collab-cell">
@@ -1336,7 +1336,7 @@ section: project
 
       {# Right: Description body text #}
       <div class="grid__item--span-2-right">
-        <div class="project-desc-header">Description</div>
+        <h2 class="project-desc-header">Description</h2>
         <div class="project-desc-body">
           {{ content | safe }}
         </div>
@@ -1353,7 +1353,7 @@ section: project
 
     <div class="project-section-header">
       <div class="project-section-header-inner">
-        <div class="project-section-header-cell">Photos</div>
+        <h2 class="project-section-header-cell">Photos</h2>
       </div>
     </div>
 
@@ -1415,7 +1415,7 @@ section: project
 
     <div class="project-section-header">
       <div class="project-section-header-inner">
-        <div class="project-section-header-cell">Drawings</div>
+        <h2 class="project-section-header-cell">Drawings</h2>
       </div>
     </div>
 
@@ -1490,7 +1490,7 @@ section: project
 
           <div class="project-section-header">
             <div class="project-section-header-inner">
-              <div class="project-section-header-cell">Design Toolkit</div>
+              <h2 class="project-section-header-cell">Design Toolkit</h2>
             </div>
           </div>
 
@@ -1526,7 +1526,7 @@ section: project
 
     <div class="project-section-header">
       <div class="project-section-header-inner">
-        <div class="project-section-header-cell">Related Projects</div>
+        <h2 class="project-section-header-cell">Related Projects</h2>
       </div>
     </div>
 
