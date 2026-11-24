@@ -9,6 +9,7 @@ import EleventyFetch from "@11ty/eleventy-fetch";
 import Image from "@11ty/eleventy-img";
 import MarkdownIt from "markdown-it";
 import 'dotenv/config';
+import { execFileSync } from "node:child_process";
 const mdRender = new MarkdownIt();
 
 // --- Cloudflare R2 helpers (for migrated image/asset records) ---------------
@@ -516,6 +517,31 @@ eleventyConfig.addAsyncShortcode("generateImage", async function(params) {
 
   // Date formatting for index (MMDD YYYY format)
   // Parse dates directly from frontmatter to avoid timezone issues
+  // Date a source file last changed in git (YYYY-MM-DD), used for sitemap <lastmod>.
+  // Returns "" when git history is unavailable (no git, or a shallow clone where every
+  // file would report the same date), so the sitemap omits the tag instead of lying.
+  const gitDateCache = new Map();
+  let gitHistoryUsable;
+  eleventyConfig.addFilter("gitLastModified", (inputPath) => {
+    if (!inputPath) return "";
+    if (gitHistoryUsable === undefined) {
+      try {
+        gitHistoryUsable = execFileSync("git", ["rev-parse", "--is-shallow-repository"], { encoding: "utf8" }).trim() === "false";
+      } catch (e) {
+        gitHistoryUsable = false;
+      }
+    }
+    if (!gitHistoryUsable) return "";
+    if (!gitDateCache.has(inputPath)) {
+      let date = "";
+      try {
+        date = execFileSync("git", ["log", "-1", "--format=%cs", "--", inputPath], { encoding: "utf8" }).trim();
+      } catch (e) {}
+      gitDateCache.set(inputPath, date);
+    }
+    return gitDateCache.get(inputPath);
+  });
+
   eleventyConfig.addFilter("formatDate", (dateObj, format) => {
     // Handle ISO date strings (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss.sssZ) directly
     if (typeof dateObj === 'string') {

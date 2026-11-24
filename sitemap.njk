@@ -8,7 +8,11 @@ eleventyExcludeFromCollections: true
     {%- if not page.data.draft and page.url and "/admin/" not in page.url %}
       <url>
         <loc>{{ settings.metadata.site_url }}{{ page.url }}</loc>
-        <lastmod>{{ page.date | formatDate("yyyy-MM-dd") }}</lastmod>
+        {#- lastmod = when the page's source file last changed in git, not the project date #}
+        {%- set lastmod = page.inputPath | gitLastModified %}
+        {%- if lastmod %}
+        <lastmod>{{ lastmod }}</lastmod>
+        {%- endif %}
       </url>
     {%- endif %}
   {%- endfor %}
