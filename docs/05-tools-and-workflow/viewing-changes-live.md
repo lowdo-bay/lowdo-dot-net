@@ -30,7 +30,7 @@ Look for your site and check the "Deploys" tab.
 
 ## Viewing the Live Site
 
-Visit: https://lowdo.netlify.app
+Visit: https://lowdo.net
 
 Hard refresh to see changes: Cmd+Shift+R (Mac) or Ctrl+Shift+F5 (Windows)
 

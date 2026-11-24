@@ -16,7 +16,7 @@ The \ file contains all site-wide configuration. This guide explains each sectio
 title: "LowDO"
 description: "Low Design Office"
 email: "lowdo@lowdo.net"
-url: "https://lowdo.netlify.app"
+url: "https://lowdo.net"
 ```
 
 ---

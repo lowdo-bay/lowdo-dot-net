@@ -32,7 +32,7 @@ Look for fields near the top:
 title: "LowDO"
 description: "Low Design Office - Architecture and Design Studio based in Austin, Texas"
 email: "lowdo@lowdo.net"
-url: "https://lowdo.netlify.app"
+url: "https://lowdo.net"
 ```
 
 ---

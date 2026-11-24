@@ -290,8 +290,8 @@ _site/all/
 
 ### Live URLs (What Visitors See)
 
-- **Project page:** https://lowdo.netlify.app/project/casa-marianella/
-- **Index listing:** https://lowdo.netlify.app/all/
+- **Project page:** https://lowdo.net/project/casa-marianella/
+- **Index listing:** https://lowdo.net/all/
 
 ---
 
