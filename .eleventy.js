@@ -74,6 +74,25 @@ export default function(eleventyConfig) {
     if (record.r2) return r2PublicUrl(record.src);
     return (base ? String(base).replace(/\/$/, "") : "") + "/" + record.src;
   });
+  // Remove empty values (null, undefined, "", [], {}) from structured data before output,
+  // so JSON-LD never carries blank fields. Used by components/jsonld.njk.
+  eleventyConfig.addFilter("jsonLdClean", function clean(value) {
+    if (Array.isArray(value)) {
+      const items = value.map(clean).filter(v => v !== undefined);
+      return items.length ? items : undefined;
+    }
+    if (value && typeof value === "object") {
+      const out = {};
+      for (const [k, v] of Object.entries(value)) {
+        const c = clean(v);
+        if (c !== undefined) out[k] = c;
+      }
+      return Object.keys(out).length ? out : undefined;
+    }
+    if (value === null || value === undefined || value === "") return undefined;
+    return value;
+  });
+
   // Like r2url but returns a small resized variant when available (for thumbnails).
   eleventyConfig.addFilter("r2variant", function(record, width, fmt) {
     if (!record || !record.src) return "";

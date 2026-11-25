@@ -83,37 +83,97 @@
   } %}
   <script type="application/ld+json" data-helmet>{{ webSiteSchema | dump | safe }}</script>
 
-{# Project detail pages: CreativeWork schema #}
-{% elif section == "project" %}
-  {% set imageUrl = (headerImage | r2url(siteUrl)) if headerImage and headerImage.src else null %}
+{# Project detail pages: CreativeWork + BreadcrumbList schema.
+   Keyed on entryType (always set for entries) rather than `section`: the project layout is
+   assigned by eleventyComputed, so its front matter `section: project` never reaches the page.
+   Every value below is something the page already shows. jsonLdClean drops empty fields. #}
+{% elif entryType == "project" or section == "project" %}
+  {% set pageUrl = siteUrl + page.url %}
+  {% set orgRef = { "@id": siteUrl + "/#organization" } %}
+  {% set imageCaption = title + (", " + location if location else "") + " — Low Design Office" %}
+
+  {# Header image first, then gallery photos (capped to keep the page light) #}
+  {% set projectImages = [] %}
+  {% if headerImage and headerImage.src %}
+    {% set projectImages = (projectImages.push(headerImage), projectImages) %}
+  {% endif %}
+  {% for image in images %}
+    {% if image.src and projectImages.length < 12 %}
+      {% set projectImages = (projectImages.push(image), projectImages) %}
+    {% endif %}
+  {% endfor %}
+  {% set imageObjects = [] %}
+  {% for image in projectImages %}
+    {% set imageObjects = (imageObjects.push({
+      "@type": "ImageObject",
+      "contentUrl": image | r2url(siteUrl),
+      "caption": imageCaption,
+      "creditText": "Low Design Office",
+      "creator": orgRef
+    }), imageObjects) %}
+  {% endfor %}
+
+  {# Trade collaborators, each with the role shown in the Trade / Collaborator table #}
+  {% set contributors = [] %}
+  {% for c in collaborators %}
+    {% if c.name %}
+      {% set contributors = (contributors.push({
+        "@type": "Role",
+        "roleName": c.role,
+        "contributor": { "@type": "Organization", "name": c.name }
+      }), contributors) %}
+    {% endif %}
+  {% endfor %}
+
+  {# Awards & Recognition rows: awards become `award`, press and other items become `subjectOf` #}
+  {% set awardNames = [] %}
+  {% set coverage = [] %}
+  {% for item in collections.entriesByProject[page.fileSlug] %}
+    {% set itemYear = item.data.date | formatDate("YYYY") %}
+    {% if item.data.entryType == "award" %}
+      {% set awardNames = (awardNames.push(item.data.title + " (" + itemYear + ")"), awardNames) %}
+    {% else %}
+      {% set coverage = (coverage.push({
+        "@type": "CreativeWork",
+        "name": item.data.title,
+        "url": item.data.link,
+        "datePublished": itemYear
+      }), coverage) %}
+    {% endif %}
+  {% endfor %}
+
   {% set creativeWorkSchema = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
+    "@id": pageUrl + "#project",
     "name": title,
-    "description": (description | striptags) if description else null,
-    "datePublished": year | string if year else null,
-    "locationCreated": {
-      "@type": "Place",
-      "name": location
-    } if location else null,
-    "image": {
-      "@type": "ImageObject",
-      "url": imageUrl,
-      "caption": (title + (", " + location if location else "") + " — Low Design Office"),
-      "author": {
-        "@type": "Organization",
-        "name": "Low Design Office",
-        "url": siteUrl
-      }
-    } if imageUrl else null,
-    "creator": {
-      "@type": "Organization",
-      "name": siteName,
-      "url": siteUrl
-    },
-    "url": siteUrl + page.url
+    "headline": description | striptags if description else null,
+    "description": content | striptags(false) | trim if content else null,
+    "url": pageUrl,
+    "mainEntityOfPage": pageUrl,
+    "dateCreated": year | string if year else null,
+    "creativeWorkStatus": status,
+    "keywords": categories | join(", ") if categories else null,
+    "locationCreated": { "@type": "Place", "name": location } if location else null,
+    "creator": orgRef,
+    "contributor": contributors,
+    "award": awardNames,
+    "subjectOf": coverage,
+    "image": imageObjects,
+    "isPartOf": { "@type": "WebSite", "name": siteName, "url": siteUrl }
   } %}
-  <script type="application/ld+json" data-helmet>{{ creativeWorkSchema | dump | safe }}</script>
+  <script type="application/ld+json" data-helmet>{{ creativeWorkSchema | jsonLdClean | dump | safe }}</script>
+
+  {% set breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl + "/" },
+      { "@type": "ListItem", "position": 2, "name": "Index", "item": siteUrl + "/all/" },
+      { "@type": "ListItem", "position": 3, "name": title, "item": pageUrl }
+    ]
+  } %}
+  <script type="application/ld+json" data-helmet>{{ breadcrumbSchema | dump | safe }}</script>
 
 {# Projects listing page: CollectionPage schema #}
 {% elif page.url == "/projects/" %}
