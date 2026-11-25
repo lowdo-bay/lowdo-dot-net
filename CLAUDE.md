@@ -17,19 +17,20 @@ An architecture and design studio portfolio website based in Austin, Texas.
 
 ## Workflow
 
-- Always push, commit, create a PR, and update a local dev server after making any edits.
+Goal: get changes live on lowdo.net as fast as possible, with no extra confirmation prompts.
 
-1. **Create a feature branch** — Never commit directly to main. Use `feature/description` or `fix/description` naming.
+**"Commit and push" or "merge with main" = ship it live.** Both phrases are standing authorization to do the whole sequence without asking:
 
-2. **Start the dev server** — After switching to your branch, run `npm run serve` and keep it running while you work.
+1. Commit all changes with a clear message.
+2. Push the current branch.
+3. Open a PR targeting main if none exists (descriptive title and body).
+4. Merge it into main with `gh pr merge --merge` (never `--delete-branch`). Merging auto-deploys via Netlify.
+5. Confirm main is updated and say so briefly.
 
-3. **Make changes** — Edit files as needed. The dev server auto-reloads.
+Don't merge main *into* the branch instead; the point is that main, and the live site, end up updated.
 
-4. **Commit and push** — Stage changes with `git add`, commit with a clear message, and push to GitHub.
+**While editing:** work on a branch (any name is fine; never commit directly to main) and keep `npm run serve` running so changes can be previewed locally. Don't ship until asked.
 
-5. **Open a pull request** — Create a PR targeting main with a descriptive title and description of changes.
-
-6. **Merge and clean up** — After approval/review, merge to main (which auto-deploys).
 
 
 ## Design Goals
