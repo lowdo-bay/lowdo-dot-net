@@ -47,12 +47,41 @@ function projectUrlSlug(fileSlug) {
   return String(fileSlug).replace(/^\d{6}_/, '');
 }
 
+// Search-result title and description for a project page, built from the entry's own
+// fields so every project (including future ones) gets specific ones with no extra work.
+// An entry can still override either with `seo: { title, description }` in its front matter.
+//   title:       "Wolf Creek Ranch, Burnet, TX | Low Design Office"
+//   description: "Wolf Creek Ranch, Burnet, TX, 2024. <tagline> By Low Design Office (LowDO)."
+const VAGUE_LOCATIONS = ['various', 'open source'];
+function projectSeo(data) {
+  const given = data.seo || {};
+  const title = String(data.title || '').trim();
+  let place = String(data.location || '').replace(/,\s*USA$/i, '').trim();
+  if (VAGUE_LOCATIONS.includes(place.toLowerCase())) place = '';
+  // Tagline: strip simple markdown and make sure it ends as a sentence.
+  let tagline = String(data.description || '').replace(/[*_`#>]/g, '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\s+/g, ' ').trim();
+  if (tagline && !/[.!?]$/.test(tagline)) tagline += '.';
+  const lead = [title, place, data.year].filter(Boolean).join(', ') + '.';
+  return {
+    ...given,
+    title: given.title || `${title}${place ? ', ' + place : ''} | Low Design Office`,
+    description: given.description ||
+      [lead, tagline, 'By Low Design Office (LowDO).'].filter(Boolean).join(' '),
+  };
+}
+
 export default function() {
   return {
     eleventyComputed: {
       // Entry type comes from `type:` frontmatter field
       entryType(data) {
         return resolveEntryType(data);
+      },
+
+      // Specific <title> and meta description for project pages (see projectSeo above)
+      seo(data) {
+        if (resolveEntryType(data) !== 'project' || !data.title) return data.seo;
+        return projectSeo(data);
       },
 
       // Set layout based on entry type
