@@ -38,6 +38,15 @@ function imageDims(record) {
   }
 }
 
+// Public URL slug for a project: the folder name without its YYMMDD_ job-code prefix.
+// Folders keep their dated names (201230_wolf-creek-ranch); only the URL drops the date
+// (/project/wolf-creek-ranch/). redirects.njk sends the old dated URLs to the new ones.
+// If two folders ever reduce to the same slug, Eleventy stops the build with a
+// duplicate-permalink error, so a clash cannot go live unnoticed.
+function projectUrlSlug(fileSlug) {
+  return String(fileSlug).replace(/^\d{6}_/, '');
+}
+
 export default function() {
   return {
     eleventyComputed: {
@@ -57,7 +66,7 @@ export default function() {
       permalink(data) {
         if (data.draft) return false;
         if (resolveEntryType(data) === 'project') {
-          return `/project/${data.page.fileSlug}/index.html`;
+          return `/project/${projectUrlSlug(data.page.fileSlug)}/index.html`;
         }
         return false;
       },

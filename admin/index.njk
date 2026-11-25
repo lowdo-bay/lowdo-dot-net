@@ -164,7 +164,7 @@ eleventyExcludeFromCollections: true
         <div class="ep-section">
           <span class="ep-section__label">Identity</span>
           <div class="ep-grid">
-            <span class="ep-row__label" data-tooltip="Determines the entry's category. 'project' gets a detail page at /project/{slug}/; all others are index-only.">Type</span>
+            <span class="ep-row__label" data-tooltip="Determines the entry's category. 'project' gets a detail page at /project/{slug}/ (without the date prefix); all others are index-only.">Type</span>
             <div class="ep-row__control">
               <div class="admin-dropdown ep-type-dropdown" id="ep-type-dropdown">
                 <button class="admin-dropdown__button" aria-expanded="false" type="button">
@@ -176,7 +176,7 @@ eleventyExcludeFromCollections: true
                 <div class="admin-dropdown__drawer" aria-hidden="true" id="ep-type-drawer"></div>
               </div>
             </div>
-            <span class="ep-row__label" data-tooltip="The URL-safe ID used in the page URL: /project/{slug}/. Changing this renames the file on GitHub.">Slug</span>
+            <span class="ep-row__label" data-tooltip="The folder and file name on GitHub. Keep the date prefix (YYMMDD_name): the page URL drops it automatically, so 201230_wolf-creek-ranch is published at /project/wolf-creek-ranch/. Changing this renames the file on GitHub.">Slug</span>
             <div class="ep-row__control">
               <input type="text" id="ep-slug" placeholder="20260101_project-name">
             </div>

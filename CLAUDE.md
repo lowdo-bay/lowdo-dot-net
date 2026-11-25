@@ -91,6 +91,7 @@ An architecture and design studio portfolio website based in Austin, Texas.
 _data/settings.yaml    # Site-wide configuration (edit this for theme changes)
 entries/               # All content entries
   projects/            # Project entries — get individual pages at /project/{slug}/
+                       # (URL slug = folder name minus its YYMMDD_ prefix; old dated URLs redirect via redirects.njk)
   other/               # All non-project entries (news, awards, features, etc.)
 _includes/components/  # Reusable template components
 admin/                 # Password-protected admin page (/admin/)
